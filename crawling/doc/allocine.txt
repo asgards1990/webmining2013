@@ -1,0 +1,33 @@
+Sitemap (xml) :
+  http://www.allocine.fr/sitemap_index.xml
+  Pointe vers des sitemaps pour :
+  - des films http://www.allocine.fr/film/sitemap-*.xml
+  - des personnes http://www.allocine.fr/personne/sitemap-*.xml
+  - des videos, des articles…
+  Remarque : des liens morts
+
+
+Liste (html) des films par année :
+  Exemples de requête (choix d’une décennie + GET ?year=y pour l’année y):
+  http://www.allocine.fr/film/tous/decennie-2010/?year=2011
+  http://www.allocine.fr/film/tous/decennie-1990/?year=1997
+  10 résultats par pages -> GET ?page=p pour aller à la page p
+  ex : http://www.allocine.fr/film/tous/decennie-1990/?page=10&year=1997
+
+  Présentation HTML du résultat :
+  ...
+  <div class=”datablock”>
+  <div class=”mainzone”>
+    ...
+    <div class=”contentzone”>
+      <div class=”titlebar”>
+        <h2>
+        <a href=”Le lien vers la fiche du film”>Le titre du film</a>
+        </h2>
+      </div>
+    </div
+    ...
+  </div>
+  ...
+  </div>
+  ...
