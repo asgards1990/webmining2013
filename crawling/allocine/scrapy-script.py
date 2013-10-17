@@ -14,7 +14,9 @@ class FilmItem(Item):
 # We start at:
 # http://www.allocine.fr/film/tous/decennie-1990/?year=1997
 
-
+from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from scrapy.selector import HtmlXPathSelector
 
 class AllocineSpider(CrawlSpider):
 
@@ -24,7 +26,9 @@ class AllocineSpider(CrawlSpider):
     rules = [Rule(SgmlLinkExtractor(allow=['/film/fichefilm_gen_cfilm=\d+.html']), 'parse_film')]
 
     def parse_film(self, response):
-        x = HtmlXPathSelector(response)
+	self.log('Film data sheet %s' % response.url)        
+
+	x = HtmlXPathSelector(response)
 
         film = FilmItem()
         film['url'] = response.url
