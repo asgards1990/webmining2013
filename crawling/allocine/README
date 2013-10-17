@@ -1,0 +1,7 @@
+On a besoin d'une version propre à ScraPy de la bibliothèque w3lib
+
+Elle est installée "en local" dans :
+/home/pesto/lib/python2.7/site-packages/
+
+Pour que le script fonctionne il faut faire un :
+export PYTHONPATH=/home/pesto/lib/python2.7/site-packages/
