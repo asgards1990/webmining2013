@@ -9,7 +9,8 @@ from allocine.items import FilmItem
 class AllocineSpider(CrawlSpider):
     name = 'allocine.fr'
     allowed_domains = ['allocine.fr']
-    start_urls = ['http://www.allocine.fr/film/tous/decennie-1990/?year=1997']
+    start_urls = ['http://www.allocine.fr/']
+     
     rules = [Rule(SgmlLinkExtractor(allow=['/film/fichefilm_gen_cfilm=\d+.html']), 'parse_film')]
 
     def parse_film(self, response):
