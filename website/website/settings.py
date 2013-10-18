@@ -1,3 +1,5 @@
+import dbpasswd
+
 # Django settings for website project.
 
 DEBUG = True
@@ -14,7 +16,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'pesto',                      # Or path to database file if using sqlite3.
         'USER': 'pesto',                      # Not used with sqlite3.
-        'PASSWORD': 'pesto',                  # Not used with sqlite3.
+        'PASSWORD': dbpasswd.passwd,                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
