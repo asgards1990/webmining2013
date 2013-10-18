@@ -3,6 +3,7 @@
 from scrapy.item import Item, Field
 
 class FilmItem(Item):
+    ident = Field()
     url = Field()
-    title = Field()
-
+    titre = Field()
+    decennie = Field()
