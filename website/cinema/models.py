@@ -26,7 +26,7 @@ class  Genre (models.Model):
 
 class  Reviewer (models.Model):
     name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')], null=True)
+    gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')], null=True,blank=True)
     def __unicode__(self):
         return self.name      
     class Meta:
@@ -34,20 +34,20 @@ class  Reviewer (models.Model):
         
 class  Journal (models.Model):
     name = models.CharField(max_length=255)
-    prestige = models.FloatField(validators = [MinValueValidator(0.0), MaxValueValidator(1.0)], null=True)
-    country = models.ManyToManyField(Country, null=True)
-    language = models.ManyToManyField(Language, null=True)
+    prestige = models.FloatField(validators = [MinValueValidator(0.0), MaxValueValidator(1.0)], null=True,blank=True)
+    country = models.ManyToManyField(Country, null=True,blank=True)
+    language = models.ManyToManyField(Language, null=True,blank=True)
     def __unicode__(self):
         return self.name      
     class Meta:
         ordering = ['name']
   
 class  Review (models.Model):
-    grade = models.FloatField(validators = [MinValueValidator(0.0), MaxValueValidator(10.0)], null=True)
-    summary = models.TextField(null=True)
-    text = models.TextField(null=True)
-    reviewer = models.ManyToManyField(Reviewer, null=True)
-    journal = models.ManyToManyField(Journal, null=True)
+    grade = models.FloatField(validators = [MinValueValidator(0.0), MaxValueValidator(10.0)], null=True,blank=True)
+    summary = models.TextField(null=True,blank=True)
+    text = models.TextField(null=True,blank=True)
+    reviewer = models.ManyToManyField(Reviewer, null=True,blank=True)
+    journal = models.ManyToManyField(Journal, null=True,blank=True)
     def __unicode__(self):
         return "{0} par {1} pour {2}".format(self.grade, self.reviewer.name, self.journal.name)       
     class Meta:
@@ -56,7 +56,7 @@ class  Review (models.Model):
 class  ProductionCompany (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=255, unique=True)
-    country = models.ManyToManyField(Country, null=True)
+    country = models.ManyToManyField(Country, null=True,blank=True)
     def __unicode__(self):
         return self.name      
     class Meta:
@@ -64,8 +64,8 @@ class  ProductionCompany (models.Model):
         
 class  Institution (models.Model):
     name = models.CharField(max_length=255)
-    prestige = models.FloatField(validators = [MinValueValidator(0.0), MaxValueValidator(1.0)], null=True)
-    country = models.ManyToManyField(Country, null=True)
+    prestige = models.FloatField(validators = [MinValueValidator(0.0), MaxValueValidator(1.0)], null=True,blank=True)
+    country = models.ManyToManyField(Country, null=True,blank=True)
     def __unicode__(self):
         return self.name      
     class Meta:
@@ -74,8 +74,8 @@ class  Institution (models.Model):
 class  Prize (models.Model):
     award = models.CharField(max_length=255)
     level = models.CharField(max_length=1, validators=[RegexValidator('(n|w)')]) #nomination or win
-    prestige = models.FloatField(validators = [MinValueValidator(0.0), MaxValueValidator(1.0)], null=True)
-    year = models.IntegerField(null=True)
+    prestige = models.FloatField(validators = [MinValueValidator(0.0), MaxValueValidator(1.0)], null=True,blank=True)
+    year = models.IntegerField(null=True,blank=True)
     institution = models.ManyToManyField(Institution)
     def __unicode__(self):
         return "{0} for award named {1} in {2}".format(self.level, self.award, self.year)   
@@ -86,10 +86,10 @@ class  Person (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')], null=True) #restreindre masculin et feminin / imdb ne fournit que le sexe des acteurs
-    bith_date = models.DateField(null=True)
-    countries = models.ManyToManyField(Country, null=True)
-    prizes = models.ManyToManyField(Prize, null=True)
+    gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')], null=True,blank=True) #restreindre masculin et feminin / imdb ne fournit que le sexe des acteurs
+    bith_date = models.DateField(null=True,blank=True)
+    countries = models.ManyToManyField(Country, null=True,blank=True)
+    prizes = models.ManyToManyField(Prize, null=True,blank=True)
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
     class Meta:
@@ -98,23 +98,23 @@ class  Person (models.Model):
 class  Film (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True)
     title_original = models.CharField(max_length=255)
-    title_english = models.CharField(max_length=255)
-    title_french = models.CharField(max_length=255)
+    title_english = models.CharField(max_length=255,blank=True,null=True)
+    title_french = models.CharField(max_length=255,blank=True,null=True)
     release_date = models.DateField()
-    countries = models.ManyToManyField(Country, null=True)
-    synopsis_wiki = models.TextField(null=True)
-    synopsis_imdb = models.TextField(null=True)
-    budget = models.IntegerField(null=True)
-    box_office = models.IntegerField(null=True)
-    keywords = models.TextField(null=True)
+    countries = models.ManyToManyField(Country, null=True, blank=True)
+    synopsis_wiki = models.TextField(null=True,blank=True)
+    synopsis_imdb = models.TextField(null=True,blank=True)
+    budget = models.IntegerField(null=True,blank=True)
+    box_office = models.IntegerField(null=True,blank=True)
+    keywords = models.TextField(null=True,blank=True)
     actors = models.ManyToManyField(Person, through='ActorWeight', related_name='aw')
     directors = models.ManyToManyField(Person, through='DirectorWeight', related_name='dw')
     writers = models.ManyToManyField(Person, through='WriterWeight', related_name='ww')
     production_companies = models.ManyToManyField(ProductionCompany, through='ProductionCompanyWeight', null=True)
-    genres = models.ManyToManyField(Genre, null=True)
-    prizes = models.ManyToManyField(Prize, null=True)
-    languages = models.ManyToManyField(Language, null=True)
-    reviews = models.ManyToManyField(Review, null=True)
+    genres = models.ManyToManyField(Genre, null=True,blank=True)
+    prizes = models.ManyToManyField(Prize, null=True,blank=True)
+    languages = models.ManyToManyField(Language, null=True,blank=True)
+    reviews = models.ManyToManyField(Review, null=True,blank=True)
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
     class Meta:
