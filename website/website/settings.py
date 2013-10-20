@@ -1,4 +1,4 @@
-import dbpasswd
+import myconfig
 
 # Django settings for website project.
 
@@ -12,22 +12,14 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-#        'NAME': 'pesto',                      # Or path to database file if using sqlite3.
-#        'USER': 'pesto',                      # Not used with sqlite3.
-#        'PASSWORD': dbpasswd.passwd,                  # Not used with sqlite3.
-#        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-#    },
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/Users/benjamin/webmining2013/db.sqlite',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
+        'ENGINE': myconfig.engine, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': myconfig.name,                      # Or path to database file if using sqlite3.
+        'USER': myconfig.user,                      # Not used with sqlite3.
+        'PASSWORD': myconfig.passwd,                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
+    },
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -92,7 +84,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '@x8p@s(ow59*fgs-!60(b+7ha$0@ucn_k-5q4#$4kg%ij)%iun'
+SECRET_KEY = myconfig.secret_key
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

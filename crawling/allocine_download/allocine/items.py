@@ -5,3 +5,6 @@ class FilmItem(Item):
     url = Field()
     titre = Field()
     decennie = Field()
+    image_urls = Field()
+    note_presse = Field()
+    note_spectateur = Field()
