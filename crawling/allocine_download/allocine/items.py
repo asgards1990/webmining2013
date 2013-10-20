@@ -8,3 +8,4 @@ class FilmItem(Item):
     image_urls = Field()
     note_presse = Field()
     note_spectateur = Field()
+    affiche = Field()

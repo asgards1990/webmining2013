@@ -7,7 +7,9 @@ ITEM_PIPELINES = {
     'allocine.pipelines.JsonWriterPipeline': 1,
     'scrapy.contrib.pipeline.images.ImagesPipeline' : 1,
     'allocine.pipelines.DbWriterPipeline' : 1,
+    'allocine.pipelines.HtmlWriterPipeline': 2,
+    'allocine.pipelines.ImgWriterPipeline': 3,
     }
 
-IMAGES_STORE = '/Users/benjamin/allocine/'
+IMAGES_STORE = '/home/pesto/allocine/'
 IMAGES_EXPIRES = 90

@@ -49,8 +49,18 @@ class AllocineSpider(CrawlSpider):
             film["note_presse"] = notes[0]
             film["note_spectateur"] = notes[1]
             
+            #result_title = result.select('//div[@class="titlebar"]//a')
+            #result_picture = result.select('//div[@class="picturezone"]//img')
+            #film["ident"] = re.findall(r'\d+', result_title.select('@href').extract()[0])[0]
+            #film["decennie"] = response.url.split("/")[-2]
+            #film["titre"] = result_title.select('text()').extract()[0]
+            #film["url"] = result_title.select('@href').extract()[0]
+            try:
+                #film["affiche"] = result_picture.select('@src').extract()[0]
+                film["affiche"] = s
+            except:
+                film["affiche"] = ""                        
             films.append(film)
-        
         return(films)
     
 #    def parse_film_page(self, response):
