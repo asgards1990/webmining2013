@@ -80,7 +80,7 @@ class HtmlWriterPipeline(object):
             f.close()
             u.close()
             self.logfile.write('http://www.allocine.fr/film/fichefilm-' + item["ident"] + '/critiques/presse/' + ' downloaded' + "\n")
-
+        
         # Enregistrement du casting du film
         try:
             u = urllib.urlopen('http://www.allocine.fr/film/fichefilm-' + item["ident"] + '/casting/')
@@ -98,7 +98,7 @@ class HtmlWriterPipeline(object):
             f.close()
             u.close()
             self.logfile.write('http://www.allocine.fr/film/fichefilm-' + item["ident"] + '/casting/' + ' downloaded' + "\n")
-
+        
         return item
 
 class ImgWriterPipeline(object):
@@ -125,5 +125,5 @@ class ImgWriterPipeline(object):
             f.close()
             u.close()
             self.logfile.write(item["affiche"] + ' downloaded' + "\n")
-       
+        
         return item
