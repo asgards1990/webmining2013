@@ -2,7 +2,7 @@
 # -*- coding: latin-1 -*-
 
 
-""" The init.py script aims at checking out that the environment has been setting up correctly so that the application can be launched"""
+""" Point d'entrée """
 
 ########################
 
