@@ -1,7 +1,10 @@
-On a besoin d'une version propre à ScraPy de la bibliothèque w3lib
+Projet ScraPy pour le téléchargement des données Allocine.
 
-Elle est installée "en local" dans :
-/home/pesto/lib/python2.7/site-packages/
+Pour chaque film sont téléchargés :
+- la fiche du film en format HTML
+- la fiche casting du film en format HTML
+- la fiche critiques presses du film en format HTML
+- l'affiche du film
 
-Pour que le script fonctionne il faut faire un :
-export PYTHONPATH=/home/pesto/lib/python2.7/site-packages/
+Ces données sont ensuite stockées en local et sont destinées
+à être parsées dans un autre module.
