@@ -98,15 +98,17 @@ class  Person (models.Model):
         ordering = ['last_name','first_name']
         
 class  Film (models.Model):
-    #imdb_id = models.CharField(max_length=10, unique=True)
-    imdb_id = models.PositiveIntegerField(unique=True)
+    imdb_id = models.CharField(max_length=10, unique=True)
+    #imdb_id = models.PositiveIntegerField(unique=True)
     title_original = models.CharField(max_length=255)
     title_english = models.CharField(max_length=255,blank=True,null=True)
     title_french = models.CharField(max_length=255,blank=True,null=True)
     release_date = models.DateField()
     countries = models.ManyToManyField(Country, null=True, blank=True)
+    synopsis_allocine = models.TextField(null=True,blank=True)
     synopsis_wiki = models.TextField(null=True,blank=True)
-    synopsis_imdb = models.TextField(null=True,blank=True)
+    summary_imdb = models.TextField(null=True,blank=True)
+    storyline_imdb = models.TextField(null=True,blank=True)
     budget = models.IntegerField(null=True,blank=True)
     box_office = models.IntegerField(null=True,blank=True)
     keywords = models.TextField(null=True,blank=True)
