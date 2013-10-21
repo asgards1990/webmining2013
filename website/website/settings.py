@@ -66,7 +66,7 @@ STATIC_ROOT = '/home/pesto/webmining2013/website/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/test/static/'
+STATIC_URL = '/pesto/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
