@@ -6,6 +6,24 @@ import re
 
 from allocine.items import FilmItem
 
+class TestSpider(BaseSpider):
+    name = 'test'
+    allowed_domains = ['allocine.fr']
+    start_urls = [
+        'http://www.example.com/1.html',
+        'http://www.example.com/2.html',
+        'http://www.example.com/3.html',
+    ]
+
+    def parse(self, response):
+        sel = Selector(response)
+        for h3 in sel.xpath('//h3').extract():
+            yield MyItem(title=h3)
+
+        for url in sel.xpath('//a/@href').extract():
+            yield Request(url, callback=self.parse)
+
+
 class AllocineSpider(CrawlSpider):
     name = "allocine"
     allowed_domains = ["allocine.fr"]
@@ -23,6 +41,10 @@ class AllocineSpider(CrawlSpider):
             follow=True
             ),
     )
+
+    def __init__(self):
+        self.logfile = open('/home/pesto/allocine/crawled_addresses.log', 'wb')
+
         
     def parse_films(self, response):
         hxs = HtmlXPathSelector(response)
