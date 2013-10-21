@@ -54,7 +54,8 @@ class  Review (models.Model):
         ordering = ['-grade']
         
 class  ProductionCompany (models.Model):
-    imdb_id = models.CharField(max_length=10, unique=True)
+    #imdb_id = models.CharField(max_length=10, unique=True)
+    imdb_id = models.PositiveIntegerField(unique=True)
     name = models.CharField(max_length=255, unique=True)
     country = models.ManyToManyField(Country, null=True,blank=True)
     def __unicode__(self):
@@ -83,7 +84,8 @@ class  Prize (models.Model):
         ordering = ['year', 'award']
         
 class  Person (models.Model):
-    imdb_id = models.CharField(max_length=10, unique=True)
+    #imdb_id = models.CharField(max_length=10, unique=True)
+    imdb_id = models.PositiveIntegerField(unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')], null=True,blank=True) #restreindre masculin et feminin / imdb ne fournit que le sexe des acteurs
@@ -97,13 +99,16 @@ class  Person (models.Model):
         
 class  Film (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True)
+    #imdb_id = models.PositiveIntegerField(unique=True)
     title_original = models.CharField(max_length=255)
     title_english = models.CharField(max_length=255,blank=True,null=True)
     title_french = models.CharField(max_length=255,blank=True,null=True)
     release_date = models.DateField()
     countries = models.ManyToManyField(Country, null=True, blank=True)
+    synopsis_allocine = models.TextField(null=True,blank=True)
     synopsis_wiki = models.TextField(null=True,blank=True)
-    synopsis_imdb = models.TextField(null=True,blank=True)
+    summary_imdb = models.TextField(null=True,blank=True)
+    storyline_imdb = models.TextField(null=True,blank=True)
     budget = models.IntegerField(null=True,blank=True)
     box_office = models.IntegerField(null=True,blank=True)
     keywords = models.TextField(null=True,blank=True)
@@ -116,7 +121,7 @@ class  Film (models.Model):
     languages = models.ManyToManyField(Language, null=True,blank=True)
     reviews = models.ManyToManyField(Review, null=True,blank=True)
     def __unicode__(self):
-        return u'%s %s' % (self.first_name, self.last_name)
+        return u'%s %i' % (self.title_original, self.imdb_id)
     class Meta:
         ordering = ['title_original']
    
@@ -157,15 +162,17 @@ class  Keyword (models.Model):
         ordering = ['word']
 
 class FilmImage (models.Model):
-    filename = models.CharField(max_length=255, unique=True)
+    #filename = models.CharField(max_length=255, unique=True)
+    filename = models.URLField()
     film = models.ManyToManyField(Film)
     def __unicode__(self):
         return self.filename  
-    class Meta:
-        ordering = ['filename']
+    #class Meta:
+    #    ordering = ['filename']
         
 class PersonImage (models.Model):
-    filename = models.CharField(max_length=255, unique=True)
+    #filename = models.CharField(max_length=255, unique=True)
+    filename = models.URLField()
     person = models.ManyToManyField(Person)
     def __unicode__(self):
         return self.filename  

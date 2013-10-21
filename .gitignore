@@ -9,9 +9,9 @@
 *.pyc
 
 
-# Password #
-############
-dbpasswd.py
+# Private configuration #
+#########################
+myconfig.py
 
 # Packages #
 ############
