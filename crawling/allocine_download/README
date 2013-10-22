@@ -1,0 +1,10 @@
+Projet ScraPy pour le téléchargement des données Allocine.
+
+Pour chaque film sont téléchargés :
+- la fiche du film en format HTML
+- la fiche casting du film en format HTML
+- la fiche critiques presses du film en format HTML
+- l'affiche du film
+
+Ces données sont ensuite stockées en local et sont destinées
+à être parsées dans un autre module.

@@ -1,3 +1,5 @@
+import myconfig
+
 # Django settings for website project.
 import os
 
@@ -12,14 +14,13 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'test',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',  
-    }
+        'ENGINE': myconfig.engine, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': myconfig.name,                      # Or path to database file if using sqlite3.
+        'USER': myconfig.user,                      # Not used with sqlite3.
+        'PASSWORD': myconfig.passwd,                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -62,11 +63,11 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/home/pesto/webmining2013/website/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = '/pesto/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -85,7 +86,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '@x8p@s(ow59*fgs-!60(b+7ha$0@ucn_k-5q4#$4kg%ij)%iun'
+SECRET_KEY = myconfig.secret_key
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -110,10 +111,11 @@ ROOT_URLCONF = 'website.urls'
 WSGI_APPLICATION = 'website.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), '../templates').replace('\\','/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    #"/home/pesto/webmining2013/website/templates/cinema"
 )
 
 INSTALLED_APPS = (
