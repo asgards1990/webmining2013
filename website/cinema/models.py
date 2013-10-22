@@ -12,6 +12,7 @@ class  Country (models.Model):
 
 class Language(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    identifier = models.CharField(max_length=10, unique=True)
     def __unicode__(self):
         return self.name    
     class Meta:
@@ -48,8 +49,8 @@ class  Person (models.Model):
     image_url = models.CharField(blank=True, max_length=255)
     birth_country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
     gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')],blank=True) #later
-    first_name = models.CharField(max_length=255) #later
-    last_name = models.CharField(max_length=255) #later
+    first_name = models.CharField(max_length=255, blank=True) #later
+    last_name = models.CharField(max_length=255, blank=True) #later
     def __unicode__(self):
         return self.name
     class Meta:
