@@ -131,7 +131,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'cinema',
     'autocomplete_app',
-    'autocomplete_light',
+#    'autocomplete_light',
     'status',
 )
 
