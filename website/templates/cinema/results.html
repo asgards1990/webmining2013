@@ -12,29 +12,29 @@ and open the template in the editor.
         <meta charset="windows-1252">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" type="text/css" href="{% static 'cinema/commun.css' %}" >
-        <link rel="stylesheet" type="text/css" href="{% static 'cinema/prediction.css' %}">        
+        <link rel="stylesheet" type="text/css" href="{% static 'cinema/results.css' %}"  />        
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <script>
-  $(function() {
-    $( "#slider" ).slider();
-  });
+            $(function() {
+                $("#slider").slider();
+            });
         </script>
         <script>
-  $(function() {
-    $( "#slider-range" ).slider({
-      range: true,
-      min: 0,
-      max: 300,
-      values: [ 5, 250 ],
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-      }
-    });
-    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
-  });
+            $(function() {
+                $("#slider-range").slider({
+                    range: true,
+                    min: 0,
+                    max: 300,
+                    values: [5, 250],
+                    slide: function(event, ui) {
+                        $("#amount").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                    }
+                });
+                $("#amount").val("$" + $("#slider-range").slider("values", 0) +
+                        " - $" + $("#slider-range").slider("values", 1));
+            });
         </script>
 
     </head>
@@ -46,77 +46,92 @@ and open the template in the editor.
 
         <div id="container">
 
+            <div id="distancecriteria">
+                <h1>Distance Criteria </h1>
+            </div>
 
             <div id="menu">
-                <h1 class="titre">Your Movie</h1>
+                <h1 class="titre">Filters</h1>
                 <div class="menubox">
-                    <h1>Actors</h1>
-                    <div id="actorsdesc">
+                    <h1>Actors / Director</h1>
+                    <div id="actors">
+                        <form>
+                        <p class="director">
+                            <input type="checkbox" name="director" value="director">
+                            <span class="name">Woody Allen</span>           
+                        </p> 
+                        </form>
+                        
+                        <form>
                         <p class="actor">
-                            <span class="name">Leonardo DiCaprio</span>
-                            <img class="pic" 
-                                 src='http://images.allocine.fr/cx_160_213/b_1_d6d6d6/pictures/210/037/21003742_20130506174242197.jpg' 
-                                 alt="Leonard DiCaprio">
-                            <img class="delete" 
-                                 src='https://cdn1.iconfinder.com/data/icons/softwaredemo/PNG/256x256/DeleteRed.png' 
-                                 alt="Delete">
+                            <input type="checkbox" name="actor" value="actor1">
+                            <span class="name">Cate Blanchett</span>           
                         </p>
-
                         <p class="actor">
-                            <span class="name">Leonardo DiCapriodjuzngerznzuzbiuzr</span>
-                            <img class="pic" 
-                                 src='http://images.allocine.fr/cx_160_213/b_1_d6d6d6/pictures/210/037/21003742_20130506174242197.jpg' 
-                                 alt="Leonard DiCaprio">
-                            <img class="delete" 
-                                 src='https://cdn1.iconfinder.com/data/icons/softwaredemo/PNG/256x256/DeleteRed.png' 
-                                 alt="Delete">
+                            <input type="checkbox" name="actor" value="actor2">
+                            <span class="name">Alec Baldwin</span>           
                         </p>
-
-                    </div>
-
-                    <div id="actorsearch">
-
-                        <p>
-                            <input id="actorinput" type="text" 
-                                   name="actorname" value=" Enter an actor's name..." size="12">                  
-                            <input id="addactorbutton" type="image" alt="Add"
-                                   src="http://icongal.com/gallery/image/268146/add_button_new_edit_car_plus_green_equal.png">
-                        </p>                  
-
-                    </div>
-
+                        <p class="actor">
+                            <input type="checkbox" name="actor" value="actor3">
+                            <span class="name">Sally Hawkins</span>           
+                        </p>
+                        </form>                    
+                    </div>                    
                 </div>
 
                 <div class="menubox">
                     <h1>Genre</h1>
-                    <div class="styled-select-genre">
-                        <select class="genre" name="Genre">
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
-                            <option value="mercedes">Mercedes</option>
-                            <option value="audi">Audi</option>
-                        </select>
-                    </div>
-                    <div class="styled-select-genre" style="margin-left:5px">
-                        <select class="genre" name="Genre">
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
-                            <option value="mercedes">Mercedes</option>
-                            <option value="audi">Audi</option>
-                        </select>
-                    </div>
+                    <div id="actors">
+                        <form>
+                        <p class="director">
+                            <input type="checkbox" name="director" value="director">
+                            <span class="name">Woody Allen</span>           
+                        </p> 
+                        </form>
+                        
+                        <form>
+                        <p class="actor">
+                            <input type="checkbox" name="actor" value="actor1">
+                            <span class="name">Cate Blanchett</span>           
+                        </p>
+                        <p class="actor">
+                            <input type="checkbox" name="actor" value="actor2">
+                            <span class="name">Alec Baldwin</span>           
+                        </p>
+                        <p class="actor">
+                            <input type="checkbox" name="actor" value="actor3">
+                            <span class="name">Sally Hawkins</span>           
+                        </p>
+                        </form>                    
+                    </div>          
+                    
 
                 </div>
 
                 <div class="menubox">
                     <h1>Keywords</h1>
-                    <div id="keywordsdesc">
-                        <p class="keyword">
+                    <div id="genre">
+                        <form>
+                        <p class="genre">
+                            <input type="checkbox" name="genre" value="actor1">
+                            <span class="name">Cate Blanchett</span>           
+                        </p>
+                        <p class="genre">
+                            <input type="checkbox" name="actor" value="actor2">
+                            <span class="name">Alec Baldwin</span>           
+                        </p>
+                        <p class="genre">
+                            <input type="checkbox" name="actor" value="actor3">
+                            <span class="name">Sally Hawkins</span>           
+                        </p>
+                        </form>  
+                        
+                        <p class="genre">
                             <span class="name">Rhinoceros</span>                           
                             <img class="delete" 
                                  src='https://cdn1.iconfinder.com/data/icons/softwaredemo/PNG/256x256/DeleteRed.png' 
                                  alt="Delete">
-                        
+
                             <span class="name">Rhinoceroserierzngergnzfogzrn</span>                           
                             <img class="delete" 
                                  src='https://cdn1.iconfinder.com/data/icons/softwaredemo/PNG/256x256/DeleteRed.png' 
@@ -125,12 +140,12 @@ and open the template in the editor.
                             <img class="delete" 
                                  src='https://cdn1.iconfinder.com/data/icons/softwaredemo/PNG/256x256/DeleteRed.png' 
                                  alt="Delete">
-                        
+
                             <!-- <span class="name">Rhinoceroserierzngergnzfogzrn</span>                           
                             <img class="delete" 
                                  src='https://cdn1.iconfinder.com/data/icons/softwaredemo/PNG/256x256/DeleteRed.png' 
                                  alt="Delete"> -->
-                                                                  
+
                             <input id="keywordinput" type="text" 
                                    name="actorname" value=" Enter a keyword..." size="12">                  
                             <input id="addkeywordbutton" type="image" alt="Add"
@@ -181,8 +196,8 @@ and open the template in the editor.
                             <img class="delete" 
                                  src='http://icongal.com/gallery/image/268146/add_button_new_edit_car_plus_green_equal.png' 
                                  alt="Add">
-                                                                                                                                    
-                            </p>
+
+                        </p>
                     </div>
                 </div>
 
@@ -200,7 +215,7 @@ and open the template in the editor.
                                  alt="Delete">
                         </p>
                     </div>
-                    
+
                     <div id="directorsearch">
 
                         <p>
@@ -251,17 +266,20 @@ and open the template in the editor.
                 </div>
             </div>
 
-            <div id="prizes">
-                <h1>Prizes </h1>
+            <div id="coverflow">
+                <h1>Coverflow</h1>
             </div>
 
-            <div id="boxoffice">
-                <h1>Box Office</h1>
+            <div id="graphic">
+                <h1>Graphic</h1>
             </div>
 
-            <div id="reviews">
-                <h1>Reviews</h1>
+
+            <div id="filmdesc">
+                <h1>Film desc</h1>
             </div>
+
+
 
         </div>
 
