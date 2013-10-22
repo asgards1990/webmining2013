@@ -1,0 +1,49 @@
+##########IMDBspider.py##############
+
+
+
+for k in range(YEARSTART,YEARSTOP): #Global YEARSTART=1950 YEARSTOP=2020
+	GET pageinit=http://www.imdb.com/search/title?at=0&count=250&release_date=AAAA,AAAA&sort=release_date_us,asc&start=1&title_type=feature,documentary&view=simple, AAAA=k)
+	nb_result=page_init.xpath('//*[@id="left"]')
+	nb_page=nb_result/250+1
+
+		for j in range(1,nb_page):
+    	
+#? armer,lancer la requete GET, cleaner?
+		GET page=(http://www.imdb.com/search/title?at=0&count=250&release_date=%AAAA,%AAAA&sort=release_date_us,asc&start=BBBB&title_type=feature,documentary&view=simple, AAAA=k,BBBB=1+250*j)	
+ 										                                                         ###   ###			                           ###
+        
+
+#recup id:
+		ref=page.xpath('//td[@class="title"]/a/@href') 
+	 	 #---> "/title/tt0243327/"
+     	  	 #ou
+     	  	 #'//*[@id="main"]/table/tbody/tr/td[2]/a/@href'
+     	   
+     		id='tt'+regexp(r'd+',ref)
+
+        
+        
+#recup position:
+       		pos=page.xpath('//td[@class="number"]')
+         # ou  '//*[@id="main"]/table/tbody/tr/td[1]'
+
+
+         	mettre dans Imdb_status (id,pos)
+         
+         
+###########downloader.py###############
+
+import random
+
+
+for k in random.shuffle(Imdb_status[MainPage<5, year=:, page=:])
+
+	
+    telecharger page=http://www.imdb.com/search/title?count=250&release_date=k,k&sort=release_date_us,asc&title_type=feature,documentary&view=simple
+        
+
+         
+         
+         
+         
