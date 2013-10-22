@@ -24,6 +24,8 @@ parser = argparse.ArgumentParser()
 #Liste tous les arguments que l'on peut saisir sur la ligne de commandes
 parser.add_argument('-fd', '--fresh_debug', dest = 'fresh_debug', help = "Si présent, le fichier de debug est vidé avant l'exécution", action='store_true')
 
+parser.add_argument('-s', '--spider', dest = 'spider', help = "Si présent, lance le spider", action='store_true')
+
 #Crée le tableau global qui donne accès aux arguments passés en paramètres sur la ligne de commande
 initConfig.args = parser.parse_args()
 
@@ -39,5 +41,9 @@ if initConfig.args.fresh_debug:
     logger.info ('Vide le fichier {}...'.format(debug_file))
     open(debug_file, 'w').close()
 
+if initConfig.args.spider:
+    logger.info ('Lancement du Spider')
+    import Spider.IMDBSpider
+
 ###############
-import IMDBExtractor.IMDBExtractor
+# import IMDBExtractor.IMDBExtractor
