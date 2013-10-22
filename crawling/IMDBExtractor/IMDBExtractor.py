@@ -31,6 +31,7 @@ companycredits_suffixe = '/companycredits'
 keywords_suffixe = '/keywords'
 film_page_default = '/title/'
 actor_page_default= '/name/'
+company_page_default = '/company/'
 page_prefixe = 'http://www.imdb.com'
 film_id_ = 'tt1675434'
 the_artist_id="tt1655442"
@@ -80,11 +81,12 @@ class IMDBExtractor_Film(IMDBExtractor):
       #TODO language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
       #TODO country = models.ManyToManyField(Country, related_name="films")
       #TODO genres = models.ManyToManyField(Genre, related_name="films")
-      #TODO keywords = models.ManyToManyField(Keyword, related_name="films")
-      #TODO production_company = models.ManyToManyField(ProductionCompany, related_name="films")
-      self.directors = self.extractDirectors() #models.ManyToManyField(Person, related_name='films') #TODO : check with Django
-      #TODO writers = models.ManyToManyField(Person, related_name='films')
-      self.actors =  self.extractActors()
+      #array
+      self.keywords = self.extractKeywords() 
+      self.production_company =self.extractProducers()
+      #self.directors = self.extractDirectors() 
+      self.writers = self.extractWriter() 
+      #self.actors =  self.extractActors()
       
    def extractTitle(self):
       logger.debug("Extract Title : ")
@@ -127,7 +129,8 @@ class IMDBExtractor_Film(IMDBExtractor):
 
    def extractWriter(self):
       logger.debug("Extract Writers : ")
-      return self.extractor.extractXpathText('//td[@id="overview-top"]/div[@itemprop="creator"]/a/span[@itemprop="name"]')
+      writer_url_list = self.extractor.extractXpathElement('//td[@id="overview-top"]/div[@itemprop="creator"]/a/@href')
+      return self.createPersonList(writer_url_list)
 
    def extractCountry(self):
       logger.debug("Extract country : ")
@@ -160,7 +163,7 @@ class IMDBExtractor_Film(IMDBExtractor):
       #TODO : charge la page des acteurs (1 en local, 2 avecurllib) // extrait les id des acteurs. Pour chaque acteurs on crée un objet IMDBExtract_Person
       logger.debug("Extract Actors : ")
       actor_url_list = self.extractor.extractXpathElement('//td[@itemprop="actor"]/a/@href')
-      return self.createPersonList(director_url_tab )
+      return self.createPersonList(actor_url_list)
 
    def createPersonList(self,p_url_list):
       p_id_list = [re.match("/name/(nm[0-9]+)/", x).group(1) for x in p_url_list]
@@ -179,20 +182,39 @@ class IMDBExtractor_Film(IMDBExtractor):
    def extractProducers(self):
       logger.debug("Extract Producers : ")
       # Principal producers sur la main page
-      #return self.extractor.extractXpathText('//span[contains(@itemtype,"Organization") and @itemprop="creator"]/a/span[@itemprop="name"]')
-      #TODO : on charge la page du producteur (1- vérif en local; 2 : urllib) pour récupérer les info sur les producteurs
-      return self.extractor.extractXpathText('//div[@class="article listo"]/div[@id="company_credits_content"]/ul[@class="simpleList"][1]/li/a')
+      p_url_list= self.extractor.extractXpathElement('//span[contains(@itemtype,"Organization") and @itemprop="creator"]/a/@href')
+      
+      #TODO :travailler à partir de la page /companycredits
+      #p_url_list=self.extractor.extractXpathElement('//div[@class="article listo"]/div[@id="company_credits_content"]/ul[@class="simpleList"][1]/li/a/@href')
+      #TODO faire attention sur le cas ou la regex ne fonctionne pas! ça fiat planter le programme
+      p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list]
+      logger.debug(p_id_list)
+      p_list=[]
+      for p_id in p_id_list:
+         p_list.append(IMDBExtractor_Producer(p_id))
+      return p_list
+         
 
-
-class IMDBExtractor_Keywords(IMDBExtractor):
-   def __init__(self,url):
-      #TODO : on charge la page de keyword (1 en local 2 avec urllib) et on crée des objets Keywors
-      pass
- 
    def extractKeywords(self):
-      #TODO : on charge la page de keyword (1 en local 2 avec urllib) et on crée des objets Keywors
       logger.debug("Extract Keywords : ")
-      return self.extractor.extractXpathText('//td/a')
+      keyword_list = IMDBExtractor_Keyword(self.id_).keywords
+      return keyword_list
+
+class IMDBExtractor_Producer(IMDBExtractor):
+   def __init__(self,id_):
+      logger.debug("Création d'un Extracteur pour un type Producer")
+      IMDBExtractor.__init__(self,id_)
+      self.createExtractorEngine(page_prefixe+company_page_default+id_)
+
+      self.extractName()
+      self.extractCountry()
+
+   def extractName(self):
+      #ATTENTION dans les cas où la regex ne fonctionne pas ça fait planter le programme
+      self.name = self.extractor.extractXpathText('//strong[@class="title"]')[0].split("[")[0]
+
+   def extractCountry():
+      self.name = self.extractor.extractXpathText('//strong[@class="title"]')[0].split("[")[1][:-1]
 
 class IMDBExtractor_Awards(IMDBExtractor):
    def __init__(self,url):
@@ -214,6 +236,19 @@ class IMDBExtractor_Awards(IMDBExtractor):
             print j
 	    award_category_status.pop(0)
             award_category_list.pop(0)
+
+class IMDBExtractor_Keyword(IMDBExtractor):
+
+   def __init__(self,id_):
+      logger.debug("Création d'un Extracteur pour un type Keyword")
+      IMDBExtractor.__init__(self,id_)
+      self.createExtractorEngine(page_prefixe+film_page_default+id_+keywords_suffixe)
+
+      self.extractWords()
+
+   def extractWords(self):
+      self.keywords = self.extractor.extractXpathText('//td/a')
+      
 
 class IMDBExtractor_Person(IMDBExtractor):
 
