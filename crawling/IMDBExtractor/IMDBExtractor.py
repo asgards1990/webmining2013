@@ -221,6 +221,6 @@ def actorExtract(actor_id_):
    main_page.extractBirthCountry()
 
 
-#filmExtract('tt1454468')
+filmExtract('tt1454468')
 #actorExtract('nm1082477')
 actorExtract('nm0000288')
