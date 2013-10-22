@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'cinema',
     'autocomplete_app',
     'autocomplete_light',
+    'status',
 )
 
 # A sample logging configuration. The only tangible logging

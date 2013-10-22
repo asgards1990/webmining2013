@@ -143,8 +143,6 @@ class ActorWeight(models.Model):
     def __unicode__(self):
         return "{0} played in {1} and is ranked {2} in credits. Star : {3}".format(self.actor, self.film, self.rank, self.star)
 
-#PREPROCESSING CI-DESSOUS
-
 class JournalInfluence(models.Model):
     influence = models.FloatField(null=True,blank=True)
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE)
@@ -169,6 +167,6 @@ class GenrePopularKeyword(models.Model):
     keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE)
     occurences = models.IntegerField()
     def __unicode__(self):
-        return "{0} has influence {1} for {2} films in {3}".format(self.institution.name, self.influence, self.genre.name, self.country.name)
+        return "{0} occurs {1} times in {2} films".format(self.keyword.word, self.occurences, self.genre.name)
     class Meta:
         ordering = ['-occurences']
