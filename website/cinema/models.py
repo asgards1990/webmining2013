@@ -108,6 +108,7 @@ class  Film (models.Model):
     actors = models.ManyToManyField(Person, through='ActorWeight', related_name='films_from_actor')
     def __unicode__(self):
         return u'%s %i' % (self.original_title, self.imdb_id)
+        
     class Meta:
         ordering = ['original_title', 'release_date']
 

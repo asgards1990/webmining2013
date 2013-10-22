@@ -1,7 +1,16 @@
-#-*- coding: utf-8 -*-
-from django.http import HttpResponse
 from django.shortcuts import render
+from autocomplete_app.forms import MultipleActorSearchForm, FilmSearchForm
+from django.http import HttpResponse
 from cinema.forms import HomeForm, ResultsForm, PredictionForm
+
+def filmsearch(request):
+    if request.method == 'POST':
+        form = MultipleActorSearchForm(request.POST)
+        if form.is_valid():
+            return render(request, 'thanks.html')
+    else:
+        form = MultipleActorSearchForm()
+    return render(request, 'actor.html', {'form': form})
 
 def home(request):
     if request.method == 'POST':
@@ -9,9 +18,9 @@ def home(request):
         if form.is_valid():
             recherche = form.cleaned_data['recherche']
             criteriaActorsDirector = form.cleaned_data['criteriaActorsDirector']
-            criteriaGenre = forms.cleaned_data['criteriaGenre']
-            criteriaBudget = forms.cleaned_date['criteriaBudget']
-            criteriaReview = forms.cleaned_date['criteriaReview']
+            criteriaGenre = form.cleaned_data['criteriaGenre']
+            criteriaBudget = form.cleaned_date['criteriaBudget']
+            criteriaReview = form.cleaned_date['criteriaReview']
               
             send = True
 
@@ -25,14 +34,14 @@ def resultsForm(request):
         form = ResultsForm(request.POST)
         if form.is_valid():
             criteriaActorsDirector = form.cleaned_data['criteriaActorsDirector']
-            criteriaGenre = forms.cleaned_data['criteriaGenre']
-            criteriaBudget = forms.cleaned_date['criteriaBudget']
-            criteriaReview = forms.cleaned_date['criteriaReview']
-            director = forms.cleaned_date['director']
-            actors = forms.cleaned_date['actors']
-            genre = forms.cleaned_date['genre']
-            budget = forms.cleaned_date['budget']
-            review = forms.cleaned_date['review']
+            criteriaGenre = form.cleaned_data['criteriaGenre']
+            criteriaBudget = form.cleaned_date['criteriaBudget']
+            criteriaReview = form.cleaned_date['criteriaReview']
+            director = form.cleaned_date['director']
+            actors = form.cleaned_date['actors']
+            genre = form.cleaned_date['genre']
+            budget = form.cleaned_date['budget']
+            review = form.cleaned_date['review']
               
             send = True
 
@@ -46,15 +55,15 @@ def predictionForm(request):
         form = PredictionForm(request.POST)
         if form.is_valid():
             criteriaActorsDirector = form.cleaned_data['criteriaActorsDirector']
-            criteriaGenre = forms.cleaned_data['criteriaGenre']
-            criteriaBudget = forms.cleaned_date['criteriaBudget']
-            criteriaReview = forms.cleaned_date['criteriaReview']
-            director = forms.cleaned_date['director']
-            actors = forms.cleaned_date['actors']
-            genre = forms.cleaned_date['genre']
-            budget = forms.cleaned_date['budget']
-            review = forms.cleaned_date['review']
-            keyWords = forms.cleaned_date['keyWords']
+            criteriaGenre = form.cleaned_data['criteriaGenre']
+            criteriaBudget = form.cleaned_date['criteriaBudget']
+            criteriaReview = form.cleaned_date['criteriaReview']
+            director = form.cleaned_date['director']
+            actors = form.cleaned_date['actors']
+            genre = form.cleaned_date['genre']
+            budget = form.cleaned_date['budget']
+            review = form.cleaned_date['review']
+            keyWords = form.cleaned_date['keyWords']
               
             send = True
 
@@ -62,5 +71,3 @@ def predictionForm(request):
             form = PredictionForm()
 
     return render(request, 'test.html',locals())
-
-
