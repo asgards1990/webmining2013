@@ -29,5 +29,5 @@ class SearchHandler(tornado.web.RequestHandler):
 
 if __name__ == "__main__":
     app = tornado.web.Application([(r'/', TestHandler), (r'/predict/', PredictionHandler), (r'/search/', SearchHandler)])
-    app.listen(2345)
+    app.listen(8080)
     tornado.ioloop.IOLoop.instance().start()
