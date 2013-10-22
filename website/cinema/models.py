@@ -116,7 +116,7 @@ class  Film (models.Model):
     languages = models.ManyToManyField(Language, null=True,blank=True)
     reviews = models.ManyToManyField(Review, null=True,blank=True)
     def __unicode__(self):
-        return u'%s %s' % (self.first_name, self.last_name)
+        return u'%s' % (self.title_original)
     class Meta:
         ordering = ['title_original']
    
@@ -171,3 +171,6 @@ class PersonImage (models.Model):
         return self.filename  
     class Meta:
         ordering = ['filename']
+
+
+

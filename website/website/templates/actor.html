@@ -1,0 +1,24 @@
+<html>
+
+{% load static %}
+<script src="{% static 'javascript/jquery.js' %}" type="text/javascript"></script>
+{% include 'autocomplete_light/static.html' %}
+
+<body>
+    <h1>Contact us</h1>
+
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    <form action="" method="post">
+        <table>
+            {{ form.as_table }}
+        </table>
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
