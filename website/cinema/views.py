@@ -27,7 +27,7 @@ def home(request):
         else:
             form = HomeForm()
 
-    return render(request, 'test.html', locals())
+    return render(request, 'home.html', locals())
 
 def resultsForm(request):
     if request.method == 'POST':
@@ -48,7 +48,7 @@ def resultsForm(request):
         else:
             form = ResultsForm()
 
-    return render(request, 'test.html',locals())
+    return render(request, 'results.html',locals())
 
 def predictionForm(request):
     if request.method == 'POST':
@@ -70,4 +70,4 @@ def predictionForm(request):
         else:
             form = PredictionForm()
 
-    return render(request, 'test.html',locals())
+    return render(request, 'prediction.html',locals())

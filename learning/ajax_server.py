@@ -15,7 +15,8 @@ class PredictionHandler(tornado.web.RequestHandler):
         self.finish()
     
     def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "null") # Enable acces from every host.
+        self.set_header("Access-Control-Allow-Origin", "senellart.com")
+	#self.set_header("Access-Control-Allow-Origin", "null") Uncomment to enable access from every host.
 
 class SearchHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -25,7 +26,8 @@ class SearchHandler(tornado.web.RequestHandler):
         self.finish()
     
     def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "null")
+        self.set_header("Access-Control-Allow-Origin", "senellart.com")
+	#self.set_header("Access-Control-Allow-Origin", "null") Uncomment to enable acces from every host.
 
 if __name__ == "__main__":
     app = tornado.web.Application([(r'/', TestHandler), (r'/predict/', PredictionHandler), (r'/search/', SearchHandler)])
