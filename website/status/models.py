@@ -2,8 +2,8 @@ from django.db import models
 
 # Model for IMDB status
 class IMDBstatus(models.Model):
-    imdb_id = models.CharField()            # the IMDB identifier
-    year = models.IntegerField()            # the release year
+    imdb_id = models.CharField(max_length=9)            # the IMDB identifier
+    year = models.IntegerField()            # the release year
     position = models.IntegerField()        # the page in which the film appears
     # we need to download 5 webpages for each film
     film_page = models.IntegerField()       
