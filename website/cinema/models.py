@@ -51,7 +51,7 @@ class  Person (models.Model):
     first_name = models.CharField(max_length=255) #later
     last_name = models.CharField(max_length=255) #later
     def __unicode__(self):
-        return u'%s %s' % (self.name)
+        return self.name
     class Meta:
         ordering = ['name']
 
