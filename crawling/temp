@@ -32,16 +32,6 @@ for k in range(YEARSTART,YEARSTOP): #Global YEARSTART=1950 YEARSTOP=2020
          	mettre dans Imdb_status (id,pos)
          
          
-###########downloader.py###############
-
-import random
-
-
-for k in random.shuffle(Imdb_status[MainPage<5, year=:, page=:])
-
-	
-    telecharger page=http://www.imdb.com/search/title?count=250&release_date=k,k&sort=release_date_us,asc&title_type=feature,documentary&view=simple
-        
 
          
          
