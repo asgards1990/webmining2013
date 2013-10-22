@@ -1,5 +1,76 @@
-{% if send %} Votre demande a été prise en compte ! {% endif %}
+{% load staticfiles %}
 
-<form action="{% url "cinema.views.home" %}" method="post">{%csrf_token %}{{ form.as_p}}<input type="submit" value="Submit" />
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <base href="{% static 'cinema/' %}">
+        <title>Jackast, Cast'em all</title>
+        <link rel="stylesheet" type="text/css" href=commun.css  >
+        <link rel="stylesheet" type="text/css" href=rediction.css>
+    </head>
 
-</form>
+    <body>
+        
+        <div id="header">
+            <h1>Jackast</h1>
+            <h2>Cast'em all...</h2>
+        </div>
+
+        <div id="container">
+            <div id="film">
+                <form class="film" name="ChercheTonFilm">
+ 
+                    <p class="legend"> Looking for matches for the 
+                        latest movie you've seen?</p>
+                    
+                    <p>                        
+                    <input id="filmInput" type="text" name="TitreFilm" size="12"></input>
+                    <span>
+                       <input type="button" value="CE QUI EST ECRIT SUR LE BOUTON" onclick="self.location.href='http://tiresias.enst.fr/pesto/results'" >
+
+<!-- <input id="goButton" type="image" src="./img/go-icon.jpg"></input> -->
+                    </span>
+                    </p>
+                                      
+                    <p class="filterby"> Filter By:</p>
+                                    
+                    <div id="filters">
+                        <div class="filter">
+                            <input id="genre"type="image" alt="Genre" 
+                                   src="./img/genre.png">
+                            <figcaption class="season">Genre</figcaption>
+                        </div>
+                        
+                        <div class="filter">
+                            <input id="acteurs"type="image" alt="Acteurs" 
+                                   src="./img/acteurs.png">
+                            <figcaption class="season">Actors</figcaption>
+                        </div>
+                        
+                        <div class="filter">
+                            <input id="reviews"type="image" alt="Reviews" 
+                                   src="./img/reviews.png">
+                            <figcaption class="season">Reviews</figcaption>
+                        </div>
+                        
+                        <div class="filter">
+                            <input id="budget"type="image" alt="Budget" 
+                                   src="./img/budget.png">
+                            <figcaption class="season">Budget</figcaption>
+                        </div>                                                                   
+                    </div>                
+                </form>
+            </div>
+
+            <div id="makeyourmovie" Onclick="">
+                <p class="legend">  Or You can Just make your Movie and predict its Sucess! 
+                </p> 
+            </div>
+        </div> 
+        
+        <div id="footer">
+            <h1>Copyright Pesto WebMining 2013</h1>
+        </div>
+    </body>
+
+</html>
