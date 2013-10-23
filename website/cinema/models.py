@@ -53,7 +53,7 @@ class  Person (models.Model):
     first_name = models.CharField(max_length=255, blank=True) #later
     last_name = models.CharField(max_length=255, blank=True) #later
     def __unicode__(self):
-        return self.name
+        return u'%s' % (self.name)
     class Meta:
         ordering = ['name']
 
@@ -109,7 +109,7 @@ class  Film (models.Model):
     writers = models.ManyToManyField(Person, blank=True, null=True, related_name='films_from_writer')
     actors = models.ManyToManyField(Person, blank=True, null=True, through='ActorWeight', related_name='films_from_actor')
     def __unicode__(self):
-        return u'%s %i' % (self.original_title, self.imdb_id)
+        return u'%s' % (self.original_title)
     class Meta:
         ordering = ['original_title', 'release_date']
 
