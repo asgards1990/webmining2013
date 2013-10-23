@@ -19,9 +19,6 @@ import random
 
 import os
 
-# Logger for this module
-logger = initLogger.getLogger(DownloaderConfig.DOWNLOADER_LOGGER_NAME)
-
 ####################################################################
 
 # Custom User-Agent to load IMDB search results
@@ -29,75 +26,68 @@ logger = initLogger.getLogger(DownloaderConfig.DOWNLOADER_LOGGER_NAME)
 class IMDBSpiderURLopener(FancyURLopener):
     version = "Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11"
 
-urllib._urlopener = IMDBSpiderURLopener()
-
 
 ####################################################################
 
-def checkDownloadedHTML(dest):
-    logger.debug("Check the size of downloaded HTML page {}".format(dest))
+class Downloader:
     
-    statinfo = os.stat(dest)
-    logger.debug("Size: {}".format(statinfo.st_size))
-    
-    if (statinfo.st_size > DownloaderConfig.DOWNLOADER_MIN_PAGE_SIZE):
-        logger.debug("The html page has a correct size")
-        return True
-    else:
-        logger.warning("The html page has not a correct size")
-        return False
+    def __init__(self):
+        # Logger
+        self.logger = initLogger.getLogger(DownloaderConfig.DOWNLOADER_LOGGER_NAME)
+        urllib._urlopener = IMDBSpiderURLopener()
 
-
-def downloadHTML(url, dest):
-    logger.debug("Download the HTML page from url {0} to file {1}".format(url, dest))
+    def checkDownloadedHTML(self, dest):
+        self.logger.debug("Check the size of downloaded HTML page {}".format(dest))
     
-    try:
-        logger.debug("Try to download the HTML page")
-        u = urllib.urlopen(url)
-    except IOError as e:
-        logger.error(url)
-        logger.error('We failed to reach a server or the server couldn\'t fulfill the request.')
-        logger.error('Error: {}'.format(e.errno))
-        logger.error('Reason: {}'.format(e.strerror))
-        return False        
-    else:
-        f = open(dest, 'wb')
-        f.write(u.read())
-        f.close()
-        u.close()
-        logger.debug("HTML page downloaded")
-        
-        if checkDownloadedHTML(dest):
+        statinfo = os.stat(dest)
+        self.logger.debug("Size: {}".format(statinfo.st_size))
+    
+        if (statinfo.st_size > DownloaderConfig.DOWNLOADER_MIN_PAGE_SIZE):
+            self.logger.debug("The html page has a correct size")
             return True
         else:
-            logger.warning("Deleting the downloaded HTML page")
-            os.remove(dest)
+            self.logger.warning("The html page has not a correct size")
             return False
 
-####################################################################
 
-def downloadFilmPage(imdb_id):
-    logger.debug("Download the Film Page for film {}".format(imdb_id))
+    def checkHTTPStatus(self, u):
+        self.logger.debug("Check HTTP status of page {}".format(u.geturl()))
 
-def downloadFilmCast(imdb_id):
-    logger.debug("Download the Film Cast for film {}".format(imdb_id))
+        if u.getcode() == 200:
+            self.logger.debug("Status code 200 - The request has suceeded")
+            return True
+        else:
+            self.logger.warning("Status code {} - There can be a problem with the request".format(u.getcode()))
+            return False
+    
+    def downloadHTML(self, url, dest):
+        self.logger.debug("Download the HTML page from url {0} to file {1}".format(url, dest))
+        
+        try:
+            self.logger.debug("Try to download the HTML page")
+            u = urllib.urlopen(url)
+        except IOError as e:
+            self.logger.warning(url)
+            self.logger.warning('We failed to reach a server or the server couldn\'t fulfill the request.')
+            self.logger.warning('Error: {}'.format(e.errno))
+            self.logger.warning('Reason: {}'.format(e.strerror))
+            return False        
+        else:
+                        
+            if self.checkHTTPStatus(u):
+                f = open(dest, 'wb')
+                f.write(u.read())
+                f.close()
+                u.close()
+                self.logger.debug("HTML page downloaded")
 
-def downloadFilmAwards(imdb_id):
-    logger.debug("Download the Film Awards for film {}".format(imdb_id))
-
-def downloadFilmReviews(imdb_id):
-    logger.debug("Download the Film Reviews for film {}".format(imdb_id))
-
-def downloadFilmKeywords(imdb_id):
-    logger.debug("Download the Film Keywords for film {}".format(imdb_id))
-
-####################################################################
-
-def startDownloader():
-    logger.debug("Start the downloader")
-
-url = "http://www.imdb.com/title/tt0203259/"
-dest = "test.html"
-
-downloadHTML(url, dest)
+                if self.checkDownloadedHTML(dest):
+                    return True
+                else:
+                    self.logger.warning("Deleting the downloaded HTML page")
+                    os.remove(dest)
+                    return False
+            else:
+                u.close()
+                return False
 

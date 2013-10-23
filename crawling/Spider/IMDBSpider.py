@@ -22,7 +22,7 @@ import re
 import random
 
 # Logger for this module
-logger = initLogger.getLogger(SpiderConfig.SPIDER_LOGGER_NAME)
+logger = initLogger.getLogger(SpiderConfig.IMDB_SPIDER_LOGGER_NAME)
 
 
 ####################################################################
@@ -39,7 +39,7 @@ urllib._urlopener = IMDBSpiderURLopener()
 def searchURL(year, start_pos):
     logger.debug("Compute the url for IMDB search:")
 
-    url = "http://www.imdb.com/search/title?count=250&release_date=" + str(year) + "," + str(year) + "&sort=release_date_us,asc&start=" + str(start_pos) + "&title_type=feature,documentary&view=simple"
+    url = "http://www.imdb.com/search/title?count=250&release_date={0},{0}&sort=release_date_us,asc&start={1}&title_type=feature,documentary&view=simple".format(year, start_pos)
     logger.debug(url)
     return url
 
