@@ -5,11 +5,13 @@ from cinema.forms import HomeForm, ResultsForm, PredictionForm
 
 def filmsearch(request):
     if request.method == 'POST':
-        form = MultipleActorSearchForm(request.POST)
-        if form.is_valid():
+        #form = MultipleActorSearchForm(request.POST)
+        form = FilmSearchForm(request.POST)
+	if form.is_valid():
             return render(request, 'thanks.html')
     else:
-        form = MultipleActorSearchForm()
+        #form = MultipleActorSearchForm()
+        form = FilmSearchForm()
     return render(request, 'actor.html', {'form': form})
 
 def home(request):
