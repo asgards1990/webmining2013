@@ -2,27 +2,33 @@
 # -*- coding: utf-8 -*-
 
 
-
 ####################################################################
 
 #importe les modules internes
+
 import Logger.init_logger as initLogger #Initialise le logger
 import Logger.logger_config as loggerConfig
 
-import spider_config as SpiderConfig
-
 import Extractor.superExtractor
 from Extractor.extractorHTML import ExtractorHTML
+import Extractor.customisedCleaner as CustomCleaner
+
+import spider_config as SpiderConfig
 
 import urllib
 from urllib import FancyURLopener
 
-import Extractor.customisedCleaner as CustomCleaner
+import re
 
+import random
+
+# Logger for this module
 logger = initLogger.getLogger(SpiderConfig.SPIDER_LOGGER_NAME)
 
 
 ####################################################################
+
+# Custom User-Agent to load IMDB search results
 
 class IMDBSpiderURLopener(FancyURLopener):
     version = "Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11"
@@ -31,12 +37,14 @@ urllib._urlopener = IMDBSpiderURLopener()
 
 ####################################################################
 
-def search_url(year, start_pos):
+def searchURL(year, start_pos):
     logger.debug("Compute the url for IMDB search:")
 
-    url = "http://www.imdb.com/search/title?count=250&release_date=" + str(year) + "," + str(year) + "&sort=release_date_us,asc&start=" + str(start_pos) + "&title_tyearpe=feature,documentary&view=simple"
+    url = "http://www.imdb.com/search/title?count=250&release_date=" + str(year) + "," + str(year) + "&sort=release_date_us,asc&start=" + str(start_pos) + "&title_type=feature,documentary&view=simple"
     logger.debug(url)
     return url
+
+####################################################################
 
 class IMDBSearchResultsExtractor:
 
@@ -51,33 +59,76 @@ class IMDBSearchResultsExtractor:
         logger.debug("IMDB Search Result Extractor created for webpage {} ".format(url))
     
     def extractNumberOfResults(self):
-        logger.debug("Extract Number of Search Results:")
-        return self.extractor.extractXpathText('//div[@id="left"]')
+        logger.debug("Extract Number of Search Results")
+        
+        text = self.extractor.extractXpathText('//div[@id="left"]')[0]
+        nb = int(re.findall(r'\d+', text.replace(",", ""))[-1])
+        logger.debug("Number of Results: {}".format(nb))
+        return nb
 
-    def extractURLs(self):
-        logger.debug("Extract IMDB ids:")
-        return self.extractor.extractXpathText('//td[@class="title"]')
+    def extractIds(self):
+        logger.debug("Extract IMDB ids")
+
+        links = self.extractor.extractXpathElement('//td[@class="title"]//a/@href')
+        ids = map(lambda s: re.findall(r'tt\d+', s)[0], links)
+        logger.debug("IMDB ids: {}".format(ids))
+        return ids
     
     def extractPositions(self):
-        logger.debug("Extract positions:")
-        return self.extractor.extractXpathText('//td[@class="number"]')
-
-def process_page(page, year):
-    logger.debug("Extract IDs from search results:")
-
-    urls = page.xpath('//td[@class="title"]/a/@href')
-    positions = page.xpath('//td[@class="number"]')
-    
-    for i in range(len(urls)):
-        url = urls[i]
-        imdb_id='tt' + regexp(r'd+',url)    
+        logger.debug("Extract positions")
         
+        labels = self.extractor.extractXpathText('//td[@class="number"]')
+        positions = map(lambda s: int(re.findall(r'\d+', s)[0]), labels)
+        logger.debug("Positions: {}".format(positions))
+        return positions
+
+####################################################################
+
+def insertResults(imdb_ids, positions, year):
+    logger.debug("Insert results into the database")
+ 
+    for i in range(len(imdb_ids)):
+        imdb_id = imdb_ids[i]    
+        position = positions[i]
+        logger.debug("Inserting result: imdb_id={0} year={1} position={2}".format(imdb_id, year, position))
+        # TODO: TESTER SI LE FILM EXISTE DEJA !!
         # TODO: METTRE dans Imdb_status (imdb_id, year, position, 0, 0, 0, 0, 0, -1)
 
-url = search_url(1999,1000)
+####################################################################
 
-extractor = IMDBSearchResultsExtractor(url)
-extractor.extractNumberOfResults()
-extractor.extractIMDBIds()
-extractor.extractPositions()
+def extractYear(year):
+    logger.debug("Extract all IMDB search results for year {}".format(year))
+    
+    # TODO: OBTENIR POSITION MAXIMALE dans la BDD pour l'année year -> pos_init[year] = 
+    pos_init = 0
 
+    # TODO: PAGE MAXIMAL (dans la base de donnée) pour l'année year
+    page_init = 1 # (pos_init - 1) / 250 + 1
+
+    url_init = searchURL(year, 1 + 250 * (page_init - 1))
+    extr_init = IMDBSearchResultsExtractor(url_init)
+  	
+    insertResults(extr_init.extractIds(), extr_init.extractPositions(), year)
+
+    pos_max = extr_init.extractNumberOfResults() # POSITION MAXIMALE A PARSER   
+    page_max = (pos_max - 1) / 250 + 1 # PAGE MAXIMALE A PARSER 
+    
+    for page in range(page_init + 1, page_max + 1):
+        url = searchURL(year, 1 + 250 * (page - 1))
+        extr = IMDBSearchResultsExtractor(url)
+        
+        insertResults(extr.extractIds(), extr.extractPositions(), year)
+
+####################################################################
+
+def startSpider():
+    logger.debug("Start the spider")
+    logger.debug("START YEAR: {}".format(SpiderConfig.SPIDER_START_YEAR))
+    logger.debug("END YEAR: {}".format(SpiderConfig.SPIDER_END_YEAR))
+    years = range(SpiderConfig.SPIDER_START_YEAR, SpiderConfig.SPIDER_END_YEAR + 1)
+    random.shuffle(years)
+    logger.debug("Years order: {}".format(years))
+    for year in years:
+        extractYear(year)
+
+startSpider()
