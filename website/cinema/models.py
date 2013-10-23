@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 
 class  Country (models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -82,7 +83,7 @@ class  Keyword (models.Model):
 
 class  Film (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True)
-    original_title = models.CharField(max_length=255)
+    original_title = models.CharField(max_length=255,default=None)
     english_title = models.CharField(max_length=255,blank=True)
     release_date = models.DateField()
     runtime = models.IntegerField(null=True,blank=True)
