@@ -4,30 +4,30 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
 class  Country (models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    nationality = models.CharField(max_length=255, unique=True) 
+    name = models.CharField(max_length=255, unique=True, default=None)
+    nationality = models.CharField(max_length=255, unique=True, default=None) 
     def __unicode__(self):
         return self.name       
     class Meta:
         ordering = ['name']
 
 class Language(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    identifier = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
+    identifier = models.CharField(max_length=10, unique=True, default=None)
     def __unicode__(self):
         return self.name    
     class Meta:
         ordering = ['name']
  
 class  Genre (models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
     def __unicode__(self):
         return self.name
     class Meta:
         ordering = ['name']
 
 class  Reviewer (models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
     gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')], null=True,blank=True) #later
     def __unicode__(self):
         return self.name      
@@ -35,7 +35,7 @@ class  Reviewer (models.Model):
         ordering = ['name']
 
 class  Journal (models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
     language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL) #later
     def __unicode__(self):
@@ -44,8 +44,8 @@ class  Journal (models.Model):
         ordering = ['name']
 
 class  Person (models.Model):
-    imdb_id = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=255)
+    imdb_id = models.CharField(max_length=10, unique=True, default=None)
+    name = models.CharField(max_length=255, default=None)
     birth_date = models.DateField(null=True,blank=True)
     image_url = models.CharField(blank=True, max_length=255)
     birth_country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
@@ -58,8 +58,8 @@ class  Person (models.Model):
         ordering = ['name']
 
 class  ProductionCompany (models.Model):
-    imdb_id = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=255, unique=True)
+    imdb_id = models.CharField(max_length=10, unique=True, default=None)
+    name = models.CharField(max_length=255, unique=True, default=None)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL) #later
     def __unicode__(self):
         return self.name      
@@ -67,7 +67,7 @@ class  ProductionCompany (models.Model):
         ordering = ['name']
 
 class  Institution (models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL) #later
     def __unicode__(self):
         return self.name      
@@ -75,14 +75,14 @@ class  Institution (models.Model):
         ordering = ['name']
 
 class  Keyword (models.Model):
-    word = models.CharField(max_length=255, unique=True)
+    word = models.CharField(max_length=255, unique=True, default=None)
     def __unicode__(self):
         return self.word
     class Meta:
         ordering = ['word']
 
 class  Film (models.Model):
-    imdb_id = models.CharField(max_length=10, unique=True)
+    imdb_id = models.CharField(max_length=10, unique=True, default=None)
     original_title = models.CharField(max_length=255,default=None)
     english_title = models.CharField(max_length=255,blank=True)
     release_date = models.DateField()
@@ -114,7 +114,7 @@ class  Film (models.Model):
         ordering = ['original_title', 'release_date']
 
 class  Prize (models.Model):
-    win = models.BooleanField()
+    win = models.BooleanField(default=None)
     year = models.IntegerField(null=True,blank=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
