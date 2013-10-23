@@ -5,7 +5,8 @@ from django.core.exceptions import ValidationError
 
 class  Country (models.Model):
     name = models.CharField(max_length=255, unique=True, default=None)
-    nationality = models.CharField(max_length=255, unique=True, default=None) 
+    nationality = models.CharField(max_length=255, unique=True, default=None)
+    identifier = models.CharField(max_length=5, unique=True, default=None)
     def __unicode__(self):
         return self.name       
     class Meta:
@@ -13,7 +14,7 @@ class  Country (models.Model):
 
 class Language(models.Model):
     name = models.CharField(max_length=255, unique=True, default=None)
-    identifier = models.CharField(max_length=10, unique=True, default=None)
+    identifier = models.CharField(max_length=5, unique=True, default=None)
     def __unicode__(self):
         return self.name    
     class Meta:
