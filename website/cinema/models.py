@@ -142,7 +142,7 @@ class ActorWeight(models.Model):
     actor = models.ForeignKey(Person, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} played in {1} and is ranked {2} in credits. Star : {3}".format(self.actor, self.film, self.rank, self.star)
+        return "{0} played in {1} and is ranked {2} in credits. Star : {3}".format(self.actor.name, self.film.original_title, self.rank, self.star)
 
 class JournalInfluence(models.Model):
     influence = models.FloatField(null=True,blank=True)
