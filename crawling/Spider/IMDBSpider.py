@@ -1,7 +1,6 @@
 # /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 ####################################################################
 
 #importe les modules internes
@@ -60,7 +59,7 @@ class IMDBSearchResultsExtractor:
     
     def extractNumberOfResults(self):
         logger.debug("Extract Number of Search Results")
-        
+         
         text = self.extractor.extractXpathText('//div[@id="left"]')[0]
         nb = int(re.findall(r'\d+', text.replace(",", ""))[-1])
         logger.debug("Number of Results: {}".format(nb))

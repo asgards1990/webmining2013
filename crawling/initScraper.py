@@ -26,6 +26,8 @@ parser.add_argument('-fd', '--fresh_debug', dest = 'fresh_debug', help = "Si pr�
 
 parser.add_argument('-s', '--spider', dest = 'spider', help = "Si présent, lance le spider", action='store_true')
 
+parser.add_argument('-d', '--downloader', dest = 'downloader', help = "Si présent, lance le downloader", action='store_true')
+
 #Crée le tableau global qui donne accès aux arguments passés en paramètres sur la ligne de commande
 initConfig.args = parser.parse_args()
 
@@ -44,6 +46,10 @@ if initConfig.args.fresh_debug:
 if initConfig.args.spider:
     logger.info ('Lancement du Spider')
     import Spider.IMDBSpider
+
+if initConfig.args.downloader:
+    logger.info ('Lancement du Downloader')
+    import Downloader.IMDBDownloader
 
 ###############
 # import IMDBExtractor.IMDBExtractor
