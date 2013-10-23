@@ -1,0 +1,93 @@
+# /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+####################################################################
+
+#importe les modules internes
+
+import Logger.init_logger as initLogger #Initialise le logger
+import Logger.logger_config as loggerConfig
+
+import downloader_config as DownloaderConfig
+
+import urllib
+from urllib import FancyURLopener
+
+import re
+
+import random
+
+import os
+
+####################################################################
+
+# Custom User-Agent to load IMDB search results
+
+class IMDBSpiderURLopener(FancyURLopener):
+    version = "Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11"
+
+
+####################################################################
+
+class Downloader:
+    
+    def __init__(self):
+        # Logger
+        self.logger = initLogger.getLogger(DownloaderConfig.DOWNLOADER_LOGGER_NAME)
+        urllib._urlopener = IMDBSpiderURLopener()
+
+    def checkDownloadedHTML(self, dest):
+        self.logger.debug("Check the size of downloaded HTML page {}".format(dest))
+    
+        statinfo = os.stat(dest)
+        self.logger.debug("Size: {}".format(statinfo.st_size))
+    
+        if (statinfo.st_size > DownloaderConfig.DOWNLOADER_MIN_PAGE_SIZE):
+            self.logger.debug("The html page has a correct size")
+            return True
+        else:
+            self.logger.warning("The html page has not a correct size")
+            return False
+
+
+    def checkHTTPStatus(self, u):
+        self.logger.debug("Check HTTP status of page {}".format(u.geturl()))
+
+        if u.getcode() == 200:
+            self.logger.debug("Status code 200 - The request has suceeded")
+            return True
+        else:
+            self.logger.warning("Status code {} - There can be a problem with the request".format(u.getcode()))
+            return False
+    
+    def downloadHTML(self, url, dest):
+        self.logger.debug("Download the HTML page from url {0} to file {1}".format(url, dest))
+        
+        try:
+            self.logger.debug("Try to download the HTML page")
+            u = urllib.urlopen(url)
+        except IOError as e:
+            self.logger.warning(url)
+            self.logger.warning('We failed to reach a server or the server couldn\'t fulfill the request.')
+            self.logger.warning('Error: {}'.format(e.errno))
+            self.logger.warning('Reason: {}'.format(e.strerror))
+            return False        
+        else:
+                        
+            if self.checkHTTPStatus(u):
+                f = open(dest, 'wb')
+                f.write(u.read())
+                f.close()
+                u.close()
+                self.logger.debug("HTML page downloaded")
+
+                if self.checkDownloadedHTML(dest):
+                    return True
+                else:
+                    self.logger.warning("Deleting the downloaded HTML page")
+                    os.remove(dest)
+                    return False
+            else:
+                u.close()
+                return False
+
