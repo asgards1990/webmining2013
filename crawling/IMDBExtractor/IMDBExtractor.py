@@ -44,7 +44,17 @@ the_artist_id="tt1655442"
 
 
 class IMDBExtractor:
-   #TODO voir si on peut actoriser en mettant dans un loader universel
+
+   """Chaque page nécessite un extractor qui lui est propre : 
+          Film 
+          Personne (la structure de Actor/Writer/Director est identique) 
+          Company 
+          Keyword 
+          Awards 
+          Casting (fullcredits) 
+          Producteurs (companycredits / review / )
+   """
+
    #TODO le load page ey le create extractor engine ne doivent pas faire partie de IMDB Extractor. IMDB Extractor doit vérifier si la page existe, dans le cas contraire mettre dans le spider qu'il faut télécharger la page! Rien de plus 
    def __init__(self,id_):
       logger.debug("Création de IMDB Extracteur")
@@ -52,17 +62,23 @@ class IMDBExtractor:
 
    def loadPage(self,url):
       #TODO : vérifie si la page est déjà en local, sinon charge l'url
+      #TODO DOIT DEGAGER!
       logger.info("La page n'existe pas en locale, chargement de la page {}".format(url))
       page = urllib.urlopen(url)
       self.t = page.read()
       return self.t
 
    def createExtractorEngine(self,url):
+      #TODO DOIT DEGAGER
       t=self.loadPage(url)
       cleaner = CustomCleaner.CustomedCleaner_HTML()
       self.extractor = ExtractorHTML(t,cleaner)
 
 class IMDBExtractor_Film(IMDBExtractor):
+
+   """ Objet qui va récupérer la page HTML principale pour le film en question (une fois que toutes les pages relatives au film sont déjà chargées (Except Personnes/Companies)). Une fois récupérée, l'extracteur récupère toutes les infos pour remplir la base
+      Pour remplir la base, l'extractor crée de nouveaux extractors pour les pages connexes (keywords, awards, casting, producteurs...)
+   """
 
    def __init__(self,film_id):
       logger.debug("Création d'un Extracteur pour un type page de Film")
@@ -70,6 +86,7 @@ class IMDBExtractor_Film(IMDBExtractor):
 
       self.createExtractorEngine(page_prefixe+film_page_default+film_id)
 
+      # Sur la main page directement
       self.english_title = self.extractTitle()
       self.original_title = self.extractOriginalTitle()
       self.release_date = self.extractReleaseDate()
@@ -81,14 +98,21 @@ class IMDBExtractor_Film(IMDBExtractor):
       self.imdb_nb_user_review,self.imdb_nb_reviews = self.extractReviewCount() 
       self.imdb_summary = self.extractSummary()
       self.imdb_storyline = self.extractStoryLine()
-      #TODO metacritic_score = IntegerField(null=True,blank=True)
-      #TODO self.image_url = #TODO 
-      #TODO language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
       self.country = self.extractCountry()
       self.genres = self.extractGenres()
-      #array
+      #TODO language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
+
+      #sur la page reviews
+      #TODO metacritic_score = IntegerField(null=True,blank=True)
+
+      #sur la page keywords
       self.keywords = self.extractKeywords() 
+
+      #sur la page companycredits
       self.production_company =self.extractProducers() #TODO vérifier avant de transmettre à la DB
+
+      #sur la page fullcredits
+      #TODO faire une fonction extractFullCredits() qui construit un extracteur pour la page full credits et qui remplit self.directors/self.writers/self.actors
       #self.directors = self.extractDirectors() #TODO à faire sur la page fullcredits
       self.writers = self.extractWriter()#pris directement sur la page du film (les 3 premiers) #TODO a faire sur la page fullcredits
       #self.actors =  self.extractActors()#page de casting (tous les acteurs)
