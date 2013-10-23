@@ -5,7 +5,7 @@
     <head>
         <base href="{% static 'cinema/' %}">
         <title>Jackast, Cast'em all</title>
-        <link rel="stylesheet" type="text/css" href=commun.css  >
+        <link rel="stylesheet" type="text/css" href=commun.css>
         <link rel="stylesheet" type="text/css" href=home.css>
     </head>
 
@@ -23,41 +23,44 @@
                     <p class="legend"> Looking for matches for the 
                         latest movie you've seen?</p>
                     
-                    <p>                        
-                    <input id="filmInput" type="text" name="TitreFilm" size="12"></input>
-                    <span>
-                       <input type="button" id="goButton" value="Go" onclick="self.location.href='http://tiresias.enst.fr/pesto/results'" >
-
-                    </span>
+                    <p style="text-align:center;">                        
+                    <input id="filmInput" type="text" name="TitreFilm" size="12">                 
                     </p>
                                       
                     <p class="filterby"> Filter By:</p>
                                     
                     <div id="filters">
                         <div class="filter">
-                            <input id="genre"type="image" alt="Genre" 
+                            <input id="genre" type="image" alt="Genre" 
                                    src="./img/genre.png">
-                            <figcaption class="season">Genre</figcaption>
+                            <figcaption class="filter">Genre</figcaption>
                         </div>
                         
                         <div class="filter">
-                            <input id="acteurs"type="image" alt="Acteurs" 
+                            <input id="acteurs" type="image" alt="Acteurs" 
                                    src="./img/acteurs.png">
-                            <figcaption class="season">Actors</figcaption>
+                            <figcaption class="filter">Actors</figcaption>
                         </div>
                         
                         <div class="filter">
-                            <input id="reviews"type="image" alt="Reviews" 
+                            <input id="reviews" type="image" alt="Reviews" 
                                    src="./img/reviews.png">
-                            <figcaption class="season">Reviews</figcaption>
+                            <figcaption class="filter">Reviews</figcaption>
                         </div>
                         
                         <div class="filter">
-                            <input id="budget"type="image" alt="Budget" 
+                            <input id="budget" type="image" alt="Budget" 
                                    src="./img/budget.png">
-                            <figcaption class="season">Budget</figcaption>
-                        </div>                                                                   
-                    </div>                
+                            <figcaption class="filter">Budget</figcaption>
+                        </div>
+                        
+                        <p style="clear:both;text-align:center;">
+			<a id="goButton" href="http://tiresias.enst.fr/pesto/results"><img src="img/go-icon.jpg" alt="Go"></a> 
+                   
+                    </p>
+                    </div>  
+                    
+                    
                 </form>
             </div>
 
