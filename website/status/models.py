@@ -1,7 +1,7 @@
 from django.db import models
 
 # Model for IMDB status
-class IMDBstatus(models.Model):
+class IMDBFilmStatus(models.Model):
     imdb_id = models.CharField(max_length=9)            # the IMDB identifier
     year = models.IntegerField()            # the release year
     position = models.IntegerField()        # the page in which the film appears
@@ -34,4 +34,5 @@ class IMDBstatus(models.Model):
             raise Exception, "the 'extracted' field should be -1, 0 or 1"
         else:
             super(IMDBstatus, self).save(*args, **kwargs) # Call the "real" save() method.
+
 

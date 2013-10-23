@@ -1,7 +1,7 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: latin-1 -*-
 
 #Définit la configuration du module Extractor
 
 #Logger
-IMDB_EXTRACTOR_LOGGER_NAME = "ExTRACTOR IMDB"
+USER_AGENT_LOGGER_NAME = "CUSTOM USER AGENT"
