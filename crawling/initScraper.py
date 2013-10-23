@@ -23,7 +23,7 @@ parser = argparse.ArgumentParser()
 
 #Liste tous les arguments que l'on peut saisir sur la ligne de commandes
 parser.add_argument('-fd', '--fresh_debug', dest = 'fresh_debug', help = "Si présent, le fichier de debug est vidé avant l'exécution", action='store_true')
-
+parser.add_argument('-imdb_ex', '--imdb-extractor', dest = 'imdb_extractor', help = "Si présent, lance l'extraction des fichiers HTML en provenace de IMDB", action='store_true')
 #Crée le tableau global qui donne accès aux arguments passés en paramètres sur la ligne de commande
 initConfig.args = parser.parse_args()
 
@@ -40,4 +40,6 @@ if initConfig.args.fresh_debug:
     open(debug_file, 'w').close()
 
 ###############
-import IMDBExtractor.IMDBExtractor
+if initConfig.args.imdb_extractor:
+   import UserAgent.userAgent
+   import IMDBExtractor.IMDBExtractor
