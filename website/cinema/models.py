@@ -54,14 +54,14 @@ class  Person (models.Model):
     first_name = models.CharField(max_length=255, blank=True) #later
     last_name = models.CharField(max_length=255, blank=True) #later
     def __unicode__(self):
-        return u'%s' % (self.name)
+        return self.name
     class Meta:
         ordering = ['name']
 
 class  ProductionCompany (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True, default=None)
     name = models.CharField(max_length=255, unique=True, default=None)
-    country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL) #later
+    country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
     def __unicode__(self):
         return self.name      
     class Meta:
@@ -110,7 +110,7 @@ class  Film (models.Model):
     writers = models.ManyToManyField(Person, blank=True, null=True, related_name='films_from_writer')
     actors = models.ManyToManyField(Person, blank=True, null=True, through='ActorWeight', related_name='films_from_actor')
     def __unicode__(self):
-        return u'%s' % (self.original_title)
+        return self.original_title
     class Meta:
         ordering = ['original_title', 'release_date']
 
@@ -120,7 +120,7 @@ class  Prize (models.Model):
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} in {1} for film {2}. Won : {3}".format(self.institution.name, self.year, self.film.original_title, self.win)
+        return "{0} in {1} for film {2} and Won {3}".format(self.institution.name, self.year, self.film.original_title, self.win)
     class Meta:
         ordering = ['year']
 
@@ -143,7 +143,7 @@ class ActorWeight(models.Model):
     actor = models.ForeignKey(Person, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} played in {1} and is ranked {2} in credits. Star : {3}".format(self.actor.name, self.film.original_title, self.rank, self.star)
+        return "{0} played in {1} and is ranked {2} in credits and Star {3}".format(self.actor.name, self.film.original_title, self.rank, self.star)
 
 class JournalInfluence(models.Model):
     influence = models.FloatField(null=True,blank=True)
