@@ -71,7 +71,7 @@ STATIC_URL = '/pesto/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'static').replace('\\','/'),
+    #os.path.join(os.path.dirname(__file__), 'static').replace('\\','/'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -111,11 +111,12 @@ ROOT_URLCONF = 'website.urls'
 WSGI_APPLICATION = 'website.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), '../templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), '/templates').replace('\\','/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    #"/home/pesto/webmining2013/website/templates/cinema"
+    "/home/pesto/webmining2013/website/templates/cinema",
+    "/home/pesto/webmining2013/website/templates"
 )
 
 INSTALLED_APPS = (
@@ -131,7 +132,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'cinema',
     'autocomplete_app',
-#    'autocomplete_light',
+    'autocomplete_light',
     'status',
 )
 

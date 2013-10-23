@@ -6,7 +6,7 @@
         <base href="{% static 'cinema/' %}">
         <title>Jackast, Cast'em all</title>
         <link rel="stylesheet" type="text/css" href=commun.css  >
-        <link rel="stylesheet" type="text/css" href=rediction.css>
+        <link rel="stylesheet" type="text/css" href=home.css>
     </head>
 
     <body>
@@ -26,9 +26,8 @@
                     <p>                        
                     <input id="filmInput" type="text" name="TitreFilm" size="12"></input>
                     <span>
-                       <input type="button" value="CE QUI EST ECRIT SUR LE BOUTON" onclick="self.location.href='http://tiresias.enst.fr/pesto/results'" >
+                       <input type="button" id="goButton" value="Go" onclick="self.location.href='http://tiresias.enst.fr/pesto/results'" >
 
-<!-- <input id="goButton" type="image" src="./img/go-icon.jpg"></input> -->
                     </span>
                     </p>
                                       
