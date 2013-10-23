@@ -120,7 +120,7 @@ class  Prize (models.Model):
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} in {1} for film {2} and Won {3}".format(self.institution.name, self.year, self.film.original_title, self.win)
+        return u"{0} in {1} for film {2} and Won {3}".format(self.institution.name, self.year, self.film.original_title, self.win)
     class Meta:
         ordering = ['year']
 
@@ -133,7 +133,7 @@ class  Review (models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     full_review_url = models.URLField(blank=True)
     def __unicode__(self):
-        return "{0} from {1} for {2}".format(self.grade, self.reviewer.name, self.journal.name)       
+        return u"{0} from {1} for {2}".format(self.grade, self.reviewer.name, self.journal.name)       
     class Meta:
         ordering = ['-grade']
 
@@ -143,14 +143,14 @@ class ActorWeight(models.Model):
     actor = models.ForeignKey(Person, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} played in {1} and is ranked {2} in credits and Star {3}".format(self.actor.name, self.film.original_title, self.rank, self.star)
+        return u"{0} played in {1} and is ranked {2} in credits and Star {3}".format(self.actor.name, self.film.original_title, self.rank, self.star)
 
 class JournalInfluence(models.Model):
     influence = models.FloatField(null=True,blank=True)
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} has influence {1} for {2} films".format(self.journal.name, self.influence, self.genre.name)
+        return u"{0} has influence {1} for {2} films".format(self.journal.name, self.influence, self.genre.name)
     class Meta:
         ordering = ['-influence']
 
@@ -160,7 +160,7 @@ class InstitutionInfluence(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} has influence {1} for {2} films in {3}".format(self.institution.name, self.influence, self.genre.name, self.country.name)
+        return u"{0} has influence {1} for {2} films in {3}".format(self.institution.name, self.influence, self.genre.name, self.country.name)
     class Meta:
         ordering = ['-influence']
 
@@ -169,6 +169,6 @@ class GenrePopularKeyword(models.Model):
     keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE)
     occurences = models.IntegerField()
     def __unicode__(self):
-        return "{0} occurs {1} times in {2} films".format(self.keyword.word, self.occurences, self.genre.name)
+        return u"{0} occurs {1} times in {2} films".format(self.keyword.word, self.occurences, self.genre.name)
     class Meta:
         ordering = ['-occurences']
