@@ -46,7 +46,7 @@ class  Journal (models.Model):
 
 class  Person (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True, default=None)
-    name = models.CharField(max_length=255, default=None)
+    name = models.CharField(max_length=255,blank=True)
     birth_date = models.DateField(null=True,blank=True)
     image_url = models.CharField(blank=True, max_length=255)
     birth_country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
@@ -60,7 +60,7 @@ class  Person (models.Model):
 
 class  ProductionCompany (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True, default=None)
-    name = models.CharField(max_length=255, unique=True, default=None)
+    name = models.CharField(max_length=255, unique=True)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
     def __unicode__(self):
         return u"%s"%(self.name)      
@@ -84,7 +84,7 @@ class  Keyword (models.Model):
 
 class  Film (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True, default=None)
-    original_title = models.CharField(max_length=255,default=None)
+    original_title = models.CharField(max_length=255,blank=True)
     english_title = models.CharField(max_length=255,blank=True)
     release_date = models.DateField()
     runtime = models.IntegerField(null=True,blank=True)
