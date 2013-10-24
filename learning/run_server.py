@@ -5,7 +5,7 @@ import ajax_server.handlers
 import service.prodbox
 
 if __name__ == "__main__":
-    app_learn = service.prodbox.CinemaService()
+    app_learn = service.prodbox.CinemaService("cache")
 
     app = tornado.web.Application(
         [(r'/', ajax_server.handlers.TestHandler),
