@@ -67,6 +67,58 @@ class IMDBFilmStatusConnector:
             self.logger.debug("Film status for IMDB ID {} deleted from the database".format(imdb_id))
             return True
 
+    def getFilmMainPageStatus(self, imdb_id):
+        self.logger.debug("Get the film Main Page status for IMDB ID {} in the database".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.film_mainpage
+        
+        self.logger.debug("Status: {}".format(status))
+        return status
+
+    def getFilmFullCreditsStatus(self, imdb_id):
+        self.logger.debug("Get the film Full Credits status for IMDB ID {} in the database".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.film_fullcredits
+
+        self.logger.debug("Status: {}".format(status))
+        return status
+
+    def getFilmAwardsStatus(self, imdb_id):
+        self.logger.debug("Get the film Awards status for IMDB ID {} in the database".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.film_awards
+
+        self.logger.debug("Status: {}".format(status))
+        return status
+
+    def getFilmReviewsStatus(self, imdb_id):
+        self.logger.debug("Get the film Reviews status for IMDB ID {} in the database".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.film_reviews
+
+        self.logger.debug("Status: {}".format(status))
+        return status
+
+    def getFilmKeywordsStatus(self, imdb_id):
+        self.logger.debug("Get the film Keywords status for IMDB ID {} in the database".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.film_keywords
+
+        return status
+
+    def getFilmCompanyCreditsStatus(self, imdb_id):
+        self.logger.debug("Get the film Company Credits status for IMDB ID {} in the database".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.film_companycredits
+
+        self.logger.debug("Status: {}".format(status))
+        return status
 
 ####################################################################
 

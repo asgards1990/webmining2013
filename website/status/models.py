@@ -21,15 +21,24 @@ class IMDBFilmStatus(models.Model):
     downloaded = models.IntegerField()
     extracted = models.IntegerField()
     
+    def __unicode__(self):
+        return u'%s status' % (self.imdb_id)
+    
 class IMDBPersonStatus(models.Model):
     imdb_id = models.CharField(max_length=9)    # the IMDB identifier
     # status for downloader and extracter
     downloaded = models.IntegerField()
     extracted = models.IntegerField()
+    
+    def __unicode__(self):
+        return u'%s status' % (self.imdb_id)
+
 
 class IMDBCompanyStatus(models.Model):
     imdb_id = models.CharField(max_length=9)    # the IMDB identifier
     # status for downloader and extracter
     downloaded = models.IntegerField()
     extracted = models.IntegerField()
-
+    
+    def __unicode__(self):
+        return u'%s status' % (self.imdb_id)

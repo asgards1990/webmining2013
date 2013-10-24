@@ -4,7 +4,7 @@
 #Définit la configuration du module Spider
 
 #Logger
-IMDB_SPIDER_LOGGER_NAME = "IMDB_SPIDER"
+IMDB_SPIDER_LOGGER_NAME = "IMDB SPIDER"
 
 #Start year and End year for the Spider
 SPIDER_START_YEAR = 2000
