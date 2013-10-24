@@ -156,6 +156,11 @@ class IMDBExtractor_Film(IMDBExtractor):
       logger.debug("Extract review count (user/critics) : ")      
       return self.extractor.extractXpathText('//span[@itemprop="reviewCount"]')
 
+   def extractMetacriticScore(self):
+      #Extrait le nombre de personne ayant commenté le film
+      logger.debug("Extract metacritic score : ")      
+      return self.extractor.extractXpathText('//a[contains(@href,criticreviews)]')
+
    def extractStars(self):
       logger.debug("Extract Stars) : ")      
       actor_url_list = self.extractor.extractXpathElement('//a[contains(@href,"tt_ov_st")]/@href')
@@ -298,21 +303,34 @@ class IMDBExtractor_Awards(IMDBExtractor):
 
    def extractAwards(self):
       logger.debug("Extract Awards (à remettre en forme) : ")
-      institution_list = self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/h3')
+      institution_list = self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/h3')#Cannes Film Festival
       #award_list = self.sanitizeList(self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="award_description"]')
-      award_category_list=self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/span[@class="award_category"]')
-      award_category_status=self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/b')
+      award_category_list=self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/span[@class="award_category"]')#Palme d'or, oscar...
+      award_category_status=self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/b') #WIN NOMINATED
+      award_year_list=self.extractor.extractXpathText('//a[@class="event_year"]')
 
       logger.debug('Mise en forme des Awards')
-
+      award_tab=[]
       for i in range(1,len(institution_list)+1):
          logger.debug( '########### {}  ##############'.format(institution_list[i-1]) )
          for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
+            award_detail = []
             logger.debug(award_category_status[0])
             logger.debug(award_category_list[0])
+            logger.debug(award_year_list[0])
             logger.debug(j)
+           
+            award_detail.append(award_category_status[0]) #WIN/NPMINATED
+            award_detail.append(award_category_list[0])   #Palme d'or
+            award_detail.append(award_year_list[0])       #2013
+            award_detail.append(institution_list[i-1])     #Cannes Film Festival
+
 	    award_category_status.pop(0)
             award_category_list.pop(0)
+            award_year_list.pop(0)
+
+         award_tab.append(award_detail)
+      return award_tab
 
 class IMDBExtractor_Keyword(IMDBExtractor):
 
@@ -338,7 +356,21 @@ class IMDBExtractor_Person(IMDBExtractor):
 
       self.birthDate = self.extractBirthDate()
       self.birthCountry = self.extractBirthCountry()
-      self.Name = self.extractName()
+      self.name = self.extractName()
+
+      p = definePerson(id_)
+      if p:
+         try:
+            logger.info("Mise à jour de la personne {} dans la base de données".format(id_))
+            p.name=self.name
+            p.birth_date=self.birthDate
+            p.birth_country=self.birthCountry
+            p.save()
+
+         except Exception as e:
+            logger.error("-> The rewiew couldn't be updated:")
+            logger.error("-> Error: {}".format(e))
+
 
    def extractName(self):
       logger.debug("Extract Person name")
@@ -355,6 +387,8 @@ class IMDBExtractor_Person(IMDBExtractor):
       logger.debug("Extract Person Birth Country : ")      
       return self.extractor.extractXpathText('//a[contains(@href,"?birth_place=")]')
 
+
+
 def createPersonList(p_url_list):
    p_id_list = [ re.match("/name/(nm[0-9]+)/", x).group(1) for x in p_url_list if re.match("/name/(nm[0-9]+)/", x) ]
    logger.debug(p_id_list)
@@ -364,7 +398,121 @@ def createPersonList(p_url_list):
    return person_list
 
 
-   
+##########################################################
+#
+#                    DEFINE FAMILY
+#
+##########################################################
+
+"""Crée/Renvoie les objects pour intéragir avec la base de données Django."""
+
+def defineFilm(film_id):
+    try :
+      f = Film.objects.get(imdb_id=film_id)
+      return f
+    except Film.DoesNotExist :
+      logger.info("Création du film avec l'id {} dans la base de données".format(film_id))
+      f = Film.objects.create(imdb_id=film_id)
+      return f
+    except Exception as e:
+      logger.error('Impossible de retrouver le film {} a cause de l erreur {}'.format(film_id,e))
+      return False
+
+def defineKeyword(keyword):
+    try :
+      w = Keyword.objects.get(word=keyword)
+      return w
+    except Keyword.DoesNotExist :
+      logger.info("Création du keyword {} dans la base de données".format(keyword))
+      w = Keyword.objects.create(word=keyword)
+      return w
+    except Exception as e:
+      logger.error('Impossible de retrouver le keyword {} a cause de l erreur {}'.format(keyword,e))
+      return False
+ 
+def defineReview(reviewer,journal,film):
+   try :
+      r = Reviewer.objects.get(reviewer=reviewer,journal=journal,film=film)
+      return False 
+   except Reviewer.DoesNotExist :
+      logger.info("Création de la review dans la base de données")
+      r = Review.objects.create(reviewer=reviewer,journal=journal,film=film)
+      return r
+   except Exception as e:
+      logger.error('Impossible de retrouver la review a cause de l erreur {}'.format(e))
+      return False
+
+def definePerson(p_id):
+   try :
+      p = Person.objects.get(imdb_id=p_id)
+      return p 
+   except Person.DoesNotExist :
+      logger.info("Création de la personne {} dans la base de données".format(p_id))
+      p = Person.objects.create(imdb_id=p_id)
+      return p
+   except Exception as e:
+      logger.error('Impossible de retrouver la personne {} a cause de l erreur {}'.format(p_id,e))
+      return False
+
+def defineJournal(name):
+   try :
+      j = Journal.objects.get(name=name)
+      return j
+   except Journal.DoesNotExist :
+      logger.info("Création du journal {} dans la base de données".format(name))
+      j = Journal.objects.create(imdb_id=p_id)
+      return j
+   except Exception as e:
+      logger.error('Impossible de retrouver le journal {} a cause de l erreur {}'.format(name,e))
+      return False
+
+def defineProducer(p_id):
+   try :
+      p = ProductionCompany.objects.get(imdb_id=p_id)
+      return p
+   except ProductionCompany.DoesNotExist :
+      logger.info("Création du producteur {} dans la base de données".format(p_id))
+      p = ProductionCompany.objects.create(imdb_id=p_id)
+      return p
+   except Exception as e:
+      logger.error('Impossible de retrouver le producteur {} a cause de l erreur {}'.format(p_id,e))
+      return False
+
+def defineReviewer(name):
+   try :
+      r = Reviewer.objects.get(name=name)
+      return r
+   except Reviewer.DoesNotExist :
+      logger.info("Création du reviewer {} dans la base de données".format(r))
+      r = Reviewer.objects.create(name=name)
+      return r
+   except Exception as e:
+      logger.error('Impossible de retrouver le reviewer {} a cause de l erreur {}'.format(name,e))
+      return False
+
+def defineInstitution(name):
+   try :
+      i = Institution.objects.get(name=name)
+      return r
+   except Institution.DoesNotExist :
+      logger.info("Création du reviewer {} dans la base de données".format(r))
+      r = Institution.objects.create(name=name)
+      return r
+   except Exception as e:
+      logger.error('Impossible de retrouver l institution {} a cause de l erreur {}'.format(name,e))
+      return False
+
+def definePrize():
+   #TODO
+   pass
+
+################################################################
+#
+#                        IMDB_*Extract Family
+#
+##################################################################
+
+""" Fonctions appelées depuis l'exterieur du module. Créent les objets nécessaires à l'extraction et remplissent la DB. Il existe une fonction par type de page"""
 
 def IMDB_filmExtract(film_id):
 
@@ -378,9 +526,10 @@ def IMDB_filmExtract(film_id):
    box_office =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractBoxOffice())
    imdb_user_rating =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRatingValue())
    imdb_nb_raters =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRatingCount())
-   imdb_nb_user_review,filmPage.imdb_nb_reviews = filmPage.extractReviewCount() 
+   imdb_nb_user_review,imdb_nb_reviews = filmPage.extractReviewCount() 
    imdb_summary = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractSummary())
    imdb_storyline = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractStoryLine())
+   metacritic_score=(lambda x : int(x[0].split('/')[0]) if len(x)>0 else None)(filmPage.extractMetacriticScore())
 
    #Arrays
    country =(filmPage.extractCountry())
@@ -388,43 +537,154 @@ def IMDB_filmExtract(film_id):
    stars =(filmPage.extractStars())
    language =(filmPage.extractLanguage())
 
-   #f = Film.objects.create(original_title="La vie d'Adèle", imdb_id=film_id, release_date="2013-03-05") 
+   f=defineFilm(imdb_id)
+   if f:
+      try:
+         logger.info('Mise à jour de la DB pour le film {} : extraction des données de base du film'.format(film_id))
+         Film.objects.filter(imdb_id=fim_id).update(original_title=original_title,\
+                        english_title=english_title,
+                        release_date=release_date,\
+                        runtime=runtime,\
+                        budget=budget,\
+                        box_office=box_office,\
+                        imdb_user_rating=imdb_user_rating,\
+                        imdb_nb_user_ratings = imdb_nb_ratersi,\
+                        imdb_nb_user_reviews=imdb_nb_user_review,\
+                        imdb_nb_reviews=imdb_nb_reviews,\
+                        imdb_summary=imdb_summary,\
+                        imdb_storyline=imdb_storyline,\
+                        metacritic_score=metacritic_score
+                        ) 
+         for c in country:
+            f.country.add(c)  
+         for genre in genres:
+            f.genres.add(genre)
+         for l in language:
+            f.language.add(l)
+         f.save()
+
+      except Exception as e:
+         logger.error("-> The film couldn't be updated:")
+         logger.error("-> Error: {}".format(e))
 
 def IMDB_awardsExtract(film_id):
    #sur la page awards
    logger.debug("Lancement de l'extraction des awards")
    awardsPage = IMDBExtractor_Awards(film_id)
-   awardsPage.extractAwards()
+   award_tab = awardsPage.extractAwards()
+
+   f=defineFilm(film_id)
+   
+   #TODO
 
 def IMDB_reviewsExtract(film_id):
    logger.debug("Lancement de l'extraction des reviews")
+
    reviewPage = IMDBExtractor_Reviews(film_id)
-   reviewPage.extractGrade()
-   reviewPage.extractSummary()
-   reviewPage.extractReviewer()
-   reviewPage.extractJournal()
-   reviewPage.extractFullReviewURL()
-   #TODO extraire le reste
+
+   grade=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractGrade())
+   summary=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractSummary())
+   reviewer=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractReviewer())
+   journal=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractJournal())
+   fullReviewURL=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractFullReviewURL())
+
+   r = defineReviewer(reviewer)
+   j = defineJournal(journal)
+   f = defineFilm(film_id)   
+
+   if r:
+      if j:
+         if f:
+            re = defineReview(r,j,f)
+   if re:
+      try:
+         logger.info('Mise à jour de la DB pour le film {} : extraction des critiques du film'.format(film_id))
+         re.summary=summary
+         re.grade=grade
+         re.fullReviewURL = fullReviewURL
+         re.save()
+
+         f.add(re)
+         f.save()
+
+      except Exception as e:
+         logger.error("-> The rewiew couldn't be updated:")
+         logger.error("-> Error: {}".format(e))
+
+   #TODO extraire le FullReviewURL
 
 def IMDB_keywordsExtract(film_id):
    #sur la page keywords
    logger.debug("Lancement de l'extraction des keywords")
    keywordsPage = IMDBExtractor_Keyword(film_id)
-   keywordsPage.extractKeywords() 
+   l = keywordsPage.extractKeywords() 
+
+   f = defineFilm(film_id)
+   if f:
+      try:
+         logger.info('Mise à jour de la DB pour le film {} : extraction des keywords'.format(film_id))
+         for word in l:
+            keyword = defineKeyword(word) 
+            if keyword:
+               f.keywords.add(keyword)
+
+         f.save()
+      except Exception as e:
+         logger.error('La mise à jour de la DB pour le film {} : extraction des keywords a échoué'.format(film_id))
+         logger.error("-> Error: {}".format(e))
 
 def IMDB_companyCreditsExtractor(film_id):
    #sur la page companycredits
    logger.debug("Lancement de l'extraction des de la page Company Credits")
    companyCreditsPage = IMDBExtractor_companyCredits(film_id)
-   companyCreditsPage.extractProducers() #TODO vérifier avant de transmettre à la DB
+   producers = companyCreditsPage.extractProducers() 
 
+   f = defineFilm(film_id)
+   if f:
+      try:
+         logger.info('Mise à jour de la DB pour le film {} : extraction des Producteurs'.format(film_id))
+         for p_id in producers:
+            producer = defineProducer(p_id)
+            if producer:
+               f.producer.add(producer)
+         logger.info('Mise à jour de la DB pour le film {} : extraction des Producteurs'.format(film_id))
+         f.save()
+
+      except Exception as e:
+         logger.error('La mise à jour de la DB pour le film {} : extraction des Producteurs a échoué'.format(film_id))
+         logger.error("-> Error: {}".format(e))
+
+     
 def IMDB_fullCreditsExtractor(film_id):
    logger.debug("Lancement de l'extraction des de la page full credits")
    fullCreditsPage = IMDBExtractor_fullCredits(film_id)
 
    directors = fullCreditsPage.extractDirectors() 
    writers = fullCreditsPage.extractWriters()
-   #actors =  fullCreditsPage.extractActors()
+   actors =  fullCreditsPage.extractActors()
+
+   f = defineFilm(film_id)
+   if f:
+      try:
+         for d_id in directors:
+            director = definePerson(d_id)
+            if director:
+               f.directors.add(director)
+         for w_id in writers:
+            writer = definePerson(w_id)
+            if writer:
+               f.writers.add(writer)
+         for a_id in actors:
+           actor = definePerson(a_id)
+           if actor:
+              f.actors.add(actor)
+         logger.info('Mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors'.format(film_id))
+         f.save()   
+      except Exception as e:
+         logger.error('La mise à jour de la DB pour le film {} : extraction des Producteurs a échoué'.format(film_id))
+         logger.error("-> Error: {}".format(e))
+
+
 
 def IMDB_SuperExtractor(film_id):
    IMDB_filmExtract(film_id) 
@@ -438,7 +698,5 @@ def IMDB_SuperExtractor(film_id):
 #                MAIN
 ###############################################
 
-if __name__=="__main__":
-   IMDB_SuperExtractor(film_id_)
 
 IMDB_SuperExtractor(film_id_)
