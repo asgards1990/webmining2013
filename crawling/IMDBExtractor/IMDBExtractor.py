@@ -26,8 +26,9 @@ logger = initLogger.getLogger(IMDBExtractorConfig.IMDB_EXTRACTOR_LOGGER_NAME)
 ###################################################################
 
 awards_suffixe = '/awards'
-cast_suffixe = '/fullcredits'
+fullcredits_suffixe = '/fullcredits'
 companycredits_suffixe = '/companycredits'
+review_suffixe = '/criticreviews'
 keywords_suffixe = '/keywords'
 film_page_default = '/title/'
 actor_page_default= '/name/'
@@ -39,13 +40,11 @@ the_artist_id="tt1655442"
 
 #################################################################
 
-#TODO : faire un extracteur par type de page : acteur/fullcredit/companycredits/keywords
-#TODO : page par personne (acteur,auteur,...) / producteur
-
 
 class IMDBExtractor:
 
-   """Chaque page nécessite un extractor qui lui est propre : 
+   """
+      Chaque page nécessite un extractor qui lui est propre : 
           Film 
           Personne (la structure de Actor/Writer/Director est identique) 
           Company 
@@ -55,10 +54,11 @@ class IMDBExtractor:
           Producteurs (companycredits / review / )
    """
 
-   #TODO le load page ey le create extractor engine ne doivent pas faire partie de IMDB Extractor. IMDB Extractor doit vérifier si la page existe, dans le cas contraire mettre dans le spider qu'il faut télécharger la page! Rien de plus 
+   #TODO le load page et le create extractor engine ne doivent pas faire partie de IMDB Extractor. IMDB Extractor doit vérifier si la page existe, dans le cas contraire mettre dans le spider qu'il faut télécharger la page! Rien de plus 
    def __init__(self,id_):
       logger.debug("Création de IMDB Extracteur")
       self.id_=id_
+      self.url = None
 
    def loadPage(self,url):
       #TODO : vérifie si la page est déjà en local, sinon charge l'url
@@ -68,67 +68,34 @@ class IMDBExtractor:
       self.t = page.read()
       return self.t
 
-   def createExtractorEngine(self,url):
+   def createExtractorEngine(self):
       #TODO DOIT DEGAGER
-      t=self.loadPage(url)
+      t=self.loadPage(self.url)
       cleaner = CustomCleaner.CustomedCleaner_HTML()
       self.extractor = ExtractorHTML(t,cleaner)
 
 class IMDBExtractor_Film(IMDBExtractor):
 
-   """ Objet qui va récupérer la page HTML principale pour le film en question (une fois que toutes les pages relatives au film sont déjà chargées (Except Personnes/Companies)). Une fois récupérée, l'extracteur récupère toutes les infos pour remplir la base
-      Pour remplir la base, l'extractor crée de nouveaux extractors pour les pages connexes (keywords, awards, casting, producteurs...)
+   """ Objet qui va récupérer la page HTML principale pour le film en question (une fois que toutes les pages relatives au film sont déjà chargées (Except Personnes/Companies)). Une fois récupérée, les méthodes de l'extracteur récupèrent toutes les infos pour remplir la base
    """
 
    def __init__(self,film_id):
       logger.debug("Création d'un Extracteur pour un type page de Film")
       IMDBExtractor.__init__(self,film_id)
+      self.url = page_prefixe+film_page_default+film_id
+      self.createExtractorEngine()
 
-      self.createExtractorEngine(page_prefixe+film_page_default+film_id)
-
-      # Sur la main page directement
-      self.english_title = self.extractTitle()
-      self.original_title = self.extractOriginalTitle()
-      self.release_date = self.extractReleaseDate()
-      self.runtime = self.extractRuntime()
-      self.budget = self.extractBudget()
-      self.box_office = self.extractBoxOffice()
-      self.imdb_user_rating = self.extractRatingValue()
-      self.imdb_nb_raters = self.extractRatingCount()
-      self.imdb_nb_user_review,self.imdb_nb_reviews = self.extractReviewCount() 
-      self.imdb_summary = self.extractSummary()
-      self.imdb_storyline = self.extractStoryLine()
-      self.country = self.extractCountry()
-      self.genres = self.extractGenres()
-      #TODO language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
-
-      #sur la page reviews
-      #TODO metacritic_score = IntegerField(null=True,blank=True)
-
-      #sur la page keywords
-      self.keywords = self.extractKeywords() 
-
-      #sur la page companycredits
-      self.production_company =self.extractProducers() #TODO vérifier avant de transmettre à la DB
-
-      #sur la page fullcredits
-      #TODO faire une fonction extractFullCredits() qui construit un extracteur pour la page full credits et qui remplit self.directors/self.writers/self.actors
-      #self.directors = self.extractDirectors() #TODO à faire sur la page fullcredits
-      self.writers = self.extractWriter()#pris directement sur la page du film (les 3 premiers) #TODO a faire sur la page fullcredits
-      #self.actors =  self.extractActors()#page de casting (tous les acteurs)
       
    def extractTitle(self):
       logger.debug("Extract Title : ")
       return self.extractor.extractXpathText('//td[@id="overview-top"]/h1[@class="header"]/span[@class="itemprop" and @itemprop="name"]')
 
    def extractOriginalTitle(self):
-      #TODO : s'assurer du user agent
       logger.debug("Extract Original Title : ")
-      a=self.extractor.extractXpathText('//td[@id="overview-top"]/h1[@class="header"]/span[@class="title-extra" and @itemprop="name"]') 
-      return self.english_title if not a else a
+      return self.extractor.extractXpathText('//td[@id="overview-top"]/h1[@class="header"]/span[@class="title-extra" and @itemprop="name"]') 
+       
 
    def extractPoster(self):
-      #TODO extraire en local
       logger.debug("Extract Poster : ")
       return self.extractor.extractXpathElement('//td[@id="img_primary"]/*/a/img/@src')
 
@@ -157,11 +124,12 @@ class IMDBExtractor_Film(IMDBExtractor):
       return self.extractor.extractXpathText('//div[@class="inline canwrap" and @itemprop="description"]/p')
 
    def extractWriter(self):
-      logger.debug("Extract Writers : ")
+      logger.debug("Extract Writers from the main page : ")
       writer_url_list = self.extractor.extractXpathElement('//td[@id="overview-top"]/div[@itemprop="creator"]/a/@href')
-      return self.createPersonList(writer_url_list)
+      return createPersonList(writer_url_list)
 
    def extractCountry(self):
+      #TODO A REFAIRE ?!?
       logger.debug("Extract country : ")
       return self.extractor.extractXpathText('//div[@id="titleDetails"]/div/a[contains(@href,"country")]')
 
@@ -188,28 +156,19 @@ class IMDBExtractor_Film(IMDBExtractor):
       logger.debug("Extract review count (user/critics) : ")      
       return self.extractor.extractXpathText('//span[@itemprop="reviewCount"]')
 
-   def extractActors(self):
-      #TODO : charge la page des acteurs (1 en local, 2 avecurllib) // extrait les id des acteurs. Pour chaque acteurs on crée un objet IMDBExtract_Person
-      logger.debug("Extract Actors : ")
-      actor_url_list = self.extractor.extractXpathElement('//td[@itemprop="actor"]/a/@href')
-      return self.createPersonList(actor_url_list)
-
-   def createPersonList(self,p_url_list):
-      p_id_list = [ re.match("/name/(nm[0-9]+)/", x).group(1) for x in p_url_list if re.match("/name/(nm[0-9]+)/", x) ]
-      logger.debug(p_id_list)
-      person_list=[]
-      for person_id in p_id_list:
-         person_list.append(IMDBExtractor_Person(person_id))
-      return person_list
+   def extractStars(self):
+      logger.debug("Extract Stars) : ")      
+      actor_url_list = self.extractor.extractXpathElement('//a[contains(@href,"tt_ov_st")]/@href')
+      return createPersonList(actor_url_list)
 
    def extractDirectors(self):
       #renvoie une liste de personne
-      logger.debug("Extract Directors : ")
+      logger.debug("Extract Directors from main page : ")
       director_url_tab = self.extractor.extractXpathElement('//td[@id="overview-top"]/div[@itemprop="director"]/a/@href')
-      return self.createPersonList(director_url_tab )
+      return createPersonList(director_url_tab )
 
    def extractProducers(self):
-      logger.debug("Extract Producers : ")
+      logger.debug("Extract Producers from main page: ")
       # Principal producers sur la main page
       p_url_list= self.extractor.extractXpathElement('//span[contains(@itemtype,"Organization") and @itemprop="creator"]/a/@href')
       
@@ -220,20 +179,38 @@ class IMDBExtractor_Film(IMDBExtractor):
       for p_id in p_id_list:
          p_list.append(IMDBExtractor_Producer(p_id))
       return p_list
-         
 
-   def extractKeywords(self):
-      logger.debug("Extract Keywords : ")
-      keyword_list = IMDBExtractor_Keyword(self.id_).keywords
-      return keyword_list
+   def extractLanguage(self):
+      logger.debug('Extract Language')
+      return self.extractor.extractXpathText('//a[contains(@href,"language")]')
+
+class IMDBExtractor_companyCredits(IMDBExtractor):
+   def __init__(self,id_):
+      logger.debug("Création d'un Extracteur pour un type companyCredits")
+      IMDBExtractor.__init__(self,id_)
+      self.url = page_prefixe+film_page_default+id_+companycredits_suffixe
+      self.createExtractorEngine()
+
+   def extractProducers(self):
+      logger.debug("Extract Producers : ")
+      p_url_list= self.extractor.extractXpathElement('//a[contains(@href,"ttco_co")]/@href')
+
+      #TODO faire attention sur le cas ou la regex ne fonctionne pas! ça fiat planter le programme
+      p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list if re.match("/company/(co[0-9]+)?",x)]
+      logger.debug(p_id_list)
+      p_list=[]
+      for p_id in p_id_list:
+         p_list.append(IMDBExtractor_Producer(p_id))
+      return p_list
 
 class IMDBExtractor_Producer(IMDBExtractor):
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Producer")
       IMDBExtractor.__init__(self,id_)
+      self.url = page_prefixe+company_page_default+id_
       #TODO vérifie si la page qui nous intéresse existe. Si oui on travaille, si non on insère dans la base la nécessité de charger la page
       
-      self.createExtractorEngine(page_prefixe+company_page_default+id_)
+      self.createExtractorEngine()
 
       self.extractName()
       self.extractCountry()
@@ -253,10 +230,71 @@ class IMDBExtractor_Producer(IMDBExtractor):
       except:
          logger.error("La page du Producteur n'a pas le format attendu")
 
+class IMDBExtractor_fullCredits(IMDBExtractor):
+
+   """Extracteur pour la page Full Credits"""
+
+   def __init__(self,id_):
+      logger.debug("Création d'un Extracteur pour un type Awards")
+      IMDBExtractor.__init__(self,id_)
+      self.url = page_prefixe+film_page_default+id_+fullcredits_suffixe
+      self.createExtractorEngine()
+
+   def extractActors(self):
+      logger.debug("Extract Actors : ")
+      actor_url_list = self.extractor.extractXpathElement('//td[@itemprop="actor"]/a/@href')
+      return createPersonList(actor_url_list)
+
+   def extractDirectors(self):
+      logger.debug("Extract Diretors : ")
+      director_url_list = self.extractor.extractXpathElement('//a[contains(@href,"ttfc_fc_dr")]/@href')
+      return createPersonList(director_url_list)
+
+   def extractWriters(self):
+      logger.debug("Extract Writers: ")
+      writer_url_list = self.extractor.extractXpathElement('//a[contains(@href,"ttfc_fc_wr")]/@href')
+      return createPersonList(writer_url_list)
+
+class IMDBExtractor_Reviews(IMDBExtractor):
+
+   """Extracteur pour la page Reviews"""
+
+   def __init__(self,id_):
+      logger.debug("Création d'un Extracteur pour un type Reviews")
+      IMDBExtractor.__init__(self,id_)
+      self.url = page_prefixe+film_page_default+id_+review_suffixe
+      self.createExtractorEngine()
+
+   def extractGrade(self):
+      logger.debug("Extract Grades : ")
+      return self.extractor.extractXpathText('//span[@itemprop="ratingValue"]')
+
+   def extractSummary(self):
+      logger.debug("Extract Summaries : ")
+      return self.extractor.extractXpathText('//div[@class="summary"]')
+
+   def extractJournal(self):
+      logger.debug("Extract Journals : ")
+      return self.extractor.extractXpathText('//b[@itemprop="publisher"]/span[@itemprop="name"]')
+
+   def extractReviewer(self):
+      logger.debug("Extract Reviewers : ")
+      return self.extractor.extractXpathText('//span[@itemprop="author"]/span[@itemprop="name"]')
+
+   def extractFullReviewURL(self):
+      logger.debug("Extract Full review URL : ")
+      #TODO ne fonctionne pas!?!
+      return self.extractor.extractXpathElement('//span[@itemprop="author"]/../@href')
+
 class IMDBExtractor_Awards(IMDBExtractor):
-   def __init__(self,url):
-      #TODO vérifie si la page qui nous intéresse existe. Si oui on travaille, si non on insère dans la base la nécessité de charger la page
-      pass
+
+   """Extracteur pour la page Awards"""
+
+   def __init__(self,id_):
+      logger.debug("Création d'un Extracteur pour un type Awards")
+      IMDBExtractor.__init__(self,id_)
+      self.url = page_prefixe+film_page_default+id_+awards_suffixe
+      self.createExtractorEngine()
 
    def extractAwards(self):
       logger.debug("Extract Awards (à remettre en forme) : ")
@@ -265,12 +303,14 @@ class IMDBExtractor_Awards(IMDBExtractor):
       award_category_list=self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/span[@class="award_category"]')
       award_category_status=self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/b')
 
+      logger.debug('Mise en forme des Awards')
+
       for i in range(1,len(institution_list)+1):
-         print '###########  ' + institution_list[i-1] +'  ##############'
+         logger.debug( '########### {}  ##############'.format(institution_list[i-1]) )
          for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
-            print award_category_status[0]
-            print award_category_list[0]
-            print j
+            logger.debug(award_category_status[0])
+            logger.debug(award_category_list[0])
+            logger.debug(j)
 	    award_category_status.pop(0)
             award_category_list.pop(0)
 
@@ -279,12 +319,12 @@ class IMDBExtractor_Keyword(IMDBExtractor):
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Keyword")
       IMDBExtractor.__init__(self,id_)
-      self.createExtractorEngine(page_prefixe+film_page_default+id_+keywords_suffixe)
-      #TODO vérifie si la page qui nous intéresse existe. Si oui on travaille, si non on insère dans la base la nécessité de charger la page
+      self.url = page_prefixe+film_page_default+id_+keywords_suffixe
+      self.createExtractorEngine()
 
-      self.extractWords()
+      self.extractKeywords()
 
-   def extractWords(self):
+   def extractKeywords(self):
       self.keywords = self.extractor.extractXpathText('//td/a')
       
 
@@ -293,12 +333,17 @@ class IMDBExtractor_Person(IMDBExtractor):
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Person")
       IMDBExtractor.__init__(self,id_)
-      
-      self.createExtractorEngine(page_prefixe+actor_page_default+id_)
+      self.url =  page_prefixe+actor_page_default+id_
+      self.createExtractorEngine()
 
-      #TODO vérifie si la page qui nous intéresse existe. Si oui on travaille, si non on insère dans la base la nécessité de charger la page
       self.birthDate = self.extractBirthDate()
       self.birthCountry = self.extractBirthCountry()
+      self.Name = self.extractName()
+
+   def extractName(self):
+      logger.debug("Extract Person name")
+      return self.extractor.extractXpathText('//h1/span[@itemprop="name"]')
+
 
    def extractBirthDate(self):
       #Extrait le nombre de personne ayant commenté le film
@@ -310,6 +355,80 @@ class IMDBExtractor_Person(IMDBExtractor):
       logger.debug("Extract Person Birth Country : ")      
       return self.extractor.extractXpathText('//a[contains(@href,"?birth_place=")]')
 
+def createPersonList(p_url_list):
+   p_id_list = [ re.match("/name/(nm[0-9]+)/", x).group(1) for x in p_url_list if re.match("/name/(nm[0-9]+)/", x) ]
+   logger.debug(p_id_list)
+   person_list=[]
+   for person_id in p_id_list:
+      person_list.append(IMDBExtractor_Person(person_id))
+   return person_list
 
 
-obj = IMDBExtractor_Film(film_id_)
+def IMDB_filmExtract(film_id):
+
+   filmPage = IMDBExtractor_Film(film_id)      # Sur la main page directement
+
+   english_title = filmPage.extractTitle()
+   a = filmPage.extractOriginalTitle()
+   original_title = english_title if not a else a 
+   release_date = filmPage.extractReleaseDate()
+   runtime = filmPage.extractRuntime()
+   budget = filmPage.extractBudget()
+   box_office = filmPage.extractBoxOffice()
+   imdb_user_rating = filmPage.extractRatingValue()
+   imdb_nb_raters = filmPage.extractRatingCount()
+   imdb_nb_user_review,filmPage.imdb_nb_reviews = filmPage.extractReviewCount() 
+   imdb_summary = filmPage.extractSummary()
+   imdb_storyline = filmPage.extractStoryLine()
+   country = filmPage.extractCountry()
+   genres = filmPage.extractGenres()
+   stars = filmPage.extractStars()
+   language = filmPage.extractLanguage() 
+
+def IMDB_awardsExtract(film_id):
+   #sur la page awards
+   logger.debug("Lancement de l'extraction des awards")
+   awardsPage = IMDBExtractor_Awards(film_id)
+   awardsPage.extractAwards()
+
+def IMDB_reviewsExtract(film_id):
+   logger.debug("Lancement de l'extraction des reviews")
+   reviewPage = IMDBExtractor_Reviews(film_id)
+   reviewPage.extractGrade()
+   reviewPage.extractSummary()
+   reviewPage.extractReviewer()
+   reviewPage.extractJournal()
+   reviewPage.extractFullReviewURL()
+   #TODO extraire le reste
+
+def IMDB_keywordsExtract(film_id):
+   #sur la page keywords
+   logger.debug("Lancement de l'extraction des keywords")
+   keywordsPage = IMDBExtractor_Keyword(film_id)
+   keywordsPage.extractKeywords() 
+
+def IMDB_companyCreditsExtractor(film_id):
+   #sur la page companycredits
+   logger.debug("Lancement de l'extraction des de la page Company Credits")
+   companyCreditsPage = IMDBExtractor_companyCredits(film_id)
+   companyCreditsPage.extractProducers() #TODO vérifier avant de transmettre à la DB
+
+def IMDB_fullCreditsExtractor(film_id):
+   logger.debug("Lancement de l'extraction des de la page full credits")
+   fullCreditsPage = IMDBExtractor_fullCredits(film_id)
+
+   directors = fullCreditsPage.extractDirectors() 
+   writers = fullCreditsPage.extractWriters()
+   #actors =  fullCreditsPage.extractActors()
+
+
+###############################################
+#                MAIN
+###############################################
+
+#IMDB_filmExtract(film_id_) 
+#IMDB_awardsExtract(film_id_)
+#IMDB_keywordsExtract(film_id_)
+#IMDB_reviewsExtract(film_id_)
+#IMDB_fullCreditsExtractor(film_id_)
+IMDB_companyCreditsExtractor(film_id_)
