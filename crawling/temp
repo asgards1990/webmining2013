@@ -1,0 +1,76 @@
+##########IMDBspider.pyear##############
+
+def search_url(year, start_pos):
+    url = "http://www.imdb.com/search/title?count=250&release_date=" + str(year) + "," + str(year) + "&sort=release_date_us,asc&start=" + str(start_pos) + "&title_tyearpe=feature,documentary&view=simple"
+    return url
+
+def process_page(page, year):
+    #recup id:
+    urls=page.xpath('//td[@class="title"]/a/@href')
+    #---> "/title/tt0243327/"
+    #ou
+    #'//*[@id="main"]/table/tbodyear/tr/td[2]/a/@href'
+
+    positions = page.xpath('//td[@class="number"]')
+    # ou  '//*[@id="main"]/table/tbodyear/tr/td[1]'
+    
+    for i in range(len(urls)):
+        url = urls[i]
+        imdb_id='tt' + regexp(r'd+',url)    
+        #recup position:
+       	position = positions[i]
+
+        METTRE dans Imdb_status (imdb_id, year, position, 0, 0, 0, 0, 0, -1)
+ 
+
+
+for year in range(YEARSTART,YEARSTOP): #Global YEARSTART=1950 YEARSTOP=2020
+
+    OBTENIR POSITION MAXIMALE dans la BDD pour l'année year -> pos_init[year] = 
+
+    INDEX DE PAGE MAXIMAL (dans la base de donnée) pour l'année year -> index_init[year] = pos_init[year] / 250 + 1
+    
+    # INITIALISATION PAR DEFAUT DE LA POSITION MAXIMALE A PARSER -> pos_max[year] = -1
+
+    # INITIALISATION PAR DEFAUT DE LA PAGE MAXIMALE A PARSER -> page_max[year] = -1
+
+    CHARGER LA PAGE ( search_url(year, 1 + 250 * (index_init[year] - 1)) ) -> dans page_init[year]
+
+  	INITIALISATION DE LA POSITION MAXIMALE A PARSER -> pos_max[year] = page_init.xpath('//*[@id="left"]')
+	INITIALISATION PAR DEFAUT DE LA PAGE MAXIMALE A PARSER -> index_max[year] = (pos_max[year] - 1) / 250 + 1
+    
+    TRAITER LA PAGE INITIALE -> process_page(page_init[year])
+
+    for index in range(index_init[year] + 1, index_max[year])
+        CHARGER LA PAGE ( search_url(year, 1 + 250 * (index - 1)) ) -> dans page
+        process_page(page)
+
+	GET pageinit=http://www.imdb.com/search/title?at=0&count=250&release_date=AAAA,AAAA&sort=release_date_us,asc&start=1&title_tyearpe=feature,documentaryear&view=simple, AAAA=k)
+	nb_result=page_init.xpath('//*[@id="left"]')
+	nb_page=nb_result/250+1
+
+		for j in range(1,nb_page):
+    	
+#? armer,lancer la requete GET, cleaner?
+		GET page=(http://www.imdb.com/search/title?at=0&count=250&release_date=%AAAA,%AAAA&sort=release_date_us,asc&start=BBBB&title_tyearpe=feature,documentaryear&view=simple, AAAA=k,BBBB=1+250*(j-1))	
+ 										                                                         ###   ###			                           ###
+        
+
+         
+         
+###########downloader.pyear###############
+
+import random
+
+
+for k in random.shuffle(Imdb_status[MainPage<5, id=:]):
+
+
+	
+   		 telecharger page_film=(http://www.imdb.com/title/iiiii/ , iiiii=k)
+
+
+        
+
+         
+         

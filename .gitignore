@@ -9,6 +9,10 @@
 *.pyc
 
 
+# Static files #
+################
+website/static/*
+
 # Private configuration #
 #########################
 myconfig.py

@@ -1,6 +1,7 @@
 import myconfig
 
 # Django settings for website project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -62,14 +63,15 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/home/pesto/webmining2013/website/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = '/pesto/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    #os.path.join(os.path.dirname(__file__), 'static').replace('\\','/'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -109,9 +111,12 @@ ROOT_URLCONF = 'website.urls'
 WSGI_APPLICATION = 'website.wsgi.application'
 
 TEMPLATE_DIRS = (
+    os.path.join(os.path.dirname(__file__), '/templates').replace('\\','/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    "/home/pesto/webmining2013/website/templates/cinema",
+    "/home/pesto/webmining2013/website/templates"
 )
 
 INSTALLED_APPS = (
@@ -126,6 +131,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'cinema',
+    'autocomplete_app',
+    'autocomplete_light',
+    'status',
 )
 
 # A sample logging configuration. The only tangible logging
