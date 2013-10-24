@@ -127,6 +127,12 @@ class IMDBFilmStatusConnector:
         self.logger.debug("-> Status: {}".format(status))
         return status
 
+    def getNotDownloaded(self):
+        self.logger.debug("Get the IMDB ID {} in the database with downloaded")
+        
+        status = IMDBFilmStatus.objects.filter(downloaded=0)
+        return map(lambda s: s.imdb_id, status)
+
     ###############################################################################
 
     # SET METHODS

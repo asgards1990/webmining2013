@@ -129,7 +129,8 @@ class IMDBFilmDownloader:
         self.failed_requests = 0
         self.logger = initLogger.getLogger(DownloaderConfig.IMDB_FILM_DOWNLOADER_LOGGER_NAME)
         self.connector = IMDBFilmStatusConnector()
-        self.limit = DownloaderConfig.IMDB_FILM_DOWNLOADER_MAX_REQUESTS_LIMIT
+        self.onepage_limit = DownloaderConfig.IMDB_FILM_DOWNLOADER_ONEPAGE_REQUESTS_LIMIT
+        self.global_limit = DownloaderConfig.IMDB_FILM_DOWNLOADER_GLOBAL_REQUESTS_LIMIT
         self.logger.debug("IMDB Film Downloader Created")
 
     def downloadFilm(self, imdb_id):
@@ -167,8 +168,8 @@ class IMDBFilmDownloader:
             lambda s: self.connector.setFilmKeywordsStatus(imdb_id, s),
             lambda s: self.connector.setFilmCompanyCreditsStatus(imdb_id, s),
             ]
-        stop_limits = [self.limit, self.limit, self.limit, self.limit, self.limit, self.limit,]
-        required_limits = [100, self.limit, self.limit, self.limit, self.limit, self.limit,]
+        stop_limits = [self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit,]
+        required_limits = [100, self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit,]
         
         if manageDownloads(self.downloader, urls, dests, stop_limits, required_limits, getFunctions, setFunctions):
             self.connector.setDownloadedStatus(imdb_id, 1)
@@ -178,11 +179,21 @@ class IMDBFilmDownloader:
 
     def start(self):
         self.logger.debug("Start the IMDB Film Downloader")
-        #TODO: BOUCLE - DEMANDE LES downloaded=0 - EN PREND UN RANDOM - APPLIQUE downloadFilm - S'ARRETE QUAND failed_requests > LIMITE
-
+        while self.failed_requests < self.global_limit:
+            imdb_ids = self.connector.getNotDownloaded()
+            try:
+                imdb_id = random.choice(imdb_ids)
+            except IndexError as e:
+                self.logger.debug("Nothing to download")
+                return
+            else:
+                self.downloadFilm(imdb_id)
+        self.logger.error("The total number of requests cannot exceed {}".format(self.global_limit))
+        self.logger.error("Stopping the downloader")
+            
 ####################################################################
 
 d = IMDBFilmDownloader()
 
-d.downloadFilm("tt0258501")
+d.start()
 
