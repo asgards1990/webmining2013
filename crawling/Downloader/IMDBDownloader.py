@@ -27,7 +27,7 @@ logger = initLogger.getLogger(DownloaderConfig.IMDB_DOWNLOADER_LOGGER_NAME)
 
 ####################################################################
 
-# Pages PATHs
+# Pages local PATHs
 
 def filmMainPagePath(imdb_id):
     path = "{0}{1}{2}.html".format(DownloaderConfig.IMDB_FILM_ROOT, DownloaderConfig.IMDB_FILM_MAINPAGE_SUBPATH, imdb_id)
@@ -99,17 +99,26 @@ def companyURL(imdb_id):
 
 ####################################################################
 
-def manageDownloads(downloader, urls, dests, conditions, successCallbacks, errorCallbacks):
+def manageDownloads(downloader, urls, dests, stop_limits, required_limits, getFunctions, setFunctions):
     logger.debug("Manage downloads")
 
     for i in range(len(urls)):
-        if conditions[i]:
+        status = getFunctions[i]() 
+        if status < stop_limits[i]:
             if downloader.downloadHTML(urls[i], dests[i]):
-                successCallbacks[i]
+                logger.debug("{} downloaded".format(urls[i]))
+                setFunctions[i](100) 
             else:
-               errorCallbacks[i]
+                logger.debug("{} not downloaded".format(urls[i]))
+                setFunctions[i](status + 1)
+                return False
         else:
-            logger.debug("Download not required")  
+            if status < required_limits[i]:
+                logger.warning("Download required!")
+                return False
+            else:
+                logger.debug("Download not required")
+    return True
 
 ####################################################################
 
@@ -117,114 +126,63 @@ class IMDBFilmDownloader:
 
     def __init__(self):
         self.downloader = Downloader()
-        self.failed_requests = []
+        self.failed_requests = 0
         self.logger = initLogger.getLogger(DownloaderConfig.IMDB_FILM_DOWNLOADER_LOGGER_NAME)
         self.connector = IMDBFilmStatusConnector()
         self.limit = DownloaderConfig.IMDB_FILM_DOWNLOADER_MAX_REQUESTS_LIMIT
         self.logger.debug("IMDB Film Downloader Created")
 
-    def successCallback(self, imdb_id, msg, setFunction):
-        self.logger.debug(msg)
-        # TODO: MAJ la base de donnée
-    
-    def errorCallback(self, imdb_id, msg, setFunction):
-        self.logger.warning(msg)
-        # TODO: MAJ la base de donnée avec la gestion d'erreur
-        # TODO: MAJ de failed_requests
-
-
     def downloadFilm(self, imdb_id):
         self.logger.debug("Download pages for the film with id {}".format(imdb_id))
 
-        urls = [filmMainPageURL(imdb_id),]
-        dests = [filmMainPagePath(imdb_id),]
-        conditions = [self.connector.getFilmMainPageStatus(imdb_id) < self.limit,]
-        successCallbacks = [self.successCallback(imdb_id, "Film Page downloaded", lambda x: x),]
-        errorCallbacks = [self.errorCallback(imdb_id, "Film Page not downloaded", lambda x: x),]
+        urls = [
+            filmMainPageURL(imdb_id),
+            filmFullCreditsURL(imdb_id),
+            filmAwardsURL(imdb_id),
+            filmReviewsURL(imdb_id),
+            filmKeywordsURL(imdb_id),
+            filmCompanyCreditsURL(imdb_id),
+            ]
+        dests = [
+            filmMainPagePath(imdb_id),
+            filmFullCreditsPath(imdb_id),
+            filmAwardsPath(imdb_id),
+            filmReviewsPath(imdb_id),
+            filmKeywordsPath(imdb_id),
+            filmCompanyCreditsPath(imdb_id),
+            ]
+        getFunctions = [
+            lambda: self.connector.getFilmMainPageStatus(imdb_id),
+            lambda: self.connector.getFilmFullCreditsStatus(imdb_id),
+            lambda: self.connector.getFilmAwardsStatus(imdb_id),
+            lambda: self.connector.getFilmReviewsStatus(imdb_id),
+            lambda: self.connector.getFilmKeywordsStatus(imdb_id),
+            lambda: self.connector.getFilmCompanyCreditsStatus(imdb_id),
+            ]
+        setFunctions = [
+            lambda s: self.connector.setFilmMainPageStatus(imdb_id, s),
+            lambda s: self.connector.setFilmFullCreditsStatus(imdb_id, s),
+            lambda s: self.connector.setFilmAwardsStatus(imdb_id, s),
+            lambda s: self.connector.setFilmReviewsStatus(imdb_id, s),
+            lambda s: self.connector.setFilmKeywordsStatus(imdb_id, s),
+            lambda s: self.connector.setFilmCompanyCreditsStatus(imdb_id, s),
+            ]
+        stop_limits = [self.limit, self.limit, self.limit, self.limit, self.limit, self.limit,]
+        required_limits = [100, self.limit, self.limit, self.limit, self.limit, self.limit,]
         
-        manageDownloads(self.downloader, urls, dests, conditions, successCallbacks, errorCallbacks)
-
-    def downloadFilmPage(downloader, imdb_id):
-        logger.debug("Download the Film Page for film {}".format(imdb_id))
-
-        url = "http://www.imdb.com/title/{0}/".format(imdb_id)
-
-        dest = "testFilmPage.html"
-        # TODO: Déterminer le fichier de destination (ATTENTION si ce n'est pas Tiresias ?)
-        
-        if downloader.downloadHTML(url, dest):
-            logger.debug("Film Page downloaded")
-            # TODO: MAJ la base de donnée
+        if manageDownloads(self.downloader, urls, dests, stop_limits, required_limits, getFunctions, setFunctions):
+            self.connector.setDownloadedStatus(imdb_id, 1)
         else:
-            logger.warning("Film Page not downloaded")
-            # TODO: MAJ la base de donnée avec la gestion d'erreur
+            self.failed_requests += 1
+            
 
-    def downloadFilmCast(downloader, imdb_id):
-        logger.debug("Download the Film Cast for film {}".format(imdb_id))
-        
-        url = "http://www.imdb.com/title/{0}/fullcredits".format(imdb_id) 
-        dest = "testFilmCast.html"
-        # TODO: Déterminer le fichier de destination (ATTENTION si ce n'est pas Tiresias ?)
-        
-        if downloader.downloadHTML(url, dest):
-            logger.debug("Film Page downloaded")
-            # TODO: MAJ la base de donnée
-        else:
-            logger.warning("Film Page not downloaded")
-            # TODO: MAJ la base de donnée avec la gestion d'erreur
-
-    def downloadFilmAwards(downloader, imdb_id):
-        logger.debug("Download the Film Awards for film {}".format(imdb_id))
-
-        url = "http://www.imdb.com/title/{0}/awards".format(imdb_id) 
-        dest = "testFilmAwards.html"
-        # TODO: Déterminer le fichier de destination (ATTENTION si ce n'est pas Tiresias ?)
-        
-        if downloader.downloadHTML(url, dest):
-            logger.debug("Film Page downloaded")
-            # TODO: MAJ la base de donnée
-        else:
-            logger.warning("Film Page not downloaded")
-            # TODO: MAJ la base de donnée avec la gestion d'erreur
-
-    def downloadFilmReviews(downloader, imdb_id):
-        logger.debug("Download the Film Reviews for film {}".format(imdb_id))
-
-        url = "http://www.imdb.com/title/{0}/criticreviews".format(imdb_id) 
-        dest = "testFilmReviews.html"
-        # TODO: Déterminer le fichier de destination (ATTENTION si ce n'est pas Tiresias ?)
-        
-        if downloader.downloadHTML(url, dest):
-            logger.debug("Film Page downloaded")
-            # TODO: MAJ la base de donnée
-        else:
-            logger.warning("Film Page not downloaded")
-            # TODO: MAJ la base de donnée avec la gestion d'erreur
-
-
-    def downloadFilmKeywords(downloader, imdb_id):
-        logger.debug("Download the Film Keywords for film {}".format(imdb_id))
-
-        url = "http://www.imdb.com/title/{0}/keywords".format(imdb_id) 
-        dest = "testFilmKeywords.html"
-        # TODO: Déterminer le fichier de destination (ATTENTION si ce n'est pas Tiresias ?)
-           
-        if downloader.downloadHTML(url, dest):
-            logger.debug("Film Page downloaded")
-            # TODO: MAJ la base de donnée
-        else:
-            logger.warning("Film Page not downloaded")
-            # TODO: MAJ la base de donnée avec la gestion d'erreur
-
+    def start(self):
+        self.logger.debug("Start the IMDB Film Downloader")
+        #TODO: BOUCLE - DEMANDE LES downloaded=0 - EN PREND UN RANDOM - APPLIQUE downloadFilm - S'ARRETE QUAND failed_requests > LIMITE
 
 ####################################################################
 
-def startDownloader():
-    logger.debug("Start the downloader")
-
-    # TODO: Déterminer les pages à télécharger (ordre random, checker si ça a été téléchargé, s'arrêter en cas d'erreur fréquente...)
-
 d = IMDBFilmDownloader()
 
-d.downloadFilm("tt3280488")
+d.downloadFilm("tt0258501")
 
