@@ -5,9 +5,6 @@ import numpy as np
 import exceptions
 
 class CinemaService(LearningService):
-    def update(self):
-        pass
-
     def search_request(self, args):
         if args.has_key('id') and args.has_key('nbresults') and args.has_key('criteria'):
             if (args['nbresults'].__class__==int) and (args['criteria'].__class__==dict):
@@ -116,59 +113,70 @@ class CinemaService(LearningService):
             except Language.DoesNotExist, exceptions.KeyError :
                 pass
         results = self.compute_predict_request(self.parse_criteria(args), language = lang)
+        
         # Build query_results
         query_results = {}
+        
         # Fill query_results['prizes']
         query_results['prizes'] = []
         for prize in results['prizes']:
             query_results['prizes'].append({'institution' : prize['institution'].name,
                                             'win' : prize['win']
                                             'value' : prize['value']})
+        
         # Fill query_results['general_box_office']
         neighbors = []
         for neighbor in results['general_box_office']['neighbors']:
             neighbors.append({'rank':neighbor['rank'],
                               'original_title':neighbor['film'].original_title,
                               'value':neighbor['film'].box_office})
+        
         general_box_office = {'rank':results['general_box_office']['rank'],
                               'value':results['general_box_office']['value'],
                               'neighbors':neighbors
-                             }
+                              }
+        
         query_results['general_box_office'] = general_box_office
+        
         # Fill query_results['genre_box_office']
         neighbors_genre = []
         for neighbor in results['genre_box_office']['neighbors']:
             neighbors_genre.append({'rank':neighbor['rank'],
                                     'original_title':neighbor['film'].original_title,
                                     'value':neighbor['film'].box_office})
-        genre_box_office = {'rank':results['genre_box_office']['rank'],
-                            'value':results['genre_box_office']['value'],
-                            'neighbors':neighbors_genre
-                           }
-        query_results['genre_box_office'] = genre_box_office
+            genre_box_office = {'rank':results['genre_box_office']['rank'],
+                                'value':results['genre_box_office']['value'],
+                                'neighbors':neighbors_genre
+                                }
+            query_results['genre_box_office'] = genre_box_office
+        
         # Fill query_results['critics']
         critics = {}
         keywords = []
         for keyword in results['keywords']:
             keyword.append(keyword.word)
+        
         reviews = []
         grades = []
         for item in results['reviews']:
             reviews.append({'journal' : item['journal'].name,
                             'grade' : item['grade'],
                             'keywords' : keywords
-                           })
+                            })
             grades.append(item['grade'])
+            
         critics['reviews'] = reviews
         critics['average'] = np.mean(grades)
         query_results['critics'] = critics
+        
         # Fill query_results['bag_of_words']
         bag_of_words = []
         for item in results['bag_of_words']:
             bag_of_words.append({'word' : item['keyword'].word,
                                  'value' : item['value']
-                                })
+                                 })
         query_results['bag_of_words'] = bag_of_words
+        
         # Return data
         return query_results
 
