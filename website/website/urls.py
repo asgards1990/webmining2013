@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^$', 'cinema.views.home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
-    url(r'^results/$', 'cinema.views.resultsForm'),
+    url(r'^results/$', 'cinema.views.resultsForm', name='results'),
     url(r'^prediction/$', 'cinema.views.predictionForm'),
     url(r'^search/', 'cinema.views.filmsearch')
 )
