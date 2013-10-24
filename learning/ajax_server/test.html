@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test the learning server</title>
+  <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
+  <script type="text/javascript">	 
+    function refresh(){
+    var url = "/"+$("#method").val()+"/";
+    var args = {'entry' : $("#input").val()};
+
+    var args2 = {
+    'id' : 'tt2278871',
+    'nbresults' : 10,
+    'criteria' :
+    {
+    'actor_director' : true, // True pour un critère actif, False sinon
+    'genre' : false,
+    'budget' : true,
+    'review' : false
+    },
+    'filter' :
+    {
+    'actors' :
+    [
+    //  Et logique
+    'nm0000113', // identifiant IMDb
+    'nm0000123',
+    'nm0000438'
+    ],
+    'directors' : 
+    [
+    'nm0304033'
+    ],
+    'genres' :
+    [
+    'Drama'
+    ],
+    'budget' : {
+    'min' : 99.8, // flottant en millions de dollars
+    'max' : 120.3
+    },
+    'reviews' : {
+    'min' : 0.3 // flottant entre 0 et 1
+    },
+    'release_period' : {
+    'begin' : '2010', // Format de date Django (à vérifier)
+    'end' : '2011' // 
+    }
+    }
+    }
+
+    var msg = "json_request="+JSON.stringify(args2);
+    $.post(url, msg, callback, "json");
+    }
+    
+    function callback(resp){
+    $("#output").html("ajax response: "+resp+" json="+JSON.stringify(resp));
+    }
+  </script>
+</head>
+<body>
+  <h1>Test a request</h1>
+  <form action="javascript:refresh()">
+    <input type="text" id="input"></input>
+    <select id="method" size="1">
+      <option value="predict">Predict</option>
+      <option value="search">Search</option>
+    </select>
+    <button type="button" onclick="refresh()">GO!</button>
+    <div id="output">
+      Output
+    </div>
+  </form>
+</body>
+</html>
