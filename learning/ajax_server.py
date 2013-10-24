@@ -18,10 +18,73 @@ class PredictionHandler(tornado.web.RequestHandler):
         if self.request.headers.get('X-Requested-With') == "XMLHttpRequest":
             try:
                 args = tornado.escape.json_decode(self.get_argument("json_request"))
+                lang = None
+                if args.has_key('language'):
+                    try:
+                        lang = Language.objects.get(identifier = str(args['language']))
+                        self.answer_predict_request(self.parse_criteria(args), language = lang)
+                    except Language.DoesNotExist, exceptions.KeyError :
+                        pass
+                self.answer_predict_request(self.parse_criteria(args), language = lang)
             except ValueError:
                 self.error('Wrong JSON format.')
         else:
             self.error('No proper JSON request found.')
+
+            
+    def answer_predict_request(self, criteria, language = None):
+        self.finish(tornado.escape.json_encode({'success' : True, 'error' : '' }))
+    
+    def parse_criteria(self, crit_in):
+        crit_out = {}
+
+        if crit_in.has_key('actors'):
+            if crit_in['actors'].__class__ == list:
+                crit_out['actors'] = []
+                for person_id in crit_in['actors']:
+                    try:
+                        crit_out['actors'].append(Person.objects.get(imdb_id=str(person_id)))
+                    except Person.DoesNotExist, exceptions.TypeError:
+                        pass
+
+        if crit_in.has_key('genres'):
+            if crit_in['genres'].__class__ == list:
+                crit_out['genres'] = []
+                for genre in crit_in['genres']:
+                    try:
+                        crit_out['genres'].append(Genre.objects.get(imdb_id=str(genre)))
+                    except Genre.DoesNotExist, exceptions.TypeError:
+                        pass
+
+        if crit_in.has_key('directors'):
+            if crit_in['directors'].__class__ == list:
+                crit_out['directors'] = []
+                for person_id in crit_in['directors']:
+                    try:
+                        crit_out['directors'].append(Person.objects.get(imdb_id=str(person_id)))
+                    except Person.DoesNotExist, exceptions.TypeError:
+                        pass
+
+        if crit_in.has_key('keywords'):
+            if crit_in['keywords'].__class__ == list:
+                crit_out['keywords'] = []
+                for keyword in crit_in['keywords']:
+                    try:
+                        crit_out['keywords'].append(Keyword.objects.get(word=str(keyword)))
+                    except Keyword.DoesNotExist:
+                        crit_out['keywords'].append(str(keyword))
+
+        if crit_in.has_key('budget'):
+            if crit_in['budget'].__class__ == float:
+                crit_out['budget'] = crit_in['budget']
+        
+        try:
+            if crit_in['release_period']['season'] in ['winter', 'spring', 'summer', 'fall']:
+                crit_out['release_period'] = crit_in['release_period']
+        except exceptions.KeyError:
+            pass
+
+        return crit_out
 
     def error(self, err_msg):
         self.finish(tornado.escape.json_encode({'success' : False, 'error' : err_msg }))
@@ -142,6 +205,13 @@ class SearchHandler(tornado.web.RequestHandler):
 	self.set_header("Access-Control-Allow-Origin", "tiresias.enst.fr")
 	self.set_header("Access-Control-Allow-Origin", "null") # Uncomment to enable acces from every host.
 
+class LearningService(object):
+    def __init__(self):
+        self.init_time = datetime.datetime.now()
+
+    def quit(self):
+        print("Learning service initialized at "+ self.init_time.isoformat()  +" is closing : tables are being cached.")
+
 if __name__ == "__main__":
     app = tornado.web.Application(
         [(r'/', TestHandler),
@@ -149,4 +219,11 @@ if __name__ == "__main__":
          (r'/search/', SearchHandler)]
         )
     app.listen(8080)
-    tornado.ioloop.IOLoop.instance().start()
+
+    learn = LearningService()
+
+    try:
+        tornado.ioloop.IOLoop.instance().start()
+    except exceptions.KeyboardInterrupt, exceptions.SystemExit:
+        learn.quit()
+

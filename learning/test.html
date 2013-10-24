@@ -4,7 +4,7 @@
   <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
   <script type="text/javascript">	 
     function refresh(){
-    var url = "http://senellart.com:8080/"+$("#method").val()+"/";
+    var url = "/"+$("#method").val()+"/";
     var args = {'entry' : $("#input").val()};
 
     var args2 = {
@@ -30,9 +30,9 @@
     [
     'nm0304033'
     ],
-    'genre' :
+    'genres' :
     [
-    'drama'
+    'Drama'
     ],
     'budget' : {
     'min' : 99.8, // flottant en millions de dollars
@@ -62,7 +62,7 @@
   <form action="javascript:refresh()">
     <input type="text" id="input"></input>
     <select id="method" size="1">
-<!--      <option value="predict">Predict</option> -->
+      <option value="predict">Predict</option>
       <option value="search">Search</option>
     </select>
     <button type="button" onclick="refresh()">GO!</button>
