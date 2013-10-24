@@ -1,5 +1,6 @@
 from objects import *
 from cinema.models import *
+import numpy as np
 
 import exceptions
 
@@ -34,7 +35,7 @@ class CinemaService(LearningService):
                                     )
                             return query_results
                         except Film.DoesNotExist:
-                            raise service.ParsingError('No film for id ' + args['id'])
+                            raise ParsingError('No film for id ' + args['id'])
                     else:
                         raise ParsingError('Criteria must be boolean.')
                 except KeyError:
@@ -107,19 +108,96 @@ class CinemaService(LearningService):
         return filt_out
 
     def predict_request(self, args):
-        # lang = None
-        # if args.has_key('language'):
-        #     try:
-        #         lang = Language.objects.get(identifier = str(args['language']))
-        #         self.answer_predict_request(self.parse_criteria(args), language = lang)
-        #     except Language.DoesNotExist, exceptions.KeyError :
-        #         pass
-        #     self.answer_predict_request(self.parse_criteria(args), language = lang)
-        return {}
+        # Get results
+        lang = None
+        if args.has_key('language'):
+            try:
+                lang = Language.objects.get(identifier = str(args['language']))
+            except Language.DoesNotExist, exceptions.KeyError :
+                pass
+        results = self.compute_predict_request(self.parse_criteria(args), language = lang)
+        # Build query_results
+        query_results = {}
+        # Fill query_results['prizes']
+        query_results['prizes'] = []
+        for prize in results['prizes']:
+            query_results['prizes'].append({'institution' : prize['institution'].name,
+                                            'win' : prize['win']
+                                            'value' : prize['value']})
+        # Fill query_results['general_box_office']
+        neighbors = []
+        for neighbor in results['general_box_office']['neighbors']:
+            neighbors.append({'rank':neighbor['rank'],
+                              'original_title':neighbor['film'].original_title,
+                              'value':neighbor['film'].box_office})
+        general_box_office = {'rank':results['general_box_office']['rank'],
+                              'value':results['general_box_office']['value'],
+                              'neighbors':neighbors
+                             }
+        query_results['general_box_office'] = general_box_office
+        # Fill query_results['genre_box_office']
+        neighbors_genre = []
+        for neighbor in results['genre_box_office']['neighbors']:
+            neighbors_genre.append({'rank':neighbor['rank'],
+                                    'original_title':neighbor['film'].original_title,
+                                    'value':neighbor['film'].box_office})
+        genre_box_office = {'rank':results['genre_box_office']['rank'],
+                            'value':results['genre_box_office']['value'],
+                            'neighbors':neighbors_genre
+                           }
+        query_results['genre_box_office'] = genre_box_office
+        # Fill query_results['critics']
+        critics = {}
+        keywords = []
+        for keyword in results['keywords']:
+            keyword.append(keyword.word)
+        reviews = []
+        grades = []
+        for item in results['reviews']:
+            reviews.append({'journal' : item['journal'].name,
+                            'grade' : item['grade'],
+                            'keywords' : keywords
+                           })
+            grades.append(item['grade'])
+        critics['reviews'] = reviews
+        critics['average'] = np.mean(grades)
+        query_results['critics'] = critics
+        # Fill query_results['bag_of_words']
+        bag_of_words = []
+        for item in results['bag_of_words']:
+            bag_of_words.append({'word' : item['keyword'].word,
+                                 'value' : item['value']
+                                })
+        query_results['bag_of_words'] = bag_of_words
+        # Return data
+        return query_results
 
     def compute_predict_request(self, criteria, language=None):
         '''
-        Return {'prizes' : list of Prize, ''}
+        Return {'prizes' : list of {'institution' : Institution Object,
+                                    'win' : boolean,
+                                    'value' : probability
+                                   },
+                'general_box_office' : {'rank' : int,
+                                        'value' : float (M$),
+                                        'neighbors': list of {'film' : Film Object,
+                                                              'rank' : int
+                                                             }
+                                       },
+                'genre_box_office' : {'rank' : int,
+                                      'value' : float (M$),
+                                      'neighbors': list of {'film' : Film Object,
+                                                            'rank' : int
+                                                           }
+                                     },
+                'reviews' : list of {'journal': Journal Object,
+                                     'grade' : float,
+                                     'keywords' : list of Keyword Object
+                                    },
+                'bag_of_words' : list of {'keyword' : Keyword Object,
+                                          'value' : float dans [0,1]
+                                         }
+               }
         '''
         return {}
 
