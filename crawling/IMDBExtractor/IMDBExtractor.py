@@ -15,11 +15,11 @@ import IMDBExtractor_config as IMDBExtractorConfig
 import Extractor.superExtractor
 from Extractor.extractorHTML import ExtractorHTML
 
-import urllib
-
 import Extractor.customisedCleaner as CustomCleaner
+from cinema.models import *
 
 import re
+import urllib
 
 logger = initLogger.getLogger(IMDBExtractorConfig.IMDB_EXTRACTOR_LOGGER_NAME)
 
@@ -364,26 +364,31 @@ def createPersonList(p_url_list):
    return person_list
 
 
+   
+
 def IMDB_filmExtract(film_id):
 
    filmPage = IMDBExtractor_Film(film_id)      # Sur la main page directement
 
-   english_title = filmPage.extractTitle()
-   a = filmPage.extractOriginalTitle()
-   original_title = english_title if not a else a 
-   release_date = filmPage.extractReleaseDate()
-   runtime = filmPage.extractRuntime()
-   budget = filmPage.extractBudget()
-   box_office = filmPage.extractBoxOffice()
-   imdb_user_rating = filmPage.extractRatingValue()
-   imdb_nb_raters = filmPage.extractRatingCount()
+   english_title = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractTitle())
+   original_title = (lambda x : x[0] if len(x)>0 else english_title)(filmPage.extractOriginalTitle()) 
+   release_date = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractReleaseDate())
+   runtime =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRuntime())
+   budget =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractBudget())
+   box_office =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractBoxOffice())
+   imdb_user_rating =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRatingValue())
+   imdb_nb_raters =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRatingCount())
    imdb_nb_user_review,filmPage.imdb_nb_reviews = filmPage.extractReviewCount() 
-   imdb_summary = filmPage.extractSummary()
-   imdb_storyline = filmPage.extractStoryLine()
-   country = filmPage.extractCountry()
-   genres = filmPage.extractGenres()
-   stars = filmPage.extractStars()
-   language = filmPage.extractLanguage() 
+   imdb_summary = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractSummary())
+   imdb_storyline = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractStoryLine())
+
+   #Arrays
+   country =(filmPage.extractCountry())
+   genres =(filmPage.extractGenres())
+   stars =(filmPage.extractStars())
+   language =(filmPage.extractLanguage())
+
+   #f = Film.objects.create(original_title="La vie d'Adèle", imdb_id=film_id, release_date="2013-03-05") 
 
 def IMDB_awardsExtract(film_id):
    #sur la page awards
@@ -421,14 +426,19 @@ def IMDB_fullCreditsExtractor(film_id):
    writers = fullCreditsPage.extractWriters()
    #actors =  fullCreditsPage.extractActors()
 
+def IMDB_SuperExtractor(film_id):
+   IMDB_filmExtract(film_id) 
+   #IMDB_awardsExtract(film_id)
+   #IMDB_keywordsExtract(film_id)
+   #IMDB_reviewsExtract(film_id)
+   #IMDB_fullCreditsExtractor(film_id)
+   #IMDB_companyCreditsExtractor(film_id)
 
 ###############################################
 #                MAIN
 ###############################################
 
-#IMDB_filmExtract(film_id_) 
-#IMDB_awardsExtract(film_id_)
-#IMDB_keywordsExtract(film_id_)
-#IMDB_reviewsExtract(film_id_)
-#IMDB_fullCreditsExtractor(film_id_)
-IMDB_companyCreditsExtractor(film_id_)
+if __name__=="__main__":
+   IMDB_SuperExtractor(film_id_)
+
+IMDB_SuperExtractor(film_id_)
