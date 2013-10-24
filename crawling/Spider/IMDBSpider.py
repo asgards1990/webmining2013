@@ -12,6 +12,8 @@ import Extractor.superExtractor
 from Extractor.extractorHTML import ExtractorHTML
 import Extractor.customisedCleaner as CustomCleaner
 
+from Connector.IMDBStatusConnector import IMDBFilmStatusConnector
+
 import spider_config as SpiderConfig
 
 import urllib
@@ -85,23 +87,25 @@ class IMDBSearchResultsExtractor:
 
 def insertResults(imdb_ids, positions, year):
     logger.debug("Insert results into the database")
- 
+    
+    connector = IMDBFilmStatusConnector()
+
     for i in range(len(imdb_ids)):
         imdb_id = imdb_ids[i]    
         position = positions[i]
         logger.debug("Inserting result: imdb_id={0} year={1} position={2}".format(imdb_id, year, position))
-        # TODO: TESTER SI LE FILM EXISTE DEJA !!
-        # TODO: METTRE dans Imdb_status (imdb_id, year, position, 0, 0, 0, 0, 0, -1)
+        
+        connector.insert(imdb_id, year, position)
 
 ####################################################################
 
 def extractYear(year):
     logger.debug("Extract all IMDB search results for year {}".format(year))
     
-    # TODO: OBTENIR POSITION MAXIMALE dans la BDD pour l'année year -> pos_init[year] = 
+    # TODO (pas crucial): OBTENIR POSITION MAXIMALE dans la BDD pour l'année year -> pos_init[year] = 
     pos_init = 0
 
-    # TODO: PAGE MAXIMAL (dans la base de donnée) pour l'année year
+    # TODO (pas crucial): PAGE MAXIMAL (dans la base de donnée) pour l'année year
     page_init = 1 # (pos_init - 1) / 250 + 1
 
     url_init = searchURL(year, 1 + 250 * (page_init - 1))
