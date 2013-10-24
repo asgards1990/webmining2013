@@ -9,8 +9,8 @@ if __name__ == "__main__":
 
     app = tornado.web.Application(
         [(r'/', ajax_server.handlers.TestHandler),
-         (r'/predict/', ajax_server.handlers.PredictionHandler, dict(app_learn = app_learn)),
-         (r'/search/', ajax_server.handlers.SearchHandler, dict(app_learn = app_learn))]
+         (r'/predict/', ajax_server.handlers.Handler, dict(app_learn = app_learn, method="prediction")),
+         (r'/search/', ajax_server.handlers.Handler, dict(app_learn = app_learn, method="search"))]
         )
     app.listen(8080)
     

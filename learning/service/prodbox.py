@@ -74,12 +74,12 @@ class CinemaService(LearningService):
                     except Person.DoesNotExist:
                         pass
 
-        if filt_in.has_key('genre'):
-            if filt_in['genre'].__class__ == list:
-                filt_out['genre'] =[]
-                for person_id in filt_in['genre']:
+        if filt_in.has_key('genres'):
+            if filt_in['genres'].__class__ == list:
+                filt_out['genres'] =[]
+                for person_id in filt_in['genres']:
                     try:
-                        filt_out['genre'].append( Genre.objects.get(name=str(person_id)) )
+                        filt_out['genres'].append( Genre.objects.get(name=str(person_id)) )
                     except Person.DoesNotExist:
                         pass
         try:
