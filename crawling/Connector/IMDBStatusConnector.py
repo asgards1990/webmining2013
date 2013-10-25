@@ -330,6 +330,15 @@ class IMDBPersonStatusConnector:
 
     # GET METHODS
 
+    def getExtractedStatus(self):
+        self.logger.debug("Get the film Extracted status for Person IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
+        status = s.extracted
+
+        self.logger.debug("-> Status: {}".format(status))
+        return status
+
     def getNotDownloaded(self):
         self.logger.debug("Get the Person IMDB IDs in the database with downloaded=0")
         
@@ -435,6 +444,15 @@ class IMDBCompanyStatusConnector:
     ###############################################################################
 
     # GET METHODS
+
+    def getExtractedStatus(self):
+        self.logger.debug("Get the film Extracted status for Company IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBCompanyStatus.objects.get(imdb_id=imdb_id)
+        status = s.extracted
+
+        self.logger.debug("-> Status: {}".format(status))
+        return status
 
     def getNotDownloaded(self):
         self.logger.debug("Get the Company IMDB IDs in the database with downloaded=0")
