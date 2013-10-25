@@ -71,23 +71,35 @@ class Downloader:
             self.logger.warning('We failed to reach a server or the server couldn\'t fulfill the request.')
             self.logger.warning('Error: {}'.format(e.errno))
             self.logger.warning('Reason: {}'.format(e.strerror))
-            return False        
+            return False
+
+        try:
+            r = u.read()
+        except Exception as e:
+            self.logger.warning('We failed to read the page')
+            self.logger.warning('Error: {}'.format(e))
+            return False
+        
+        if not self.checkHTTPStatus(u):
+            u.close()
+            return False
+           
+        try:
+            f = open(dest, 'wb')
+            f.write(r)
+        except Exception as e:
+            self.logger.warning('We failed to write the page')
+            self.logger.warning('Error: {}'.format(e))
+            return False
+
+        f.close()
+        u.close()
+        self.logger.debug("HTML page downloaded")
+
+        if self.checkDownloadedHTML(dest):
+            return True
         else:
-                        
-            if self.checkHTTPStatus(u):
-                f = open(dest, 'wb')
-                f.write(u.read())
-                f.close()
-                u.close()
-                self.logger.debug("HTML page downloaded")
-
-                if self.checkDownloadedHTML(dest):
-                    return True
-                else:
-                    self.logger.warning("Deleting the downloaded HTML page")
-                    os.remove(dest)
-                    return False
-            else:
-                u.close()
-                return False
-
+            self.logger.warning("Deleting the downloaded HTML page")
+            os.remove(dest)
+            return False
+ 
