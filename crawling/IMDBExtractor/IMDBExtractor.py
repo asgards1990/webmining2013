@@ -159,7 +159,7 @@ class IMDBExtractor_Film(IMDBExtractor):
    def extractMetacriticScore(self):
       #Extrait le nombre de personne ayant commenté le film
       logger.debug("Extract metacritic score : ")      
-      return self.extractor.extractXpathText('//a[contains(@href,criticreviews)]')
+      return self.extractor.extractXpathText('//a[contains(@href,"criticreviews")]')
 
    def extractStars(self):
       logger.debug("Extract Stars) : ")      
@@ -240,7 +240,7 @@ class IMDBExtractor_fullCredits(IMDBExtractor):
    """Extracteur pour la page Full Credits"""
 
    def __init__(self,id_):
-      logger.debug("Création d'un Extracteur pour un type Awards")
+      logger.debug("Création d'un Extracteur pour un type Full credits")
       IMDBExtractor.__init__(self,id_)
       self.url = page_prefixe+film_page_default+id_+fullcredits_suffixe
       self.createExtractorEngine()
@@ -354,21 +354,22 @@ class IMDBExtractor_Person(IMDBExtractor):
       self.url =  page_prefixe+actor_page_default+id_
       self.createExtractorEngine()
 
-      self.birthDate = self.extractBirthDate()
-      self.birthCountry = self.extractBirthCountry()
-      self.name = self.extractName()
+      self.birthDate = (lambda x : x[0] if len(x)>0 else None)(self.extractBirthDate())
+      self.birthCountry = (lambda x : x[-1].split(',')[-1].strip() if len(x)>0 else None)(self.extractBirthCountry())
+      self.name = (lambda x : x[0] if len(x)>0 else None)(self.extractName())
 
       p = definePerson(id_)
       if p:
-         try:
+         try: 
+            #TODO trouver un moyen pour savoir quand une personne a déjà été updatée pour ne pas l'updater en permanence
             logger.info("Mise à jour de la personne {} dans la base de données".format(id_))
             p.name=self.name
             p.birth_date=self.birthDate
-            p.birth_country=self.birthCountry
+            p.birth_country=defineCountry(self.birthCountry)
             p.save()
 
          except Exception as e:
-            logger.error("-> The rewiew couldn't be updated:")
+            logger.error("-> The actor couldn't be updated:")
             logger.error("-> Error: {}".format(e))
 
 
@@ -502,6 +503,17 @@ def defineInstitution(name):
       logger.error('Impossible de retrouver l institution {} a cause de l erreur {}'.format(name,e))
       return False
 
+def defineCountry(name):
+   try :
+      r = Country.objects.get(name=name)
+      return r
+   except Country.DoesNotExist :
+      logger.warning("Le pays {} n'a pas été trouvé dans la base de données".format(name))
+      return None
+   except Exception as e:
+      logger.error('Impossible de retrouver le pays {} a cause de l erreur {}'.format(name,e))
+      return False
+
 def definePrize():
    #TODO
    pass
@@ -537,7 +549,7 @@ def IMDB_filmExtract(film_id):
    stars =(filmPage.extractStars())
    language =(filmPage.extractLanguage())
 
-   f=defineFilm(imdb_id)
+   f=defineFilm(film_id)
    if f:
       try:
          logger.info('Mise à jour de la DB pour le film {} : extraction des données de base du film'.format(film_id))
@@ -574,8 +586,18 @@ def IMDB_awardsExtract(film_id):
    award_tab = awardsPage.extractAwards()
 
    f=defineFilm(film_id)
-   
-   #TODO
+   for award in award_tab:
+      try:
+         win=hasWon(award[0])
+         i = defineInstitution(name=award[3])
+         r = Prize.objects.create(win=win, year=int(award[2]), institution=i, film=f)
+
+      except Exception as e:
+         logger.error("-> The award couldn't be updated for the film {}:".format(film_id))
+         logger.error("-> Error: {}".format(e))
+
+def hasWon(status):
+   return True if status.uppercase()=="WIN" else False
 
 def IMDB_reviewsExtract(film_id):
    logger.debug("Lancement de l'extraction des reviews")
