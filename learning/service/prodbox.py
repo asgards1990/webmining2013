@@ -6,9 +6,17 @@ import numpy as np
 import exceptions
 
 class TableDependentCachedObject(CachedObject):
+    def __init__(self, name, table_name, content = None):
+        __init__(self, name, content = content)
+        self.table_name = table_name
+
     def update_status(self):
-        
-        
+        try:
+            field = TableUpdateTime.objects.get(model_name = self.table_name)
+            if field.update_time > self.version:
+                self.modified = True
+        except TableUpdateTime.DoesNotExist:
+            print('Table "' + self.table_name + ' not found.')
 
 class CinemaService(LearningService):
     def search_request(self, args):

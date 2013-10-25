@@ -1,6 +1,7 @@
 import datetime
 import dateutil.parser
 import pickle
+from django.utils.timezone import utc
 
 CACHE_DIRECTORY = './cache/'
 
@@ -29,7 +30,7 @@ class CachedObject:
             self.name = name
             self.saved = False
             self.modified = True
-            self.version = datetime.datetime.now()
+            self.version = datetime.datetime.utcnow().replace(tzinfo=utc)
             self.checksum = ''
             self.obj = content
 
