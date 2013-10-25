@@ -25,6 +25,8 @@ logger = initLogger.getLogger(IMDBExtractorConfig.IMDB_EXTRACTOR_LOGGER_NAME)
 
 ###################################################################
 
+import md5
+
 awards_suffixe = '/awards'
 fullcredits_suffixe = '/fullcredits'
 companycredits_suffixe = '/companycredits'
@@ -63,9 +65,10 @@ class IMDBExtractor:
    def loadPage(self,url):
       #TODO : vérifie si la page est déjà en local, sinon charge l'url
       #TODO DOIT DEGAGER!
-      logger.info("La page n'existe pas en locale, chargement de la page {}".format(url))
+      logger.info("La page n'existe pas en local, chargement de la page {}".format(url))
       page = urllib.urlopen(url)
-      self.t = page.read()
+      charset = page.headers.getparam('charset')
+      self.t = unicode(page.read(),charset)
       return self.t
 
    def createExtractorEngine(self):
@@ -82,7 +85,7 @@ class IMDBExtractor_Film(IMDBExtractor):
    def __init__(self,film_id):
       logger.debug("Création d'un Extracteur pour un type page de Film")
       IMDBExtractor.__init__(self,film_id)
-      self.url = page_prefixe+film_page_default+film_id
+      self.url = page_prefixe+film_page_default+self.id_
       self.createExtractorEngine()
 
       
@@ -129,7 +132,6 @@ class IMDBExtractor_Film(IMDBExtractor):
       return createPersonList(writer_url_list)
 
    def extractCountry(self):
-      #TODO A REFAIRE ?!?
       logger.debug("Extract country : ")
       return self.extractor.extractXpathText('//div[@id="titleDetails"]/div/a[contains(@href,"country")]')
 
@@ -177,17 +179,84 @@ class IMDBExtractor_Film(IMDBExtractor):
       # Principal producers sur la main page
       p_url_list= self.extractor.extractXpathElement('//span[contains(@itemtype,"Organization") and @itemprop="creator"]/a/@href')
       
-      #TODO faire attention sur le cas ou la regex ne fonctionne pas! ça fiat planter le programme
-      p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list if re.match("/company/(co[0-9]+)?",x)]
-      logger.debug(p_id_list)
-      p_list=[]
-      for p_id in p_id_list:
-         p_list.append(IMDBExtractor_Producer(p_id))
+      try:
+         p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list if re.match("/company/(co[0-9]+)?",x)]
+         logger.debug(p_id_list)
+         p_list=[]
+      
+         for p_id in p_id_list:
+            p_list.append(IMDBExtractor_Producer(p_id))
+
+      except Exception as e:
+         logger.error("Problème lors de l'extraction des producteurs : {}".format(e))
+
       return p_list
 
    def extractLanguage(self):
       logger.debug('Extract Language')
       return self.extractor.extractXpathText('//a[contains(@href,"language")]')
+
+   def extractContent(self):
+
+      self.english_title = (lambda x : x[0] if len(x)>0 else None)(self.extractTitle()) 
+      self.original_title = (lambda x : x[0] if len(x)>0 else self.english_title)(self.extractOriginalTitle()) 
+      self.release_date = (lambda x : x[0] if len(x)>0 else None)(self.extractReleaseDate())
+      self.runtime =(lambda x : x[0].split(' ')[0] if len(x)>0 else None)(self.extractRuntime())
+      self.budget =(lambda x : x[0] if len(x)>0 else None)(self.extractBudget())
+      self.box_office =(lambda x : x[0] if len(x)>0 else None)(self.extractBoxOffice())
+      self.imdb_user_rating =(lambda x : x[0] if len(x)>0 else None)(self.extractRatingValue())
+      self.imdb_nb_raters =(lambda x : x[0] if len(x)>0 else None)(self.extractRatingCount())
+      self.imdb_nb_user_review,imdb_nb_reviews = self.extractReviewCount() 
+      self.imdb_summary = (lambda x : x[0] if len(x)>0 else None)(self.extractSummary())
+      self.imdb_storyline = (lambda x : x[0] if len(x)>0 else None)(self.extractStoryLine())
+      self.metacritic_score=(lambda x : int(x[0].split('/')[0]) if len(x)>0 else None)(self.extractMetacriticScore())
+
+      #Arrays
+      self.country =(self.extractCountry())
+      self.genres =(self.extractGenres())
+      self.stars =(self.extractStars())
+      self.language =(lambda x : x[0] if len(x)>0 else None)(self.extractLanguage())
+
+   def extractFilmPage_DB(self):
+
+      self.extractContent()
+
+      f=defineFilm(self.id_)
+      if f:
+         try:
+            logger.info('Mise à jour de la DB pour le film {} : extraction des données de base du film'.format(self.id_))
+            f.original_title=self.original_title
+            f.english_title=self.english_title
+            f.release_date=self.release_date
+            f.runtime=self.runtime
+            f.budget=self.budget
+            f.box_office=self.box_office
+            f.imdb_user_rating=self.imdb_user_rating
+            f.imdb_nb_user_ratings = self.imdb_nb_raters.replace(',','')
+            f.imdb_nb_user_reviews=self.imdb_nb_user_review.split(' ')[0].replace(',','')
+            f.imdb_nb_reviews=self.imdb_nb_reviews.split(' ')[0].replace(',','')
+            f.imdb_summary=self.imdb_summary
+            f.imdb_storyline=self.imdb_storyline
+            f.metacritic_score=self.metacritic_score
+          
+            for c in self.country:
+               cc = defineCountry(name=c)
+               if cc:
+                  f.country.add(cc)  
+            for genre in self.genres:
+               g = defineGenre(name=genre)
+               if g:
+                  f.genres.add(g)
+            ll = defineLanguage(name=language)
+            if ll:
+               f.language = ll
+
+            logger.debug("Save")
+            f.save()
+
+         except Exception as e:
+            logger.error("-> The film couldn't be updated:")
+            logger.error("-> Error: {}".format(e))
 
 class IMDBExtractor_companyCredits(IMDBExtractor):
    def __init__(self,id_):
@@ -196,37 +265,71 @@ class IMDBExtractor_companyCredits(IMDBExtractor):
       self.url = page_prefixe+film_page_default+id_+companycredits_suffixe
       self.createExtractorEngine()
 
+   def extractContent(self):
+      self.producers = self.extractProducers()
+
    def extractProducers(self):
       logger.debug("Extract Producers : ")
       p_url_list= self.extractor.extractXpathElement('//a[contains(@href,"ttco_co")]/@href')
 
-      #TODO faire attention sur le cas ou la regex ne fonctionne pas! ça fiat planter le programme
-      p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list if re.match("/company/(co[0-9]+)?",x)]
-      logger.debug(p_id_list)
-      p_list=[]
-      for p_id in p_id_list:
-         p_list.append(IMDBExtractor_Producer(p_id))
+      try:
+         p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list if re.match("/company/(co[0-9]+)?",x)]
+         logger.debug(p_id_list)
+         p_list=[]
+
+         for p_id in p_id_list:
+            prod = IMDBExtractor_Producer(p_id)
+            logger.debug('Extract Producer debug entry id : {} ; name : {} ; country : {}'.format(prod.id_,prod.name,prod.country))
+            p_list.append(prod)
+
+      except Exception as e:
+         logger.error("Problème lors de l'extraction des producteurs : {}".format(e))
+
       return p_list
+
+   def extractCompanyCreditsPage_DB(self):
+      self.extractContent()
+      f = defineFilm(self.id_)
+      if f:
+         try:
+            logger.info('Mise à jour de la DB pour le film {} : extraction des Producteurs'.format(self.id_))
+            for p in self.producers:
+               producer = defineProducer(p.id_)
+               if producer:
+                  logger.debug("Producer Name : {} Producer country : {}".format(p.name,p.country))
+                  producer.name=p.name
+                  c = defineCountryByCode(p.country)
+                  if c:
+                     producer.country=c
+
+                  f.production_companies.add(producer)
+                  producer.save()
+            f.save()
+
+         except Exception as e:
+            logger.error('La mise à jour de la DB pour le film {} : extraction des Producteurs a échoué'.format(self.id_))
+            logger.error("-> Error: {}".format(e))
+
 
 class IMDBExtractor_Producer(IMDBExtractor):
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Producer")
       IMDBExtractor.__init__(self,id_)
       self.url = page_prefixe+company_page_default+id_
-      #TODO vérifie si la page qui nous intéresse existe. Si oui on travaille, si non on insère dans la base la nécessité de charger la page
       
       self.createExtractorEngine()
 
-      self.extractName()
+      self.name=self.extractName()
+      
       self.extractCountry()
 
    def extractName(self):
-      #ATTENTION dans les cas où la regex ne fonctionne pas ça fait planter le programme
       try:
-         self.name = self.extractor.extractXpathText('//strong[@class="title"]')[0].split("[")[0][:-1]
-         logger.debug(self.name)
+         name = self.extractor.extractXpathText('//strong[@class="title"]')[0].split("[")[0][:-1]
+         return str(name)
       except:
          logger.error("La page du Producteur n'a pas le format attendu")
+         return md5.new("{}".format(self.id_)).hexdigest() 
 
    def extractCountry(self):
       try:
@@ -245,6 +348,12 @@ class IMDBExtractor_fullCredits(IMDBExtractor):
       self.url = page_prefixe+film_page_default+id_+fullcredits_suffixe
       self.createExtractorEngine()
 
+   def extractContent(self):
+      self.directors = self.extractDirectors() 
+      self.writers = self.extractWriters()
+      self.actors =  self.extractActors()
+
+
    def extractActors(self):
       logger.debug("Extract Actors : ")
       actor_url_list = self.extractor.extractXpathElement('//td[@itemprop="actor"]/a/@href')
@@ -259,6 +368,36 @@ class IMDBExtractor_fullCredits(IMDBExtractor):
       logger.debug("Extract Writers: ")
       writer_url_list = self.extractor.extractXpathElement('//a[contains(@href,"ttfc_fc_wr")]/@href')
       return createPersonList(writer_url_list)
+
+ 
+   def extractFullCreditsPage_DB(self):
+
+      self.extractContent()
+
+      f = defineFilm(self.id_)
+      if f:
+         try:
+            for d in self.directors:
+               director = definePerson(d.id_)
+               if director:
+                  f.directors.add(director)
+                  f.save()
+            for w in self.writers:
+               writer = definePerson(w.id_)
+               if writer:
+                  f.writers.add(writer)
+                  f.save()
+            for a in self.actors:
+              actor = definePerson(a.id_)
+              if actor:
+                 pass
+                 #f.actors.add(actor)
+                 #TODO
+            logger.info('Mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors'.format(self.id_))
+         except Exception as e:
+            logger.error('La mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors a échoué'.format(self.id_))
+            logger.error("-> Error: {}".format(e))
+   
 
 class IMDBExtractor_Reviews(IMDBExtractor):
 
@@ -289,7 +428,42 @@ class IMDBExtractor_Reviews(IMDBExtractor):
    def extractFullReviewURL(self):
       logger.debug("Extract Full review URL : ")
       #TODO ne fonctionne pas!?!
-      return self.extractor.extractXpathElement('//span[@itemprop="author"]/../@href')
+      return self.extractor.extractXpathElement('//span[@itemprop="author"]/../@href')   
+
+   def extractContent(self):
+      self.grade=(self.extractGrade())
+      self.summary=(self.extractSummary())
+      self.reviewer=(self.extractReviewer())
+      self.journal=(self.extractJournal())
+      self.fullReviewURL=(self.extractFullReviewURL())
+
+   def extractReviewsPage_DB(self):
+      self.extractContent()
+      f = defineFilm(self.id_)   
+   
+      for index in range(len(self.grade)):
+        try:
+         r = defineReviewer(self.reviewer[index])
+         j = defineJournal(self.journal[index])
+   
+         if r:
+            if j:
+               if f:
+                  re = defineReview(r,j,f)
+         if re:
+            try:
+               logger.info('Mise à jour de la DB pour le film {} : extraction des critiques du film'.format(self.id_))
+               re.summary=self.summary[index]
+               re.grade=self.grade[index]
+               #re.fullReviewURL = self.fullReviewURL[index]
+               re.save()
+   
+            except Exception as e:
+               logger.error("-> The rewiew couldn't be updated:")
+               logger.error("-> Error: {}".format(e))
+        except :
+         logger.warning("Problème d'homogénéité dans les tableaux de reviews")
+  
 
 class IMDBExtractor_Awards(IMDBExtractor):
 
@@ -317,20 +491,39 @@ class IMDBExtractor_Awards(IMDBExtractor):
             award_detail = []
             logger.debug(award_category_status[0])
             logger.debug(award_category_list[0])
-            logger.debug(award_year_list[0])
+            logger.debug(award_year_list[i-1])
             logger.debug(j)
            
             award_detail.append(award_category_status[0]) #WIN/NPMINATED
             award_detail.append(award_category_list[0])   #Palme d'or
-            award_detail.append(award_year_list[0])       #2013
+            award_detail.append(award_year_list[i-1])       #2013
             award_detail.append(institution_list[i-1])     #Cannes Film Festival
 
 	    award_category_status.pop(0)
             award_category_list.pop(0)
-            award_year_list.pop(0)
 
          award_tab.append(award_detail)
       return award_tab
+
+   def extractContent(self):
+      self.award_tab = self.extractAwards()
+
+   def extractAwardsPage_DB(self):
+      self.extractContent()
+      f=defineFilm(self.id_)
+   
+      for award in self.award_tab:
+         try:
+            win=hasWon(award[0])
+            ins = defineInstitution(name=award[3])
+            if ins:
+               logger.info("Mise à jour du film {}, lien avec un nouvel award pour l'institution {}".format(self.id_,ins))
+               Prize.objects.create(win=win, year=int(award[2]), institution=ins, film=f)
+
+         except Exception as e:
+            logger.error("-> The film {}  couldn't be updated for the award:".format(self.id_))
+            logger.error("-> Error: {}".format(e))
+
 
 class IMDBExtractor_Keyword(IMDBExtractor):
 
@@ -340,10 +533,27 @@ class IMDBExtractor_Keyword(IMDBExtractor):
       self.url = page_prefixe+film_page_default+id_+keywords_suffixe
       self.createExtractorEngine()
 
-      self.extractKeywords()
+   def extractContent(self):
+      self.keywords = self.extractKeywords() 
+
+   def extractKeywordsPage_DB(self):
+      self.extractContent()
+      f = defineFilm(self.id_)
+      if f:
+         try:
+            logger.info('Mise à jour de la DB pour le film {} : extraction des keywords'.format(self.id_))
+            for word in self.keywords:
+               keyword = defineKeyword(word) 
+               if keyword:
+                  f.keywords.add(keyword)
+
+            f.save()
+         except Exception as e:
+            logger.error('La mise à jour de la DB pour le film {} : extraction des keywords a échoué'.format(self.id_))
+            logger.error("-> Error: {}".format(e))
 
    def extractKeywords(self):
-      self.keywords = self.extractor.extractXpathText('//td/a')
+      return self.extractor.extractXpathText('//td/a')
       
 
 class IMDBExtractor_Person(IMDBExtractor):
@@ -357,6 +567,8 @@ class IMDBExtractor_Person(IMDBExtractor):
       self.birthDate = (lambda x : x[0] if len(x)>0 else None)(self.extractBirthDate())
       self.birthCountry = (lambda x : x[-1].split(',')[-1].strip() if len(x)>0 else None)(self.extractBirthCountry())
       self.name = (lambda x : x[0] if len(x)>0 else None)(self.extractName())
+
+   def extractPerson_DB(self):
 
       p = definePerson(id_)
       if p:
@@ -433,9 +645,9 @@ def defineKeyword(keyword):
  
 def defineReview(reviewer,journal,film):
    try :
-      r = Reviewer.objects.get(reviewer=reviewer,journal=journal,film=film)
+      r = Review.objects.get(reviewer=reviewer,journal=journal,film=film)
       return False 
-   except Reviewer.DoesNotExist :
+   except Review.DoesNotExist :
       logger.info("Création de la review dans la base de données")
       r = Review.objects.create(reviewer=reviewer,journal=journal,film=film)
       return r
@@ -455,16 +667,16 @@ def definePerson(p_id):
       logger.error('Impossible de retrouver la personne {} a cause de l erreur {}'.format(p_id,e))
       return False
 
-def defineJournal(name):
+def defineJournal(j_name):
    try :
-      j = Journal.objects.get(name=name)
+      j = Journal.objects.get(name=j_name)
       return j
    except Journal.DoesNotExist :
-      logger.info("Création du journal {} dans la base de données".format(name))
-      j = Journal.objects.create(imdb_id=p_id)
+      logger.info("Création du journal {} dans la base de données".format(j_name))
+      j = Journal.objects.create(name=j_name)
       return j
    except Exception as e:
-      logger.error('Impossible de retrouver le journal {} a cause de l erreur {}'.format(name,e))
+      logger.error('Impossible de retrouver le journal {} a cause de l erreur {}'.format(j_name,e))
       return False
 
 def defineProducer(p_id):
@@ -484,7 +696,7 @@ def defineReviewer(name):
       r = Reviewer.objects.get(name=name)
       return r
    except Reviewer.DoesNotExist :
-      logger.info("Création du reviewer {} dans la base de données".format(r))
+      logger.info("Création du reviewer {} dans la base de données".format(name))
       r = Reviewer.objects.create(name=name)
       return r
    except Exception as e:
@@ -494,11 +706,11 @@ def defineReviewer(name):
 def defineInstitution(name):
    try :
       i = Institution.objects.get(name=name)
-      return r
+      return i
    except Institution.DoesNotExist :
-      logger.info("Création du reviewer {} dans la base de données".format(r))
-      r = Institution.objects.create(name=name)
-      return r
+      logger.info("Création de l'institution {} dans la base de données".format(name))
+      i = Institution.objects.create(name=name)
+      return i
    except Exception as e:
       logger.error('Impossible de retrouver l institution {} a cause de l erreur {}'.format(name,e))
       return False
@@ -512,6 +724,17 @@ def defineCountry(name):
       return None
    except Exception as e:
       logger.error('Impossible de retrouver le pays {} a cause de l erreur {}'.format(name,e))
+      return False
+
+def defineCountryByCode(code):
+   try :
+      r = Country.objects.get(identifier=code)
+      return r
+   except Country.DoesNotExist :
+      logger.warning("Le pays dont le code est {} n'a pas été trouvé dans la base de données".format(code))
+      return None
+   except Exception as e:
+      logger.error('Impossible de retrouver le pays {} a cause de l erreur {}'.format(code,e))
       return False
 
 def defineGenre(name):
@@ -547,202 +770,69 @@ def defineLanguage(name):
 """ Fonctions appelées depuis l'exterieur du module. Créent les objets nécessaires à l'extraction et remplissent la DB. Il existe une fonction par type de page"""
 
 def IMDB_filmExtract(film_id):
-
+   logger.debug("Lancement de l'extraction de la Page film pour le film {}".format(film_id))
    filmPage = IMDBExtractor_Film(film_id)      # Sur la main page directement
 
-   english_title = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractTitle())
-   original_title = (lambda x : x[0] if len(x)>0 else english_title)(filmPage.extractOriginalTitle()) 
-   release_date = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractReleaseDate())
-   runtime =(lambda x : x[0].split(' ')[0] if len(x)>0 else None)(filmPage.extractRuntime())
-   budget =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractBudget())
-   box_office =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractBoxOffice())
-   imdb_user_rating =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRatingValue())
-   imdb_nb_raters =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRatingCount())
-   imdb_nb_user_review,imdb_nb_reviews = filmPage.extractReviewCount() 
-   imdb_summary = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractSummary())
-   imdb_storyline = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractStoryLine())
-   metacritic_score=(lambda x : int(x[0].split('/')[0]) if len(x)>0 else None)(filmPage.extractMetacriticScore())
+   filmPage.extractFilmPage_DB()
 
-   #Arrays
-   country =(filmPage.extractCountry())
-   genres =(filmPage.extractGenres())
-   stars =(filmPage.extractStars())
-   language =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractLanguage())
-
-   f=defineFilm(film_id)
-   if f:
-      try:
-         logger.info('Mise à jour de la DB pour le film {} : extraction des données de base du film'.format(film_id))
-         Film.objects.filter(imdb_id=film_id).update(original_title=original_title,\
-                        english_title=english_title,
-                        release_date=release_date,\
-                        runtime=runtime,\
-                        budget=budget,\
-                        box_office=box_office,\
-                        imdb_user_rating=imdb_user_rating,\
-                        imdb_nb_user_ratings = imdb_nb_raters.replace(',',''),\
-                        imdb_nb_user_reviews=imdb_nb_user_review.split(' ')[0].replace(',',''),\
-                        imdb_nb_reviews=imdb_nb_reviews.split(' ')[0].replace(',',''),\
-                        imdb_summary=imdb_summary,\
-                        imdb_storyline=imdb_storyline,\
-                        metacritic_score=metacritic_score
-                        ) 
-         for c in country:
-            cc = defineCountry(name=c)
-            if cc:
-               logger.debug("Mise à jour du film {}, établissement du lien vers le pays {}".format(film_id,c))
-               f.country.add(cc)  
-         for genre in genres:
-            g = defineGenre(name=genre)
-            if g:
-               logger.debug("Mise à jour du film {}, établissement du lien vers le genre {}".format(film_id,genre))
-               f.genres.add(g)
-         ll = defineLanguage(name=language)
-         if ll:
-            logger.debug("Mise à jour du film {}, établissement du lien vers le langage {}".format(film_id,ll))
-            f.language = ll
-         f.save()
-
-      except Exception as e:
-         logger.error("-> The film couldn't be updated:")
-         logger.error("-> Error: {}".format(e))
 
 def IMDB_awardsExtract(film_id):
    #sur la page awards
-   logger.debug("Lancement de l'extraction des awards")
+   logger.debug("Lancement de l'extraction des awards pour le film {}".format(film_id))
    awardsPage = IMDBExtractor_Awards(film_id)
-   award_tab = awardsPage.extractAwards()
 
-   f=defineFilm(film_id)
-   for award in award_tab:
-      try:
-         win=hasWon(award[0])
-         i = defineInstitution(name=award[3])
-         r = Prize.objects.create(win=win, year=int(award[2]), institution=i, film=f)
+   awardsPage.extractAwardsPage_DB()
 
-      except Exception as e:
-         logger.error("-> The award couldn't be updated for the film {}:".format(film_id))
-         logger.error("-> Error: {}".format(e))
 
 def hasWon(status):
-   return True if status.uppercase()=="WIN" else False
+   return True if status.upper()=="WON" else False
 
 def IMDB_reviewsExtract(film_id):
-   logger.debug("Lancement de l'extraction des reviews")
-
+   logger.debug("Lancement de l'extraction des reviews pour le film {}".format(film_id))
    reviewPage = IMDBExtractor_Reviews(film_id)
 
-   grade=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractGrade())
-   summary=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractSummary())
-   reviewer=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractReviewer())
-   journal=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractJournal())
-   fullReviewURL=(lambda x : x[0] if len(x)>0 else None)(reviewPage.extractFullReviewURL())
-
-   r = defineReviewer(reviewer)
-   j = defineJournal(journal)
-   f = defineFilm(film_id)   
-
-   if r:
-      if j:
-         if f:
-            re = defineReview(r,j,f)
-   if re:
-      try:
-         logger.info('Mise à jour de la DB pour le film {} : extraction des critiques du film'.format(film_id))
-         re.summary=summary
-         re.grade=grade
-         re.fullReviewURL = fullReviewURL
-         re.save()
-
-         f.add(re)
-         f.save()
-
-      except Exception as e:
-         logger.error("-> The rewiew couldn't be updated:")
-         logger.error("-> Error: {}".format(e))
+   reviewPage.extractReviewsPage_DB()
+   
 
    #TODO extraire le FullReviewURL
 
 def IMDB_keywordsExtract(film_id):
    #sur la page keywords
-   logger.debug("Lancement de l'extraction des keywords")
+   logger.debug("Lancement de l'extraction des keywords pour le film {}".format(film_id))
    keywordsPage = IMDBExtractor_Keyword(film_id)
-   l = keywordsPage.extractKeywords() 
 
-   f = defineFilm(film_id)
-   if f:
-      try:
-         logger.info('Mise à jour de la DB pour le film {} : extraction des keywords'.format(film_id))
-         for word in l:
-            keyword = defineKeyword(word) 
-            if keyword:
-               f.keywords.add(keyword)
+   keywordsPage.extractKeywordsPage_DB()
 
-         f.save()
-      except Exception as e:
-         logger.error('La mise à jour de la DB pour le film {} : extraction des keywords a échoué'.format(film_id))
-         logger.error("-> Error: {}".format(e))
 
 def IMDB_companyCreditsExtractor(film_id):
    #sur la page companycredits
-   logger.debug("Lancement de l'extraction des de la page Company Credits")
+   logger.debug("Lancement de l'extraction des de la page Company Credits pour le film {}".format(film_id))
    companyCreditsPage = IMDBExtractor_companyCredits(film_id)
-   producers = companyCreditsPage.extractProducers() 
 
-   f = defineFilm(film_id)
-   if f:
-      try:
-         logger.info('Mise à jour de la DB pour le film {} : extraction des Producteurs'.format(film_id))
-         for p_id in producers:
-            producer = defineProducer(p_id)
-            if producer:
-               f.producer.add(producer)
-         logger.info('Mise à jour de la DB pour le film {} : extraction des Producteurs'.format(film_id))
-         f.save()
+   companyCreditsPage.extractCompanyCreditsPage_DB()
 
-      except Exception as e:
-         logger.error('La mise à jour de la DB pour le film {} : extraction des Producteurs a échoué'.format(film_id))
-         logger.error("-> Error: {}".format(e))
 
-     
 def IMDB_fullCreditsExtractor(film_id):
-   logger.debug("Lancement de l'extraction des de la page full credits")
+   logger.debug("Lancement de l'extraction des de la page full credits pour le film {}".format(film_id))
    fullCreditsPage = IMDBExtractor_fullCredits(film_id)
 
-   directors = fullCreditsPage.extractDirectors() 
-   writers = fullCreditsPage.extractWriters()
-   actors =  fullCreditsPage.extractActors()
-
-   f = defineFilm(film_id)
-   if f:
-      try:
-         for d_id in directors:
-            director = definePerson(d_id)
-            if director:
-               f.directors.add(director)
-         for w_id in writers:
-            writer = definePerson(w_id)
-            if writer:
-               f.writers.add(writer)
-         for a_id in actors:
-           actor = definePerson(a_id)
-           if actor:
-              f.actors.add(actor)
-         logger.info('Mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors'.format(film_id))
-         f.save()   
-      except Exception as e:
-         logger.error('La mise à jour de la DB pour le film {} : extraction des Producteurs a échoué'.format(film_id))
-         logger.error("-> Error: {}".format(e))
+   fullCreditsPage.extractFullCreditsPage_DB()
 
 
+def IMDB_personExtractor(person_id):
+   logger.debug("Lancement de l'extraction de la page person pour {}".format(person_id))
+   personPage = IMDBExtractor_Person(person_id)
+
+   personPage.extractPerson_DB()
 
 def IMDB_SuperExtractor(film_id):
    IMDB_filmExtract(film_id) 
-   #IMDB_awardsExtract(film_id)
-   #IMDB_keywordsExtract(film_id)
-   #IMDB_reviewsExtract(film_id)
-   #IMDB_fullCreditsExtractor(film_id)
-   #IMDB_companyCreditsExtractor(film_id)
+   IMDB_awardsExtract(film_id)
+   IMDB_keywordsExtract(film_id)
+   IMDB_reviewsExtract(film_id) #TODO
+   IMDB_companyCreditsExtractor(film_id)
+   IMDB_fullCreditsExtractor(film_id)
+
 
 ###############################################
 #                MAIN
