@@ -42,3 +42,9 @@ class IMDBCompanyStatus(models.Model):
     
     def __unicode__(self):
         return u'%s status' % (self.imdb_id)
+
+class TableUpdateTime(models.Model):
+    table = models.ForeignKey(object, default=None, unique=True)
+    update_time = models.DateTimeField(default=None)
+    def __unicode__(self):
+        return u'table for objects of class %s was last modified at %s' % (self.table.__name__, self.update_time)
