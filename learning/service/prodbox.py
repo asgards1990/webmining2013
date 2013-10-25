@@ -126,7 +126,7 @@ class CinemaService(LearningService):
                 lang = Language.objects.get(identifier = str(args['language']))
             except Language.DoesNotExist, exceptions.KeyError :
                 pass
-        results = self.compute_predict_request(self.parse_criteria(args), language = lang)
+        results = self.compute_predict(self.parse_criteria(args), language = lang)
         
         # Build query_results
         query_results = {}
@@ -194,7 +194,7 @@ class CinemaService(LearningService):
         # Return data
         return query_results
 
-    def compute_predict_request(self, criteria, language=None):
+    def compute_predict(self, criteria, language=None):
         '''
         Return {'prizes' : list of {'institution' : Institution Object,
                                     'win' : boolean,
