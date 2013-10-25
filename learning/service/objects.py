@@ -1,6 +1,7 @@
 import datetime
 import dateutil.parser
 import pickle
+from django.utils.timezone import utc
 
 CACHE_DIRECTORY = './cache/'
 
@@ -21,6 +22,7 @@ class CachedObject:
             self.saved = d['saved']
             self.modified = d['modified']
             self.version = d['version']
+            self.checksum = d['checksum']
             self.obj = d['obj']
             print('Initializing ' + self.name + ' at version ' + self.version.isoformat() + '.')
         except:
@@ -28,7 +30,8 @@ class CachedObject:
             self.name = name
             self.saved = False
             self.modified = True
-            self.version = datetime.datetime.now()
+            self.version = datetime.datetime.utcnow().replace(tzinfo=utc)
+            self.checksum = ''
             self.obj = content
 
     def get_content(self):

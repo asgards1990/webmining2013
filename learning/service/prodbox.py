@@ -1,8 +1,22 @@
 from objects import *
+from status.models import *
 from cinema.models import *
 import numpy as np
 
 import exceptions
+
+class TableDependentCachedObject(CachedObject):
+    def __init__(self, name, table_name, content = None):
+        __init__(self, name, content = content)
+        self.table_name = table_name
+
+    def update_status(self):
+        try:
+            field = TableUpdateTime.objects.get(model_name = self.table_name)
+            if field.update_time > self.version:
+                self.modified = True
+        except TableUpdateTime.DoesNotExist:
+            print('Table "' + self.table_name + ' not found.')
 
 class CinemaService(LearningService):
     def search_request(self, args):
@@ -112,7 +126,7 @@ class CinemaService(LearningService):
                 lang = Language.objects.get(identifier = str(args['language']))
             except Language.DoesNotExist, exceptions.KeyError :
                 pass
-        results = self.compute_predict_request(self.parse_criteria(args), language = lang)
+        results = self.compute_predict(self.parse_criteria(args), language = lang)
         
         # Build query_results
         query_results = {}
@@ -180,7 +194,7 @@ class CinemaService(LearningService):
         # Return data
         return query_results
 
-    def compute_predict_request(self, criteria, language=None):
+    def compute_predict(self, criteria, language=None):
         '''
         Return {'prizes' : list of {'institution' : Institution Object,
                                     'win' : boolean,
