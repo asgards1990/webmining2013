@@ -1,8 +1,14 @@
 from objects import *
+from status.models import *
 from cinema.models import *
 import numpy as np
 
 import exceptions
+
+class TableDependentCachedObject(CachedObject):
+    def update_status(self):
+        
+        
 
 class CinemaService(LearningService):
     def search_request(self, args):

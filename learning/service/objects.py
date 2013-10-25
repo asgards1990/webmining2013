@@ -21,6 +21,7 @@ class CachedObject:
             self.saved = d['saved']
             self.modified = d['modified']
             self.version = d['version']
+            self.checksum = d['checksum']
             self.obj = d['obj']
             print('Initializing ' + self.name + ' at version ' + self.version.isoformat() + '.')
         except:
@@ -29,6 +30,7 @@ class CachedObject:
             self.saved = False
             self.modified = True
             self.version = datetime.datetime.now()
+            self.checksum = ''
             self.obj = content
 
     def get_content(self):
