@@ -4,5 +4,5 @@
 #Cette classe contient les paramètres de configuration pour le module Logger
 
 
-LOG_FILE = 'debug.log'
+LOG_FILE = 'debug_Downloader_131025_007.log'
 LOGGER_BASE_NAME = 'SUPER LOGGER'

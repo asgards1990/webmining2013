@@ -86,7 +86,7 @@ class  Film (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True, default=None)
     original_title = models.CharField(max_length=255,blank=True)
     english_title = models.CharField(max_length=255,blank=True)
-    release_date = models.DateField()
+    release_date = models.DateField(null=True,blank=True)
     runtime = models.IntegerField(null=True,blank=True)
     budget = models.IntegerField(null=True,blank=True)
     box_office = models.IntegerField(null=True,blank=True)
