@@ -121,7 +121,7 @@ class CinemaService(LearningService):
         query_results['prizes'] = []
         for prize in results['prizes']:
             query_results['prizes'].append({'institution' : prize['institution'].name,
-                                            'win' : prize['win']
+                                            'win' : prize['win'],
                                             'value' : prize['value']})
         
         # Fill query_results['general_box_office']
