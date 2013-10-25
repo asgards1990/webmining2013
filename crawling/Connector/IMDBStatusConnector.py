@@ -128,9 +128,15 @@ class IMDBFilmStatusConnector:
         return status
 
     def getNotDownloaded(self):
-        self.logger.debug("Get the IMDB ID {} in the database with downloaded")
+        self.logger.debug("Get the IMDB ID {} in the database with downloaded=0")
         
         status = IMDBFilmStatus.objects.filter(downloaded=0)
+        return map(lambda s: s.imdb_id, status)
+
+    def getDownloadedNotExtracted(self):
+        self.logger.debug("Get the IMDB ID {} in the database with downloaded=1 and extracted=0")
+
+        status = IMDBFilmStatus.objects.filter(downloaded=1, extracted=0)
         return map(lambda s: s.imdb_id, status)
 
     ###############################################################################
