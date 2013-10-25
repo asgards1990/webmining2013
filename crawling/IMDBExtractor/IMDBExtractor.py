@@ -514,9 +514,29 @@ def defineCountry(name):
       logger.error('Impossible de retrouver le pays {} a cause de l erreur {}'.format(name,e))
       return False
 
-def definePrize():
-   #TODO
-   pass
+def defineGenre(name):
+   try :
+      r = Genre.objects.get(name=name)
+      return r
+   except Genre.DoesNotExist :
+      logger.warning("Le genre {} n'a pas été trouvé dans la base de données".format(name))
+      return None
+   except Exception as e:
+      logger.error('Impossible de retrouver le genre {} a cause de l erreur {}'.format(name,e))
+      return False
+
+def defineLanguage(name):
+   try :
+      r = Language.objects.get(name=name)
+      return r
+   except Language.DoesNotExist :
+      logger.warning("Le langage {} n'a pas été trouvé dans la base de données".format(name))
+      return None
+   except Exception as e:
+      logger.error('Impossible de retrouver le langage {} a cause de l erreur {}'.format(name,e))
+      return False
+
+
 
 ################################################################
 #
@@ -533,7 +553,7 @@ def IMDB_filmExtract(film_id):
    english_title = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractTitle())
    original_title = (lambda x : x[0] if len(x)>0 else english_title)(filmPage.extractOriginalTitle()) 
    release_date = (lambda x : x[0] if len(x)>0 else None)(filmPage.extractReleaseDate())
-   runtime =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRuntime())
+   runtime =(lambda x : x[0].split(' ')[0] if len(x)>0 else None)(filmPage.extractRuntime())
    budget =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractBudget())
    box_office =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractBoxOffice())
    imdb_user_rating =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractRatingValue())
@@ -547,32 +567,40 @@ def IMDB_filmExtract(film_id):
    country =(filmPage.extractCountry())
    genres =(filmPage.extractGenres())
    stars =(filmPage.extractStars())
-   language =(filmPage.extractLanguage())
+   language =(lambda x : x[0] if len(x)>0 else None)(filmPage.extractLanguage())
 
    f=defineFilm(film_id)
    if f:
       try:
          logger.info('Mise à jour de la DB pour le film {} : extraction des données de base du film'.format(film_id))
-         Film.objects.filter(imdb_id=fim_id).update(original_title=original_title,\
+         Film.objects.filter(imdb_id=film_id).update(original_title=original_title,\
                         english_title=english_title,
                         release_date=release_date,\
                         runtime=runtime,\
                         budget=budget,\
                         box_office=box_office,\
                         imdb_user_rating=imdb_user_rating,\
-                        imdb_nb_user_ratings = imdb_nb_ratersi,\
-                        imdb_nb_user_reviews=imdb_nb_user_review,\
-                        imdb_nb_reviews=imdb_nb_reviews,\
+                        imdb_nb_user_ratings = imdb_nb_raters.replace(',',''),\
+                        imdb_nb_user_reviews=imdb_nb_user_review.split(' ')[0].replace(',',''),\
+                        imdb_nb_reviews=imdb_nb_reviews.split(' ')[0].replace(',',''),\
                         imdb_summary=imdb_summary,\
                         imdb_storyline=imdb_storyline,\
                         metacritic_score=metacritic_score
                         ) 
          for c in country:
-            f.country.add(c)  
+            cc = defineCountry(name=c)
+            if cc:
+               logger.debug("Mise à jour du film {}, établissement du lien vers le pays {}".format(film_id,c))
+               f.country.add(cc)  
          for genre in genres:
-            f.genres.add(genre)
-         for l in language:
-            f.language.add(l)
+            g = defineGenre(name=genre)
+            if g:
+               logger.debug("Mise à jour du film {}, établissement du lien vers le genre {}".format(film_id,genre))
+               f.genres.add(g)
+         ll = defineLanguage(name=language)
+         if ll:
+            logger.debug("Mise à jour du film {}, établissement du lien vers le langage {}".format(film_id,ll))
+            f.language = ll
          f.save()
 
       except Exception as e:
