@@ -174,11 +174,7 @@ class IMDBExtractor_Film(IMDBExtractor):
       director_url_tab = self.extractor.extractXpathElement('//td[@id="overview-top"]/div[@itemprop="director"]/a/@href')
       return createPersonList(director_url_tab )
 
-   def extractProducers(self):
-      logger.debug("Extract Producers from main page: ")
-      # Principal producers sur la main page
-      p_url_list= self.extractor.extractXpathElement('//span[contains(@itemtype,"Organization") and @itemprop="creator"]/a/@href')
-      
+   def extractProducerIdFromURLList(p_url_list):
       try:
          p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list if re.match("/company/(co[0-9]+)?",x)]
          logger.debug(p_id_list)
@@ -191,6 +187,17 @@ class IMDBExtractor_Film(IMDBExtractor):
          logger.error("Problème lors de l'extraction des producteurs : {}".format(e))
 
       return p_list
+
+   def extractProducers(self):
+
+      """renvoie une liste d'objets Producers"""
+
+      logger.debug("Extract Producers from main page: ")
+      # Principal producers sur la main page
+      p_url_list= self.extractor.extractXpathElement('//span[contains(@itemtype,"Organization") and @itemprop="creator"]/a/@href')
+ 
+      return self.extractProducerIdFromURLList(p_url_list)
+      
 
    def extractLanguage(self):
       logger.debug('Extract Language')
@@ -206,7 +213,7 @@ class IMDBExtractor_Film(IMDBExtractor):
       self.box_office =(lambda x : x[0] if len(x)>0 else None)(self.extractBoxOffice())
       self.imdb_user_rating =(lambda x : x[0] if len(x)>0 else None)(self.extractRatingValue())
       self.imdb_nb_raters =(lambda x : x[0] if len(x)>0 else None)(self.extractRatingCount())
-      self.imdb_nb_user_review,imdb_nb_reviews = self.extractReviewCount() 
+      self.imdb_nb_user_review,self.imdb_nb_reviews = self.extractReviewCount() 
       self.imdb_summary = (lambda x : x[0] if len(x)>0 else None)(self.extractSummary())
       self.imdb_storyline = (lambda x : x[0] if len(x)>0 else None)(self.extractStoryLine())
       self.metacritic_score=(lambda x : int(x[0].split('/')[0]) if len(x)>0 else None)(self.extractMetacriticScore())
@@ -238,7 +245,16 @@ class IMDBExtractor_Film(IMDBExtractor):
             f.imdb_summary=self.imdb_summary
             f.imdb_storyline=self.imdb_storyline
             f.metacritic_score=self.metacritic_score
-          
+
+
+            for a in self.stars:
+              actor = definePerson(a.id_)
+              if actor:
+                 actor_weight = defineActorWeight(actor,f)
+                 if actor_weight:
+                    actor_weight.star = True
+                    actor_weight.save()
+
             for c in self.country:
                cc = defineCountry(name=c)
                if cc:
@@ -247,7 +263,7 @@ class IMDBExtractor_Film(IMDBExtractor):
                g = defineGenre(name=genre)
                if g:
                   f.genres.add(g)
-            ll = defineLanguage(name=language)
+            ll = defineLanguage(name=self.language)
             if ll:
                f.language = ll
 
@@ -387,12 +403,16 @@ class IMDBExtractor_fullCredits(IMDBExtractor):
                if writer:
                   f.writers.add(writer)
                   f.save()
+            actor_index=1
             for a in self.actors:
               actor = definePerson(a.id_)
               if actor:
-                 pass
-                 #f.actors.add(actor)
-                 #TODO
+                 actor_weight = defineActorWeight(actor,f)
+                 if actor_weight:
+                    actor_weight.rank = actor_index
+                    actor_weight.film = f
+                    actor_weight.save()
+                    actor_index +=1
             logger.info('Mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors'.format(self.id_))
          except Exception as e:
             logger.error('La mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors a échoué'.format(self.id_))
@@ -667,6 +687,19 @@ def definePerson(p_id):
       logger.error('Impossible de retrouver la personne {} a cause de l erreur {}'.format(p_id,e))
       return False
 
+def defineActorWeight(actor,film):
+   try :
+      actor_weight = ActorWeight.objects.get(actor=actor,film=film)
+      return actor_weight 
+   except ActorWeight.DoesNotExist :
+      logger.info("Création de l'Actor weight dans la base de données")
+      actor_weight = ActorWeight.objects.create(actor=actor,film=film)
+      actor_weight.star = False
+      return actor_weight 
+   except Exception as e:
+      logger.error('Impossible de retrouver la personne {} a cause de l erreur {}'.format(e))
+      return False
+
 def defineJournal(j_name):
    try :
       j = Journal.objects.get(name=j_name)
@@ -827,10 +860,10 @@ def IMDB_personExtractor(person_id):
 
 def IMDB_SuperExtractor(film_id):
    IMDB_filmExtract(film_id) 
-   IMDB_awardsExtract(film_id)
-   IMDB_keywordsExtract(film_id)
-   IMDB_reviewsExtract(film_id) #TODO
-   IMDB_companyCreditsExtractor(film_id)
+   #IMDB_awardsExtract(film_id)
+   #IMDB_keywordsExtract(film_id)
+   #IMDB_reviewsExtract(film_id) #TODO
+   #IMDB_companyCreditsExtractor(film_id)
    IMDB_fullCreditsExtractor(film_id)
 
 
