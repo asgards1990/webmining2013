@@ -18,9 +18,6 @@ import os
 
 #########################
 
-def exportSettings():
-   os.system(initConfig.DJANGO_SETTINGS_MODULE)
-   os.system(initConfig.PYTHONPATH)
 
 ##########################
 
@@ -58,8 +55,8 @@ if initConfig.args.downloader:
 
 ###############
 if initConfig.args.imdb_extractor:
-   exportSettings()
+   logger.info("Lancement de l'extracteur IMDB")
+   os.system('./export.sh') #Exporte les valeurs d'environnement
    import UserAgent.userAgent
-   import IMDBExtractor.IMDBExtractor
-
+   import FilmExtractor.IMDBExtractor_init 
 

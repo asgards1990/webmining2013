@@ -11,7 +11,7 @@ import Logger.logger_config as loggerConfig
 
 import connector_config as ConnectorConfig
 
-from status.models import IMDBFilmStatus
+from status.models import *
 
 ####################################################################
 
@@ -126,6 +126,16 @@ class IMDBFilmStatusConnector:
         
         self.logger.debug("-> Status: {}".format(status))
         return status
+
+    def getIsDownloaded(self, imdb_id):
+        self.logger.debug("Determine if the film {} can be downloaded:".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.downloaded
+        
+        self.logger.debug("-> Status: {}".format(status))
+        return True if status==1 else False
+
 
     def getNotDownloaded(self):
         self.logger.debug("Get the Film IMDB IDs in the database with downloaded=0")
@@ -280,6 +290,14 @@ class IMDBPersonStatusConnector:
         self.logger = initLogger.getLogger(ConnectorConfig.IMDB_PERSON_STATUS_CONNECTOR_LOGGER_NAME)
     
     ###############################################################################
+    def getIsDownloaded(self, imdb_id):
+        self.logger.debug("Determine if the film {} can be downloaded:".format(imdb_id))
+        
+        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
+        status = s.downloaded
+        
+        self.logger.debug("-> Status: {}".format(status))
+        return True if status==1 else False
 
     def id_exists(self, imdb_id):
         self.logger.debug("Find if the person with IMDB ID {} exists in the database:".format(imdb_id))
@@ -395,6 +413,14 @@ class IMDBCompanyStatusConnector:
         self.logger = initLogger.getLogger(ConnectorConfig.IMDB_PERSON_STATUS_CONNECTOR_LOGGER_NAME)
     
     ###############################################################################
+    def getIsDownloaded(self, imdb_id):
+        self.logger.debug("Determine if the film {} can be downloaded:".format(imdb_id))
+        
+        s = IMDBCompanyStatus.objects.get(imdb_id=imdb_id)
+        status = s.downloaded
+        
+        self.logger.debug("-> Status: {}".format(status))
+        return True if status==1 else False
 
     def id_exists(self, imdb_id):
         self.logger.debug("Find if the company with IMDB ID {} exists in the database:".format(imdb_id))
