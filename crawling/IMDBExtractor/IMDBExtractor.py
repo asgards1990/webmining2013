@@ -18,6 +18,8 @@ from Extractor.extractorHTML import ExtractorHTML
 import Extractor.customisedCleaner as CustomCleaner
 from cinema.models import *
 
+import FilmExtractor_utils.define_entities
+
 import re
 import urllib
 
@@ -60,22 +62,23 @@ class IMDBExtractor:
    def __init__(self,id_):
       logger.debug("Création de IMDB Extracteur")
       self.id_=id_
-      self.url = None
+      self.path = None
 
-   def loadPage(self,url):
-      #TODO : vérifie si la page est déjà en local, sinon charge l'url
-      #TODO DOIT DEGAGER!
-      logger.info("La page n'existe pas en local, chargement de la page {}".format(url))
-      page = urllib.urlopen(url)
+   def loadPage(self):
+      #TODO charge la page en local!
+      logger.info("La page n'existe pas en local, chargement de la page {}".format(self.path))
+      page = #urllib.urlopen(self.path)
       charset = page.headers.getparam('charset')
       self.t = unicode(page.read(),charset)
       return self.t
 
+#TODO faire 2 class IMDBFilmExtractor IMDBPersonExtractor et IMDBCompanyExtractor qui redéfinissent createExtractorEngine
    def createExtractorEngine(self):
       #TODO DOIT DEGAGER
-      t=self.loadPage(self.url)
+      t=self.loadPage()
       cleaner = CustomCleaner.CustomedCleaner_HTML()
       self.extractor = ExtractorHTML(t,cleaner)
+
 
 class IMDBExtractor_Film(IMDBExtractor):
 
@@ -630,241 +633,6 @@ def createPersonList(p_url_list):
       person_list.append(IMDBExtractor_Person(person_id))
    return person_list
 
-
-##########################################################
-#
-#                    DEFINE FAMILY
-#
-##########################################################
-
-"""Crée/Renvoie les objects pour intéragir avec la base de données Django."""
-
-def defineFilm(film_id):
-    try :
-      f = Film.objects.get(imdb_id=film_id)
-      return f
-    except Film.DoesNotExist :
-      logger.info("Création du film avec l'id {} dans la base de données".format(film_id))
-      f = Film.objects.create(imdb_id=film_id)
-      return f
-    except Exception as e:
-      logger.error('Impossible de retrouver le film {} a cause de l erreur {}'.format(film_id,e))
-      return False
-
-def defineKeyword(keyword):
-    try :
-      w = Keyword.objects.get(word=keyword)
-      return w
-    except Keyword.DoesNotExist :
-      logger.info("Création du keyword {} dans la base de données".format(keyword))
-      w = Keyword.objects.create(word=keyword)
-      return w
-    except Exception as e:
-      logger.error('Impossible de retrouver le keyword {} a cause de l erreur {}'.format(keyword,e))
-      return False
- 
-def defineReview(reviewer,journal,film):
-   try :
-      r = Review.objects.get(reviewer=reviewer,journal=journal,film=film)
-      return False 
-   except Review.DoesNotExist :
-      logger.info("Création de la review dans la base de données")
-      r = Review.objects.create(reviewer=reviewer,journal=journal,film=film)
-      return r
-   except Exception as e:
-      logger.error('Impossible de retrouver la review a cause de l erreur {}'.format(e))
-      return False
-
-def definePerson(p_id):
-   try :
-      p = Person.objects.get(imdb_id=p_id)
-      return p 
-   except Person.DoesNotExist :
-      logger.info("Création de la personne {} dans la base de données".format(p_id))
-      p = Person.objects.create(imdb_id=p_id)
-      return p
-   except Exception as e:
-      logger.error('Impossible de retrouver la personne {} a cause de l erreur {}'.format(p_id,e))
-      return False
-
-def defineActorWeight(actor,film):
-   try :
-      actor_weight = ActorWeight.objects.get(actor=actor,film=film)
-      return actor_weight 
-   except ActorWeight.DoesNotExist :
-      logger.info("Création de l'Actor weight dans la base de données")
-      actor_weight = ActorWeight.objects.create(actor=actor,film=film)
-      actor_weight.star = False
-      return actor_weight 
-   except Exception as e:
-      logger.error('Impossible de retrouver la personne {} a cause de l erreur {}'.format(e))
-      return False
-
-def defineJournal(j_name):
-   try :
-      j = Journal.objects.get(name=j_name)
-      return j
-   except Journal.DoesNotExist :
-      logger.info("Création du journal {} dans la base de données".format(j_name))
-      j = Journal.objects.create(name=j_name)
-      return j
-   except Exception as e:
-      logger.error('Impossible de retrouver le journal {} a cause de l erreur {}'.format(j_name,e))
-      return False
-
-def defineProducer(p_id):
-   try :
-      p = ProductionCompany.objects.get(imdb_id=p_id)
-      return p
-   except ProductionCompany.DoesNotExist :
-      logger.info("Création du producteur {} dans la base de données".format(p_id))
-      p = ProductionCompany.objects.create(imdb_id=p_id)
-      return p
-   except Exception as e:
-      logger.error('Impossible de retrouver le producteur {} a cause de l erreur {}'.format(p_id,e))
-      return False
-
-def defineReviewer(name):
-   try :
-      r = Reviewer.objects.get(name=name)
-      return r
-   except Reviewer.DoesNotExist :
-      logger.info("Création du reviewer {} dans la base de données".format(name))
-      r = Reviewer.objects.create(name=name)
-      return r
-   except Exception as e:
-      logger.error('Impossible de retrouver le reviewer {} a cause de l erreur {}'.format(name,e))
-      return False
-
-def defineInstitution(name):
-   try :
-      i = Institution.objects.get(name=name)
-      return i
-   except Institution.DoesNotExist :
-      logger.info("Création de l'institution {} dans la base de données".format(name))
-      i = Institution.objects.create(name=name)
-      return i
-   except Exception as e:
-      logger.error('Impossible de retrouver l institution {} a cause de l erreur {}'.format(name,e))
-      return False
-
-def defineCountry(name):
-   try :
-      r = Country.objects.get(name=name)
-      return r
-   except Country.DoesNotExist :
-      logger.warning("Le pays {} n'a pas été trouvé dans la base de données".format(name))
-      return None
-   except Exception as e:
-      logger.error('Impossible de retrouver le pays {} a cause de l erreur {}'.format(name,e))
-      return False
-
-def defineCountryByCode(code):
-   try :
-      r = Country.objects.get(identifier=code)
-      return r
-   except Country.DoesNotExist :
-      logger.warning("Le pays dont le code est {} n'a pas été trouvé dans la base de données".format(code))
-      return None
-   except Exception as e:
-      logger.error('Impossible de retrouver le pays {} a cause de l erreur {}'.format(code,e))
-      return False
-
-def defineGenre(name):
-   try :
-      r = Genre.objects.get(name=name)
-      return r
-   except Genre.DoesNotExist :
-      logger.warning("Le genre {} n'a pas été trouvé dans la base de données".format(name))
-      return None
-   except Exception as e:
-      logger.error('Impossible de retrouver le genre {} a cause de l erreur {}'.format(name,e))
-      return False
-
-def defineLanguage(name):
-   try :
-      r = Language.objects.get(name=name)
-      return r
-   except Language.DoesNotExist :
-      logger.warning("Le langage {} n'a pas été trouvé dans la base de données".format(name))
-      return None
-   except Exception as e:
-      logger.error('Impossible de retrouver le langage {} a cause de l erreur {}'.format(name,e))
-      return False
-
-
-
-################################################################
-#
-#                        IMDB_*Extract Family
-#
-##################################################################
-
-""" Fonctions appelées depuis l'exterieur du module. Créent les objets nécessaires à l'extraction et remplissent la DB. Il existe une fonction par type de page"""
-
-def IMDB_filmExtract(film_id):
-   logger.debug("Lancement de l'extraction de la Page film pour le film {}".format(film_id))
-   filmPage = IMDBExtractor_Film(film_id)      # Sur la main page directement
-
-   filmPage.extractFilmPage_DB()
-
-
-def IMDB_awardsExtract(film_id):
-   #sur la page awards
-   logger.debug("Lancement de l'extraction des awards pour le film {}".format(film_id))
-   awardsPage = IMDBExtractor_Awards(film_id)
-
-   awardsPage.extractAwardsPage_DB()
-
-
-def hasWon(status):
-   return True if status.upper()=="WON" else False
-
-def IMDB_reviewsExtract(film_id):
-   logger.debug("Lancement de l'extraction des reviews pour le film {}".format(film_id))
-   reviewPage = IMDBExtractor_Reviews(film_id)
-
-   reviewPage.extractReviewsPage_DB()
-   
-
-   #TODO extraire le FullReviewURL
-
-def IMDB_keywordsExtract(film_id):
-   #sur la page keywords
-   logger.debug("Lancement de l'extraction des keywords pour le film {}".format(film_id))
-   keywordsPage = IMDBExtractor_Keyword(film_id)
-
-   keywordsPage.extractKeywordsPage_DB()
-
-
-def IMDB_companyCreditsExtractor(film_id):
-   #sur la page companycredits
-   logger.debug("Lancement de l'extraction des de la page Company Credits pour le film {}".format(film_id))
-   companyCreditsPage = IMDBExtractor_companyCredits(film_id)
-
-   companyCreditsPage.extractCompanyCreditsPage_DB()
-
-
-def IMDB_fullCreditsExtractor(film_id):
-   logger.debug("Lancement de l'extraction des de la page full credits pour le film {}".format(film_id))
-   fullCreditsPage = IMDBExtractor_fullCredits(film_id)
-
-   fullCreditsPage.extractFullCreditsPage_DB()
-
-
-def IMDB_personExtractor(person_id):
-   logger.debug("Lancement de l'extraction de la page person pour {}".format(person_id))
-   personPage = IMDBExtractor_Person(person_id)
-
-   personPage.extractPerson_DB()
-
-def IMDB_SuperExtractor(film_id):
-   IMDB_filmExtract(film_id) 
-   #IMDB_awardsExtract(film_id)
-   #IMDB_keywordsExtract(film_id)
-   #IMDB_reviewsExtract(film_id) #TODO
-   #IMDB_companyCreditsExtractor(film_id)
-   IMDB_fullCreditsExtractor(film_id)
 
 
 ###############################################
