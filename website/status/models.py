@@ -3,6 +3,16 @@
 
 from django.db import models
 
+class ScrapyStatus(models.Model):
+    imdb_id = models.CharField(max_length=9)
+    year = models.IntegerField(blank=True, null=True)
+    parsed = models.BooleanField()
+    extracted = models.BooleanField()
+    downloaded = models.BooleanField()
+
+    def __unicode__(self):
+        return u'%s is %s parsed and %s extracted. ' % (self.imdb_id, self.parsed, self.extracted)
+
 # Model for IMDB status
 class IMDBFilmStatus(models.Model):
     imdb_id = models.CharField(max_length=9)    # the IMDB identifier

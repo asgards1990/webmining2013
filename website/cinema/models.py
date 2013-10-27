@@ -60,7 +60,7 @@ class  Person (models.Model):
 
 class  ProductionCompany (models.Model):
     imdb_id = models.CharField(max_length=10, unique=True, default=None)
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
     def __unicode__(self):
         return u"%s"%(self.name)      
@@ -110,9 +110,9 @@ class  Film (models.Model):
     writers = models.ManyToManyField(Person, blank=True, null=True, related_name='films_from_writer')
     actors = models.ManyToManyField(Person, blank=True, null=True, through='ActorWeight', related_name='films_from_actor')
     def __unicode__(self):
-        return u"%s"%(self.original_title)
+        return u"%s"%(self.english_title)
     class Meta:
-        ordering = ['original_title', 'release_date']
+        ordering = ['english_title', 'release_date']
 
 class  Prize (models.Model):
     win = models.BooleanField(default=None)
@@ -120,7 +120,7 @@ class  Prize (models.Model):
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return u"%s in %s for film %s. Won : %s"%(self.institution.name, self.year, self.film.original_title, self.win)
+        return u"%s in %s for film %s. Won : %s"%(self.institution.name, self.year, self.film.english_title, self.win)
     class Meta:
         ordering = ['year']
 
@@ -143,7 +143,7 @@ class ActorWeight(models.Model):
     actor = models.ForeignKey(Person, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return u"%s played in %s and is ranked %s in credits. Star : %s"%(self.actor.name, self.film.original_title, self.rank, self.star)
+        return u"%s played in %s and is ranked %s in credits. Star : %s"%(self.actor.name, self.film.english_title, self.rank, self.star)
 
 class JournalInfluence(models.Model):
     influence = models.FloatField(null=True,blank=True)

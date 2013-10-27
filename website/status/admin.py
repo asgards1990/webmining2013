@@ -1,5 +1,8 @@
 from django.contrib import admin
 from status.models import IMDBFilmStatus, IMDBPersonStatus, IMDBCompanyStatus
+from status.models import ScrapyStatus
+
+admin.site.register(ScrapyStatus)
 
 class IMDBFilmStatusAdmin(admin.ModelAdmin):
     list_display = ('imdb_id', 'year', 'position', 

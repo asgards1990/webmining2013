@@ -1,5 +1,4 @@
 import datetime
-import dateutil.parser
 import pickle
 from django.utils.timezone import utc
 
