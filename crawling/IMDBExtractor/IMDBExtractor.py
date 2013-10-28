@@ -25,25 +25,14 @@ from FilmExtractor_utils.define_entities import *
 import re
 import urllib
 
+import random
+import codecs
+
 logger = initLogger.getLogger(IMDBExtractorConfig.IMDB_EXTRACTOR_LOGGER_NAME)
 
 ###################################################################
 
 import md5
-"""
-awards_suffixe = '/awards'
-fullcredits_suffixe = '/fullcredits'
-companycredits_suffixe = '/companycredits'
-review_suffixe = '/criticreviews'
-keywords_suffixe = '/keywords'
-film_page_default = '/title/'
-actor_page_default= '/name/'
-company_page_default = '/company/'
-page_prefixe = 'http://www.imdb.com'
-#film_id_ = 'tt1675434'
-film_id_='tt2278871'
-the_artist_id="tt1655442"
-"""
 
 #################################################################
 
@@ -59,80 +48,104 @@ class IMDBExtractor:
           Awards 
           Casting (fullcredits) 
           Producteurs (companycredits / review / )
+
    """
 
-   #TODO le load page et le create extractor engine ne doivent pas faire partie de IMDB Extractor. IMDB Extractor doit vérifier si la page existe, dans le cas contraire mettre dans le spider qu'il faut télécharger la page! Rien de plus 
    def __init__(self,id_):
       logger.debug("Création de IMDB Extracteur")
       self.id_=id_
+      self.isExtractable=False #détermine si le fichier a été downloadé et est prêt pour être extrait (valeur portentiellement modifiée dans openFile)
+      if self.doesIdExist():
+         self.createExtractorEngine()
+
+   def getIsExtracted(self):
+      """renvoie True si la super entité (Film/Person/Company) a déjà été extraite, False sinon """
+      try:
+         return True if self.conn.getExtractedStatus(self.id_)==1 else False
+      except Exception as e:
+         logger.warning("Impossible de trouver le statut d'extraction de l'entité {}; Error {} : ".format(self.id_,e))
+         return True #SI on n'arrive pas à récupérer le statur on considère que la page a déjà été extraite
+
 
    def openFile(self,path):
+      """  
+        place l'attribut self.extractable à True si le document peut être chargé en local et à false sinon
+        retourne le contenu de la page ou None si le programme ne parvient pas à ouvrir la page
+      """
       try:
-         with open(path, 'r') as page:
+         with codecs.open(path, 'r','utf-8') as page:
+            #charset = page.headers.getparam('charset')
+            #self.t = unicode(page.read(),charset)
             logger.debug (" Ouverture du fichier {} réussi " .format(path))
+            self.isExtractable=True
             return page.read()
-      except:
-         logger.error("Le fichier {} n'existe pas".format(path))
+      except Exception as e:
+         logger.error("Le fichier {} n'existe pas : {}".format(path,e))
+         self.isExtractable=False
          return None
 
    def loadPage(self):
+      """
+      Récupère le contenu de la page sauvegardée en local
+      Renvoie le contenu de la page ou None si le programme n'a pas réussi à ouvrir la page (cf openFile)
+      """
       try:
          page = self.openFile(self.path)
-         #TODO Travailler l'encodage
-         #charset = page.headers.getparam('charset')
-         #self.t = unicode(page.read(),charset)
          self.t = page
          return self.t
       except Exception as e:
          logger.error("Le fichier {} ne peut pas être loadé. Error {} : ".format(self.path,e))
 
-   def extractIfExist(self):
+   def doesIdExist(self):
+      """
+         renvoie True si l'id existe et le document est affiché "downloaded" and not extracted. 
+         Si l'id n'existe pas il est inséré dans la table du downloader
+      """
+      try:
+         if self.conn.id_exists(self.id_) == 1 :
+            if self.conn.getIsDownloaded(self.id_):
+               if not(self.getIsExtracted()):
+                  return True #Downloaded non extracted
+               return False #Dowloaded already extracted
+         else:
+            self.conn.insert(self.id_)
+            return False
+      except Exception as e:
+           logger.error("Impossible de trouver l'existence de l'entité {} à cause de l'erreur {}".format(self.id_,e))
 
-      if self.conn.id_exists(self.id_) == 1 :
-         return self.conn.getIsDownloaded(self.id_)
-      else:
-         self.conn.insert(self.id_)
-         return False
-
-
-   def createExtractorEngine(self,boolean):
-      if boolean:
-         t=self.loadPage()
+   def createExtractorEngine(self):
+      """
+      Crée l'extracteur au sens propre du terme
+      est appelée si la page est "downloaded but not extracted" 
+      """
+      t=self.loadPage()
+      if self.isExtractable:
          cleaner = CustomCleaner.CustomedCleaner_HTML()
          self.extractor = ExtractorHTML(t,cleaner)
-      else:
-         return False
 
 
 class IMDBFilmExtractor(IMDBExtractor):
-
+   """Extracteur de l'entité Film (sert pour toutes les pages de base de film (keywords, awards,...))"""
    def __init__(self,film_id):
-      IMDBExtractor.__init__(self,film_id)
       self.conn = IMDBFilmStatusConnector()
-      boolean = self.extractIfExist()
-      self.createExtractorEngine(boolean)
+      IMDBExtractor.__init__(self,film_id)
       
 
 class IMDBPersonExtractor(IMDBExtractor):
-
+   """Extracteur de l'entité Person (sert pour toutes les page de personnes (résalisateurs, scénaristes,acteurs...))"""
    def __init__(self,id_):
-      IMDBExtractor.__init__(self,id_)
       self.conn = IMDBPersonStatusConnector()
-      boolean = self.extractIfExist()
-      self.createExtractorEngine(boolean)
+      IMDBExtractor.__init__(self,id_)
 
 class IMDBCompanyExtractor(IMDBExtractor):
-
-   def __init__(self,film_id):
-      IMDBExtractor.__init__(self,film_id)
+   """Extracteur de l'entité Company (sert pour l'extraxtion des pages de compagnies de production)"""
+   def __init__(self,id_):
       self.conn = IMDBCompanyStatusConnector()
-      boolean = self.extractIfExist()
-      self.createExtractorEngine(boolean)
+      IMDBExtractor.__init__(self,id_)
 
 class IMDBExtractor_Film(IMDBFilmExtractor):
 
-   """ Objet qui va récupérer la page HTML principale pour le film en question (une fois que toutes les pages relatives au film sont déjà chargées (Except Personnes/Companies)). Une fois récupérée, les méthodes de l'extracteur récupèrent toutes les infos pour remplir la base
-   """
+   """ Objet qui sert l'extraction de la main page du film   """
 
    def __init__(self,film_id):
       logger.debug("Création d'un Extracteur pour un type page de Film")
@@ -229,18 +242,15 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
       try:
          p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list if re.match("/company/(co[0-9]+)?",x)]
          logger.debug(p_id_list)
-         p_list=[]
       
          for p_id in p_id_list:
-            p_list.append(IMDBExtractor_Producer(p_id))
+            IMDBExtractor_Producer(p_id)
 
       except Exception as e:
          logger.error("Problème lors de l'extraction des producteurs : {}".format(e))
 
-      return p_list
 
    def extractProducers(self):
-
       """renvoie une liste d'objets Producers"""
 
       logger.debug("Extract Producers from main page: ")
@@ -258,15 +268,15 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
 
       self.english_title = (lambda x : x[0] if len(x)>0 else None)(self.extractTitle()) 
       self.original_title = (lambda x : x[0] if len(x)>0 else self.english_title)(self.extractOriginalTitle()) 
-      self.release_date = (lambda x : x[0] if len(x)>0 else None)(self.extractReleaseDate())
+      self.release_date = (lambda x : convertDate(x[0]) if len(x)>0  else None)(self.extractReleaseDate())
       self.runtime =(lambda x : x[0].split(' ')[0] if len(x)>0 else None)(self.extractRuntime())
       try:
-         self.budget =(lambda x : x[0] if len(x)>0 else None)(self.extractBudget())
+         self.budget =(lambda x : x[0].split("$")[1] if len(x)>0 else None)(self.extractBudget())
       except:
          logger.warning("Pas de Budget décelé pour le film {}".format(self.id_))
          self.budget=None
       try:
-         self.box_office =(lambda x : x[0] if len(x)>0 else None)(self.extractBoxOffice())
+         self.box_office =(lambda x : x[0].split("$")[1] if len(x)>0 else None)(self.extractBoxOffice())
       except:
          logger.warning("Pas de Box office décelé pour le film {}".format(self.id_))
          self.box_office=None
@@ -286,8 +296,8 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
          logger.warning("Pas de nb_user / imdb_nb_review décelé pour le film {}".format(self.id_))
          self.imdb_nb_user_review=None
          self.imdb_nb_reviews = None
-      self.imdb_summary = (lambda x : x[0] if len(x)>0 else None)(self.extractSummary())
-      self.imdb_storyline = (lambda x : x[0] if len(x)>0 else None)(self.extractStoryLine())
+      self.imdb_summary = (lambda x : x[0] if len(x)>0 else "")(self.extractSummary())
+      self.imdb_storyline = (lambda x : x[0] if len(x)>0 else "")(self.extractStoryLine())
       try :
          self.metacritic_score=(lambda x : int(x[0].split('/')[0]) if len(x)>0 else None)(self.extractMetacriticScore())
       except:
@@ -301,6 +311,7 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
       self.language =(lambda x : x[0] if len(x)>0 else None)(self.extractLanguage())
 
    def extractFilmPage_DB(self):
+      """extrait les données essentielles et les sauvegarde dans la DB"""
 
       self.extractContent()
 
@@ -312,12 +323,12 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
             f.english_title=self.english_title
             f.release_date=self.release_date
             f.runtime=self.runtime
-            f.budget=self.budget
-            f.box_office=self.box_office
+            f.budget=(lambda x : x.replace(',','') if x != None else None)(self.budget)
+            f.box_office=(lambda x : x.replace(',','') if x != None else None)(self.box_office)
             f.imdb_user_rating=self.imdb_user_rating
-            f.imdb_nb_user_ratings = self.imdb_nb_raters.replace(',','')
-            f.imdb_nb_user_reviews=self.imdb_nb_user_review.split(' ')[0].replace(',','')
-            f.imdb_nb_reviews=self.imdb_nb_reviews.split(' ')[0].replace(',','')
+            f.imdb_nb_user_ratings = (lambda x : x.replace(',','') if x != None else None)(self.imdb_nb_raters)
+            f.imdb_nb_user_reviews= (lambda x : x.split(' ')[0].replace(',','') if x != None else None)( self.imdb_nb_user_review)
+            f.imdb_nb_reviews= (lambda x : x.split(' ')[0].replace(',','') if x!=None else None) (self.imdb_nb_reviews)
             f.imdb_summary=self.imdb_summary
             f.imdb_storyline=self.imdb_storyline
             f.metacritic_score=self.metacritic_score
@@ -355,11 +366,12 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
 class IMDBExtractor_companyCredits(IMDBFilmExtractor):
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type companyCredits")
-      self.path = IMDBExtractorConfig.COMPANY_CREDITS_URL
-      IMDBFilmExtractor.__init__(self,film_id)
+      self.path = IMDBExtractorConfig.COMPANY_CREDITS_URL.format(id_)
+      self.producers=[]
+      IMDBFilmExtractor.__init__(self,id_)
 
    def extractContent(self):
-      self.producers = self.extractProducers()
+      self.extractProducers()
 
    def extractProducers(self):
       logger.debug("Extract Producers : ")
@@ -368,17 +380,14 @@ class IMDBExtractor_companyCredits(IMDBFilmExtractor):
       try:
          p_id_list = [re.match("/company/(co[0-9]+)?", x).group(1) for x in p_url_list if re.match("/company/(co[0-9]+)?",x)]
          logger.debug(p_id_list)
-         p_list=[]
 
          for p_id in p_id_list:
             prod = IMDBExtractor_Producer(p_id)
-            logger.debug('Extract Producer debug entry id : {} ; name : {} ; country : {}'.format(prod.id_,prod.name,prod.country))
-            p_list.append(prod)
+            self.producers.append(prod)
 
       except Exception as e:
          logger.error("Problème lors de l'extraction des producteurs : {}".format(e))
 
-      return p_list
 
    def extractCompanyCreditsPage_DB(self):
       self.extractContent()
@@ -389,14 +398,7 @@ class IMDBExtractor_companyCredits(IMDBFilmExtractor):
             for p in self.producers:
                producer = defineProducer(p.id_)
                if producer:
-                  logger.debug("Producer Name : {} Producer country : {}".format(p.name,p.country))
-                  producer.name=p.name
-                  c = defineCountryByCode(p.country)
-                  if c:
-                     producer.country=c
-
-                  f.production_companies.add(producer)
-                  producer.save()
+                 f.production_companies.add(producer)
             f.save()
 
          except Exception as e:
@@ -407,7 +409,7 @@ class IMDBExtractor_companyCredits(IMDBFilmExtractor):
 class IMDBExtractor_Producer(IMDBCompanyExtractor):
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Producer")
-      self.path = IMDBExtractorConfig.PRODUCER_CREDITS_URL
+      self.path = IMDBExtractorConfig.COMPANY_URL.format(id_)
       IMDBCompanyExtractor.__init__(self,id_)
       
    def extractContent(self):
@@ -428,6 +430,20 @@ class IMDBExtractor_Producer(IMDBCompanyExtractor):
          logger.debug(self.country)
       except:
          logger.error("La page du Producteur n'a pas le format attendu")
+         self.country=None
+
+   def extractCompany_DB(self):
+      self.extractContent()
+      producer = defineProducer(self.id_)
+      if producer:
+         logger.debug("Producer Name : {} Producer country : {}".format(self.name,self.country))
+         producer.name=self.name
+         c = defineCountryByCode(self.country)
+         if c:
+            producer.country=c
+
+         producer.save()
+
 
 class IMDBExtractor_fullCredits(IMDBFilmExtractor):
 
@@ -435,8 +451,8 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
 
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Full credits")
-      self.path = IMDBExtractorConfig.FULL_CREDITS_URL
-      IMDBFilmExtractor.__init__(self,film_id)
+      self.path = IMDBExtractorConfig.FULL_CREDITS_URL.format(id_)
+      IMDBFilmExtractor.__init__(self,id_)
 
    def extractContent(self):
       self.directors = self.extractDirectors() 
@@ -463,7 +479,7 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
    def extractFullCreditsPage_DB(self):
 
       self.extractContent()
-
+      
       f = defineFilm(self.id_)
       if f:
          try:
@@ -491,7 +507,7 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
          except Exception as e:
             logger.error('La mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors a échoué'.format(self.id_))
             logger.error("-> Error: {}".format(e))
-   
+      
 
 class IMDBExtractor_Reviews(IMDBFilmExtractor):
 
@@ -499,8 +515,8 @@ class IMDBExtractor_Reviews(IMDBFilmExtractor):
 
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Reviews")
-      self.path = IMDBExtractorConfig.REVIEWS_URL
-      IMDBFilmExtractor.__init__(self,film_id)
+      self.path = IMDBExtractorConfig.REVIEWS_URL.format(id_)
+      IMDBFilmExtractor.__init__(self,id_)
       
    def extractGrade(self):
       logger.debug("Extract Grades : ")
@@ -525,7 +541,7 @@ class IMDBExtractor_Reviews(IMDBFilmExtractor):
 
    def extractContent(self):
       self.grade=(self.extractGrade())
-      self.summary=(self.extractSummary())
+      self.summary=(lambda s: s if len(s)>0 else "")(self.extractSummary())
       self.reviewer=(self.extractReviewer())
       self.journal=(self.extractJournal())
       self.fullReviewURL=(self.extractFullReviewURL())
@@ -564,7 +580,7 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
 
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Awards")
-      self.path = IMDBExtractorConfig.AWARDS_URL
+      self.path = IMDBExtractorConfig.AWARDS_URL.format(id_)
       IMDBFilmExtractor.__init__(self,id_)
       
    def extractAwards(self):
@@ -578,7 +594,11 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
       logger.debug('Mise en forme des Awards')
       award_tab=[]
       for i in range(1,len(institution_list)+1):
-         logger.debug( '########### {}  ##############'.format(institution_list[i-1]) )
+         try:
+            logger.debug( '########### {}  ##############'.format(institution_list[i-1]) )
+         except:
+            institution_list[i-1]=md5.new("{}".format(random.random())).hexdigest() 
+            logger.debug( ' NEW ID ########### {}  ##############'.format(institution_list[i-1]) )
          for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
             award_detail = []
             logger.debug(award_category_status[0])
@@ -621,8 +641,8 @@ class IMDBExtractor_Keyword(IMDBFilmExtractor):
 
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Keyword")
-      self.path = IMDBExtractorConfig.KEYWORD_URL
-      IMDBFilmExtractor.__init__(self,film_id)
+      self.path = IMDBExtractorConfig.KEYWORDS_URL.format(id_)
+      IMDBFilmExtractor.__init__(self,id_)
       
    def extractContent(self):
       self.keywords = self.extractKeywords() 
@@ -651,7 +671,7 @@ class IMDBExtractor_Person(IMDBPersonExtractor):
 
    def __init__(self,id_):
       logger.debug("Création d'un Extracteur pour un type Person")
-      self.path = IMDBExtractorConfig.PERSON_URL
+      self.path = IMDBExtractorConfig.PERSON_URL.format(id_)
       IMDBPersonExtractor.__init__(self,id_)
      
 
@@ -663,13 +683,13 @@ class IMDBExtractor_Person(IMDBPersonExtractor):
    def extractPerson_DB(self):
 
       self.extractContent()
-      p = definePerson(id_)
+      p = definePerson(self.id_)
       if p:
          try: 
             #TODO trouver un moyen pour savoir quand une personne a déjà été updatée pour ne pas l'updater en permanence
-            logger.info("Mise à jour de la personne {} dans la base de données".format(id_))
+            logger.info("Mise à jour de la personne {} dans la base de données".format(self.id_))
             p.name=self.name
-            p.birth_date=self.birthDate
+            p.birth_date=convertDate(self.birthDate)
             p.birth_country=defineCountry(self.birthCountry)
             p.save()
 
@@ -702,4 +722,17 @@ def createPersonList(p_url_list):
       person_list.append(IMDBExtractor_Person(person_id))
    return person_list
 
+def convertDate(date):
+   try:
+      if len(date.split("-"))==3:
+         return "-".join(["01" if e == "0" else e for e in date.split("-")])
+      elif len(date.split("-"))==2:
+         return "-".join(["01" if e == "0" else e for e in date.split("-")])
+      else:
+         return None
+   except:
+      logger.warning("Le format date n'est pas conforme, acune date renvoyée")
+      return None
 
+def hasWon(status):
+   return True if status.upper()=="WON" else False

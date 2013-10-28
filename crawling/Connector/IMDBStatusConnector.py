@@ -136,6 +136,15 @@ class IMDBFilmStatusConnector:
         self.logger.debug("-> Status: {}".format(status))
         return True if status==1 else False
 
+    def getExtractedStatus(self,imdb_id):
+        self.logger.debug("Get the film Extracted status for FILM IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.extracted
+
+        self.logger.debug("-> Status: {}".format(status))
+        return status
+
 
     def getNotDownloaded(self):
         self.logger.debug("Get the Film IMDB IDs in the database with downloaded=0")
@@ -348,7 +357,7 @@ class IMDBPersonStatusConnector:
 
     # GET METHODS
 
-    def getExtractedStatus(self):
+    def getExtractedStatus(self,imdb_id):
         self.logger.debug("Get the film Extracted status for Person IMDB ID {} in the database:".format(imdb_id))
         
         s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
@@ -471,7 +480,7 @@ class IMDBCompanyStatusConnector:
 
     # GET METHODS
 
-    def getExtractedStatus(self):
+    def getExtractedStatus(self,imdb_id):
         self.logger.debug("Get the film Extracted status for Company IMDB ID {} in the database:".format(imdb_id))
         
         s = IMDBCompanyStatus.objects.get(imdb_id=imdb_id)
