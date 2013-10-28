@@ -50,7 +50,7 @@ if initConfig.args.fresh_debug:
     logger.info ('Vide le fichier {}...'.format(debug_file))
     open(debug_file, 'w').close()
 
-if initConfig.args.spider:
+if initConfig.args.imdb_spider:
     logger.info ('Lancement du Spider')
     import Spider.IMDBSpider
 

@@ -8,7 +8,7 @@
 import Logger.init_logger as initLogger #Initialise le logger
 import Logger.logger_config as loggerConfig
 
-from Connector.IMDBStatusConnector import IMDBFilmStatusConnector
+from Connector.IMDBStatusConnector import IMDBPersonStatusConnector
 
 from downloader import Downloader
 import downloader_config as DownloaderConfig
@@ -58,16 +58,16 @@ class IMDBPersonDownloader:
         self.logger.debug("Download pages for the person with id {}".format(imdb_id))
 
         urls = [
-            filmPersonURL(imdb_id),
+            personURL(imdb_id),
             ]
         dests = [
-            filmPersonPath(imdb_id),
+            personPath(imdb_id),
             ]
         getFunctions = [
             lambda: self.connector.getDownloadedStatus(imdb_id),
             ]
         setFunctions = [
-            lambda s: pass
+            lambda s: s
             ]
         stop_limits = [1,] 
         required_limits = [1,]

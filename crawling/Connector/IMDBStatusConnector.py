@@ -11,7 +11,7 @@ import Logger.logger_config as loggerConfig
 
 import connector_config as ConnectorConfig
 
-from status.models import IMDBFilmStatus
+from status.models import IMDBFilmStatus, IMDBPersonStatus, IMDBCompanyStatus
 
 ####################################################################
 
