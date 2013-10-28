@@ -82,3 +82,6 @@ class ProducerItem(LinkItem):
 
 class CountryCompany(LinkItem):
     country = Field()
+
+class CountryItem(LinkItem):
+    country = Field()

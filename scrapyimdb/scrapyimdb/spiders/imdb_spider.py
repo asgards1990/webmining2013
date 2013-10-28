@@ -2,6 +2,7 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import HtmlXPathSelector
 from scrapy.http import Request
+from scrapy import log
 
 from scrapyimdb.items import *
 
@@ -19,9 +20,10 @@ class IMDbSpider(CrawlSpider):
     rules = (
         Rule(
             link_extractor=SgmlLinkExtractor(
-                allow=(r"search/title\?at=\d+&count=\d+&release_date=\d+,\d+&sort="+sort+",asc&start=\d+&title_type="+tags+"&view=simple",),
-                restrict_xpaths=('//div[@id="right"]',)
+                allow=(r"search/title\?at=\d+&count=\d+&release_date=\d+,\d+&sort="+sort+"&start=\d+&title_type="+tags+"&view=simple",),
+                restrict_xpaths=('//div[@id="right"]')
             ),
+            process_links='stop_max',
             follow=True
         ),
         Rule(
@@ -41,12 +43,27 @@ class IMDbSpider(CrawlSpider):
     extract_language = lambda self, s : self.ext_language.search(s).group(0).split('/')[1][:-1]
     ext_budget = re.compile("\$[\d|,]+")
     extract_budget = lambda self, s : self.ext_budget.search(s).group(0)[1:].replace(',', '')
+    ext_country = re.compile("country/\w+\?")
+    extract_country = lambda self, s : self.ext_country.search(s).group(0).split('/')[1][:-1]
 
-    def __init__(self, year = 1950, actors_max_rank = 20, *args, **kwargs):
+    def __init__(self, year = 1950, actors_max_rank = 20, fetch_person = False, fetch_company = False, max_position = 50000, *args, **kwargs):
         super(IMDbSpider, self).__init__(*args, **kwargs)
         self.year = year
         self.actors_max_rank = actors_max_rank
-        self.start_urls = ["http://www.imdb.com/search/title?count=250&release_date={0},{0}&sort={1}&start=1&title_type={2}&view=simple".format(self.year, self.sort, self.tags)]
+        self.fetch_person = fetch_person
+        self.fetch_company = fetch_company
+        self.max_position = max_position
+        # http://www.imdb.com/search/title?at=0&count=250&release_date=2000,2000&sort=release_date_us,asc&start=251&title_type=feature&view=simple
+        self.start_urls = ["http://www.imdb.com/search/title?at=0&count=250&release_date={0},{0}&sort={1}&start=1&title_type={2}&view=simple".format(self.year, self.sort, self.tags)]
+
+    def stop_max(self, links):
+        if links == []:
+            return []
+        link = links[0]
+        if int(re.search('start=\d+', link.url).group(0).split('=')[1]) > int(self.max_position):
+            self.log('Stopping URLs above ' + self.max_position + '.', level=log.WARNING)
+            return []
+        return links
 
     def is_parsed(self, imdb_id):
         try:
@@ -73,8 +90,13 @@ class IMDbSpider(CrawlSpider):
 
         film = FilmItem()
         film['url'] = response.url
-        film['imdb_id'] = re.search('tt\d+', response.url).group(0)
+        if response.meta.has_key('id'):
+            imdb_id = response.meta['id']
+        else:
+            imdb_id = re.search('tt\d+', response.url).group(0)
 
+        film['imdb_id'] = imdb_id
+        
         if self.is_parsed(film['imdb_id']):
             return []
 
@@ -137,7 +159,12 @@ class IMDbSpider(CrawlSpider):
         except:
             self.log('Cannot extract writers for ' + film['imdb_id'] + '.')
 
-        film['countries'] = hxs.select('//div[@id="titleDetails"]/div/a[contains(@href,"country")]/text()').extract()
+        film['countries'] = []
+        try:
+            parse_country = hxs.select('//div[@id="titleDetails"]/div/a[contains(@href,"country")]/@href').extract()
+            film['countries'] = map(self.extract_country, parse_country)
+        except:
+            self.log('Unable to extract countries for ' + film['imdb_id'] + '.')
 
         try:
             film['budget'] = int( self.extract_budget( ''.join(hxs.select('//h4[contains(text(),"Budget")]/parent::*/text()').extract()) ) )
@@ -209,11 +236,11 @@ class IMDbSpider(CrawlSpider):
             self.log('Unable to extract languages for ' + film['imdb_id'] + '.')
 
         list_items = [film,
-                     Request(url = 'http://www.idmb.com/title/' + film['imdb_id'] + '/criticreviews', callback = self.parse_film_reviews),
-                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/awards', callback = self.parse_film_awards),
-                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/keywords', callback = self.parse_film_keywords),
-                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/companycredits', callback = self.parse_company_credits),
-                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/fullcredits', callback = self.parse_film_credits)]
+                      Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/criticreviews', callback = self.parse_film_reviews, meta={'id' : film['imdb_id']}),
+                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/awards', callback = self.parse_film_awards, meta={'id' : film['imdb_id']}),
+                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/keywords', callback = self.parse_film_keywords, meta={'id' : film['imdb_id']}),
+                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/companycredits', callback = self.parse_company_credits, meta={'id' : film['imdb_id']}),
+                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/fullcredits', callback = self.parse_film_credits, meta={'id' : film['imdb_id']})]
 
         k=0
         for star in film['stars']:
@@ -242,12 +269,21 @@ class IMDbSpider(CrawlSpider):
             k += 1
             list_items.append(item)
 
+        for country in film['countries']:
+            item = CountryItem()
+            item['attached_to'] = film['imdb_id']
+            item['country'] = country
+            list_items.append(item)
+        
         self.set_parsed(film['imdb_id'], year = self.year)
         return list_items
 
     def parse_film_keywords(self, response):
         hxs = HtmlXPathSelector(response)
-        imdb_id = re.search('tt\d+', response.url).group(0)
+        if response.meta.has_key('id'):
+            imdb_id = response.meta['id']
+        else:
+            imdb_id = re.search('tt\d+', response.url).group(0)
         words = hxs.select('//td/a[starts-with(@href,"/keyword")]/text()').extract()
         item = KeywordsItem()
         item['words'] = words
@@ -257,7 +293,10 @@ class IMDbSpider(CrawlSpider):
     def parse_film_awards(self, response):
         hxs = HtmlXPathSelector(response)
         list_item = []
-        imdb_id = re.search('tt\d+', response.url).group(0)
+        if response.meta.has_key('id'):
+            imdb_id = response.meta['id']
+        else:
+            imdb_id = re.search('tt\d+', response.url).group(0)
         list_institutions = map(lambda e : e.select('string()').extract() , hxs.select('//div[@id="main"]/div/div[@class="article listo"]/h3'))
         list_award_cats = hxs.select('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/span[@class="award_category"]/text()').extract()
         list_award_status = hxs.select('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/b/text()').extract()
@@ -287,7 +326,10 @@ class IMDbSpider(CrawlSpider):
     def parse_film_credits(self, response):
         hxs = HtmlXPathSelector(response)
         list_item = []
-        imdb_id = re.search('tt\d+', response.url).group(0)
+        if response.meta.has_key('id'):
+            imdb_id = response.meta['id']
+        else:
+            imdb_id = re.search('tt\d+', response.url).group(0)
         list_actor_urls = hxs.select('//td[@itemprop="actor"]/a/@href').extract()
         list_actor_names = hxs.select('//td[@itemprop="actor"]/a/span/text()').extract()
         list_actor = map(self.extract_person, list_actor_urls)
@@ -298,8 +340,8 @@ class IMDbSpider(CrawlSpider):
             item['imdb_id'] = list_actor[k]
             item['name'] = list_actor_names[k]
             list_item.append(item)
-            if not self.is_parsed(list_actor[k]):
-                list_item.append(Request(url = 'http://www.imdb.com/name/' + list_actor[k], callback=self.parse_person ))
+            if self.fetch_person and not self.is_parsed(list_actor[k]):
+                list_item.append(Request(url = 'http://www.imdb.com/name/' + list_actor[k], callback=self.parse_person, meta={'id' : list_actor[k]} ))
 
         list_writer_urls = hxs.select('//a[contains(@href,"ttfc_fc_dr")]/@href').extract()
         list_writer_names = hxs.select('//a[contains(@href,"ttfc_fc_dr")]/text()').extract()
@@ -312,8 +354,8 @@ class IMDbSpider(CrawlSpider):
             item['name'] = list_writer_names[k]
             k += 1
             list_item.append(item)
-            if not self.is_parsed(writer) and not writer in list_actor:
-                list_item.append(Request(url = 'http://www.imdb.com/name/' + writer, callback=self.parse_person ))
+            if self.fetch_person and not self.is_parsed(writer) and not writer in list_actor:
+                list_item.append(Request(url = 'http://www.imdb.com/name/' + writer, callback=self.parse_person, meta={'id' : writer} ))
 
         list_dir_urls = hxs.select('//a[contains(@href,"ttfc_fc_dr")]/@href').extract()
         list_dir_names = hxs.select('//a[contains(@href,"ttfc_fc_dr")]/text()').extract()
@@ -326,14 +368,17 @@ class IMDbSpider(CrawlSpider):
             item['name'] = list_dir_names[k]
             k += 1
             list_item.append(item)
-            if not self.is_parsed(director) and not director in list_actor and not director in list_writers:
-                list_item.append(Request(url = 'http://www.imdb.com/name/' + director, callback=self.parse_person ))
+            if self.fetch_person and not self.is_parsed(director) and not director in list_actor and not director in list_writers:
+                list_item.append(Request(url = 'http://www.imdb.com/name/' + director, callback=self.parse_person, meta={'id' : director} ))
 
         return list_item
             
     def parse_film_reviews(self, response):
         hxs = HtmlXPathSelector(response)
-        imdb_id = re.search('tt\d+', response.url).group(0)
+        if response.meta.has_key('id'):
+            imdb_id = response.meta['id']
+        else:
+            imdb_id = re.search('tt\d+', response.url).group(0)
         list_item  = []
         
         review_frames = hxs.select('//tr[@itemprop="reviews"]')
@@ -371,7 +416,13 @@ class IMDbSpider(CrawlSpider):
         
         person = PersonItem()
         person['url'] = response.url
-        person['imdb_id'] = self.ext_person.search(response.url).group(0)
+        
+        if response.meta.has_key('id'):
+            imdb_id = response.meta['id']
+        else:
+            imdb_id = self.ext_person.search(response.url).group(0)
+        
+        person['imdb_id'] = imdb_id
         
         if self.is_parsed(person['imdb_id']):
             return []
@@ -403,7 +454,10 @@ class IMDbSpider(CrawlSpider):
 
     def parse_company_credits(self, response):
         hxs = HtmlXPathSelector(response)
-        imdb_id = re.search('tt\d+', response.url).group(0)
+        if response.meta.has_key('id'):
+            imdb_id = response.meta['id']
+        else:
+            imdb_id = re.search('tt\d+', response.url).group(0)
         list_co_ids = map(self.extract_company, hxs.select('//ul[1]//a[starts-with(@href,"/company")]/@href').extract())
         list_co_names = hxs.select('//ul[1]//a[starts-with(@href,"/company")]/text()').extract()
         list_items = []
@@ -413,13 +467,16 @@ class IMDbSpider(CrawlSpider):
             link['imdb_id'] = list_co_ids[k]
             link['name'] = list_co_names[k]
             list_items.append(link)
-            if not self.is_parsed(link['imdb_id']):
-                list_items.append(Request(url = 'http://www.imdb.com/company/'+link['imdb_id'], callback = self.parse_company))
+            if self.fetch_company and not self.is_parsed(link['imdb_id']):
+                list_items.append(Request(url = 'http://www.imdb.com/company/'+link['imdb_id'], callback = self.parse_company, meta = {'id' : link['imdb_id']}))
         return list_items
 
     def parse_company(self, response):
         co_co = CountryCompany()
-        co_co['attached_to'] = self.extract_company(response.url)
+        if response.meta.has_key('id'):
+            co_co['attached_to'] = response.meta['id']
+        else:
+            co_co['attached_to'] = self.extract_company(response.url)
         if self.is_parsed(co_co['attached_to']):
             return []
         hxs =  HtmlXPathSelector(response)
