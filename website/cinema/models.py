@@ -133,7 +133,7 @@ class  Review (models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     full_review_url = models.URLField(blank=True)
     def __unicode__(self):
-        return u"%s from %s for %s"%(self.grade, self.reviewer.name, self.journal.name)       
+        return u"Review of %s with grade %s"%(self.film.english_title, self.grade)
     class Meta:
         ordering = ['-grade']
 
