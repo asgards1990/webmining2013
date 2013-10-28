@@ -6,13 +6,14 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
 
-BOT_NAME = 'imdb'
+BOT_NAME = 'scrapyimdb'
 
-SPIDER_MODULES = ['imdb.spiders']
-NEWSPIDER_MODULE = 'imdb.spiders'
+SPIDER_MODULES = ['scrapyimdb.spiders']
+NEWSPIDER_MODULE = 'scrapyimdb.spiders'
 
-ITEM_PIPELINES = {'imdb.pipelines.MyImagesPipeline' : 500, 'imdb.pipelines.PagesPipeline' : 300, 'imdb.pipelines.LinksPipeline' : 400}
-IMAGES_STORE = '/home/pesto/scrapy-imdb-img/' # '/Users/benjamin/imdb/cache/'
+ITEM_PIPELINES = {'scrapyimdb.pipelines.MyImagesPipeline' : 500, 'scrapyimdb.pipelines.PagesPipeline' : 300, 'scrapyimdb.pipelines.LinksPipeline' : 400}
+
+IMAGES_STORE = '/home/pesto/scrapy-imdb-img/' # '/Users/benjamin/webmining2013/scrapyimdb/cache/'
 IMAGES_EXPIRES = 90
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -28,7 +29,7 @@ DOWNLOADER_MIDDLEWARES = {
 
 HTTPCACHE_ENABLED = True
 
-HTTPCACHE_DIR = '/home/pesto/scrapy-http-cache'  #'/Users/benjamin/imdb/http_cache'
+HTTPCACHE_DIR = '/home/pesto/scrapy-http-cache/'
 
 #HTTPCACHE_POLICY = 'scrapy.contrib.httpcache.RFC2616Policy'
 
