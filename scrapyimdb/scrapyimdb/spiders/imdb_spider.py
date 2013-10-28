@@ -4,7 +4,7 @@ from scrapy.selector import HtmlXPathSelector
 from scrapy.item import Item
 from scrapy.http import Request
 
-from imdb.items import *
+from scrapyimdb.items import *
 
 import re
 import dateutil.parser

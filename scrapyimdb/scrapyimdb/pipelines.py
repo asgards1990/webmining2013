@@ -1,6 +1,6 @@
 from cinema.models import *
 from status.models import ScrapyStatus
-from imdb.items import *
+from scrapyimdb.items import *
 from scrapy.exceptions import DropItem
 from scrapy import log
 from scrapy.contrib.pipeline.images import ImagesPipeline

@@ -6,12 +6,12 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
 
-BOT_NAME = 'imdb'
+BOT_NAME = 'scrapyimdb'
 
-SPIDER_MODULES = ['imdb.spiders']
-NEWSPIDER_MODULE = 'imdb.spiders'
+SPIDER_MODULES = ['scrapyimdb.spiders']
+NEWSPIDER_MODULE = 'scrapyimdb.spiders'
 
-ITEM_PIPELINES = {'imdb.pipelines.MyImagesPipeline' : 500, 'imdb.pipelines.PagesPipeline' : 300, 'imdb.pipelines.LinksPipeline' : 400}
+ITEM_PIPELINES = {'scrapyimdb.pipelines.MyImagesPipeline' : 500, 'scrapyimdb.pipelines.PagesPipeline' : 300, 'scrapyimdb.pipelines.LinksPipeline' : 400}
 IMAGES_STORE = '/home/pesto/scrapy-imdb-img/' # '/Users/benjamin/imdb/cache/'
 IMAGES_EXPIRES = 90
 
