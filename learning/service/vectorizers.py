@@ -60,7 +60,7 @@ def getPrizesFeatures(films):
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
-def getSeasonFeatures(films): #int
+def getSeasonFeatures(films):
     X0 = []
     for film in films:
         season = getSeason(film.release_date)
@@ -71,7 +71,7 @@ def getSeasonFeatures(films): #int
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
-def getBudgetFeatures(films): #int
+def getBudgetFeatures(films):
     X0 = []
     for film in films:
         budget = film.budget
@@ -82,33 +82,38 @@ def getBudgetFeatures(films): #int
     vecX = DictVectorizer(dtype=np.float32)
     return vecX.fit_transform(X0).toarray()
 
-def getBoxOfficeFeatures(films): #int
+def getBoxOfficeFeatures(films):
     X0 = []
     for film in films:
         box_office = film.box_office
-        if box_office != None:
-            X0.append({'box_office':box_office})
-        else:
-            X0.append({'no_box_office':1})
+        #if box_office != None:
+        X0.append({'box_office':box_office})
+        #else:
+            #X0.append({'no_box_office':1})
     vecX = DictVectorizer(dtype=np.float32)
     return vecX.fit_transform(X0).toarray()
 
-films = Film.objects.order_by('-release_date')[:10]
+
+#films = Film.objects.order_by('-release_date').all()
 
 #FEATURES
-X_budget = getBudgetFeatures(films)
-X_season = getSeasonFeatures(films)
-X_countries = getCountriesFeatures(films)
-X_genres = getGenresFeatures(films)
-X_keywords = getKeywordsFeatures(films)
-X_pcs = getProductionCompaniesFeatures(films)
-X_actors = getActorsFeatures(films)
-X_directors = getDirectorsFeatures(films)
-X_writers = getWritersFeatures(films)
-X_reviews = getReviewsFeatures(films)
+#X_budget = getBudgetFeatures(films)
+#X_season = getSeasonFeatures(films)
+#X_countries = getCountriesFeatures(films)
+#X_genres = getGenresFeatures(films)
+#X_keywords = getKeywordsFeatures(films)
+#X_pcs = getProductionCompaniesFeatures(films)
+#X_actors = getActorsFeatures(films)
+#X_directors = getDirectorsFeatures(films)
+#X_writers = getWritersFeatures(films)
+#X_reviews = getReviewsFeatures(films)
 #LABELS
-Y_box_office = getBoxOfficeFeatures(films)
-Y_prizes = getPrizesFeatures(films)
+#Y_box_office = getBoxOfficeFeatures(films)
+#Y_prizes = getPrizesFeatures(films)
+
+#y = Y_box_office
+#y[isnan(y)] = np.mean(y[-isnan(y)])
+#matplotlib.pyplot.hist(y)
 
 #y = Y[:,0]
 # avoir une meilleure strategie, par cluster de genre
@@ -120,12 +125,6 @@ Y_prizes = getPrizesFeatures(films)
 # LDA dans un premier temps, regression logistique puis SVM et Boosting
 # construire des classifieurs par cluster (ex: annees 2000, genre...)
 # Stochastic Gradient Descent
-
-
-
-
-
-
 
 
 #X0 = []
