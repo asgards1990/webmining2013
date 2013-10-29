@@ -14,16 +14,8 @@ import Logger.logger_config as loggerConfig
 
 #Importe les modules exterieures à l'application
 import argparse
-import os
 
 #########################
-
-def exportSettings():
-   os.system(initConfig.DJANGO_SETTINGS_MODULE)
-   os.system(initConfig.PYTHONPATH)
-
-##########################
-
 
 ## Options Ligne de commande
 parser = argparse.ArgumentParser()
@@ -68,7 +60,6 @@ if initConfig.args.imdb_company_downloader:
 
 ###############
 if initConfig.args.imdb_extractor:
-   exportSettings()
    import UserAgent.userAgent
    import IMDBExtractor.IMDBExtractor
 
