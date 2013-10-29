@@ -53,14 +53,6 @@ def filmCompanyCreditsPath(imdb_id):
     path = "{0}{1}{2}.html".format(DownloaderConfig.IMDB_FILM_ROOT, DownloaderConfig.IMDB_FILM_COMPANYCREDITS_SUBPATH, imdb_id)
     return path
 
-def personPath(imdb_id):
-    path = "{0}{1}.html".format(DownloaderConfig.IMDB_PERSON_ROOT, imdb_id)
-    return path
-
-def companyPath(imdb_id):
-    path = "{0}{1}.html".format(DownloaderConfig.IMDB_COMPANY_ROOT, imdb_id)
-    return path
-
 ####################################################################
 
 # Page URLs
@@ -88,37 +80,6 @@ def filmKeywordsURL(imdb_id):
 def filmCompanyCreditsURL(imdb_id):
     url =  "http://www.imdb.com/title/{0}/companycredits".format(imdb_id)
     return url
-
-def personURL(imdb_id):
-    url = "http://www.imdb.com/name/{0}/".format(imdb_id)
-    return url
-
-def companyURL(imdb_id):
-    url = "http://www.imdb.com/company/{0}/".format(imdb_id) 
-    return url
-
-####################################################################
-
-def manageDownloads(downloader, urls, dests, stop_limits, required_limits, getFunctions, setFunctions):
-    logger.debug("Manage downloads")
-
-    for i in range(len(urls)):
-        status = getFunctions[i]() 
-        if status < stop_limits[i]:
-            if downloader.downloadHTML(urls[i], dests[i]):
-                logger.debug("{} downloaded".format(urls[i]))
-                setFunctions[i](100) 
-            else:
-                logger.debug("{} not downloaded".format(urls[i]))
-                setFunctions[i](status + 1)
-                return False
-        else:
-            if status < required_limits[i]:
-                logger.warning("Download required!")
-                return False
-            else:
-                logger.debug("Download not required")
-    return True
 
 ####################################################################
 
@@ -171,7 +132,7 @@ class IMDBFilmDownloader:
         stop_limits = [self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit,]
         required_limits = [100, self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit, self.onepage_limit,]
         
-        if manageDownloads(self.downloader, urls, dests, stop_limits, required_limits, getFunctions, setFunctions):
+        if self.downloader.manageDownloads(urls, dests, stop_limits, required_limits, getFunctions, setFunctions):
             self.connector.setDownloadedStatus(imdb_id, 1)
         else:
             self.failed_requests += 1
