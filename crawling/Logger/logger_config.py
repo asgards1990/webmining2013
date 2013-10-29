@@ -3,6 +3,5 @@
 
 #Cette classe contient les paramètres de configuration pour le module Logger
 
-
-LOG_FILE = 'debug_Downloader_131028_007.log'
+LOG_FILE = 'debug_IMDB_PERSON_DOWNLOADER_131029_001.log'
 LOGGER_BASE_NAME = 'SUPER LOGGER'

@@ -22,6 +22,8 @@ import random
 
 import os
 
+import time
+
 # Logger for this module
 logger = initLogger.getLogger(DownloaderConfig.IMDB_DOWNLOADER_LOGGER_NAME)
 
@@ -86,7 +88,7 @@ class IMDBPersonDownloader:
                 imdb_id = random.choice(imdb_ids)
             except IndexError as e:
                 self.logger.debug("Nothing to download")
-                return
+                time.sleep(60)
             else:
                 self.downloadPerson(imdb_id)
         self.logger.error("The total number of requests cannot exceed {}".format(self.global_limit))
