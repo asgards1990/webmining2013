@@ -1,1 +1,5 @@
 Learning
+
+Installation locale de Scikitlearn (version dev) :
+(IMPORTANT pour des fonctions avancées)
+export PYTHONPATH=/home/pesto/lib/scikit-learn:$PYTHONPATH

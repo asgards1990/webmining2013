@@ -47,13 +47,14 @@ def getGenresFeatures(films):
     return vecX.fit_transform(X0).toarray()
 
 def getProductionCompaniesFeatures(films):
-    X0 = [({production_company.imdb_id:1 for production_company in film.production_companies.all()} if film.production_companies.all().count()!=0 else {'no-pcs':1}) for film in films]
+    X0 = [({production_company.imdb_id:1 for production_company in film.production_company.all()} if film.production_company.all().count()!=0 else {'no-pcs':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
 def getCountriesFeatures(films):
     X0 = [({c.name:1 for c in film.country.all()} if film.country.all().count()!=0 else {'no-country':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
+    #print(vecX.get_feature_names)
     return vecX.fit_transform(X0).toarray()
 
 def getDirectorsFeatures(films):
@@ -92,6 +93,18 @@ def getSeasonFeatures(films):
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
+
+def getRuntimeFeatures(films):
+    X0 = []
+    for film in films:
+        runtime = film.runtime
+        if runtime != None:
+            X0.append({'runtime':runtime})
+        else:
+            X0.append({'runtime':np.nan})
+    vecX = DictVectorizer(dtype=np.float32)
+    return vecX.fit_transform(X0).toarray()
+
 def getBudgetFeatures(films):
     X0 = []
     for film in films:
@@ -99,7 +112,18 @@ def getBudgetFeatures(films):
         if budget != None:
             X0.append({'budget':budget})
         else:
-            X0.append({'no-budget':1})
+            X0.append({'budget':np.nan})
+    vecX = DictVectorizer(dtype=np.float32)
+    return vecX.fit_transform(X0).toarray()
+
+def getMetacriticScoreFeatures(films):
+    X0 = []
+    for film in films:
+        metacritic_score = film.metacritic_score
+        if metacritic_score != None:
+            X0.append({'metacritic_score':metacritic_score})
+        else:
+            X0.append({'metacritic_score':np.nan})
     vecX = DictVectorizer(dtype=np.float32)
     return vecX.fit_transform(X0).toarray()
 
@@ -107,13 +131,56 @@ def getBoxOfficeFeatures(films):
     X0 = []
     for film in films:
         box_office = film.box_office
-        #if box_office != None:
-        X0.append({'box_office':box_office})
-        #else:
-            #X0.append({'no_box_office':1})
+        if box_office != None:
+            X0.append({'box_office':box_office})
+        else:
+            X0.append({'box_office':np.nan})
     vecX = DictVectorizer(dtype=np.float32)
     return vecX.fit_transform(X0).toarray()
 
+def getImdbUserRatingFeatures(films):
+    X0 = []
+    for film in films:
+        imdb_user_rating = film.imdb_user_rating
+        if imdb_user_rating != None:
+            X0.append({'imdb_user_rating':imdb_user_rating})
+        else:
+            X0.append({'imdb_user_rating':np.nan})
+    vecX = DictVectorizer(dtype=np.float32)
+    return vecX.fit_transform(X0).toarray()
+
+def getImdbNbUserRatingsFeatures(films):
+    X0 = []
+    for film in films:
+        imdb_nb_user_ratings = film.imdb_nb_user_ratings
+        if imdb_nb_user_ratings != None:
+            X0.append({'imdb_nb_user_ratings':imdb_nb_user_ratings})
+        else:
+            X0.append({'imdb_nb_user_ratings':np.nan})
+    vecX = DictVectorizer(dtype=np.float32)
+    return vecX.fit_transform(X0).toarray()
+
+def getImdbNbUserReviewsFeatures(films):
+    X0 = []
+    for film in films:
+        imdb_nb_user_reviews = film.imdb_nb_user_reviews
+        if imdb_nb_user_reviews != None:
+            X0.append({'imdb_nb_user_reviews':imdb_nb_user_reviews})
+        else:
+            X0.append({'imdb_nb_user_reviews':np.nan})
+    vecX = DictVectorizer(dtype=np.float32)
+    return vecX.fit_transform(X0).toarray()
+
+def getImdbNbReviewsFeatures(films):
+    X0 = []
+    for film in films:
+        imdb_nb_reviews = film.imdb_nb_reviews
+        if imdb_nb_reviews != None:
+            X0.append({'imdb_nb_reviews':imdb_nb_reviews})
+        else:
+            X0.append({'imdb_nb_reviews':np.nan})
+    vecX = DictVectorizer(dtype=np.float32)
+    return vecX.fit_transform(X0).toarray()
 
 #films = Film.objects.order_by('-release_date').all()
 
