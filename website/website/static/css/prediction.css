@@ -12,33 +12,45 @@
 
 /* menubox acteur */
 
-.actor { 
-    width: 16em; 
-    height: 4em; 
-    display: table;
+
+#id_actors-deck > *{
+    display:table;
+    width:100%;
+    height: 4em;
     table-layout: fixed;
-    margin:0.5em 0;
-	
+    padding-bottom:0px;
+    padding-right:0px;
 }
 
-.actor p {
-    display: table-cell; 
-    vertical-align: middle; 
-    width:12em;
+#id_actors-deck > * > *{
+    display:table-cell;
+    vertical-align:middle;
+    height:100%;
+}
+
+#id_actors-deck p {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    color:white;
+    width:70%;
 }
 
-.actor p:hover {
+#id_actors-deck p:hover {
     color:#d51c21;
 }
-.actor .photo {
-    display: table-cell; 
-    vertical-align: middle; 
-    height:4em;
-    width:4em;
+
+#id_actors-deck span {
+    background-image:url("/pesto/static/img/croix.png");
+    background-repeat:no-repeat;
+    background-position: center left;
+}
+
+#id_actors-deck span:hover {
+    background-image:url("/pesto/static/img/croix2.png");
+}
+
+#id_actors-deck .photo {
+    width:50px;
 }
 
 /* menubox genre */
