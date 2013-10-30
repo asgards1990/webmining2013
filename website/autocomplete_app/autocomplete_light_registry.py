@@ -4,7 +4,7 @@ from cinema.models import Film, Person, Genre, Keyword
 
 # Autocompletion pour un film
 class FilmAutocomplete(autocomplete_light.AutocompleteModelBase):
-    search_fields=['original_title','english_title']
+	search_fields=['original_title','english_title']
 	autocomplete_js_attributes={'placeholder': 'Title ?'}
     
 autocomplete_light.register(Film, FilmAutocomplete)
