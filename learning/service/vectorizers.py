@@ -3,6 +3,24 @@ from sklearn.feature_extraction import DictVectorizer
 from cinema.models import *
 import datetime
 
+def genKeywords(iter_films):
+    while True:
+        film = next(iter_films)
+        if film.keywords.count() == 0:
+            yield {'no-keyword' : 1}
+        else:
+            d = {}
+            for keyword in film.keywords.all():
+                d[keyword.word] = 1
+            yield d
+
+# bcp plus performant 2s sur 1000 films au lieu de 13s, moins de conso memoire
+def getKeywordsFeatures2(films):
+    g = genKeywords(films.iterator())
+    v = DictVectorizer(dtype=int)
+    return v.fit_transform(g)
+
+# etre plus precis
 def getSeason(date):
     if not date:
         return None
@@ -15,6 +33,9 @@ def getSeason(date):
     if date.month in [9, 10, 11]:
         return 'fall'
 
+
+# WARNING
+# film.keywords.all()!=[] ne dit pas si la liste est vide ou pas, car pas de type list, utiliser count()
 def getKeywordsFeatures(films):
     X0 = [({keyword.word:1 for keyword in film.keywords.all() if film.keywords.all().count()!=0} if film.keywords.all().count()!=0 else {'no-keyword':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
