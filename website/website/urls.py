@@ -15,4 +15,9 @@ urlpatterns = patterns('',
     url(r'^cinema/', include('cinema.urls')),
 )
 
+urlpatterns += patterns('website.views',
+    url(r'^$', 'home'),
+    url(r'^prediction/$', 'prediction'),
+)
+
 urlpatterns += staticfiles_urlpatterns()
