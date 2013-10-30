@@ -18,8 +18,8 @@ DATABASES = {
         'NAME': myconfig.name,                      # Or path to database file if using sqlite3.
         'USER': myconfig.user,                      # Not used with sqlite3.
         'PASSWORD': myconfig.passwd,                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'HOST': myconfig.host,                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': myconfig.port,                      # Set to empty string for default. Not used with sqlite3.
     },
 }
 
@@ -71,7 +71,7 @@ STATIC_URL = '/pesto/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'static').replace('\\','/'),
+    #os.path.join(os.path.dirname(__file__), 'static').replace('\\','/'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -111,11 +111,12 @@ ROOT_URLCONF = 'website.urls'
 WSGI_APPLICATION = 'website.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), '../templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), '/templates').replace('\\','/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    #"/home/pesto/webmining2013/website/templates/cinema"
+    "/home/pesto/webmining2013/website/templates/cinema",
+    "/home/pesto/webmining2013/website/templates"
 )
 
 INSTALLED_APPS = (

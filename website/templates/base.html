@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+	  <link href='http://fonts.googleapis.com/css?family=Fenix&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <title>ProdBox</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/commun.css' %}"/>
+        <script src="{% static 'javascript/jquery.js' %}" ></script> <!-- bibliothèque jquery -->
+        {% block extrahead %}
+        {% endblock %}
+    </head>
+
+    <body>
+        
+        <div id="header">       
+            <div id="title">
+              <img src="" alt=""/>           
+            </div>
+            
+            <a href=""  class="topmenubox">
+                <!-- <img src="{% static 'img/bouton_2.png' %}" alt="ProdBox" id="predict_img"/> -->
+                <h2 id="predict_text">Predict</h2>
+            </a>         
+            
+            <a href=""  class="topmenubox">
+                <!-- <img src="{% static 'img/bouton_1.png' %}" alt="ProdBox" id="explore_img"/> -->    
+                <h2 id="explore_text">Explore</h2>
+            </a> 
+        </div>
+
+        {% block content %}
+        {% endblock %}
+        
+        <div id="footer">
+            <h3>Copyright Pesto WebMining 2013</h3>
+        </div>
+        
+    </body>
+
+</html>

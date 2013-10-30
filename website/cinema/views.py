@@ -2,6 +2,7 @@ from django.shortcuts import render
 import autocomplete_app.forms as forms
 from cinema.forms import HomeForm, ResultsForm, PredictionForm
 
+<<<<<<< HEAD
 # Choix du formulaire
 def formchoice(persontype,request=0) :
     possibilites = ['actor','director','film','genre','prediction']
@@ -41,6 +42,18 @@ def formcall(request,persontype):
     else :
         form,template=formchoice(persontype)
     return render(request, template, {'form': form})
+=======
+def filmsearch(request):
+    if request.method == 'POST':
+        #form = MultipleActorSearchForm(request.POST)
+        form = FilmSearchForm(request.POST)
+	if form.is_valid():
+            return render(request, 'thanks.html')
+    else:
+        #form = MultipleActorSearchForm()
+        form = FilmSearchForm()
+    return render(request, 'actor.html', {'form': form})
+>>>>>>> 5730d0fae800d92689d81cb11489806d3644da36
 
 def home(request):
     if request.method == 'POST':
@@ -57,7 +70,7 @@ def home(request):
         else:
             form = HomeForm()
 
-    return render(request, 'test.html', locals())
+    return render(request, 'home.html', locals())
 
 def resultsForm(request):
     if request.method == 'POST':
@@ -78,7 +91,7 @@ def resultsForm(request):
         else:
             form = ResultsForm()
 
-    return render(request, 'test.html',locals())
+    return render(request, 'results.html',locals())
 
 def predictionForm(request):
     if request.method == 'POST':
@@ -100,4 +113,4 @@ def predictionForm(request):
         else:
             form = PredictionForm()
 
-    return render(request, 'test.html',locals())
+    return render(request, 'prediction.html',locals())

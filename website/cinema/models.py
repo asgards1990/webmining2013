@@ -1,89 +1,92 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 
 class  Country (models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    nationality = models.CharField(max_length=255, unique=True) 
+    name = models.CharField(max_length=255, unique=True, default=None)
+    nationality = models.CharField(max_length=255, blank=True)
+    identifier = models.CharField(max_length=5, unique=True, default=None)
     def __unicode__(self):
-        return self.name       
+        return u"%s"%(self.name)       
     class Meta:
         ordering = ['name']
 
 class Language(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
+    identifier = models.CharField(max_length=5, unique=True, default=None)
     def __unicode__(self):
-        return self.name    
+        return u"%s"%(self.name)   
     class Meta:
         ordering = ['name']
  
 class  Genre (models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
     def __unicode__(self):
-        return self.name
+        return u"%s"%(self.name)
     class Meta:
         ordering = ['name']
 
 class  Reviewer (models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
     gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')], null=True,blank=True) #later
     def __unicode__(self):
-        return self.name      
+        return u"%s"%(self.name)      
     class Meta:
         ordering = ['name']
 
 class  Journal (models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
     language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL) #later
     def __unicode__(self):
-        return self.name      
+        return u"%s"%(self.name)      
     class Meta:
         ordering = ['name']
 
 class  Person (models.Model):
-    imdb_id = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=255)
+    imdb_id = models.CharField(max_length=10, unique=True, default=None)
+    name = models.CharField(max_length=255,blank=True)
     birth_date = models.DateField(null=True,blank=True)
     image_url = models.CharField(blank=True, max_length=255)
     birth_country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
     gender = models.CharField(max_length=1, validators=[RegexValidator('(m|f)')],blank=True) #later
-    first_name = models.CharField(max_length=255) #later
-    last_name = models.CharField(max_length=255) #later
+    first_name = models.CharField(max_length=255, blank=True) #later
+    last_name = models.CharField(max_length=255, blank=True) #later
     def __unicode__(self):
         return u'%s' % (self.name)
     class Meta:
         ordering = ['name']
 
 class  ProductionCompany (models.Model):
-    imdb_id = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=255, unique=True)
-    country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL) #later
+    imdb_id = models.CharField(max_length=10, unique=True, default=None)
+    name = models.CharField(max_length=255)
+    country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
     def __unicode__(self):
-        return self.name      
+        return u"%s"%(self.name)      
     class Meta:
         ordering = ['name']
 
 class  Institution (models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, default=None)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL) #later
     def __unicode__(self):
-        return self.name      
+        return u"%s"%(self.name)      
     class Meta:
         ordering = ['name']
 
 class  Keyword (models.Model):
-    word = models.CharField(max_length=255, unique=True)
+    word = models.CharField(max_length=255, unique=True, default=None)
     def __unicode__(self):
-        return self.word
+        return u"%s"%(self.word)
     class Meta:
         ordering = ['word']
 
 class  Film (models.Model):
-    imdb_id = models.CharField(max_length=10, unique=True)
-    original_title = models.CharField(max_length=255)
+    imdb_id = models.CharField(max_length=10, unique=True, default=None)
+    original_title = models.CharField(max_length=255,blank=True)
     english_title = models.CharField(max_length=255,blank=True)
-    release_date = models.DateField()
+    release_date = models.DateField(null=True,blank=True)
     runtime = models.IntegerField(null=True,blank=True)
     budget = models.IntegerField(null=True,blank=True)
     box_office = models.IntegerField(null=True,blank=True)
@@ -108,17 +111,16 @@ class  Film (models.Model):
     actors = models.ManyToManyField(Person, through='ActorWeight', related_name='films_from_actor')
     def __unicode__(self):
         return u'%s %s' % (self.original_title, self.imdb_id)
-        
     class Meta:
-        ordering = ['original_title', 'release_date']
+        ordering = ['english_title', 'release_date']
 
 class  Prize (models.Model):
-    win = models.BooleanField()
+    win = models.BooleanField(default=None)
     year = models.IntegerField(null=True,blank=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} in {1} for film {2}. Won : {3}".format(self.institution.name, self.year, self.film.original_title, self.win)
+        return u"%s in %s for film %s. Won : %s"%(self.institution.name, self.year, self.film.english_title, self.win)
     class Meta:
         ordering = ['year']
 
@@ -131,7 +133,7 @@ class  Review (models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     full_review_url = models.URLField(blank=True)
     def __unicode__(self):
-        return "{0} from {1} for {2}".format(self.grade, self.reviewer.name, self.journal.name)       
+        return u"Review of %s with grade %s"%(self.film.english_title, self.grade)
     class Meta:
         ordering = ['-grade']
 
@@ -141,14 +143,14 @@ class ActorWeight(models.Model):
     actor = models.ForeignKey(Person, on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} played in {1} and is ranked {2} in credits. Star : {3}".format(self.actor, self.film, self.rank, self.star)
+        return u"%s played in %s and is ranked %s in credits. Star : %s"%(self.actor.name, self.film.english_title, self.rank, self.star)
 
 class JournalInfluence(models.Model):
     influence = models.FloatField(null=True,blank=True)
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} has influence {1} for {2} films".format(self.journal.name, self.influence, self.genre.name)
+        return u"%s has influence %s for %s films"%(self.journal.name, self.influence, self.genre.name)
     class Meta:
         ordering = ['-influence']
 
@@ -158,7 +160,7 @@ class InstitutionInfluence(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
     def __unicode__(self):
-        return "{0} has influence {1} for {2} films in {3}".format(self.institution.name, self.influence, self.genre.name, self.country.name)
+        return u"%s has influence %s for %s films in %s"%(self.institution.name, self.influence, self.genre.name, self.country.name)
     class Meta:
         ordering = ['-influence']
 
@@ -167,6 +169,6 @@ class GenrePopularKeyword(models.Model):
     keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE)
     occurences = models.IntegerField()
     def __unicode__(self):
-        return "{0} occurs {1} times in {2} films".format(self.keyword.word, self.occurences, self.genre.name)
+        return u"%s occurs %s times in %s films"%(self.keyword.word, self.occurences, self.genre.name)
     class Meta:
         ordering = ['-occurences']
