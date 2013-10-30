@@ -46,7 +46,7 @@ class IMDbSpider(CrawlSpider):
     ext_country = re.compile("country/\w+\?")
     extract_country = lambda self, s : self.ext_country.search(s).group(0).split('/')[1][:-1]
 
-    def __init__(self, year = 1950, actors_max_rank = 20, fetch_person = False, fetch_company = False, max_position = 50000, *args, **kwargs):
+    def __init__(self, year = 1950, actors_max_rank = 20, fetch_person = False, fetch_company = False, max_position = 10000, *args, **kwargs):
         super(IMDbSpider, self).__init__(*args, **kwargs)
         self.year = year
         self.actors_max_rank = actors_max_rank
