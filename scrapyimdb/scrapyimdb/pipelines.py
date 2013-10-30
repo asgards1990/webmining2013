@@ -13,7 +13,9 @@ def is_extracted(imdb_id):
     
 def set_extracted(imdb_id):
     try:
-        return ScrapyStatus.objects.get(imdb_id = imdb_id).extracted
+        status = ScrapyStatus.objects.get(imdb_id = imdb_id)
+        status.extracted = True
+        status.save()
     except ScrapyStatus.DoesNotExist:
         log.msg('No extracted status found for ' + imdb_id + '.')
 
@@ -161,7 +163,7 @@ class LinksPipeline(object):
                     comp = defineCompany(item['attached_to'])
                     comp.country = country
                 except Country.DoesNotExist:
-                    log.msg('Country ' + item['language']  + 'not found.')
+                    log.msg('Country ' + item['country']  + 'not found.')
                 return item
             film = defineFilm(item['attached_to'])
             if isinstance(item, KeywordsItem):
@@ -213,11 +215,17 @@ class LinksPipeline(object):
                 if item.has_key('full_review_url'):
                     review.full_review_url = item['full_review_url']
                 review.summary = item['summary']
-                film.reviews
                 review.save()
             elif isinstance(item, ProducerItem):
                 comp = defineCompany(item['imdb_id'])
                 comp.name = item['name']
                 film.production_companies.add(comp)
                 comp.save()
+            elif isinstance(item, CountryItem):
+                try:
+                    country = Country.objects.get(identifier = item['country'])
+                    film.country.add(country)
+                    film.save()
+                except Country.DoesNotExist:
+                    log.msg('No country found with name ' + item['country'] + '.')
         return item

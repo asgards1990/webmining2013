@@ -103,3 +103,24 @@ class Downloader:
             os.remove(dest)
             return False
  
+    def manageDownloads(self, urls, dests, stop_limits, required_limits, getFunctions, setFunctions):
+        self.logger.debug("Manage downloads")
+
+        for i in range(len(urls)):
+            status = getFunctions[i]() 
+            if status < stop_limits[i]:
+                if self.downloadHTML(urls[i], dests[i]):
+                    self.logger.debug("{} downloaded".format(urls[i]))
+                    setFunctions[i](100) 
+                else:
+                    self.logger.debug("{} not downloaded".format(urls[i]))
+                    setFunctions[i](status + 1)
+                    return False
+            else:
+                if status < required_limits[i]:
+                    self.logger.warning("Download required!")
+                    return False
+                else:
+                    self.logger.debug("Download not required")
+        return True
+

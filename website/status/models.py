@@ -30,6 +30,8 @@ class IMDBFilmStatus(models.Model):
     # status for downloader and extracter
     downloaded = models.IntegerField()
     extracted = models.IntegerField()
+    # priority
+    priority = models.IntegerField()
     
     def __unicode__(self):
         return u'%s status' % (self.imdb_id)
