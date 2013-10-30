@@ -16,47 +16,47 @@ def getSeason(date):
         return 'fall'
 
 def getKeywordsFeatures(films):
-    X0 = [({keyword.word:1 for keyword in film.keywords.all() if film.keywords.all() != []} if film.keywords.all()!=[] else {'no-keyword':1}) for film in films]
+    X0 = [({keyword.word:1 for keyword in film.keywords.all() if film.keywords.all().count()!=0} if film.keywords.all().count()!=0 else {'no-keyword':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
 def getGenresFeatures(films):
-    X0 = [({genre.name:1 for genre in film.genres.all()} if film.genres.all()!=[] else {'no-genre':1}) for film in films]
+    X0 = [({genre.name:1 for genre in film.genres.all()} if film.genres.all().count()!=0 else {'no-genre':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
 def getProductionCompaniesFeatures(films):
-    X0 = [({production_company.imdb_id:1 for production_company in film.production_companies.all()} if film.production_companies.all()!=[] else {'no-pcs':1}) for film in films]
+    X0 = [({production_company.imdb_id:1 for production_company in film.production_companies.all()} if film.production_companies.all().count()!=0 else {'no-pcs':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
 def getCountriesFeatures(films):
-    X0 = [({c.name:1 for c in film.country.all()} if film.country.all()!=[] else {'no-country':1}) for film in films]
+    X0 = [({c.name:1 for c in film.country.all()} if film.country.all().count()!=0 else {'no-country':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
 def getDirectorsFeatures(films):
-    X0 = [({director.imdb_id:1 for director in film.directors.all()} if film.directors.all()!=[] else {'no-directors':1}) for film in films]
+    X0 = [({director.imdb_id:1 for director in film.directors.all()} if film.directors.all().count()!=0 else {'no-directors':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
 def getWritersFeatures(films):
-    X0 = [({writer.imdb_id:1 for writer in film.writers.all()} if film.writers.all()!=[] else {'no-writer':1}) for film in films]
+    X0 = [({writer.imdb_id:1 for writer in film.writers.all()} if film.writers.all().count()!=0 else {'no-writer':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
 def getActorsFeatures(films):
-    X0 = [({aw.actor.imdb_id+'_'+str(aw.rank):1 for aw in ActorWeight.objects.filter(film=film)} if ActorWeight.objects.filter(film=film)!=[] else {'no-actor':1}) for film in films]
+    X0 = [({aw.actor.imdb_id+'_'+str(aw.rank):1 for aw in ActorWeight.objects.filter(film=film)} if ActorWeight.objects.filter(film=film).all().count()!=0 else {'no-actor':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
 def getReviewsFeatures(films): 
-    X0 = [({review.journal.name:review.grade for review in Review.objects.filter(film=film).all()} if Review.objects.filter(film=film).all()!=[] else {'no-review':1}) for film in films]
+    X0 = [({review.journal.name:review.grade for review in Review.objects.filter(film=film).all()} if Review.objects.filter(film=film).all().count()!=0 else {'no-review':1}) for film in films]
     vecX = DictVectorizer(dtype=np.float32)
     return vecX.fit_transform(X0).toarray()
 
 def getPrizesFeatures(films):
-    X0 = [({prize.institution.name+'_'+('win' if prize.win else 'nomination'):1 for prize in Prize.objects.filter(film=film).all()} if Prize.objects.filter(film=film).all()!=[] else {'no-prize':1}) for film in films]
+    X0 = [({prize.institution.name+'_'+('win' if prize.win else 'nomination'):1 for prize in Prize.objects.filter(film=film).all()} if Prize.objects.filter(film=film).all().all().count()!=0 else {'no-prize':1}) for film in films]
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
