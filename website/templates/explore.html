@@ -20,62 +20,80 @@
 <script type="text/javascript" src="{% static 'javascript/explore/resultatsProches.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascript/explore/bulleInfo.js' %}"></script>
 
-    {% block explore_extrahead %}
-    {% endblock %}
+{% block explore_extrahead %}
+{% endblock %}
 {% endblock %}
 
 {% block content %}
 <div id="predictioncontainer">
 
-<!-- Menu de gauche-->
+    <!-- Menu de gauche-->
 
     {% block explore_menu %}
     {% endblock %}
 
 
-<!-- Page de sélection des critères -->
+    <!-- Page de selection des criteres -->
 
     <div id="distancecriteria">
         <img class="steps" src="{% static 'img/explore/2.png' %}" alt="2">
         <div class="intro">
             <h1 class="steps">Choose your distance criteria</h1>
         </div>
+
         <div id="filters">
 
 
-            <form>                       
+            <form id="filtre" action="#">
                 <div class="filter">
                     <p>Genre</p>
-                    <input id="genre" type="image" alt="Genre" 
-                           src="{% static 'img/explore/genre.png' %}">
-                    <figcaption class="season"><input type="checkbox" name="genre" value="genre" disabled></figcaption>
+                    <input class="img" type="image" src="{% static 'img/explore/genre.png' %}" alt="image"/>
+                    <figcaption class="checkbox" >
+                        <input id="genre" type="checkbox"></input>
+                        <label for="genre">
+                            <span class="ui"></span>
+                        </label>
+                    </figcaption>
                 </div>
 
                 <div class="filter">
                     <p>People</p>
-                    <input id="genre" type="image" alt="Actors" 
-                           src="{% static 'img/explore/actors.png' %}">
-                    <figcaption class="season"><input type="checkbox" name="actors" value="actors" disabled></figcaption>
+                    <input class="img" type="image" src="{% static 'img/explore/actors.png' %}" alt="image"/>
+                    <figcaption class="checkbox" >
+                        <input id="acteurs" type="checkbox"></input>
+                        <label for="acteurs">
+                            <span class="ui"></span>
+                        </label>
+                    </figcaption>
                 </div>
 
                 <div class="filter">
                     <p>Budget</p>
-                    <input id="genre" type="image" alt="Budget" 
-                           src="{% static 'img/explore/budget.png' %}">
-                    <figcaption class="season"><input type="checkbox" name="budget" value="budget" disabled></figcaption>
+                    <input class="img" type="image" src="{% static 'img/explore/budget.png' %}" alt="image"/>
+                    <figcaption class="checkbox" >
+                        <input id="budget" type="checkbox"></input>
+                        <label for="budget">
+                            <span class="ui"></span>
+                        </label>
+                    </figcaption>
                 </div>
 
                 <div class="filter">
                     <p>Reviews</p>
-                    <input id="genre" type="image" alt="Reviews" 
-                           src="{% static 'img/explore/reviews.png' %}">
-                    <figcaption class="season"><input type="checkbox" name="reviews" value="reviews" disabled></figcaption>
-                </div>                                                
+                    <input class="img" type="image" src="{% static 'img/explore/reviews.png' %}" alt="image"/>
+                    <figcaption class="checkbox" >
+                        <input id="reviews" type="checkbox"></input>
+                        <label for="reviews">
+                            <span class="ui"></span>
+                        </label>
+                    </figcaption>
+                </div>
+
             </form>
         </div>                
     </div>
 
-<!-- Page de résultats -->
+    <!-- Page de resultats -->
 
     <div id="results">
         <div id="cadreResultats">
