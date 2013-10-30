@@ -47,8 +47,8 @@ class ExtractorHTML(SuperExtractor):
             logger.warning("L'extraction de l'élément {} est de taille nulle".format(xpath))
          return res
 
-      except : 
-         logger.error("Erreur dans l'extraction de l'élément {}".format(xpath))
+      except Exception as e: 
+         logger.error("Erreur dans l'extraction de l'élément {}; Error: {}".format(xpath,e))
          return []
 
    def extractXpathText(self,xpath):

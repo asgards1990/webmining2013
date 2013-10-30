@@ -54,6 +54,7 @@ def defineKeyword(keyword):
 def defineReview(reviewer,journal,film):
    try :
       r = Review.objects.get(reviewer=reviewer,journal=journal,film=film)
+      logger.info("La review existe deja")
       return False 
    except Review.DoesNotExist :
       logger.info("Création de la review dans la base de données")

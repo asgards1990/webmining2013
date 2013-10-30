@@ -269,7 +269,7 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
       self.english_title = (lambda x : x[0] if len(x)>0 else None)(self.extractTitle()) 
       self.original_title = (lambda x : x[0] if len(x)>0 else self.english_title)(self.extractOriginalTitle()) 
       self.release_date = (lambda x : convertDate(x[0]) if len(x)>0  else None)(self.extractReleaseDate())
-      self.runtime =(lambda x : x[0].split(' ')[0] if len(x)>0 else None)(self.extractRuntime())
+      self.runtime =(lambda x : x[0].split(' ')[0].replace(",","") if len(x)>0 else None)(self.extractRuntime())
       try:
          self.budget =(lambda x : x[0].split("$")[1] if len(x)>0 else None)(self.extractBudget())
       except:
@@ -522,17 +522,39 @@ class IMDBExtractor_Reviews(IMDBFilmExtractor):
       logger.debug("Extract Grades : ")
       return self.extractor.extractXpathText('//span[@itemprop="ratingValue"]')
 
+   def extractReviewJournalAndReviewer(self):
+      logger.debug("Extract Journals and Reviewer frame : ")
+      both = self.extractor.extractXpathText('//td[@class="review"]/*/*/')
+      
+      return both 
+
    def extractSummary(self):
       logger.debug("Extract Summaries : ")
       return self.extractor.extractXpathText('//div[@class="summary"]')
 
    def extractJournal(self):
       logger.debug("Extract Journals : ")
-      return self.extractor.extractXpathText('//b[@itemprop="publisher"]/span[@itemprop="name"]')
+      self.journal = self.extractor.extractXpathText('//b[@itemprop="publisher"]/span[@itemprop="name"]')
+      return self.journal 
 
    def extractReviewer(self):
+      """methode : on extrait un par un tous les reviewers et on regarde a quel journal ils appartiennent"""
+ 
       logger.debug("Extract Reviewers : ")
-      return self.extractor.extractXpathText('//span[@itemprop="author"]/span[@itemprop="name"]')
+
+      reviewer_tab = ['']*len(self.journal)
+      for i in range(1,len(self.journal)+1):
+        new_el =  self.extractor.extractXpathText('//span[@itemprop="author"][{}]/span[@itemprop="name"]'.format(i))
+        journal_correspondant =  self.extractor.extractXpathText('//span[@itemprop="author"][{}]/span[@itemprop="name"]/../../b[@itemprop="publisher"]/span[@itemprop="name"]'.format(i)) 
+        try:
+           reviewer_tab[self.journal.index(journal_correspondant[0])]=new_el[0] #Provoque autant d'erreur que de journaux sans auteurs
+        except Exception as e:
+           logger.debug("Anomalie dans l'extraction du reviewer : {}".format(e))
+      for i in range(len(self.journal)):
+         logger.debug("Journal :{} Reviewer :{}".format(self.journal[i],reviewer_tab[i]))
+      return reviewer_tab
+
+
 
    def extractFullReviewURL(self):
       logger.debug("Extract Full review URL : ")
@@ -540,38 +562,43 @@ class IMDBExtractor_Reviews(IMDBFilmExtractor):
       return self.extractor.extractXpathElement('//span[@itemprop="author"]/../@href')   
 
    def extractContent(self):
-      self.grade=(self.extractGrade())
+      self.grade=(lambda s : s[1:] if len(s)>1 else None)(self.extractGrade())
       self.summary=(lambda s: s if len(s)>0 else "")(self.extractSummary())
-      self.reviewer=(self.extractReviewer())
       self.journal=(self.extractJournal())
+      self.reviewer=(self.extractReviewer())
       self.fullReviewURL=(self.extractFullReviewURL())
 
    def extractReviewsPage_DB(self):
       self.extractContent()
       f = defineFilm(self.id_)   
-   
+      logger.debug("Taille Note : {}, Taille review : {}, Taille Journal : {}".format(len(self.grade),len(self.reviewer),len(self.journal))) 
+
+      for n in self.grade:
+         logger.debug("Grade : {}".format(n))
+
       for index in range(len(self.grade)):
         try:
          r = defineReviewer(self.reviewer[index])
          j = defineJournal(self.journal[index])
-   
+         logger.debug('ici') 
          if r:
             if j:
                if f:
                   re = defineReview(r,j,f)
          if re:
+            logger.debug('la') 
             try:
                logger.info('Mise à jour de la DB pour le film {} : extraction des critiques du film'.format(self.id_))
                re.summary=self.summary[index]
-               re.grade=self.grade[index]
+               re.grade=float(self.grade[index])/100
                #re.fullReviewURL = self.fullReviewURL[index]
                re.save()
    
             except Exception as e:
                logger.error("-> The rewiew couldn't be updated:")
                logger.error("-> Error: {}".format(e))
-        except :
-         logger.warning("Problème d'homogénéité dans les tableaux de reviews")
+        except Exception as e:
+         logger.warning("Problème d'homogénéité dans les tableaux de reviews; Error : {}".format(e))
   
 
 class IMDBExtractor_Awards(IMDBFilmExtractor):
@@ -727,7 +754,7 @@ def convertDate(date):
       if len(date.split("-"))==3:
          return "-".join(["01" if e == "0" else e for e in date.split("-")])
       elif len(date.split("-"))==2:
-         return "-".join(["01" if e == "0" else e for e in date.split("-")])
+         return "-".join(["01" if e == "0" else e for e in date.split("-").append("01")])
       else:
          return None
    except:
