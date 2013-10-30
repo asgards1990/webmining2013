@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extrahead %}
+
+<meta charset="windows-1252">
+<meta name="viewport" content="width=device-width">
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/resultscommun.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/explore.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/lightbox.css' %}" />
+
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> <!-- modules ui -->
+<script src="{% static 'javascript/lightbox-2.6.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'javascript/explore/cadreFinal.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascript/explore/chargement.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascript/explore/carrousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascript/explore/resultatsProches.js' %}"></script>
+<script type="text/javascript" src="{% static 'javascript/explore/bulleInfo.js' %}"></script>
+
+    {% block explore_extrahead %}
+    {% endblock %}
+{% endblock %}
+
+{% block content %}
+<div id="predictioncontainer">
+
+<!-- Menu de gauche-->
+
+    {% block explore_menu %}
+    {% endblock %}
+
+
+<!-- Page de sélection des critères -->
+
+    <div id="distancecriteria">
+        <img class="steps" src="{% static 'img/explore/2.png' %}" alt="2">
+        <div class="intro">
+            <h1 class="steps">Choose your distance criteria</h1>
+        </div>
+        <div id="filters">
+
+
+            <form>                       
+                <div class="filter">
+                    <p>Genre</p>
+                    <input id="genre" type="image" alt="Genre" 
+                           src="{% static 'img/explore/genre.png' %}">
+                    <figcaption class="season"><input type="checkbox" name="genre" value="genre" disabled></figcaption>
+                </div>
+
+                <div class="filter">
+                    <p>People</p>
+                    <input id="genre" type="image" alt="Actors" 
+                           src="{% static 'img/explore/actors.png' %}">
+                    <figcaption class="season"><input type="checkbox" name="actors" value="actors" disabled></figcaption>
+                </div>
+
+                <div class="filter">
+                    <p>Budget</p>
+                    <input id="genre" type="image" alt="Budget" 
+                           src="{% static 'img/explore/budget.png' %}">
+                    <figcaption class="season"><input type="checkbox" name="budget" value="budget" disabled></figcaption>
+                </div>
+
+                <div class="filter">
+                    <p>Reviews</p>
+                    <input id="genre" type="image" alt="Reviews" 
+                           src="{% static 'img/explore/reviews.png' %}">
+                    <figcaption class="season"><input type="checkbox" name="reviews" value="reviews" disabled></figcaption>
+                </div>                                                
+            </form>
+        </div>                
+    </div>
+
+<!-- Page de résultats -->
+
+    <div id="results">
+        <div id="cadreResultats">
+        </div>                
+    </div>
+
+</div>
+{% endblock %}
+        
+
+
+
+

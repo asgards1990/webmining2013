@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 urlpatterns += patterns('website.views',
     url(r'^$', 'home'),
     url(r'^prediction/$', 'prediction'),
+	url(r'^explore/$', 'explore'),
 )
 
 urlpatterns += staticfiles_urlpatterns()
