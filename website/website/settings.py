@@ -18,8 +18,8 @@ DATABASES = {
         'NAME': myconfig.name,                      # Or path to database file if using sqlite3.
         'USER': myconfig.user,                      # Not used with sqlite3.
         'PASSWORD': myconfig.passwd,                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'HOST': myconfig.host,                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': myconfig.port,                      # Set to empty string for default. Not used with sqlite3.
     },
 }
 
