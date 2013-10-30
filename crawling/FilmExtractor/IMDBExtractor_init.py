@@ -168,6 +168,8 @@ IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 
 #reExtractBuggyFilm()
    
-reExtractOneMovie("tt0390221")
+reExtractOneMovie("tt3029940")
 
+#Exemple avec des devises Japonaises : tt0245429
+#Exemple avec des devises € : tt302994
 #Exemple avec des Reviews decalees : tt0390221

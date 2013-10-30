@@ -74,8 +74,6 @@ class IMDBExtractor:
       """
       try:
          with codecs.open(path, 'r','utf-8') as page:
-            #charset = page.headers.getparam('charset')
-            #self.t = unicode(page.read(),charset)
             logger.debug (" Ouverture du fichier {} réussi " .format(path))
             self.isExtractable=True
             return page.read()
@@ -271,12 +269,12 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
       self.release_date = (lambda x : convertDate(x[0]) if len(x)>0  else None)(self.extractReleaseDate())
       self.runtime =(lambda x : x[0].split(' ')[0].replace(",","") if len(x)>0 else None)(self.extractRuntime())
       try:
-         self.budget =(lambda x : x[0].split("$")[1] if len(x)>0 else None)(self.extractBudget())
-      except:
-         logger.warning("Pas de Budget décelé pour le film {}".format(self.id_))
+         self.budget =(lambda x : convertCurrency(x[0]) if len(x)>0 else None)(self.extractBudget())
+      except Exception as e:
+         logger.warning("Pas de Budget décelé pour le film {}, Error : {}".format(self.id_,e))
          self.budget=None
       try:
-         self.box_office =(lambda x : x[0].split("$")[1] if len(x)>0 else None)(self.extractBoxOffice())
+         self.box_office =(lambda x : convertCurrency(x[0]) if len(x)>0 else None)(self.extractBoxOffice())
       except:
          logger.warning("Pas de Box office décelé pour le film {}".format(self.id_))
          self.box_office=None
@@ -398,7 +396,7 @@ class IMDBExtractor_companyCredits(IMDBFilmExtractor):
             for p in self.producers:
                producer = defineProducer(p.id_)
                if producer:
-                 f.production_companies.add(producer)
+                 f.production_company.add(producer)
             f.save()
 
          except Exception as e:
@@ -562,7 +560,7 @@ class IMDBExtractor_Reviews(IMDBFilmExtractor):
       return self.extractor.extractXpathElement('//span[@itemprop="author"]/../@href')   
 
    def extractContent(self):
-      self.grade=(lambda s : s[1:] if len(s)>1 else None)(self.extractGrade())
+      self.grade=(lambda s : s[1:] if len(s)>1 else [])(self.extractGrade())
       self.summary=(lambda s: s if len(s)>0 else "")(self.extractSummary())
       self.journal=(self.extractJournal())
       self.reviewer=(self.extractReviewer())
@@ -571,10 +569,7 @@ class IMDBExtractor_Reviews(IMDBFilmExtractor):
    def extractReviewsPage_DB(self):
       self.extractContent()
       f = defineFilm(self.id_)   
-      logger.debug("Taille Note : {}, Taille review : {}, Taille Journal : {}".format(len(self.grade),len(self.reviewer),len(self.journal))) 
 
-      for n in self.grade:
-         logger.debug("Grade : {}".format(n))
 
       for index in range(len(self.grade)):
         try:
@@ -763,3 +758,26 @@ def convertDate(date):
 
 def hasWon(status):
    return True if status.upper()=="WON" else False
+
+def convertCurrency(val):
+   """Convert to $ (based on x-rates)"""
+   try:
+      logger.debug("tentative de conversion de la devise {}".format(val))
+      val = val.replace(",","").replace(" ","")
+      if val[0] == "$":
+         return val.split("$")[1]
+      elif val[0] == "£":
+        return int(int(val.split("£")[1])*0,0.623284)
+      elif val[0] == "€" :
+        return int(int(val.split("€")[1])*0,727236)
+      elif val[:6]=='\u20ac':
+        return int(int(val[6:])*0,727236)
+      elif len(val)>3 and val[:3]=="JPY":
+        return int(int(val.split("JPY")[1])*98.381090)
+      elif len(val)>3 and val[:3]=="FRF":
+        return int(int(val.split("FRF")[1])*4,770356)
+      else:
+         return None
+   except Exception as e:
+      logger.error("Impossible de convertir {} : Error : {} ".format(val,e))
+
