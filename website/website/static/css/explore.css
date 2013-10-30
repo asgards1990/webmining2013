@@ -326,23 +326,25 @@ img.steps {
 #actors {    
 }
 
-#actors p.director {        
+#actors p.director, p.actor {
+    margin:0.3em auto;
+    text-align:left;
+
 }
 
-#actors p.director span.name {
+/*#actors p.director span.name {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-#actors p.actor {        
-}
+
 
 #actors p.actor span.name {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
+}*/
 
 
 
@@ -350,19 +352,25 @@ img.steps {
 #genres {    
 }
 
-#genres p.genre {      
+#genres p.genre {
+    margin:0.3em auto;
+    text-align:left;
 }
 
-#genres p.genre span.name {
+/*#genres p.genre span.name {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
+}*/
 
 #slider-range {
     margin: 10px;
 }
 
+#reviews ul{
+    padding:0;
+    list-style-type:none;
+}
 
 #stars {
     text-align:center;
