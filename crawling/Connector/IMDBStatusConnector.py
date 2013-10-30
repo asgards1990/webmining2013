@@ -41,7 +41,7 @@ class IMDBFilmStatusConnector:
             film_status = IMDBFilmStatus(imdb_id=imdb_id, year=year, position=position,
                                          film_mainpage=0, film_fullcredits=0, film_awards=0, film_reviews=0, film_keywords=0, film_companycredits=0,
                                          film_image=0,
-                                         downloaded=0, extracted=0)
+                                         downloaded=0, extracted=0, priority=1000)
             try:
                 film_status.save()
             except Exception as e:
@@ -136,8 +136,17 @@ class IMDBFilmStatusConnector:
     def getDownloadedNotExtracted(self):
         self.logger.debug("Get the Film IMDB IDs in the database with downloaded=1 and extracted=0")
 
-        status = IMDBFilmStatus.objects.filter(downloaded=1, extracted=0)
+        status = IMDBFilmStatus.objects.filter(downloaded=1, extracted=0).order_by('priority')
         return map(lambda s: s.imdb_id, status)
+
+    def getFilmPriority(self, imdb_id):
+        self.logger.debug("Get the film priority for IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.priority
+        
+        self.logger.debug("-> Priority: {}".format(status))
+        return status
 
     ###############################################################################
 
@@ -272,6 +281,21 @@ class IMDBFilmStatusConnector:
             self.logger.debug("-> Film status modified")
             return True
 
+    def setFilmPriority(self, imdb_id, priority):
+        self.logger.debug("Set the film Priority for IMDB ID {0} to {1} in the database".format(imdb_id, priority))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        s.priority = priority
+
+        try:
+            s.save()
+        except Exception as e:
+            self.logger.warning("-> The film status couldn't be saved")
+            self.logger.warning("-> Error: {}".format(e))
+            return False
+        else:
+            self.logger.debug("-> Film priority modified")
+            return True
 ####################################################################
 
 class IMDBPersonStatusConnector:
