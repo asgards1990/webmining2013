@@ -1,0 +1,58 @@
+/* Gestion globale des menus */
+
+#menu {
+    border-radius: 9px 9px 0px 0px;
+    float:left;
+    width:18em;
+    margin-top:2em;
+    margin-left:1.5em;
+}
+
+#menutitle {
+    width:100%;
+    text-align:center;
+    background-image: linear-gradient(#4A4A4A 0%,#242424 50%,#4A4A4A 100%);
+    background-image: -webkit-linear-gradient(rgb(102, 102, 94) 0%, rgb(69, 70, 61) 100%);
+    color: white ;
+    border-radius: 9px 9px 0px 0px;
+    height: 50px;
+    padding-top: 10px;
+}
+  
+.menubox {
+    background-color: #CFCFCF;
+    padding-left:5px;
+    padding-right:5px;
+    padding-top : 20px;
+    min-height:80px;
+}
+
+#menu > h1 {
+    margin: 0 auto;
+    font-variant:small-caps;
+    font-size:1.8em;
+}
+
+.menubox > h1 {
+    margin: 0 auto;
+    font-size:1.4em;
+    font-variant:small-caps;
+    color: #d51c21;
+    text-align: left;
+    border-bottom: 2px dotted #757575;
+}
+
+.menubox > *{
+    text-align:center;
+}
+
+.menubox input {
+    text-align:center;
+}
+
+
+
+
+
+
+

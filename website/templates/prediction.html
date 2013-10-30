@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extrahead %}
+<!--<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700' rel='stylesheet' type='text/css'>-->
+<!--<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>-->
+<!--<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>-->
+<meta charset="windows-1252">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" type="text/css" href="{% static 'css/resultscommun.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/prediction.css' %}" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"> <!-- modules ui -->
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> <!-- modules ui -->
+<script src="{% static 'javascript/lightbox-2.6.min.js' %}"></script>
+<link href="{% static 'css/lightbox.css' %}" rel="stylesheet" />
+    {% block prediction_extrahead %}
+    {% endblock %}
+{% endblock %}
+
+{% block content %}
+<div id="predictioncontainer">
+
+<!-- Menu de gauche-->
+
+    {% block prediction_menu %}
+    {% endblock %}
+
+
+<!-- Page de résultat -->
+
+    <div id="results">  
+        
+        <div id="prizes">
+            <h1>Prizes </h1>
+        </div>
+    
+        <div id="boxoffice">
+            <h1>Box Office</h1>
+        </div>
+    
+        <div id="reviews">
+            <h1>Reviews</h1>
+            <div class="moreinfo">
+            <a href="img/01.jpg" data-lightbox="image-1" title="My caption">More Info</a>
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+{% endblock %}
+        
+
+
+
+

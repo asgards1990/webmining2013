@@ -1,8 +1,48 @@
 from django.shortcuts import render
-from autocomplete_app.forms import MultipleActorSearchForm, FilmSearchForm
-from django.http import HttpResponse
+import autocomplete_app.forms as forms
 from cinema.forms import HomeForm, ResultsForm, PredictionForm
 
+<<<<<<< HEAD
+# Choix du formulaire
+def formchoice(persontype,request=0) :
+    possibilites = ['actor','director','film','genre','prediction']
+    if persontype in possibilites :
+        if request == 0:
+            if persontype == 'actor' :
+                form = forms.MultipleActorSearchForm()
+            elif persontype == 'director' :
+                form = forms.MultipleDirectorSearchForm()
+            elif persontype == 'film' :
+                form = forms.FilmSearchForm()
+            elif persontype == 'genre' :
+                form = forms.GKSearchForm()
+            elif persontype == 'prediction' :
+                form = forms.PredictionForm()
+        else : 
+            if persontype == 'actor' :
+                form = forms.MultipleActorSearchForm(request.POST)
+            elif persontype == 'director' :
+                form = forms.MultipleDirectorSearchForm(request.POST)
+            elif persontype == 'film' :
+                form = forms.FilmSearchForm(request.POST)
+            elif persontype == 'genre' :
+                form = forms.GKSearchForm(request.POST)
+            elif persontype == 'prediction' :
+                form = forms.PredictionForm(request.POST)
+    else : 
+        return 0,'pb.html'
+    return form,'formulaire.html'
+
+# Vue appel de formulaire
+def formcall(request,persontype):
+    if request.method == 'POST'and len(request.POST)>1 :
+        form,template=formchoice(persontype,request)
+        if form.is_valid():
+            return render(request, 'thanks.html')
+    else :
+        form,template=formchoice(persontype)
+    return render(request, template, {'form': form})
+=======
 def filmsearch(request):
     if request.method == 'POST':
         #form = MultipleActorSearchForm(request.POST)
@@ -13,6 +53,7 @@ def filmsearch(request):
         #form = MultipleActorSearchForm()
         form = FilmSearchForm()
     return render(request, 'actor.html', {'form': form})
+>>>>>>> 5730d0fae800d92689d81cb11489806d3644da36
 
 def home(request):
     if request.method == 'POST':
