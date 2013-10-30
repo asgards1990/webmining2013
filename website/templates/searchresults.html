@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        {% load static %}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+        
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Fenix&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <title>ProdBox</title>
+        <meta charset="windows-1252">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/commun.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/resultscommun.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/searchresults.css' %}" />  
+        <link rel="stylesheet" type="text/css" href="{% static 'css/rateit.css' %}" />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+        </script>
+        <script type="text/javascript" src="{% static 'javascript/explore/cadreFinal.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/explore/chargement.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/explore/carrousel.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/explore/resultatsProches.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/explore/bulleInfo.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/explore/moviesearch.js' %}"></script>
+
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script>
+            $(function() {
+                $("#slider").slider();
+            });
+        </script>
+        <script>
+            $(function() {
+                $("#slider-range").slider({
+                    range: true,
+                    min: 0,
+                    max: 300,
+                    values: [5, 250],
+                    slide: function(event, ui) {
+                        $("#amount").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                    }
+                });
+                $("#amount").val("$" + $("#slider-range").slider("values", 0) +
+                        " - $" + $("#slider-range").slider("values", 1));
+            });
+        </script>
+
+    </head>
+    <body>
+        <div id="header">
+            <div id="title">
+                <img src="img/prodbox.jpg"alt="ProdBox"/>           
+            </div>
+
+            <div id="headerexplore" class="topmenubox">
+                <a href=""><img src="./img/circle.jpg" alt="Explore"></a>
+                <h2>Explore</h2>
+            </div> 
+
+            <div id="headerpredict" class="topmenubox">
+                <a href=""><img src="./img/circle.jpg" alt="Predict"></a>
+                <h2>Predict</h2>
+            </div>
+        </div>
+
+        <div id="explorecontainer">           
+
+            <div id="menu">
+
+                <div id="moviesearch" class="menubox">
+                    <img class="steps" src="{% static 'img/explore/1.png' %}" alt="1">
+                    <h1 class="steps"> Choose a movie</h1>
+                    <div class="movie">
+                        <div class="photo">
+                            <img style="max-height:4em;max-width:4em"
+                                 src="{% static 'img/explore/questionmark.png' %}"
+                                 alt="Titanic"/>
+                        </div>
+                        <p><input id="movieinput" type="text"
+                                  name="actorname" value=" Enter a movie name..." size="21"></p>
+
+                    </div>
+                </div>
+
+
+                <div class="menubox" style="background:#adadad">
+                    <img class="steps" src="{% static 'img/explore/3.png' %}" alt="3">
+                    <h1 class="steps">Filters</h1>  
+                    <div id="actors" class="menubox">
+
+                        <h2>Actors / Director</h2>                  
+                        <form>
+                            <p class="director">
+                                <input type="checkbox" name="director" value="director">
+                                <span class="name">Woody Allen</span>           
+                            </p> 
+                        </form>
+
+                        <form>
+                            <p class="actor">
+                                <input type="checkbox" name="actor" value="actor1">
+                                <span class="name">Cate Blanchett</span>           
+                            </p>
+                            <p class="actor">
+                                <input type="checkbox" name="actor" value="actor2">
+                                <span class="name">Alec Baldwin</span>           
+                            </p>
+                            <p class="actor">
+                                <input type="checkbox" name="actor" value="actor3">
+                                <span class="name">Sally Hawkins</span>           
+                            </p>
+                        </form>                    
+                    </div>                                    
+
+                    <div id="genres" class="menubox">
+                        <h2>Genre</h2>                   
+                        <form>
+                            <p class="genre">
+                                <input type="checkbox" name="genre" value="genre1">
+                                <span class="name">Comedy</span>           
+                            </p>
+                            <p class="genre">
+                                <input type="checkbox" name="genre" value="genre2">
+                                <span class="name">Thriller</span>           
+                            </p>
+                            <p class="genre">
+                                <input type="checkbox" name="genre" value="genre3">
+                                <span class="name">Drama</span>           
+                            </p>
+                        </form>                                                    
+
+                    </div>               
+
+                    <div id="budget" class="menubox">
+                        <h2>Budget</h2>                      
+                        <label for="amount" ></label>
+                        <input type="text" id="amount" style="background:transparent;border: 0; color: #f6931f; font-weight: bold;" />        
+                        <div id="slider-range" >                        
+                        </div>
+                    </div>
+
+                    <div id="reviews" class="menubox">
+                        <h2>Reviews</h2>
+
+                        <ul class="nostyle" id="examples">
+                            <li id="ex_1b">
+
+                                <div class="rateit bigstars"  id="rateit" data-rateit-starwidth="32" data-rateit-starheight="32">
+                                </div>
+
+
+
+                                <div>
+                                    <span id="value5"></span>
+                                    <span id="hover5"></span>
+                                </div>
+
+                                <script type="text/javascript">
+                                    $("#rateit").bind('rated', function(event, value) {
+                                        $('#value5').text('You\'ve rated it: ' + value);
+                                    });
+
+                                </script>  
+
+                            </li>
+
+                        </ul>
+
+
+    <script src="{% static 'javascript/explore/jquery.rateit.js' %}" type="text/javascript"></script>
+    <script>
+    //build toc
+    var toc = [];
+    $('#examples > li').each(function (i, e) {
+
+
+        if (i > 0)
+            toc.push(', ');
+        toc.push('<a href="#')
+        toc.push(e.id)
+        toc.push('">')
+        var title = $(e).find('h3:first').text();
+        title = title.substring(title.indexOf(')') + 2);
+        toc.push(title);
+        toc.push('</a>');
+
+    });
+
+    $('#toc').html(toc.join(''));
+
+    </script>
+
+                        
+
+                </div>
+                </div>
+            </div>
+
+            <div id="distancecriteria">
+                <img class="steps" src="{% static 'img/explore/2.png' %}" alt="2">
+                <div class="intro">
+                        <h1 class="steps">Choose your distance criteria</h1>
+                </div>
+                <div id="filters">
+
+                    
+                    <form>                       
+                        <div class="filter">
+                            <p>Genre</p>
+                            <input id="genre" type="image" alt="Genre" 
+                                   src="{% static 'img/explore/genre.png' %}">
+                            <figcaption class="season"><input type="checkbox" name="genre" value="genre" disabled></figcaption>
+                        </div>
+
+                        <div class="filter">
+                            <p>People</p>
+                            <input id="genre" type="image" alt="Actors" 
+                                   src="{% static 'img/explore/actors.png' %}">
+                            <figcaption class="season"><input type="checkbox" name="actors" value="actors" disabled></figcaption>
+                        </div>
+
+                        <div class="filter">
+                            <p>Budget</p>
+                            <input id="genre" type="image" alt="Budget" 
+                                   src="{% static 'img/explore/budget.png' %}">
+                            <figcaption class="season"><input type="checkbox" name="budget" value="budget" disabled></figcaption>
+                        </div>
+
+                        <div class="filter">
+                            <p>Reviews</p>
+                            <input id="genre" type="image" alt="Reviews" 
+                                   src="{% static 'img/explore/reviews.png' %}">
+                            <figcaption class="season"><input type="checkbox" name="reviews" value="reviews" disabled></figcaption>
+                        </div>                                                
+                    </form>
+                </div>                
+            </div>
+
+            <div id="results">
+                 <div id="cadreResultats">
+		</div>
+                <!--<div id="coverflow">                    
+                    <img src="img/coverflow.jpg" alt="Coverflow">
+                </div>
+
+                <div id="graphic">
+                    <h1>Graphic</h1>
+                </div>
+
+
+                <div id="filmdesc">
+                    <h1>Blue Jasmine</h1>
+                    <p><span>Drama</span> - <span>2013</span></p>
+                    <p><span>Director : </span><span>Woody Allen</span></p>
+                    <p><span>Actors : </span><span>Cate Blanchett, Alec Baldwin, Sally Hawkins</span></p>
+                   
+                </div>-->
+            </div>
+
+
+
+        </div>
+
+        <div id="footer">
+            <h3>Copyright Pesto WebMining 2013</h3>
+        </div>
+
+
+    </body>
+</html>

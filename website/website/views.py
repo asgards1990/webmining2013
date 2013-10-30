@@ -7,3 +7,7 @@ def home(request):
 def prediction(request):
     form = forms.PredictionForm()
     return render(request, 'prediction_menu.html', {'form': form})
+	
+def explore(request):
+    return render(request, 'explore_menu.html')
+
