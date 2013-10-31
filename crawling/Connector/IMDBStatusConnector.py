@@ -291,6 +291,22 @@ class IMDBFilmStatusConnector:
             self.logger.debug("-> Film status modified")
             return True
 
+    def setPosterStatus(self, imdb_id, status):
+        self.logger.debug("Set the Poster status (Film Image) for IMDB ID {0} to {1} in the database".format(imdb_id, status))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        s.film_image = status
+
+        try:
+            s.save()
+        except Exception as e:
+            self.logger.warning("-> The film status couldn't be saved")
+            self.logger.warning("-> Error: {}".format(e))
+            return False
+        else:
+            self.logger.debug("-> Film status modified")
+            return True
+
 ####################################################################
 
 class IMDBPersonStatusConnector:

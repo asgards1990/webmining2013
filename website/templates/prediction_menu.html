@@ -6,7 +6,21 @@
     <script src="{% static 'javascript/slider.js' %}"></script>
 
     <link rel="stylesheet" href="{% static 'css/accordion.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/square/red.css' %}"/>
     <script src="{% static 'javascript/accordion.js' %}"></script>
+    <script src="{% static 'javascript/jquery.icheck.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#release input').iCheck({
+                checkboxClass: 'icheckbox_square-red',
+                radioClass: 'iradio_square-red',
+                //increaseArea: '20%' // optional
+            });
+        });
+    </script>
+
+
     {% include 'autocomplete_light/static.html' %}
     {{ form.media }}
 {% endblock %}
@@ -75,11 +89,16 @@
             <!-- Genres -->
     
             <div id="genre" class="menubox">
-                <h1>Genre</h1>
+                <h1>Genres</h1>
                 <br/>
                 <div id="genresearch">
                     {% for field in form.visible_fields %}
-                        {% if field.name == 'genre' %}
+                        {% if field.name == 'genre1' %}
+                            {{ field }}
+                        {% endif %}
+                    {% endfor %}
+                    {% for field in form.visible_fields %}
+                        {% if field.name == 'genre2' %}
                             {{ field }}
                         {% endif %}
                     {% endfor %}
@@ -140,15 +159,15 @@
                 <h1>Release Date</h1>
                 <br/>
                 <div class="seasonbox">
-                    <img class="season" src="{% static 'img/prediction/season.gif' %}" alt="Winter">
+                    <img class="season" src="{% static 'img/prediction/SpringRed.jpg' %}" alt="Spring">
                     <figcaption class="season">
-                        <label for="spring">Spring</label>
                         <input type="radio" name="radio" id="spring" />
+                        <label for="spring">Spring</label>
                     </figcaption>
                 </div>
                 
                 <div class="seasonbox">
-                    <img class="season" src="{% static 'img/prediction/season.gif' %}" alt="Winter">
+                    <img class="season" src="{% static 'img/prediction/SummerRed.jpg' %}" alt="Summer">
                     <figcaption class="season">
                         <label for="summer">Summer</label>
                         <input type="radio" name="radio" id="summer" />
@@ -156,7 +175,7 @@
                 </div>
                 
                 <div class="seasonbox">
-                    <img class="season" src="{% static 'img/prediction/season.gif' %}" alt="Winter">
+                    <img class="season" src="{% static 'img/prediction/AutumnRed.jpg' %}" alt="Fall">
                     <figcaption class="season">
                         <label for="fall">Fall</label>
                         <input type="radio" name="radio" id="fall" />
@@ -164,7 +183,7 @@
                 </div>
                 
                 <div class="seasonbox">
-                    <img class="season" src="{% static 'img/prediction/season.gif' %}" alt="Winter">
+                    <img class="season" src="{% static 'img/prediction/WinterRed.jpg' %}" alt="Winter">
                     <figcaption class="season">
                         <label for="winter">Winter</label>
                         <input type="radio" name="radio" id="winter" />

@@ -10,9 +10,10 @@ class GKSearch (models.Model):
     
 class Prediction (models.Model):
     actors = models.ManyToManyField(Person,related_name='actor')
-    genre = models.ForeignKey(Genre)
-    keyword=models.ManyToManyField(Keyword)
-    director = models.ManyToManyField(Person,related_name='director')
+    genre1 = models.ForeignKey(Genre,related_name='genre1')
+    genre2 = models.ForeignKey(Genre,related_name='genre2')
+    keyword = models.ManyToManyField(Keyword)
+    director = models.ForeignKey(Person,related_name='director')
 
     
     
