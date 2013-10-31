@@ -103,7 +103,7 @@ def genReviews(iter_films):
                 d[review.journal.name] = review.grade
             yield d
 
-def genActors(iter_films):
+def genActorsTuples(iter_films):
     while True:
         film = next(iter_films)
 	aws = ActorWeight.objects.filter(film=film)
@@ -113,5 +113,17 @@ def genActors(iter_films):
             d = {}
             for aw in aws.all():
                 d[aw.actor.imdb_id+'_'+str(aw.rank)+'_'+str(aw.star)] = 1
+            yield d
+
+def genActors(iter_films):
+    while True:
+        film = next(iter_films)
+	aws = ActorWeight.objects.filter(film=film)
+        if aws.count() == 0:
+            yield {'_nothing' : 1}
+        else:
+            d = {}
+            for aw in aws.all():
+                d[aw.actor.imdb_id] = 1
             yield d
 
