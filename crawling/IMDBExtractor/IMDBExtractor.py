@@ -321,8 +321,8 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
             f.english_title=self.english_title
             f.release_date=self.release_date
             f.runtime=self.runtime
-            f.budget=(lambda x : x.replace(',','') if x != None else None)(self.budget)
-            f.box_office=(lambda x : x.replace(',','') if x != None else None)(self.box_office)
+            f.budget=(lambda x : x if x != None else None)(self.budget)
+            f.box_office=(lambda x : x if x != None else None)(self.box_office)
             f.imdb_user_rating=self.imdb_user_rating
             f.imdb_nb_user_ratings = (lambda x : x.replace(',','') if x != None else None)(self.imdb_nb_raters)
             f.imdb_nb_user_reviews= (lambda x : x.split(' ')[0].replace(',','') if x != None else None)( self.imdb_nb_user_review)
@@ -762,22 +762,25 @@ def hasWon(status):
 def convertCurrency(val):
    """Convert to $ (based on x-rates)"""
    try:
-      logger.debug("tentative de conversion de la devise {}".format(val))
       val = val.replace(",","").replace(" ","")
       if val[0] == "$":
+         logger.debug("Montant déjà proposé en dollars")
          return val.split("$")[1]
-      elif val[0] == "£":
-        return int(int(val.split("£")[1])*0,0.623284)
-      elif val[0] == "€" :
-        return int(int(val.split("€")[1])*0,727236)
-      elif val[:6]=='\u20ac':
-        return int(int(val[6:])*0,727236)
+      elif val[0] == u'\xa3':
+        logger.debug("Conversion du montant livres vers dollars")
+        return int(int(val[1:])*0.623284)
+      elif val[0] == u'\u20ac' :
+        logger.debug("Conversion du montant euros vers dollars")
+        return int(int(val[1:])*0.727236)
       elif len(val)>3 and val[:3]=="JPY":
+        logger.debug("Conversion du montant euros vers dollars")
         return int(int(val.split("JPY")[1])*98.381090)
       elif len(val)>3 and val[:3]=="FRF":
-        return int(int(val.split("FRF")[1])*4,770356)
+       logger.debug("Conversion du montant francs vers dollars")
+       return int(int(val.split("FRF")[1])*4.770356)
       else:
+         logger.debug("Devise du budget non reconnue")
          return None
    except Exception as e:
-      logger.error("Impossible de convertir {} : Error : {} ".format(val,e))
+      logger.error("Impossible de convertir la devise : Error : {} ".format(val,e))
 
