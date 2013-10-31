@@ -17,6 +17,10 @@ import argparse
 
 #########################
 
+
+##########################
+
+
 ## Options Ligne de commande
 parser = argparse.ArgumentParser()
 
@@ -60,7 +64,7 @@ if initConfig.args.imdb_company_downloader:
 
 ###############
 if initConfig.args.imdb_extractor:
+   logger.info("Lancement de l'extracteur IMDB")
    import UserAgent.userAgent
-   import IMDBExtractor.IMDBExtractor
-
+   import FilmExtractor.IMDBExtractor_init 
 
