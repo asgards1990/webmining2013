@@ -127,7 +127,7 @@ class getIMDBPerson(threading.Thread):
              time_to_sleep = 0
 
              for person_id in person_id_tab:
-                PersonExtractor.IMDB_Extractor.IMDB_PersonExtractor(person_id)
+                FilmExtractor.IMDB_Extractor.IMDB_PersonExtractor(person_id)
 
 class getIMDBCompany(threading.Thread):
     def __init__(self, nom = 'getIMDBCompany'):
@@ -144,7 +144,7 @@ class getIMDBCompany(threading.Thread):
           else:
              time_to_sleep = 0
              for company_id in company_id_tab:
-                CompanyExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
+                FilmExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
 
 
 IMDB_FILM_EXTRACTOR = getIMDBFilm()
