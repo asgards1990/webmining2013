@@ -5,6 +5,9 @@ import completer as cplt
 import regression as rgrs
 import classification as clsf
 import pylab as pl
+import sklearn
+from matplotlib.pyplot import *
+from sklearn.feature_extraction import DictVectorizer
 
 ### SCIKITLEARN ###########
 
@@ -17,29 +20,34 @@ films = flt.filter1()
 X = []
 feature_names = []
 
-for name, fun in [('budget', getBudgetFeatures2),
-            ('metacritic', getMetacriticScoreFeatures2),
-            ('season', getSeasonFeatures2),
-            ('runtime', getRuntimeFeatures2),
+for name, fun in [('budget', genBudget),
+            ('metacritic', genMetacriticScore),
+            ('season', genSeason),
+            ('runtime', genRuntime),
             #('countries', getCountriesFeatures),
-            ('imdb_user_ratings', getImdbUserRatingFeatures2),
-            ('imdb_nb_user_reviews', getImdbNbUserReviewsFeatures2),
-            ('imdb_nb_reviews_features', getImdbNbReviewsFeatures2),
-            ('imdb_nb_user_ratings', getImdbNbUserRatingsFeatures2),
-            ('genre', getGenresFeatures)]:
-    this_vec = fun(films)
-    feature_names += this_vec.get_feature_names()
-    X.append(this_vec.toarray())
+            ('imdb_user_ratings', genImdbUserRating),
+            ('imdb_nb_user_reviews', genImdbNbUserReviews),
+            ('imdb_nb_reviews_features', genImdbNbReviews),
+            ('imdb_nb_user_ratings', genImdbNbUserRatings),
+            ('keywords', genKeywords),
+            #('genre', getGenresFeatures)
+		]:
+    this_vec = DictVectorizer()
+    X0 = fun(films.iterator()) #generator
+    #feature_names += this_vec.get_feature_names()
+    X.append(this_vec.fit_transform(X0).toarray())
 
-y = getBoxOfficeFeatures2(films)
+this_vec = DictVectorizer()
+X0 = genBoxOffice(films.iterator())
+y = this_vec.fit_transform(X0).toarray()
 
 # Data treatment
 
 y = y.ravel() # make it a vector
 X = np.concatenate(X,axis=1)
 X[np.isnan(X)] = -1 # replace NaN with -1 for missing values
-# hist(log(y),20) # print log(y) distribution
 y_log = np.log(y)
+# hist(y_log,20) # print log(y) distribution
 
 ### CLASSIFICATION #######################################
 thresh = np.median(y_log)
@@ -49,7 +57,7 @@ print scores_class.mean()
 
 ### REGRESSION ###########################################
 scores = rgrs.getRandomForestRegressorCVScore(X,y_log)
-print scores.mean(), 'chance level : %s' % y_bin.mean()
+print scores.mean()
 
 #yy = pipeline.fit(X, y_log).predict(X[1::2])
 

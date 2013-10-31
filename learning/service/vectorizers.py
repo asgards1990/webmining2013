@@ -3,7 +3,7 @@ from sklearn.feature_extraction import DictVectorizer
 from cinema.models import *
 import datetime
 
-def genKeywords(iter_films):
+def genKeywordsOld(iter_films):
     while True:
         film = next(iter_films)
         if film.keywords.count() == 0:
@@ -83,40 +83,45 @@ def getPrizesFeatures(films):
     return vecX.fit_transform(X0).toarray()
 
 
+def genNullableFeature(iter_films,feature_name):
+    while True:
+        film = next(iter_films)
+	yield {feature_name:getattr(film,feature_name)}
+def genRuntime(iter_films):
+    return genNullableFeature(iter_films,'runtime')
+def genBudget(iter_films):
+    return genNullableFeature(iter_films,'budget')
+def genMetacriticScore(iter_films):
+    return genNullableFeature(iter_films,'metacritic_score')
+def genBoxOffice(iter_films):
+    return genNullableFeature(iter_films,'box_office')
+def genImdbUserRating(iter_films):
+    return genNullableFeature(iter_films,'imdb_user_rating')
+def genImdbNbUserRatings(iter_films):
+    return genNullableFeature(iter_films,'imdb_nb_user_ratings')
+def genImdbNbUserReviews(iter_films):
+    return genNullableFeature(iter_films,'imdb_nb_user_reviews')
+def genImdbNbReviews(iter_films):
+    return genNullableFeature(iter_films,'imdb_nb_reviews')
+def genSeason(iter_films):
+    while True:
+        film = next(iter_films)
+	yield {'season':getSeason(film.release_date)}
 
-
-def getFeature(films,feature_name,dtype):
-    X0 = []
-    for film in films:
-        X0.append({feature_name:getattr(film,feature_name)})
-    vecX = DictVectorizer(dtype=dtype)
-    vecX.fit_transform(X0)
-    return vecX
-def getRuntimeFeatures2(films):
-    return getFeature(films,'runtime',int)
-def getBudgetFeatures2(films):
-    return getFeature(films,'budget',int)
-def getMetacriticScoreFeatures2(films):
-    return getFeature(films,'metacritic_score', int)
-def getBoxOfficeFeatures2(films):
-    return getFeature(films,'box_office', int)
-def getImdbUserRatingFeatures2(films):
-    return getFeature(films,'imdb_user_rating', np.float32)
-def getImdbNbUserRatingsFeatures2(films):
-    return getFeature(films,'imdb_nb_user_ratings', int)
-def getImdbNbUserReviewsFeatures2(films):
-    return getFeature(films,'imdb_nb_user_reviews', int)
-def getImdbNbReviewsFeatures2(films):
-    return getFeature(films,'imdb_nb_reviews', int)
-def getSeasonFeatures2(films):
-    X0 = []
-    for film in films:
-        X0.append({'season':getSeason(film.release_date)})
-    vecX = DictVectorizer(dtype=int)
-    vecX.fit_transform(X0)
-    return vecX
-
-
+def genKeywords(iter_films):
+    return genFeature(iter_films,'keywords', 'word')
+def genFeature(iter_films,feature_name, feature_content_name):
+    while True:
+        film = next(iter_films)
+	attr = getattr(film,feature_name)
+        if attr.count() == 0:
+            yield {'_nothing' : 1}
+        else:
+            d = {}
+            for item in attr.all():
+		content = getattr(item, feature_content_name)
+                d[content] = 1
+            yield d
 
 
 
