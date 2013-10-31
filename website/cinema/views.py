@@ -1,8 +1,10 @@
 from django.shortcuts import render
-import autocomplete_app.forms as forms
+from autocomplete_app.forms import MultipleActorSearchForm, FilmSearchForm
+from django.http import HttpResponse
 from cinema.forms import HomeForm, ResultsForm, PredictionForm
 from cinema.models import *
 from django.db.models import Q
+from django.utils import simplejson
 
 # Choix du formulaire
 def formchoice(persontype,request=0) :
@@ -104,8 +106,8 @@ def predictionForm(request):
 
     return render(request, 'prediction.html',locals())
 
-def searchresults(request,nomFilm):
-   for film in Film.objects.get(Q(original_title=nomFilm) | Q(english_title=nomFilm)):
+def searchresults(request, nomFilm):
+    for film in Film.objects.get(Q(original_title=nomFilm) | Q(english_title=nomFilm)):
         imdb_id=film.imdb_id
         actors=film.actors
         genres=film.genres
@@ -121,3 +123,20 @@ def searchresults(request,nomFilm):
     
 
         return render(request, 'prediction.html',locals())
+
+def keywordGenre1(request):
+    if request.method == 'POST':
+        genre_name = request.POST.get('genre')
+    else:
+        return HttpResponse("Erreur")
+
+    try:
+        genre = Genre.objects.get(name = genre_name)
+    except:
+        return HttpReponse("Genre not found")
+    
+    tab=list()
+    for result in GenrePopularKeyword.objects.filter(genre=genre).order_by('occurences')[:10] :
+        tab.append(result.keyword)
+
+    return HttpResponse(simplejson.dumps(tab), mimetype='application/json')
