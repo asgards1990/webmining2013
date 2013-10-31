@@ -37,11 +37,11 @@
     }
     .icheckbox_line-red.checked.hover,
     .iradio_line-red.hover {
-        background: #D51C21;
+        background: #a0383a;
     }
     .icheckbox_line-red.checked,
     .iradio_line-red.checked {
-        background: #a0383a;
+        background: #d51c21;
     }
         .icheckbox_line-red.checked .icheck_line-icon,
         .iradio_line-red.checked .icheck_line-icon {

@@ -1,0 +1,7 @@
+engine = 'django.db.backends.mysql'
+name = 'test1'
+user = 'root'
+passwd='admin'
+host=''
+port=''
+secret_key='dsybdp6w@(7g8d5o*%l=$q!k@%&ysf^qx5pmprtz-087+ch()@'

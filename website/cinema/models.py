@@ -105,12 +105,12 @@ class  Film (models.Model):
     country = models.ManyToManyField(Country, related_name="films")
     genres = models.ManyToManyField(Genre, related_name="films")
     keywords = models.ManyToManyField(Keyword, related_name="films")
-    production_company = models.ManyToManyField(ProductionCompany, related_name="films")
+    production_companies = models.ManyToManyField(ProductionCompany, related_name="films")
     directors = models.ManyToManyField(Person, related_name='films_from_director')
     writers = models.ManyToManyField(Person, related_name='films_from_writer')
     actors = models.ManyToManyField(Person, through='ActorWeight', related_name='films_from_actor')
     def __unicode__(self):
-        return u'%s %s' % (self.original_title, self.imdb_id)
+        return u'%s' % (self.english_title)
     class Meta:
         ordering = ['english_title', 'release_date']
 
