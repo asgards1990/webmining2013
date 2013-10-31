@@ -2,6 +2,8 @@ from django.shortcuts import render
 from autocomplete_app.forms import MultipleActorSearchForm, FilmSearchForm
 from django.http import HttpResponse
 from cinema.forms import HomeForm, ResultsForm, PredictionForm
+from cinema.models import *
+from django.db.models import Q
 
 def filmsearch(request):
     if request.method == 'POST':
@@ -73,3 +75,21 @@ def predictionForm(request):
             form = PredictionForm()
 
     return render(request, 'prediction.html',locals())
+
+def searchresults(request,nomFilm):
+   for film in Film.objects.get(Q(original_title=nomFilm) | Q(english_title=nomFilm)):
+        imdb_id=film.imdb_id
+        actors=film.actors
+        genres=film.genres
+        keywords=film.keywords
+        writers=film.writers
+        image_url=film.image_url
+        ratings=film.imdb_nb_user_ratings
+        reviews=film.imdb_nb_user_reviews
+        pitch=film.imdb_summary
+        resume=film.imdb_storyline
+        budget=film.budget
+        box_office=film.box_office
+    
+
+        return render(request, 'prediction.html',locals())
