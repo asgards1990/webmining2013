@@ -25,18 +25,25 @@
     </script>
 
     <script>
+            var valueStar;
+            var budgetMin;
+            var budgetMax;
+        </script>
+
+    <script>
         $(function () {
             $("#slider-range").slider({
                 range: true,
                 min: 0,
                 max: 300,
-                values: [5, 250],
+                values: [30, 250],
                 slide: function (event, ui) {
-                    $("#amount").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                    $("#amount").val("$" + ui.values[ 0 ] + "M - $" + ui.values[ 1 ]+"M");
+                    budgetMin=ui.values[ 0 ];budgetMax=ui.values[ 1 ];
                 }
             });
             $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-                    " - $" + $("#slider-range").slider("values", 1));
+                    "M - $" + $("#slider-range").slider("values", 1)+"M");
         });
     </script>
 
@@ -164,9 +171,10 @@
                             <span id="hover5"></span>
                         </div>
 
-                        <script type="text/javascript">
+                        <script type=";text/javascript">
                             $("#rateit").bind('rated', function (event, value) {
                                 $('#value5').text('You\'ve rated it: ' + value);
+                                valueStar=value;
                             });
 
                         </script>

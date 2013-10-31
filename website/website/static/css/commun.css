@@ -100,6 +100,7 @@ p{
     min-width:980px;
     max-width:1920px;
     margin:0 auto;
+    clear:both;
 }
 
 #footer h3 {
