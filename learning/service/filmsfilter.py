@@ -19,5 +19,5 @@ def filter2(): #like filter1 but returns 100 films, useful for tests
             film.imdb_nb_user_reviews=0
         if film.imdb_nb_reviews==None:
             film.imdb_nb_reviews=0
-    print('Nb of films after cleaning : ' + str(films.count()) + '. Selected ' + str(float(films.count())/Film.objects.count()) + ' %.')
+    print('Nb of films after cleaning : ' + str(films.count()) + '. Selected ' + str(100*float(films.count())/Film.objects.count()) + ' %.')
     return films
