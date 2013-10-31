@@ -1,4 +1,5 @@
 from cinema.models import *
+import logging
 
 # def addOccurence(genre, keyword):
     # result = GenrePopularKeyword.objects.filter(genre=genre, keyword=keyword)
@@ -16,11 +17,13 @@ from cinema.models import *
         # for film_keyword in film_keywords:
             # addOccurence(film_genre,film_keyword)
 
-for genre in Genre.objects.all():
-	for keyword in Keyword.objects.all():
+for keyword in Keyword.objects.all():
+	print(keyword)
+	for genre in Genre.objects.all():
 		try:
 			field = GenrePopularKeyword.objects.get(genre = genre, keyword = keyword)
 		except GenrePopularKeyword.DoesNotExist:
 			field = GenrePopularKeyword.objects.create(genre=genre, keyword=keyword, occurences=0)
 		field.occurences = Film.objects.filter(genres = genre).filter(keywords = keyword).count()
 		field.save()
+	
