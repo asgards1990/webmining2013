@@ -19,3 +19,5 @@ urlpatterns += patterns('website.views',
 )
 
 urlpatterns += staticfiles_urlpatterns()
+
+urlpatterns += patterns('', url(r'^cinema/keywordGenre/','cinema.views.keywordGenre1'))

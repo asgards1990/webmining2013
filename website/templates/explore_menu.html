@@ -13,9 +13,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/explore.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/rateit.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/line/red.css' %}"/>
-
+    <link rel="stylesheet" href="{% static 'css/accordion.css' %}">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-
+    <script src="{% static 'javascript/accordion.js' %}"></script>
     <script type="text/javascript" src="{% static 'javascript/explore/moviesearch.js' %}"></script>
     <script src="{% static 'javascript/jquery.icheck.js' %}"></script>
     <script>
@@ -25,18 +25,25 @@
     </script>
 
     <script>
+            var valueStar;
+            var budgetMin;
+            var budgetMax;
+        </script>
+
+    <script>
         $(function () {
             $("#slider-range").slider({
                 range: true,
                 min: 0,
                 max: 300,
-                values: [5, 250],
+                values: [30, 250],
                 slide: function (event, ui) {
-                    $("#amount").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                    $("#amount").val("$" + ui.values[ 0 ] + "M - $" + ui.values[ 1 ]+"M");
+                    budgetMin=ui.values[ 0 ];budgetMax=ui.values[ 1 ];
                 }
             });
             $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-                    " - $" + $("#slider-range").slider("values", 1));
+                    "M - $" + $("#slider-range").slider("values", 1)+"M");
         });
     </script>
 
@@ -63,6 +70,7 @@
 
 {% block explore_menu %}
 
+
     <div id="menu">
 
         <div id="moviesearch" class="menubox">
@@ -82,91 +90,112 @@
             </div>
         </div>
 
-
         <div class="menubox" style="background:#adadad">
-            <img class="steps" src="{% static 'img/explore/3.png' %}" alt="3">
 
-            <h1 class="steps">Filters</h1>
+                <img class="steps" src="{% static 'img/explore/3.png' %}" alt="3">
+                <h1 class="steps">Filters</h1>
 
-            <div id="actors" class="menubox">
+        <ul class="menu">
+		<li id="actors"><a href="#">Actors / Director <span>4</span></a>
+			<ul>
+                    <form>
+				<li class="listactor">
+                            <p class="director">
+                            <input type="checkbox" name="director" value="director">
+                            <span class="name">Woody Allen</span>
+                            </p>
+                        </li>
 
-                <h2>Actors / Director</h2>
+				<li class="listactor">
+                            <p class="actor">
+                            <input type="checkbox" name="actor" value="actor1">
+                            <span class="name">Cate Blanchett</span>
+                            </p>                       
+                        </li>
 
-                <form>
-                    <p class="director">
-                        <input type="checkbox" name="director" value="director">
-                        <span class="name">Woody Alffffffffffffffffffffffffffffffffffffffffffffffffffflen</span>
-                    </p>
-                </form>
+				<li class="listactor">
+                            <p class="actor">
+                            <input type="checkbox" name="actor" value="actor2">
+                            <span class="name">Alec Baldwin</span>
+                            </p>
+                        </li>
 
-                <form>
-                    <p class="actor">
-                        <input type="checkbox" name="actor" value="actor1">
-                        <span class="name">Cate Blanchett</span>
-                    </p>
+                        <li class="listactor">
+                            <p class="actor">
+                            <input type="checkbox" name="actor" value="actor3">
+                            <span class="name">Sally Hawkins</span>
+                            </p>
+                        </li>
 
-                    <p class="actor">
-                        <input type="checkbox" name="actor" value="actor2">
-                        <span class="name">Alec Baldwin</span>
-                    </p>
+                    </form>
+			</ul>
+		</li>
 
-                    <p class="actor">
-                        <input type="checkbox" name="actor" value="actor3">
-                        <span class="name">Sally Hawkins</span>
-                    </p>
-                </form>
-            </div>
+		<li id="genres"><a href="#">Genre<span>3</span></a>
+			<ul>
+                    <form>
+				<li class="subitem1">   
+                            <p class="genre">
+                                <input type="checkbox" name="genre" value="genre1">
+                                <span class="name">Comedy</span>
+                            </p>
+                        </li>
+                        <li class="subitem2"> 
+                            <p class="genre">
+                                <input type="checkbox" name="genre" value="genre2">
+                                <span class="name">Thriller</span>
+                            </p>
+                        </li>
+                        <li class="subitem2"> 
+                            <p class="genre">
+                                <input type="checkbox" name="genre" value="genre3">
+                                <span class="name">Drama</span>
+                            </p>   
+                        </li>
+                    </form>
+			</ul>
+		</li>
 
-            <div id="genres" class="menubox">
-                <h2>Genre</h2>
-
-                <form>
-                    <p class="genre">
-                        <input type="checkbox" name="genre" value="genre1">
-                        <span class="name">Comedy</span>
-                    </p>
-
-                    <p class="genre">
-                        <input type="checkbox" name="genre" value="genre2">
-                        <span class="name">Thriller</span>
-                    </p>
-
-                    <p class="genre">
-                        <input type="checkbox" name="genre" value="genre3">
-                        <span class="name">Drama</span>
-                    </p>
-                </form>
-
-            </div>
-
-            <div id="budget" class="menubox">
-                <h2>Budget</h2>
-                <label for="amount"></label>
-                <input type="text" id="amount"
-                       style="background:transparent;border: 0; color: #f6931f; font-weight: bold;"/>
-
-                <div id="slider-range">
-                </div>
-            </div>
-
-            <div id="reviews" class="menubox">
-                <h2>Reviews</h2>
-
-                <ul class="nostyle" id="examples">
-                    <li id="ex_1b">
-
+		<li id="budget"><a href="#">Budget</a>
+			<ul>
+				<li class="listbudget">
+                        <label for="amount"></label>
+                        <input type="text" id="amount" style="background:transparent;border: 0; font-size:0.9em; color: #f6931f; font-weight: bold;"/>
+                        <div id="slider-range" style="background-color:white;">
+                        </div>
+                        </li>
+			</ul>
+		</li>
+		<li id="reviews"><a href="#">Reviews</a>
+			<ul>
+			<li class="listreviews">
+                    <a href="#">
+                        <ul class="nostyle" id="examples">
+                        <li id="ex_1b">
                         <div class="rateit bigstars" id="rateit" data-rateit-starwidth="32" data-rateit-starheight="32">
                         </div>
-
-
                         <div>
                             <span id="value5"></span>
                             <span id="hover5"></span>
                         </div>
-
                         <script type="text/javascript">
                             $("#rateit").bind('rated', function (event, value) {
                                 $('#value5').text('You\'ve rated it: ' + value);
+                            });
+                        </script>
+
+                    </li>
+
+                </ul></li>
+			</ul>
+		</li>
+	</ul>
+
+
+                        <script type=";text/javascript">
+                            $("#rateit").bind('rated', function (event, value) {
+                                $('#value5').text('You\'ve rated it: ' + value);
+                                valueStar=value;
                             });
 
                         </script>
