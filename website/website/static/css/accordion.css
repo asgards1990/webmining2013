@@ -91,6 +91,7 @@ ul, ul ul {
 	top: 50%;
 	margin: -.5em 0 0 0;
 }
+
 .item1 > a:before {
 	background-position: 0 0;
 }
@@ -106,6 +107,7 @@ ul, ul ul {
 .item5 > a:before {
 	background-position: -76px 0;
 }
+
 .menu > li > a span {
 	font-size: 0.857em; 
 	display: inline-block;
