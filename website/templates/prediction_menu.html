@@ -89,11 +89,16 @@
             <!-- Genres -->
     
             <div id="genre" class="menubox">
-                <h1>Genre</h1>
+                <h1>Genres</h1>
                 <br/>
                 <div id="genresearch">
                     {% for field in form.visible_fields %}
-                        {% if field.name == 'genre' %}
+                        {% if field.name == 'genre1' %}
+                            {{ field }}
+                        {% endif %}
+                    {% endfor %}
+                    {% for field in form.visible_fields %}
+                        {% if field.name == 'genre2' %}
                             {{ field }}
                         {% endif %}
                     {% endfor %}
