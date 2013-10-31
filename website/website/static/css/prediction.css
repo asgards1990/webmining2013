@@ -1,0 +1,367 @@
+/* Gestion global du container */
+
+#predictioncontainer{
+    width:100%;
+    min-width:980px;
+    max-width:1920px;
+    margin:0 auto;
+    overflow:auto;
+}
+
+
+
+/* menubox acteur */
+
+
+#id_actors-deck > *{
+    display:table;
+    width:100%;
+    height: 4em;
+    table-layout: fixed;
+    padding-bottom:0px;
+    padding-right:0px;
+}
+
+#id_actors-deck > * > *{
+    display:table-cell;
+    vertical-align:middle;
+    height:100%;
+}
+
+#id_actors-deck p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width:70%;
+}
+
+#id_actors-deck p:hover {
+    color:#d51c21;
+}
+
+#id_actors-deck span {
+    background-image:url("/pesto/static/img/croix.png");
+    background-repeat:no-repeat;
+    background-position: center left;
+}
+
+#id_actors-deck span:hover {
+    background-image:url("/pesto/static/img/croix2.png");
+}
+
+#id_actors-deck .photo {
+    width:50px;
+}
+
+/* menubox genre */
+
+#genre .styled-select-genre select {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background: transparent;
+    width: 100%;
+}
+
+#genre .styled-select-genre {
+    float:left;
+    display:inline;
+    width: 40%;   
+    overflow: hidden;
+    margin:0% 5%;
+}
+
+#keywordsdesc {
+    padding:3px;
+    overflow:auto;
+    width:14.5em;
+    border-bottom:1px dashed black;
+    padding-bottom:10px;
+}
+#keywordsdesc .keyword {
+    float:left;
+    vertical-align:middle;
+    border:1px solid grey;
+    border-radius: 5px;
+    padding: .25em;
+    background-color:White;
+    margin:.2em .2em;
+}
+#keywordsdesc .keyword:hover {
+    float:left;
+    background-color:#D6D6D6;
+    vertical-align:middle;
+    border:1px solid grey;
+    border-radius: 5px;
+    padding: .25em;
+    margin:.2em .2em;
+    color: #d51c21;
+}
+
+#keywordsdesc .keyword span.name {
+    display:inline-block;
+    max-width: 11.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+/*#keywordsdesc img.delete {
+    width: 1.2em;
+    vertical-align: middle;
+}*/
+
+.delete img {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top:1px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer; 
+  vertical-align:middle;
+}
+
+.delete {
+    position:relative;
+    vertical-align:middle;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin:1px;
+}
+
+.a { 
+    z-index: 10;
+    opacity: 1;
+}
+
+.b { 
+    z-index: 0;
+}
+
+.keyword:hover .a{
+    opacity: 0;
+    transition-duration: 0.5s;
+}
+
+#keywords #keywordinput {
+    width:15em;
+    height:2.0em;
+    margin-right: 0.3em;
+    vertical-align:middle;
+    margin-top:1em;
+}
+
+#keywords #addkeywordbutton {
+    max-width:1.4em;
+    max-height:1.4em;
+    vertical-align:middle;
+    margin-top:1em;
+}
+
+#keywords #keywordsugg {
+    padding:3px;
+    overflow:auto;
+    width:14.5em;
+
+}
+#keywords #keywordsugg h2 {
+
+}
+
+
+#keywords #keywordsugg p.keyword {
+    float:left;
+    font-size:0.8em;
+    vertical-align:middle;
+    border:1px solid grey; 
+    border-radius: 5px; 
+    padding:0.25em;
+    margin:.2em .2em;
+
+}
+
+#keywords #keywordsugg p.keyword span.name {
+    display:inline-block;   
+    max-width:11.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    vertical-align:middle;   
+}
+
+#keywords #keywordsugg img.add {
+    width:1.2em;
+    vertical-align: middle;
+}
+
+.director { 
+    width: 14.5em; 
+    height: 4em; 
+    display: table;
+    table-layout: fixed;
+    margin:0.5em 0;
+    background-color:white;
+}
+
+.director p {
+    display: table-cell; 
+    vertical-align: middle; 
+    width:9em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.director p:hover{
+    display: table-cell; 
+    vertical-align: middle; 
+    width:9em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #d51c21;
+}
+
+.director .photo {
+    display: table-cell; 
+    vertical-align: middle; 
+    text-align: left;
+    height:4em;
+    width:4em;
+}
+
+.director .deleteicon {
+    display: table-cell; 
+    vertical-align: middle; 
+    text-align: center;
+    height:1.4em;
+    width:1.4em;
+    padding-right:0.4em;
+}
+
+#directorsearch {
+}
+
+#directorinput {
+    width:15em;
+    height:2.0em;
+    margin-right: 0.3em;
+    vertical-align:middle;
+
+}
+
+#adddirectorbutton {      
+    max-width:1.4em;
+    max-height:1.4em;
+    vertical-align:middle;
+}
+
+#slider-range {
+    margin: 10px;
+}
+
+
+#release.menubox:after { /*implementation de ClearFix*/
+    content: " "; 
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+
+}
+
+/* Code de Clearfix
+.clearfix:after {
+   content: " "; 
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}*/
+
+
+#release .seasonbox {
+    width:23%;
+    text-align:center;
+    float:left;
+    margin:0 1%;
+    display:inline-block;
+    text-align:center;
+}
+
+
+.seasonbox label {
+    display:block;
+}
+
+#results {
+    overflow:auto;
+    text-align:center;
+}
+
+#prizes {
+    /*width: 345px;*/
+    width:47%;
+    display:inline-block;
+    height:330px;
+    border:1px dashed blue;
+    margin:50px 1%;
+}
+
+#boxoffice {
+    /*width:240px;*/
+    display:inline-block;
+    width:47%;
+    height:330px;
+    border:1px dashed magenta;
+    margin:50px 1%;
+}
+
+#reviews {
+    /*width:700px;*/
+    display:inline-block;
+    width:90%; 
+    position:relative;
+    height:320px;
+    border: 1px dashed maroon;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#reviews .moreinfo{
+ font-size: 1.1em; 
+ position: absolute;
+ bottom:0; right:0;
+ width: 8%; 
+ height: 1.5em; 
+ padding-top:0.3em; /*permet le centrage vertical*/ 
+ text-align: center;  
+  overflow:auto;
+    border-bottom:2px solid black;
+   background: linear-gradient(rgb(213, 28, 33) 50%, rgb(215,46,28) 50%) repeat scroll 0% 0% transparent;
+    background-color: transparent;
+    background-image: linear-gradient(rgb(213, 28, 33) 0%, rgb(215,46,28) 50%);
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0% 0%;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto auto;
+	border-radius:17px 17px 17px 17px;
+}
+
+#reviews .moreinfo a{
+color: beige;
+}
+
+
+
+
+
+
+
+
+
+

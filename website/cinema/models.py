@@ -54,7 +54,7 @@ class  Person (models.Model):
     first_name = models.CharField(max_length=255, blank=True) #later
     last_name = models.CharField(max_length=255, blank=True) #later
     def __unicode__(self):
-        return u"%s"%(self.name)
+        return u'%s' % (self.name)
     class Meta:
         ordering = ['name']
 
@@ -102,15 +102,15 @@ class  Film (models.Model):
     wikipedia_synopsis = models.TextField(blank=True)
     image_url = models.CharField(blank=True, max_length=255)
     language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
-    country = models.ManyToManyField(Country, blank=True, null=True, related_name="films")
-    genres = models.ManyToManyField(Genre, blank=True, null=True, related_name="films")
-    keywords = models.ManyToManyField(Keyword, blank=True, null=True, related_name="films")
-    production_companies = models.ManyToManyField(ProductionCompany, blank=True, null=True, related_name="films")
-    directors = models.ManyToManyField(Person, blank=True, null=True, related_name='films_from_director')
-    writers = models.ManyToManyField(Person, blank=True, null=True, related_name='films_from_writer')
-    actors = models.ManyToManyField(Person, blank=True, null=True, through='ActorWeight', related_name='films_from_actor')
+    country = models.ManyToManyField(Country, related_name="films")
+    genres = models.ManyToManyField(Genre, related_name="films")
+    keywords = models.ManyToManyField(Keyword, related_name="films")
+    production_companies = models.ManyToManyField(ProductionCompany, related_name="films")
+    directors = models.ManyToManyField(Person, related_name='films_from_director')
+    writers = models.ManyToManyField(Person, related_name='films_from_writer')
+    actors = models.ManyToManyField(Person, through='ActorWeight', related_name='films_from_actor')
     def __unicode__(self):
-        return u"%s"%(self.english_title)
+        return u'%s' % (self.english_title)
     class Meta:
         ordering = ['english_title', 'release_date']
 
