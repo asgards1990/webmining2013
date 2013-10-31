@@ -23,7 +23,7 @@ def getKeywordsFeatures2(films):
 # etre plus precis
 def getSeason(date):
     if not date:
-        return None
+        return 'no-season'
     if date.month in [12, 1, 2]:
         return 'winter'
     if date.month in [3, 4, 5]:
@@ -82,6 +82,47 @@ def getPrizesFeatures(films):
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
 
+
+
+
+def getFeature(films,feature_name,dtype):
+    X0 = []
+    for film in films:
+        X0.append({feature_name:getattr(film,feature_name)})
+    vecX = DictVectorizer(dtype=dtype)
+    vecX.fit_transform(X0)
+    return vecX
+def getRuntimeFeatures2(films):
+    return getFeature(films,'runtime',int)
+def getBudgetFeatures2(films):
+    return getFeature(films,'budget',int)
+def getMetacriticScoreFeatures2(films):
+    return getFeature(films,'metacritic_score', int)
+def getBoxOfficeFeatures2(films):
+    return getFeature(films,'box_office', int)
+def getImdbUserRatingFeatures2(films):
+    return getFeature(films,'imdb_user_rating', np.float32)
+def getImdbNbUserRatingsFeatures2(films):
+    return getFeature(films,'imdb_nb_user_ratings', int)
+def getImdbNbUserReviewsFeatures2(films):
+    return getFeature(films,'imdb_nb_user_reviews', int)
+def getImdbNbReviewsFeatures2(films):
+    return getFeature(films,'imdb_nb_reviews', int)
+def getSeasonFeatures2(films):
+    X0 = []
+    for film in films:
+        X0.append({'season':getSeason(film.release_date)})
+    vecX = DictVectorizer(dtype=int)
+    vecX.fit_transform(X0)
+    return vecX
+
+
+
+
+
+
+
+
 def getSeasonFeatures(films):
     X0 = []
     for film in films:
@@ -92,7 +133,6 @@ def getSeasonFeatures(films):
             X0.append({'no-season':1})
     vecX = DictVectorizer(dtype=int)
     return vecX.fit_transform(X0).toarray()
-
 
 def getRuntimeFeatures(films):
     X0 = []

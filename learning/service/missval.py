@@ -1,71 +1,59 @@
 from cinema.models import Film
 from vectorizers import *
-
+import filmsfilter as flt
+import completer as cplt
 import pylab as pl
 
 ### SCIKITLEARN ###########
 
 import sklearn
 
-from sklearn.preprocessing import Imputer # manage missing values
+#from sklearn.preprocessing import Imputer # manage missing values
 from sklearn.pipeline import Pipeline
-
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
-
 from sklearn.cross_validation import cross_val_score
 
 ############################
-
-def filterFilms():
-    print('Nb of films in DB : ' + str(Film.objects.count()))
-    films = Film.objects.exclude(runtime=None).exclude(genres=None).exclude(country=None).exclude(imdb_user_rating=None).exclude(imdb_nb_user_ratings=None).exclude(box_office=None)
-    for film in films:
-        if film.imdb_nb_user_reviews==None:
-            film.imdb_nb_user_reviews=0
-        if film.imdb_nb_reviews==None:
-            film.imdb_nb_reviews=0
-    print('Nb of films after cleaning : ' + str(films.count()) + '. Selected ' + str(float(films.count())/Film.objects.count()) + ' %.')
-    return films
     
-films = filterFilms()
+films = flt.filter1()
 
-# Creation of features
+# Creation of features and labels
 
 X = []
-features_names = []
+feature_names = []
 
-for name, fun in [('budget', getBudgetFeatures),
-            ('metacritic', getMetacriticScoreFeatures),
-            ('season', getSeasonFeatures),
-            ('runtime', getRuntimeFeatures),
-            ('countries', getCountriesFeatures),
-            ('imdb_user_ratings', getImdbUserRatingFeatures),
-            ('imdb_nb_user_reviews', getImdbNbUserReviewsFeatures),
-            ('imdb_nb_reviews_features', getImdbNbReviewsFeatures),
-            ('imdb_nb_user_ratings', getImdbNbUserRatingsFeatures),
+for name, fun in [('budget', getBudgetFeatures2),
+            ('metacritic', getMetacriticScoreFeatures2),
+            ('season', getSeasonFeatures2),
+            ('runtime', getRuntimeFeatures2),
+            #('countries', getCountriesFeatures),
+            ('imdb_user_ratings', getImdbUserRatingFeatures2),
+            ('imdb_nb_user_reviews', getImdbNbUserReviewsFeatures2),
+            ('imdb_nb_reviews_features', getImdbNbReviewsFeatures2),
+            ('imdb_nb_user_ratings', getImdbNbUserRatingsFeatures2),
             ('genre', getGenresFeatures)]:
-    this_X = fun(films)
-    features_names += ['%s%d' % (name, k) for k in range(this_X.shape[1])]
-    X.append(this_X)
+    this_vec = fun(films)
+    feature_names += this_vec.get_feature_names()
+    X.append(this_vec.toarray())
 
-y = getBoxOfficeFeatures(films)
+y = getBoxOfficeFeatures2(films)
 y = y.ravel()
 
 X = np.concatenate(X,axis=1)
 
 # Imputer to complete missing values
-imputer = Imputer(missing_values=-1)
-
+imputerX = Imputer(missing_values=-1)
 X[np.isnan(X)] = -1
 
 # X = imputer.fit_transform(X) : pour calculer les missing values (mieux en pipeline)
-
 # hist(log(y),20)
 
 y_log = np.log(y)
 
 ### CLASSIFICATION #######################################
+
+print clsf.getRandomForestClassifierScores(X,y_log)
 
 thresh = np.median(y_log)
 
