@@ -61,7 +61,7 @@ critereEnable = false;
 			var element = this.parentNode;
 			var movieinput = document.createElement('input');
 			var newP = document.createElement('p');
-			element.getElementsByTagName("img")[0].src="http://goo.gl/cO7yqA";
+			element.getElementsByTagName("img")[0].src="../pesto/static/img/explore/questionmark.png";
 
 
 			element.removeChild(this);
