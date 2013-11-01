@@ -29,7 +29,6 @@ for genre in Genre.objects.all():
     if index != []:
         obj = lsi[Sparse2Corpus(X[index, :], documents_columns = False)]
         E = corpus2dense(obj, k).transpose()
-        row = np.mean(E, axis = 0)])
         genreMat.append( np.hstack([ [genre.name] , np.mean(E, axis = 0)]) )
     else:
         genreMat.append( np.hstack([ [genre.name] , np.zeros(k) ] ))
