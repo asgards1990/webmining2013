@@ -79,6 +79,14 @@ def genWriters(iter_films):
 def genProductionCompanies(iter_films):
     return genFeature(iter_films,'production_companies', 'imdb_id')
 
+def hashIds(iter_films):
+    d = {}
+    k = 0
+    for film in iter_films:
+        d[film.imdb_id] = k
+        k += 1
+    return d
+
 def genPrizes(iter_films):
     while True:
         film = next(iter_films)
