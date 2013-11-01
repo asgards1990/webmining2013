@@ -1,26 +1,21 @@
 import filmsfilter as flt
+from dimreduce import *
 from vectorizers import *
 from sklearn.feature_extraction import DictVectorizer
-
-films = flt.filter2(10)
-n_clusters = 3
-
-filters = None
-criteria = {'actor_director':False,
-          'budget':True,
-          'review':True,
-          'genre':True}
-nb_results = 5
-film_index = 0
-closest_films = getClosestFilms(films,film_index,nb_results,criteria,filters)
+from sklearn.preprocessing import Imputer
+import numpy as np
 
 def getClosestFilms(index, nb_results, criteria, filters=None):
     # Features (relevant to criteria)
     X_people = [] if criteria['actor_director'] else None #TODO
-    X_budget = DictVectorizer(dtype=int).fit_transform(genBudget(films.iterator())) if criteria['budget'] else None
-    X_review = DictVectorizer(dtype=np.float32).fit_transform(genReviews(films.iterator())) if criteria['review'] else None
-    X_genre = DictVectorizer(dtype=int).fit_transform(genGenres(films.iterator())) if criteria['genre'] else None
-    print X_people, X_budget, X_review, X_genre
+    X_budget = DictVectorizer(dtype=np.float32).fit_transform(genBudget(films.iterator())).toarray() if criteria['budget'] else None
+    X_review = DictVectorizer(dtype=np.float32).fit_transform(genReviews(films.iterator())).toarray() if criteria['review'] else None
+    X_genre = DictVectorizer(dtype=int).fit_transform(genGenres(films.iterator())).toarray() if criteria['genre'] else None
+    X_budget[np.isnan(X_budget)] = -1 # replace NaN with -1 for missing values
+    completer = Imputer(missing_values=-1)
+    completer.fit(X_budget)
+    X_budget = completer.transform(X_budget)
+    #print X_people, X_budget, X_review, X_genre
     # Clustering
     (labels,centroids) = performClustering(n_clusters,criteria) # perform clustering according to criteria
     current_cluster = labels[index] # get cluster of the film we're studying
@@ -55,3 +50,16 @@ def findClosestFilms(indexes, nb_results):
     #indexes is the indexes of films to search in films
     #nb_results is the number of results to return
     return []
+
+
+films = flt.filter2(10)
+n_clusters = 3
+
+filters = None
+criteria = {'actor_director':False,
+          'budget':True,
+          'review':True,
+          'genre':True}
+nb_results = 5
+film_index = 0
+closest_films = getClosestFilms(film_index,nb_results,criteria,filters)
