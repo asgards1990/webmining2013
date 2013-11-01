@@ -39,9 +39,16 @@ p{
 
 #title{
     float:left;
-    margin:15px 0% 0px 5%;
+    margin:5px 0px 5px 30px;
+
+
 }
 
+#title img {
+    max-width:200px;
+    max-height:40px;
+    vertical-align:middle;
+}
 /* Menu du haut*/
 
 #header {
@@ -100,6 +107,7 @@ p{
     min-width:980px;
     max-width:1920px;
     margin:0 auto;
+    clear:both;
 }
 
 #footer h3 {

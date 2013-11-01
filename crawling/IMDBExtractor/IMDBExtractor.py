@@ -162,7 +162,22 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
 
    def extractPoster(self):
       logger.debug("Extract Poster : ")
-      return self.extractor.extractXpathElement('//td[@id="img_primary"]/*/a/img/@src')
+      poster = self.extractor.extractXpathElement('//td[@id="img_primary"]/*/a/img/@src')
+      try:
+         u = urllib.urlopen(poster[0]) 
+         content=u.read()
+         path="{}{}.{}".format(IMDBExtractorConfig.POSTER_PATH,self.id_,poster[0].split(".")[-1])
+         logger.debug("Sauvegarde de l'image {} vers le chemin {}".format(poster[0].split(".")[-1],path))
+         f=open(path,'wb')
+         f.write(content)
+         f.close()
+      except Exception as e:
+         logger.error('Impossible de sauvegarder le poster, Error : {}'.format(e))
+      try:
+        IMDBFilmStatusConnector().setPosterStatus(self.id_,1)
+      except Exception as e:
+         logger.error('Erreur lors du changement de statut "Poster" dans la base : {}'.format(e))
+         
 
    def extractYear(self):
       logger.debug("Extract Year : ")
@@ -266,6 +281,7 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
 
       self.english_title = (lambda x : x[0] if len(x)>0 else None)(self.extractTitle()) 
       self.original_title = (lambda x : x[0] if len(x)>0 else self.english_title)(self.extractOriginalTitle()) 
+      self.extractPoster()
       self.release_date = (lambda x : convertDate(x[0]) if len(x)>0  else None)(self.extractReleaseDate())
       self.runtime =(lambda x : x[0].split(' ')[0].replace(",","") if len(x)>0 else None)(self.extractRuntime())
       try:
@@ -321,8 +337,8 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
             f.english_title=self.english_title
             f.release_date=self.release_date
             f.runtime=self.runtime
-            f.budget=(lambda x : x.replace(',','') if x != None else None)(self.budget)
-            f.box_office=(lambda x : x.replace(',','') if x != None else None)(self.box_office)
+            f.budget=(lambda x : x if x != None else None)(self.budget)
+            f.box_office=(lambda x : x if x != None else None)(self.box_office)
             f.imdb_user_rating=self.imdb_user_rating
             f.imdb_nb_user_ratings = (lambda x : x.replace(',','') if x != None else None)(self.imdb_nb_raters)
             f.imdb_nb_user_reviews= (lambda x : x.split(' ')[0].replace(',','') if x != None else None)( self.imdb_nb_user_review)
@@ -396,7 +412,7 @@ class IMDBExtractor_companyCredits(IMDBFilmExtractor):
             for p in self.producers:
                producer = defineProducer(p.id_)
                if producer:
-                 f.production_company.add(producer)
+                 f.production_companies.add(producer)
             f.save()
 
          except Exception as e:
@@ -762,22 +778,25 @@ def hasWon(status):
 def convertCurrency(val):
    """Convert to $ (based on x-rates)"""
    try:
-      logger.debug("tentative de conversion de la devise {}".format(val))
       val = val.replace(",","").replace(" ","")
       if val[0] == "$":
+         logger.debug("Montant déjà proposé en dollars")
          return val.split("$")[1]
-      elif val[0] == "£":
-        return int(int(val.split("£")[1])*0,0.623284)
-      elif val[0] == "€" :
-        return int(int(val.split("€")[1])*0,727236)
-      elif val[:6]=='\u20ac':
-        return int(int(val[6:])*0,727236)
+      elif val[0] == u'\xa3':
+        logger.debug("Conversion du montant livres vers dollars")
+        return int(int(val[1:])*1.603157)
+      elif val[0] == u'\u20ac' :
+        logger.debug("Conversion du montant euros vers dollars")
+        return int(int(val[1:])*1.360673)
       elif len(val)>3 and val[:3]=="JPY":
-        return int(int(val.split("JPY")[1])*98.381090)
+        logger.debug("Conversion du montant euros vers dollars")
+        return int(int(val.split("JPY")[1])*0.010171)
       elif len(val)>3 and val[:3]=="FRF":
-        return int(int(val.split("FRF")[1])*4,770356)
+        logger.debug("Conversion du montant francs vers dollars")
+        return int(int(val.split("FRF")[1])*0.207433)
       else:
-         return None
+        logger.debug("Devise du budget non reconnue")
+        return None
    except Exception as e:
-      logger.error("Impossible de convertir {} : Error : {} ".format(val,e))
+      logger.error("Impossible de convertir la devise : Error : {} ".format(val,e))
 

@@ -76,7 +76,7 @@ def IMDB_fullCreditsExtractor(film_id):
       fullCreditsPage.extractFullCreditsPage_DB()
 
 
-def IMDB_personExtractor(person_id):
+def IMDB_PersonExtractor(person_id):
    logger.debug("Lancement de l'extraction de la page person pour {}".format(person_id))
    personPage = IMDBExtractor_Person(person_id)
    if personPage.isExtractable:
@@ -85,7 +85,7 @@ def IMDB_personExtractor(person_id):
    conn = IMDBPersonStatusConnector()
    IMDB_setIsExtracted(person_id,conn)
 
-def IMDB_companyExtractor(company_id):
+def IMDB_CompanyExtractor(company_id):
    logger.debug("Lancement de l'extraction de la page company pour {}".format(company_id))
    companyPage = IMDBExtractor_Producer(company_id)
    if companyPage.isExtractable:

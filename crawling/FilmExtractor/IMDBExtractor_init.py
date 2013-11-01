@@ -31,26 +31,18 @@ def setUnextractedToOneMovie(imdb_id):
 def reExtractOneMovie(imdb_id):
    setUnextractedToOneMovie(imdb_id)
    extractOneMovie(imdb_id)
+
 def setUnextractedToBuggyFilm():
    """Met le bit extracted à 0 sur les personnes bugguées"""
-   object_list = Film.objects.filter(english_title="")
-   film_id_tab = map(lambda s: s.imdb_id, object_list)
-   for film_id in film_id_tab:
-      setUnextractedToOneMovie(imdb_id)
+   IMDBFilmStatus.objects.filter(english_title="").update(extracted=0)
 
 def setUnextractedToBuggyPerson():
    """Met le bit extracted à 0 sur les personnes bugguées"""
-   object_list = Person.objects.filter(name="")
-   person_id_tab = map(lambda s: s.imdb_id, object_list)
-   for person_id in person_id_tab:
-      Connector.IMDBStatusConnector.IMDBPersonStatusConnector().setExtractedStatus(person_id, "0")
+   IMDBPersonStatus.objects.filter(name=="").update(extracted=0)
 
 def setUnextractedToAllPerson():
    """Met le bit extracted à 0 sur toutes les personnes"""
-   object_list = Person.objects.all()
-   person_id_tab = map(lambda s: s.imdb_id, object_list)
-   for person_id in person_id_tab:
-      Connector.IMDBStatusConnector.IMDBPersonStatusConnector().setExtractedStatus(person_id, "0")
+   IMDBPersonStatus.objects.all().update(extracted=0)
 
 def reExtractAllPerson():
    """Ré extrait toutes les personnes dont le champ name est nul (caractéristique d'un bug)"""
@@ -64,10 +56,7 @@ def reExtractAllPerson():
 
 def setUnextractedToBuggyCompany():
    """Met le bit extracted à 0 sur les personnes bugguées"""
-   object_list = ProductionCompany.objects.filter(name="")
-   company_id_tab = map(lambda s: s.imdb_id, object_list)
-   for company_id in company_id_tab:
-      Connector.IMDBStatusConnector.IMDBPCompanyStatusConnector().setExtractedStatus(company_id, "0")
+   IMDBCompanyStatus.objects.filter(name=="").update(extracted=0)
 
 def reExtractBuggyPerson():
    """Ré extrait toutes les personnes dont le champ name est nul (caractéristique d'un bug)"""
@@ -138,7 +127,7 @@ class getIMDBPerson(threading.Thread):
              time_to_sleep = 0
 
              for person_id in person_id_tab:
-                PersonExtractor.IMDB_Extractor.IMDB_PersonExtractor(person_id)
+                FilmExtractor.IMDB_Extractor.IMDB_PersonExtractor(person_id)
 
 class getIMDBCompany(threading.Thread):
     def __init__(self, nom = 'getIMDBCompany'):
@@ -155,21 +144,22 @@ class getIMDBCompany(threading.Thread):
           else:
              time_to_sleep = 0
              for company_id in company_id_tab:
-                CompanyExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
+                FilmExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
 
 
 IMDB_FILM_EXTRACTOR = getIMDBFilm()
 IMDB_PERSON_EXTRACTOR = getIMDBPerson()
 IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 
-#IMDB_FILM_EXTRACTOR.start()
-#IMDB_PERSON_EXTRACTOR.start()
-#IMDB_COMPANY_EXTRACTOR.start()
+IMDB_FILM_EXTRACTOR.start()
+IMDB_PERSON_EXTRACTOR.start()
+IMDB_COMPANY_EXTRACTOR.start()
 
 #reExtractBuggyFilm()
    
-reExtractOneMovie("tt3029940")
+#reExtractOneMovie("tt0119698")
 
-#Exemple avec des devises Japonaises : tt0245429
+#Exemple avec des devises Japonaises : tt0119698
 #Exemple avec des devises € : tt302994
+#Exemple avec des devises £ : 
 #Exemple avec des Reviews decalees : tt0390221

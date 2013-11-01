@@ -147,6 +147,11 @@
     display:block;
 }
 
+.seasonbox img {
+    max-height:3em;
+    max-width:3em;
+}
+
 #results {
     overflow:auto;
     text-align:center;

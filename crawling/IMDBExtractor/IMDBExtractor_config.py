@@ -17,3 +17,5 @@ REVIEWS_URL=LOCAL_PATH+"film/reviews/{}.html"
 KEYWORDS_URL=LOCAL_PATH+"film/keywords/{}.html"
 AWARDS_URL=LOCAL_PATH+"film/awards/{}.html"
 COMPANY_URL=LOCAL_PATH+"company/{}.html"
+
+POSTER_PATH="/home/pesto/imdb/poster/"
