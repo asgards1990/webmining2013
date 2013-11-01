@@ -14,112 +14,63 @@
 
 {% block prediction_menu %}
 
-<div id="content">
-	<ul class="menu">
-		<li class="item1"><a href="#">Amis <span>340</span></a>
-			<ul>
-				<li class="subitem1"><a href="#">Famille<span>14</span></a></li>
-				<li class="subitem2"><a href="#">Ecole<span>6</span></a></li>
-				<li class="subitem3"><a href="#">Travail<span>2</span></a></li>
-			</ul>
-		</li>
-		<li class="item2"><a href="#">Videos <span>147</span></a>
-			<ul>
-				<li class="subitem1"><a href="#">Sport<span>14</span></a></li>
-				<li class="subitem2"><a href="#">Musique<span>6</span></a></li>
-				<li class="subitem3"><a href="#">Cuisine<span>2</span></a></li>
-			</ul>
-		</li>
-		<li class="item3"><a href="#">Photos<span>340</span></a>
-			<ul>
-				<li class="subitem1"><a href="#">Nature<span>14</span></a></li>
-				<li class="subitem2"><a href="#">Portrait<span>6</span></a></li>
-				<li class="subitem3"><a href="#">Animaux<span>2</span></a></li>
-			</ul>
-		</li>
-		<li class="item4"><a href="#">Blog<span>222</span></a>
-			<ul>
-				<li class="subitem1"><a href="#">Santé<span>14</span></a></li>
-				<li class="subitem2"><a href="#">Nutrition<span>6</span></a></li>
-			</ul>
-		</li>
-	</ul>
-
-</div>
 
     <div id="menu">
-
-        <h1 id="menutitle">Your Movie </h1>
-        
-        <form>
+    <form>
+	<ul class="menu">
 
             <!-- Acteurs -->
-    
-            <div id="actors" class="menubox">
-                <h1>Actors</h1>
-                <br/>
-                <div id="actorsearch">
-                    {% if form.errors %}
-                    <p style="color: red;">
-                        Please correct the error{{ form.errors|pluralize }} below.
-                    </p>
-                    {% endif %}
-                    {% for field in form.visible_fields %}
-                        {% if field.name == 'actors' %}
-                            {{ field }}
+
+            <li class="item1"><a href="#">Actors<span>340</span></a>
+                <ul class="menubox">
+                    <div id="actorsearch">
+                        {% if form.errors %}
+                            <p style="color: red;">
+                                Please correct the error{{ form.errors|pluralize }} below.
+                            </p>
                         {% endif %}
-                    {% endfor %}
-                </div> 
-            </div>
-    
+                        {% for field in form.visible_fields %}
+                            {% if field.name == 'actors' %}
+                                {{ field }}
+                            {% endif %}
+                        {% endfor %}
+                    </div> 
+                </ul>
+            </li>
+
             <!-- Genres -->
     
-            <div id="genre" class="menubox">
-                <h1>Genres</h1>
-                <br/>
-                <div id="genresearch">
-                    {% for field in form.visible_fields %}
-                        {% if field.name == 'genre1' %}
-                            {{ field }}
-                        {% endif %}
-                    {% endfor %}
-                    {% for field in form.visible_fields %}
-                        {% if field.name == 'genre2' %}
-                            {{ field }}
-                        {% endif %}
-                    {% endfor %}
-                </div> 
-            </div>
-    
-            <!-- Keywords -->
-    
-            <div id="keywords" class="menubox">
-                <h1>Keywords</h1>
-                <br/>
-                <div id="keywordssearch">
-                    {% for field in form.visible_fields %}
-                        {% if field.name == 'keyword' %}
-                            {{ field }}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-                <!-- 
-                <div id="keywordsugg">
-                    <h2>Suggestions</h2>
-                    <p class="keyword">
-                        <span class="name">Rhijjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnoceros</span>
-                        <img class="add" src='img/add.png' alt="Add">
-                    </p>
-                   
-                </div>
-                -->
-            </div>
-    
-            <!-- Directors -->
-    
-            <div id="directors" class="menubox">
-                <h1>Director</h1>
-                <br/>
+		<li class="item2"><a href="#">Genres<span>147</span></a>
+                <ul class="menubox">
+                    <div id="genresearch">
+                        {% for field in form.visible_fields %}
+                            {% if field.name == 'genre1' %}
+                                {{ field }}
+                            {% endif %}
+                        {% endfor %}
+                        {% for field in form.visible_fields %}
+                            {% if field.name == 'genre2' %}
+                                {{ field }}
+                            {% endif %}
+                        {% endfor %}
+                    </div> 
+                </ul>
+		</li>
+
+		<li class="item3"><a href="#">Keywords<span>340</span></a>
+                <ul class="menubox">
+                    <div id="keywordssearch">
+                        {% for field in form.visible_fields %}
+                            {% if field.name == 'keyword' %}
+                                {{ field }}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </ul>
+		</li>
+
+		<li class="item4"><a href="#">Director<span>222</span></a>
+            <ul class="menubox">
                 <div id="directorsearch">
                     {% for field in form.visible_fields %}
                         {% if field.name == 'directors' %}
@@ -127,23 +78,20 @@
                         {% endif %}
                     {% endfor %}
                 </div> 
-            </div>
-    
-            <!-- Budget -->
-    
-            <div id="budget" class="menubox">
+            </ul>
+		</li>
+
+		<li class="item5"><a href="#">Range<span>222</span></a>
+            <ul class="menubox">
                 <h1>
-                    <label for="amount">Range:</label>
                     <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
                 </h1>
                 <div id="slider-range"></div>
-            </div>
-    
-            <!-- Release -->
-    
-            <div id="release" class="menubox" >
-                <h1>Release Date</h1>
-                <br/>
+            </ul>
+		</li>
+
+		<li class="item6"><a href="#">Release Date<span>222</span></a>
+            <ul class="menubox">
                 <div class="seasonbox">
                     <img class="season" src="{% static 'img/prediction/season.gif' %}" alt="Winter">
                     <figcaption class="season">
@@ -175,13 +123,11 @@
                         <input type="radio" name="radio" id="winter" />
                     </figcaption>
                 </div>                    
-            </div>
-    
-            <!-- Release-end -->
+            </ul>
+		</li>
 
-        {% csrf_token %}
-        </form>
-
+	</ul>
+    </form>
     </div> 
 {% endblock %}    
 
