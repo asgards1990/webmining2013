@@ -1,9 +1,11 @@
 body {
 	font-size: 100%;
 }
+
 a {
 	text-decoration: none;
 }
+
 ul, ul ul {
 	margin: 0;
 	padding: 0;
