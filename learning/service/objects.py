@@ -12,7 +12,7 @@ class ParsingError(Exception):
         return repr(self.value)
 
 class CachedObject:
-    def __init__(self, name, content = None):
+    def __init__(self, name):
         try:
             fi = open(CACHE_DIRECTORY + name + '.cache', 'r')
             d = pickle.load(fi)
@@ -25,13 +25,15 @@ class CachedObject:
             self.obj = d['obj']
             print('Initializing ' + self.name + ' at version ' + self.version.isoformat() + '.')
         except:
-            print('Cache file "' + name + '.cache" does not exist or cannot be read : creating new object ...')
+            print('Cache file "' + name + '.cache" does not exist or cannot be read. Create it if needed.')
             self.name = name
-            self.saved = False
-            self.modified = True
-            self.version = datetime.datetime.utcnow().replace(tzinfo=utc)
-            self.checksum = ''
-            self.obj = content
+
+    def create(self, content):
+        self.saved = False
+        self.modified = True
+        self.version = datetime.datetime.utcnow().replace(tzinfo=utc)
+        self.checksum = ''
+        self.obj = content
 
     def get_content(self):
         return self.obj
@@ -44,7 +46,7 @@ class CachedObject:
         if not self.saved:
             try:
                 fi = open(CACHE_DIRECTORY + self.name + '.cache', 'w')
-                pickle.dump({'name':self.name, 'saved' : True, 'modified' : False, 'version' : self.version, 'obj' : self.obj}, fi)
+                pickle.dump({'name':self.name, 'saved' : True, 'modified' : False, 'version' : self.version, 'checksum' : self.checksum, 'obj' : self.obj}, fi)
                 fi.close()
                 print('Writing ' + self.name + '.cache ...')
             except IOError:
@@ -63,8 +65,16 @@ class CachedObject:
 class LearningService(object):
     def __init__(self, list_file="cache_list"):
         self.init_time = datetime.datetime.now()
-        self.clist = CachedObject(list_file, content = [])
+        self.clist = CachedObject(list_file)
+        if not self.clist.obj:
+            self.clist.create([])
         self.cobjects = [self.clist]
+    
+        for name in self.clist.get_content():
+            self.load_cobject(name)
+
+    def is_loaded(self, name):
+        return name in map(str, self.cobjects)
 
     def load_cobject(self, name):
         if name in self.clist.get_content():
@@ -79,7 +89,7 @@ class LearningService(object):
         if name in self.clist.get_content():
             print("Name " + name + " is already taken.")
         else:
-            self.cobjects.append( CachedObject(name, content = obj) )
+            self.cobjects.append( CachedObject(name).create(obj) )
             l = self.clist.get_content()
             l.append(name)
             self.clist.set_content(l)

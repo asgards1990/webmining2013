@@ -1,7 +1,19 @@
 from objects import *
-from status.models import *
+from vectorizers import *
+from status.models import TableUpdateTime
 from cinema.models import *
+import filmsfilter as flt
 import numpy as np
+import scipy
+
+from sklearn.feature_extraction import DictVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.preprocessing import normalize
+from sklearn.cluster import KMeans
+from sklearn.cluster import SpectralClustering
+
+
+import re
 
 import exceptions
 
@@ -19,6 +31,115 @@ class TableDependentCachedObject(CachedObject):
             print('Table "' + self.table_name + ' not found.')
 
 class CinemaService(LearningService):
+    def __init__(self):
+        super(CinemaService, self).__init__()
+        
+        if not self.is_loaded('films'):
+            self.films = flt.filter1()
+            self.indexes = hashIndexes(self.films.iterator())
+            self.create_cobject('films', self.indexes)
+        else:
+            self.indexes = self.get_cobject('films').get_content()
+        self.nbfilms = len(self.indexes)
+        
+        if not self.is_loaded('keywords'):
+            gkey = genKeywords(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.keyword_matrix = v.fit_transform(gkey)
+            self.keyword_names = v.get_feature_names()
+            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix))
+        else:
+            self.keyword_names, self.keyword_matrix = self.get_cobject('keywords').get_content()
+        self.nbkeywords = self.keyword_matrix.shape[1]
+        
+        if not self.is_loaded('genre_stats'):
+            self.filmsbygenre = {}
+            self.keywordsbygenre = {}
+            for genre in Genre.objects.all():
+                #self.filmsbygenre[genre.name] = []
+                self.filmsbygenre[genre.name] = map(lambda e : self.indexes[e], map(lambda e: e.imdb_id, self.films.filter(genres = genre)))
+                if self.filmsbygenre[genre.name] == []:
+                    self.keywordsbygenre[genre.name] = np.zeros(self.nbkeywords)
+                else:
+                    self.keywordsbygenre[genre.name] = np.sum(self.keyword_matrix[self.filmsbygenre[genre.name]].toarray(), axis=0)
+            self.create_cobject('genre_stats', (self.filmsbygenre, self.keywordsbygenre))
+        else:
+            self.filmsbygenre, self.keywordsbygenre = self.get_cobject('genre_stats').get_content()
+
+        if not self.is_loaded('actors'):
+            v = DictVectorizer(dtype=int)
+            self.actor_matrix = v.fit_transform(genActorsTuples2(self.films.iterator()))
+            self.actor_names = v.get_feature_names()
+            self.create_cobject('actors', (self.actor_names, self.actor_matrix))
+        else:
+            self.actor_names, self.actor_matrix = self.get_cobject('actors').get_content()
+
+        # DIMENSIONNALITY REDUCTION
+        self.dim_keywords = 30
+        self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++', verbose=1)
+        self.keywords_reduced = self.keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
+
+        self.dim_writers = 20 # must be lower than dim_keywords
+        if not self.is_loaded('writers'):
+            v=DictVectorizer(dtype=int)
+            writer_matrix = v.fit_transform(genWriters(self.films.iterator()))
+            self.writer_names = v.get_feature_names()
+            self.writer_keyword_matrix = writer_matrix.transpose() * self.keywords_reduced
+            
+            writer_SC = SpectralClustering(n_clusters = self.dim_writers, eigen_solver='arpack', affinity="nearest_neighbors")
+            writer_labels = writer_SC.fit_predict(self.writer_keyword_matrix)
+            self.proj_writers = scipy.sparse.csc_matrix(writer_labels==0, dtype=int).transpose()
+            for i in range(1, self.dim_writers):
+                self.proj_writers = scipy.sparse.hstack([self.proj_writers, scipy.sparse.csc_matrix(writer_labels==i, dtype=int).transpose()])
+            self.writer_reduced = writer_matrix * self.proj_writers
+            
+            self.create_cobject('writers', (self.writer_names, self.writer_keyword_matrix, self.writer_reduced, self.proj_writers))
+        else:
+            self.writer_names, self.writer_keyword_matrix, self.writer_reduced, self.proj_writers = self.get_cobject('writers').get_content()
+
+        self.nbwriters = len(self.writer_names)
+
+        # TODO : load other variables
+
+        self.dim_actors = 30
+        s = raw_input('Start Spectral Clustering on actors ?')
+        actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='amg', affinity="nearest_neighbors", n_neighbors=10)
+        firmtKM = KMeans(n_clusters = 1000, init='k-means++')
+        first_reduction = firstKM.fit_transform(self.actor_matrix)
+        actor_labels = actors_SC.fit_predict(first_reduction.transpose())
+        self.proj_actors = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
+        for i in range(1, self.dim_actors):
+            self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
+        self.actor_reduced = first_reduction * self.proj_actors
+        self.actor_reduced = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
+
+    def suggest_keywords(self, args):
+        if args.has_key('str') and args.has_key('nbresults'):
+            if args['nbresults'].__class__ == int and args['nbresults'] >= 0:
+                tot = np.zeros(self.nbkeywords)
+                rex = re.compile(args['str'])
+                found = [(rex.search(m)!=None) for m in self.keyword_names]
+                if args.has_key('filter') and args['filter'].__class__ == list:
+                    for element in args['filter']:
+                        try:
+                            value, genre = element
+                            tot += found * (value * self.keywordsbygenre[genre])
+                        except:
+                            continue
+                else:
+                    tot = found * np.sum(self.keyword_matrix.toarray(), axis=0)
+                ind = list(np.argsort(-tot)[:min(args['nbresults'], self.nbfilms)])
+                results = []
+                for i in ind:
+                    if np.abs(tot[i]) > 0:
+                        results.append( (tot[i], self.keyword_names[i] ) )
+                return {'results' : results}
+            else:
+                raise ParsingError('Wrong format for nbresults.')
+        else:
+            raise ParsingError('Please define a string and the expected number of results.')
+    
+    
     def search_request(self, args):
         if args.has_key('id') and args.has_key('nbresults') and args.has_key('criteria'):
             if (args['nbresults'].__class__==int) and (args['criteria'].__class__==dict):
