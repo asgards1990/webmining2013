@@ -9,7 +9,8 @@ import scipy
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.preprocessing import normalize
-from sklearn.cluster import KMeans
+from sklearn.cluster import MiniBatchKMeans, KMeans
+from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
 
 
@@ -34,34 +35,40 @@ class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
         
+        self.films = flt.filter1()
         if not self.is_loaded('films'):
-            self.films = flt.filter1()
+            #self.films = flt.filter1()
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
         else:
             self.indexes = self.get_cobject('films').get_content()
         self.nbfilms = len(self.indexes)
         
+        self.dim_keywords = 30
         if not self.is_loaded('keywords'):
             gkey = genKeywords(self.films.iterator())
             v =  DictVectorizer(dtype=int)
             self.keyword_matrix = v.fit_transform(gkey)
             self.keyword_names = v.get_feature_names()
-            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix))
+            
+            self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++', verbose=1)
+            self.keywords_reduced = self.keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
+            # 0 means closer to centroids.
+            
+            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced))
         else:
-            self.keyword_names, self.keyword_matrix = self.get_cobject('keywords').get_content()
+            self.keyword_names, self.keyword_matrix, self.keywords_reduced = self.get_cobject('keywords').get_content()
         self.nbkeywords = self.keyword_matrix.shape[1]
         
         if not self.is_loaded('genre_stats'):
             self.filmsbygenre = {}
             self.keywordsbygenre = {}
             for genre in Genre.objects.all():
-                #self.filmsbygenre[genre.name] = []
                 self.filmsbygenre[genre.name] = map(lambda e : self.indexes[e], map(lambda e: e.imdb_id, self.films.filter(genres = genre)))
                 if self.filmsbygenre[genre.name] == []:
                     self.keywordsbygenre[genre.name] = np.zeros(self.nbkeywords)
                 else:
-                    self.keywordsbygenre[genre.name] = np.sum(self.keyword_matrix[self.filmsbygenre[genre.name]].toarray(), axis=0)
+                    self.keywordsbygenre[genre.name] = np.mean(self.keyword_matrix[self.filmsbygenre[genre.name]].toarray(), axis=0)
             self.create_cobject('genre_stats', (self.filmsbygenre, self.keywordsbygenre))
         else:
             self.filmsbygenre, self.keywordsbygenre = self.get_cobject('genre_stats').get_content()
@@ -74,20 +81,16 @@ class CinemaService(LearningService):
         else:
             self.actor_names, self.actor_matrix = self.get_cobject('actors').get_content()
 
-        # DIMENSIONNALITY REDUCTION
-        self.dim_keywords = 30
-        self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++', verbose=1)
-        self.keywords_reduced = self.keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
-
         self.dim_writers = 20 # must be lower than dim_keywords
         if not self.is_loaded('writers'):
             v=DictVectorizer(dtype=int)
             writer_matrix = v.fit_transform(genWriters(self.films.iterator()))
             self.writer_names = v.get_feature_names()
+            # Distance to keywords' centroids of writers.
             self.writer_keyword_matrix = writer_matrix.transpose() * self.keywords_reduced
             
-            writer_SC = SpectralClustering(n_clusters = self.dim_writers, eigen_solver='arpack', affinity="nearest_neighbors")
-            writer_labels = writer_SC.fit_predict(self.writer_keyword_matrix)
+            self.writer_SC = SpectralClustering(n_clusters = self.dim_writers, eigen_solver='arpack', affinity="nearest_neighbors")
+            writer_labels = self.writer_SC.fit_predict(self.writer_keyword_matrix)
             self.proj_writers = scipy.sparse.csc_matrix(writer_labels==0, dtype=int).transpose()
             for i in range(1, self.dim_writers):
                 self.proj_writers = scipy.sparse.hstack([self.proj_writers, scipy.sparse.csc_matrix(writer_labels==i, dtype=int).transpose()])
@@ -101,17 +104,34 @@ class CinemaService(LearningService):
 
         # TODO : load other variables
 
-        self.dim_actors = 30
+        self.dim_actors = 20
         s = raw_input('Start Spectral Clustering on actors ?')
-        actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='amg', affinity="nearest_neighbors", n_neighbors=10)
-        firmtKM = KMeans(n_clusters = 1000, init='k-means++')
-        first_reduction = firstKM.fit_transform(self.actor_matrix)
-        actor_labels = actors_SC.fit_predict(first_reduction.transpose())
-        self.proj_actors = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
-        for i in range(1, self.dim_actors):
-            self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
-        self.actor_reduced = first_reduction * self.proj_actors
-        self.actor_reduced = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
+        if s=='y':
+            self.firstKM = MiniBatchKMeans(n_clusters=500, init='k-means++', n_init=1, init_size=2000, batch_size=3000, verbose=1)
+            first_reduction = self.firstKM.fit_transform(self.actor_matrix)
+            #first_reduction = np.exp( - first_reduction ** 2 ) # go from distance to similarity matrix
+            
+            #self.firstSVD = TruncatedSVD(n_components = 500, n_iterations = 100)
+            #first_reduction = self.firstSVD.fit_transform(self.actor_matrix)
+            
+            self.actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=10)
+            self.actor_labels = self.actors_SC.fit_predict(first_reduction.transpose())
+            self.proj_actors = scipy.sparse.csc_matrix(self.actor_labels==0, dtype=int).transpose()
+            for i in range(1, self.dim_actors):
+                self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(self.actor_labels==i, dtype=int).transpose()])
+            self.actor_reduced = first_reduction * self.proj_actors
+            self.actor_reduced = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
+            self.topic_actors = []
+            for i in range(self.dim_actors):
+                tot = np.sum(self.firstKM.cluster_centers_[self.firstKM.labels_[self.actor_labels == i]], axis=0)
+                #tot = self.firstSVD.inverse_transform(self.actor_labels == i)[0,:]
+                persons = []
+                for person in (np.array(self.actor_names)[np.argsort(-tot)[:10]]).tolist():
+                    try:
+                        persons.append( Person.objects.get(imdb_id = person[:9]) )
+                    except:
+                        continue
+                self.topic_actors.append((persons))
 
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
@@ -127,7 +147,7 @@ class CinemaService(LearningService):
                         except:
                             continue
                 else:
-                    tot = found * np.sum(self.keyword_matrix.toarray(), axis=0)
+                    tot = found * np.mean(self.keyword_matrix.toarray(), axis=0)
                 ind = list(np.argsort(-tot)[:min(args['nbresults'], self.nbfilms)])
                 results = []
                 for i in ind:
