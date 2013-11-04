@@ -197,8 +197,22 @@ function longueurEtAngle(coeffDist,largeurBox,hauteurBox,coeffEmToPx){
 
 function sign(x) { if (x>=0){return 1} else{return -1}}
 
-function montrerResultats(nomDuCadre){
-
+function montrerResultats(nomDuCadre,data){
+	//alert("hello2")
+	var nbrResultats=data.nbresults;
+	var Afficher=new Array;
+	var nomFilm=new Array;
+	for (var i = nbrResultats;i<10;i++){
+		Afficher[i]=false;
+		coeffDist[i]=1;
+		nomFilm[i]="Inexistant";
+	}
+	for (var i = 0;i<nbrResultats;i++){
+		Afficher[i]=true;
+		coeffDist[i]=1-data.results[i].value;  // CHANGER 0 par i
+		nomFilm[i]=data.results[i].title; // CHANGER 0 par i
+	}
+	
 	var cadreInter1 = document.createElement('div');
 	cadreInter1.id="cadreInter1";
 	cadreInter1.style.cssText ='width:100%;height:18em;border: 1px solid Black;'
@@ -242,6 +256,8 @@ function montrerResultats(nomDuCadre){
 		angleBarre[i]=rajoutAngle[i]*Math.PI+Math.asin(sign(numeroLigne[i])*(Math.abs(numeroLigne[i])*2)/lBarre[i]);
 	}
 	
+	var conteneur=new Array;
+	var contenuTitre=new Array;
 	for (var i=0;i<10;i++){
 
 		barre[i] = document.createElement('div');
@@ -256,19 +272,42 @@ function montrerResultats(nomDuCadre){
 		cadre[i].style.cssText ='position:absolute;width: '+coeffTailleCadreTitre*largeurBox+'px;height: 1.6em;background-color: Red;border: 1px solid Black;left :'+(largeurBox/2+coeffEmToPx*lBarre[i]*Math.cos(angleBarre[i]))+'px;z-index:2;display:none;top:'+(hauteurBox/2+coeffEmToPx*lBarre[i]*Math.sin(angleBarre[i]))+'px;transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em);-webkit-transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em)';
 
 		document.getElementById(nomDuCadre).appendChild(cadre[i]);
+		
+		conteneur[i]=document.createElement('p');
+
+		conteneur[i].id="conteneur"+i;
+		conteneur[i].style.cssText='position:relative;text-align: center;text-overflow:ellipsis;overflow:hidden; white-space:nowrap;transform:translate(0px,-0.8em);-webkit-transform:translate(0px,-0.8em)'
+		//display:table-cell; text-align: center;vertical-align: middle;'
+
+		contenuTitre[i]=document.createTextNode(nomFilm[i]);
+		contenuTitre[i].id="contenuTitre"+i;
+		
+		document.getElementById("cadre"+i).appendChild(conteneur[i]);
+		document.getElementById("conteneur"+i).appendChild(contenuTitre[i]);
+		
 	}
 
 	var vitesse=2.5;
-	setTimeout(function(){$("#barre0").fadeIn(1000/vitesse);$("#cadre0").fadeIn(1000/vitesse);},(9-0)*300/vitesse)
-	setTimeout(function(){$("#barre1").fadeIn(1000/vitesse);$("#cadre1").fadeIn(1000/vitesse);},(9-1)*300/vitesse)
-	setTimeout(function(){$("#barre2").fadeIn(1000/vitesse);$("#cadre2").fadeIn(1000/vitesse);},(9-2)*300/vitesse)
-	setTimeout(function(){$("#barre3").fadeIn(1000/vitesse);$("#cadre3").fadeIn(1000/vitesse);},(9-3)*300/vitesse)
-	setTimeout(function(){$("#barre4").fadeIn(1000/vitesse);$("#cadre4").fadeIn(1000/vitesse);},(9-4)*300/vitesse)
-	setTimeout(function(){$("#barre5").fadeIn(1000/vitesse);$("#cadre5").fadeIn(1000/vitesse);},(9-5)*300/vitesse)
-	setTimeout(function(){$("#barre6").fadeIn(1000/vitesse);$("#cadre6").fadeIn(1000/vitesse);},(9-6)*300/vitesse)
-	setTimeout(function(){$("#barre7").fadeIn(1000/vitesse);$("#cadre7").fadeIn(1000/vitesse);},(9-7)*300/vitesse)
-	setTimeout(function(){$("#barre8").fadeIn(1000/vitesse);$("#cadre8").fadeIn(1000/vitesse);},(9-8)*300/vitesse)
-	setTimeout(function(){$("#barre9").fadeIn(1000/vitesse);$("#cadre9").fadeIn(1000/vitesse);},(9-9)*300/vitesse)
+	if(Afficher[0]==true){
+	setTimeout(function(){$("#barre0").fadeIn(1000/vitesse);$("#cadre0").fadeIn(1000/vitesse);},(9-0)*300/vitesse)}
+	if(Afficher[1]==true){
+	setTimeout(function(){$("#barre1").fadeIn(1000/vitesse);$("#cadre1").fadeIn(1000/vitesse);},(9-1)*300/vitesse)}
+	if(Afficher[2]==true){
+	setTimeout(function(){$("#barre2").fadeIn(1000/vitesse);$("#cadre2").fadeIn(1000/vitesse);},(9-2)*300/vitesse)}
+	if(Afficher[3]==true){
+	setTimeout(function(){$("#barre3").fadeIn(1000/vitesse);$("#cadre3").fadeIn(1000/vitesse);},(9-3)*300/vitesse)}
+	if(Afficher[4]==true){
+	setTimeout(function(){$("#barre4").fadeIn(1000/vitesse);$("#cadre4").fadeIn(1000/vitesse);},(9-4)*300/vitesse)}
+	if(Afficher[5]==true){
+	setTimeout(function(){$("#barre5").fadeIn(1000/vitesse);$("#cadre5").fadeIn(1000/vitesse);},(9-5)*300/vitesse)}
+	if(Afficher[6]==true){
+	setTimeout(function(){$("#barre6").fadeIn(1000/vitesse);$("#cadre6").fadeIn(1000/vitesse);},(9-6)*300/vitesse)}
+	if(Afficher[7]==true){
+	setTimeout(function(){$("#barre7").fadeIn(1000/vitesse);$("#cadre7").fadeIn(1000/vitesse);},(9-7)*300/vitesse)}
+	if(Afficher[8]==true){
+	setTimeout(function(){$("#barre8").fadeIn(1000/vitesse);$("#cadre8").fadeIn(1000/vitesse);},(9-8)*300/vitesse)}
+	if(Afficher[9]==true){
+	setTimeout(function(){$("#barre9").fadeIn(1000/vitesse);$("#cadre9").fadeIn(1000/vitesse);},(9-9)*300/vitesse)}
 
 	$(window).resize(function() {
 		largeurBox=$("#cadreInter1").width();
@@ -303,16 +342,16 @@ function montrerResultats(nomDuCadre){
 	});
 
 	$("#carreCentral").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 6");$("#canv6").click();}})
-	$("#cadre0").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 1");$("#canv1").click();}})
-	$("#cadre1").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 2");$("#canv2").click();}})
-	$("#cadre2").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 3");$("#canv3").click();}})
+	$("#cadre0").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 1");$("#canv7").click();}})
+	$("#cadre1").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 2");$("#canv5").click();}})
+	$("#cadre2").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 3");$("#canv8").click();}})
 	$("#cadre3").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 4");$("#canv4").click();}})
-	$("#cadre4").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 5");$("#canv5").click();}})
-	$("#cadre5").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 7");$("#canv7").click();}})
-	$("#cadre6").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 8");$("#canv8").click();}})
-	$("#cadre7").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 9");$("#canv9").click();}})
-	$("#cadre8").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 10");$("#canv10").click();}})
-	$("#cadre9").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 11");$("#canv11").click();}})
+	$("#cadre4").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 5");$("#canv9").click();}})
+	$("#cadre5").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 7");$("#canv3").click();}})
+	$("#cadre6").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 8");$("#canv10").click();}})
+	$("#cadre7").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 9");$("#canv2").click();}})
+	$("#cadre8").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 10");$("#canv11").click();}})
+	$("#cadre9").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 11");$("#canv1").click();}})
 
 }
 /*$(document).ready(function(){
