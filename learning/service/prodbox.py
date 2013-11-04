@@ -9,7 +9,7 @@ from dimreduce import *
 
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import normalize, Imputer
 from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
@@ -211,18 +211,20 @@ class CinemaService(LearningService):
             v = DictVectorizer(dtype=int)
             self.actor_matrix = v.fit_transform(genActorsTuples(self.films.iterator()))
             self.actor_names = v.get_feature_names()
-	    self.actor_reduced_SC = getReducedActorsFeatureSC(self.films,self.dim_actors) # uses dimreduce
+            # TODO : play on arguments (ex: n_neighbors) in spectral clustering
+	    self.actor_reduced_SC = reduceDimBySpectralClustering(self.actor_matrix, self.actor_names, self.dim_actors) # uses dimreduce
             self.create_cobject('actors', (self.actor_names, self.actor_matrix, self.actor_reduced_SC))
         else:
             self.actor_names, self.actor_matrix, self.actor_reduced_SC = self.get_cobject('actors').get_content()
 
     def loadWriters(self):
         self.dim_writers = 20 # must be lower than dim_keywords #TODO : optimize
+	keywords_reduced = self.keywords_reduced_KM
         if not self.is_loaded('writers'):
             v=DictVectorizer(dtype=int)
             self.writer_matrix = v.fit_transform(genWriters(self.films.iterator()))
             self.writer_names = v.get_feature_names()
-            self.writer_keyword_matrix = self.writer_matrix.transpose() * self.keywords_reduced #TODO : average?	
+            self.writer_keyword_matrix = normalize(self.writer_matrix.transpose(), norm='l1', axis=1) * keywords_reduced #TODO : average?	
 	    # First method: Spectral Clustering
             self.writer_SC = SpectralClustering(n_clusters = self.dim_writers, eigen_solver='arpack', affinity="nearest_neighbors")
             writer_labels = self.writer_SC.fit_predict(self.writer_keyword_matrix)
@@ -231,15 +233,62 @@ class CinemaService(LearningService):
                 self.proj_writers_SC = scipy.sparse.hstack([self.proj_writers, scipy.sparse.csc_matrix(writer_labels==i, dtype=int).transpose()])
             self.writer_reduced_SC = self.writer_matrix * self.proj_writers
             # Second method: Average of keywords features
-	    self writer_reduced_avg =  self.writer_matrix * self.writer_keyword_matrix #TODO : average?
+	    self.writer_reduced_avg =  normalize(self.writer_matrix, norm='l1', axis=1)*self.writer_keyword_matrix #TODO : average?
             self.create_cobject('writers', (self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg))
         else:
             self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg = self.get_cobject('writers').get_content()
-        self.nbwriters = len(self.writer_names)
+        self.nb_writers = len(self.writer_names)
 
-    def loadWriters(self):
-	#TODO (sur le modele de loadWriters)
-	return
+    def loadDirectors(self):
+        self.dim_directors = 20 # must be lower than dim_actors #TODO : optimize
+	actor_reduced = self.actor_reduced_SC
+        if not self.is_loaded('directors'):
+            v=DictVectorizer(dtype=int)
+            self.director_matrix = v.fit_transform(genDirectors(self.films.iterator()))
+            self.director_names = v.get_feature_names()
+            self.director_actor_matrix = normalize(self.director_matrix.transpose(), norm='l1', axis=1) * actor_reduced #TODO : average?	
+	    # First method: Spectral Clustering
+            self.director_SC = SpectralClustering(n_clusters = self.dim_directors, eigen_solver='arpack', affinity="nearest_neighbors")
+            director_labels = self.director_SC.fit_predict(self.director_actor_matrix)
+            self.proj_directors_SC = scipy.sparse.csc_matrix(director_labels==0, dtype=int).transpose()
+            for i in range(1, self.dim_directors):
+                self.proj_directors_SC = scipy.sparse.hstack([self.proj_directors, scipy.sparse.csc_matrix(director_labels==i, dtype=int).transpose()])
+            self.director_reduced_SC = self.director_matrix * self.proj_director
+            # Second method: Average of actors features
+	    self.director_reduced_avg =  normalize(self.director_matrix, norm='l1', axis=1) * self.director_actor_matrix #TODO : average?
+            self.create_cobject('directors', (self.director_names, self.director_actor_matrix, self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg))
+        else:
+            self.director_names, self.director_actor_matrix, self.director_reduced_SC, self.proj_directors_SC, self.directors_reduced_avg = self.get_cobject('directors').get_content()
+        self.nb_directors = len(self.director_names)
+
+    def loadSearchClustering(self):
+	if not self.is_loaded('search_clustering'):
+            self.search_clustering = []
+	    X_people = scipy.sparse.hstack([self.actor_reduced_SC,self.director_reduced_SC]) #TODO:play on clustering types
+	    X_budget = self.budget_matrix
+	    X_review = self.reviews_matrix
+	    X_genre =  self.genres_matrix
+	    X_budget[np.isnan(X_budget)] = -1 # replace NaN with -1 for missing values
+	    completer = Imputer(missing_values=-1)
+	    completer.fit(X_budget)
+	    X_budget = completer.transform(X_budget) #TODO: answer this question: use log instead ?
+	    X_budget = X_budget/np.max(X_budget)
+	    X_review = X_review/100 # because grades should be in [0,1] #WARNING BDD DAVID OU BENJAMIN
+	    X_review = X_review/X_review.shape[1] #divide by number of columns
+	    X_genre = X_genre/X_genre.shape[1] #divide by number of columns
+	    X_people = X_people/X_people.shape[1] #divide by number of columns
+            for k in range(16):
+		people_weight = self.high_weight if (k>>0)%2 else self.low_weight
+		budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
+		review_weight = self.high_weight if (k>>2)%2 else self.low_weight
+		genre_weight = self.high_weight if (k>>3)%2 else self.low_weight
+		X = scipy.sparse.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_review])
+		KM = KMeans(n_clusters=self.n_clusters_search)
+		KM.fit_predict(X)
+                self.search_clustering[k] = {'labels':KM.labels_, 'cluster_centers':KM.cluster_centers_}
+	    self.create_cobject('search_clustering',self.search_clustering)
+	else:
+	    self.search_clustering = self.get_cobject('search_clustering').get_content()
 
     def __init__(self):
         super(CinemaService, self).__init__()
@@ -266,6 +315,12 @@ class CinemaService(LearningService):
 	self.loadImdb()
 	self.loadCountries()
 	self.loadLanguages()
+	# Load search clusterings
+	self.n_clusters_search = 20
+	self.p_norm = 2 # p-norm used for distances
+	self.high_weight = 1 # for the distance definition
+	self.low_weight = 0 # for the distance definition
+	self.loadSearchClustering()
 
 # VIEUX CODE BENJAMIN
 #        self.dim_actors = 20
