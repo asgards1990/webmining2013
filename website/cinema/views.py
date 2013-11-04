@@ -124,16 +124,16 @@ def searchresults(request, nomFilm):
 
         return render(request, 'prediction.html',locals())
 
-def keywordGenre(request):
+def filmInfo(request):
     if request.method == 'POST':
-        genre_id= request.POST.get('genre')
+        film_id= request.POST.get('film_id')
     else:
         return HttpResponse("Erreur")
 
     try:
-        genre = Genre.objects.get(id = genre_id)
+        idDuFilm = Film.objects.get(imdb_id = film_id)
     except:
-        return HttpReponse("Genre not found")
+        return HttpReponse("movie not found")
     
     tab=list()
     
