@@ -28,6 +28,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-fd', '--fresh_debug', dest = 'fresh_debug', help = "Si présent, le fichier de debug est vidé avant l'exécution", action='store_true')
 parser.add_argument('-imdb_ex', '--imdb-extractor', dest = 'imdb_extractor', help = "Si présent, lance l'extraction des fichiers HTML en provenace de IMDB", action='store_true')
 parser.add_argument('-imdb_sp', '--imdb-spider', dest = 'imdb_spider', help = "Si présent, lance le spider pour IMDB", action='store_true')
+parser.add_argument('-imdb_psp', '--imdb-priority-spider', dest = 'imdb_priority_spider', help = "Si présent, lance le spider pour les priorités IMDB", action='store_true')
 parser.add_argument('-imdb_fdw', '--imdb-film-downloader', dest = 'imdb_film_downloader', help = "Si présent, lance le downloader des films IMDB", action='store_true')
 parser.add_argument('-imdb_pdw', '--imdb-person-downloader', dest = 'imdb_person_downloader', help = "Si présent, lance le downloader des personnes IMDB", action='store_true')
 parser.add_argument('-imdb_cdw', '--imdb-company-downloader', dest = 'imdb_company_downloader', help = "Si présent, lance le downloader des entreprises IMDB", action='store_true')
@@ -49,6 +50,10 @@ if initConfig.args.fresh_debug:
 if initConfig.args.imdb_spider:
     logger.info ('Lancement du Spider')
     import Spider.IMDBSpider
+
+if initConfig.args.imdb_priority_spider:
+    logger.info ('Lancement du Spider de Priorités')
+    import Spider.IMDBPrioritySpider
 
 if initConfig.args.imdb_film_downloader:
     logger.info ('Lancement du IMDB Film Downloader')

@@ -108,3 +108,114 @@ $(document).ready(function() {
         console.log(genre1WidgetElement, 'data is', genre1WidgetElement.yourlabsWidget().autocomplete.data)
     })
 });
+
+
+
+
+
+
+/*function ajoutKeywordSuggest(keyword) {
+
+var newKeyword = document.createElement('div');
+newKeyword.className="keyword";
+
+
+var newName = document.createElement('span');
+newName.className="name";
+
+
+newName.appendChild(document.createTextNode(keyword));
+
+
+
+var newDelete = document.createElement('span');                               
+newDelete.className="delete";
+
+
+var newImg1 = document.createElement('img');
+newImg1.className="add1";
+newImg1.src="img/DeleteGrey.jpg" 
+
+
+var newImg2 = document.createElement('img');
+newImg2.className="add2"; 
+newImg2.src="img/DeleteRed.png" ;
+
+
+newKeyword.appendChild(newName);
+newKeyword.appendChild(newDelete);
+newDelete.appendChild(newImg1);
+newDelete.appendChild(newImg2);
+
+document.getElementById("keywordSuggest").appendChild(newKeyword);
+
+return newImg1;
+return newImg1;
+};*/
+
+
+
+
+
+$(document).ready(function() {
+    $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
+        var genre1 = $('#id_genre1');
+        var genre2 = $('#id_genre2');
+        var id1 = genre1.val();
+        var id2 = genre2.val();
+        urlSubmit = 'http://Senellart.com:8080/suggest/';
+
+        if (id1) {
+            var value1 = $('#id_genre1-deck').clone().children().children().remove().end().text();
+            alert (value1);
+        
+            if (id2) {
+                var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
+                alert (value2);
+                };
+           /* else {
+                $.post({
+                    url: urlSubmit,
+                    msg="json.request"+JSON.stringify(???: 'value1', )
+                    success:function callback(response){
+                        if (response.success) {
+                            for (k=0;k<10;k++) {
+                            ajoutKeywordSuggest(response.resuslts[k]);
+                            };
+                        }
+                    });
+                };*/
+            };
+        /*else {if (id2) {
+            var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
+                $.ajax({
+                    type:"POST",
+                    url: urlUnGenre
+                    data: {genre: value2}
+                    success:function(tab){
+                        for (k=0;k<10;k++) {
+                            ajoutKeywordSuggest(tab[k]);
+                            };
+                        }
+                    });
+                };
+            else {
+                $.ajax({
+                    type:"POST",
+                    url: urlUnGenre
+                    data: {genre: value1}
+                    
+                    success:function(tab){
+                          for (k=0;k<10;k++) {
+                            ajoutKeywordSuggest(tab[k]);
+                            };
+                          }
+                        
+                    });
+                };
+            };*/
+        });
+    });
+        
+            
+            

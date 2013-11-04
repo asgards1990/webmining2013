@@ -37,11 +37,28 @@ body {
 }
 
 h1.steps {
+    position:relative;
     font-variant: small-caps;
     font-size: 1.5em;
-    border-bottom: dashed 1px;
-    margin-bottom: 0.3em;
 
+    margin-top:0;
+    margin-bottom: 0.3em;
+    background:#ffffff;
+    border:1px solid black;
+    box-shadow: 1px 1px 1px;
+    border-radius:5px;
+    padding:0.2em 0.6em;
+
+}
+
+img.steps {
+    position: absolute;
+    max-height: 1.6em;
+    max-width: 1.6em;
+    vertical-align: middle;
+    left: -0.8em;
+    top: -0.8em;
+    z-index: 10;
 }
 
 .menubox h1 {
@@ -73,11 +90,9 @@ h1.steps {
     margin-left: 21em;
     margin-top: 2em;
     margin-bottom: 1em;
-    padding: 0.5em;
-    border: 1px solid #444444;
-    border-radius: 3px;
-    background: white;
-    box-shadow: 1px 1px 1px;
+    padding: 0em 0.5em 0.5em 0.5em;
+
+
 }
 
 #distancecriteria div.intro {
@@ -105,8 +120,17 @@ h1.steps {
   border-bottom:1px dashed #d51c21 ;
 }*/
 
+.wrapper {
+    width:100%;
+    border: 1px solid #444444;
+    border-radius: 3px;
+    background: white;
+    box-shadow: 1px 1px 1px;
+}
+
 #filters {
     display: table;
+    width:70%;
     margin: 0 auto;
     text-align: center;
 }
@@ -117,6 +141,7 @@ h1.steps {
     display: table-cell;
     text-align: center;
     vertical-align: middle;
+    padding-bottom:1em;
 }
 
 #filters input {
