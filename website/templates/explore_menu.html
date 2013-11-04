@@ -71,166 +71,176 @@
 {% block explore_menu %}
 
 
-    <div id="menu">
+<div id="menu">
 
-        <div id="moviesearch" class="menubox">
-            <img class="steps" src="{% static 'img/explore/1.png' %}" alt="1">
+    <h1 class="steps">
+        <img class="steps" src="{% static 'img/explore/1.png' %}" alt="1">
+        Choose a movie
+    </h1>
 
-            <h1 class="steps"> Choose a movie</h1>
+    <div id="moviesearch" class="menubox">
 
-            <div class="movie">
-                <div class="photo">
-                    <img style="max-height:4em;max-width:4em"
-                         src="{% static 'img/explore/questionmark.png' %}"
-                         alt="Titanic"/>
-                </div>
-                <p><input id="movieinput" type="text"
-                          name="actorname" value=" Enter a movie name..." size="21"></p>
-
+        <div class="movie">
+            <div class="photo">
+                <img style="max-height:4em;max-width:4em;"
+                     src="{% static 'img/explore/questionmark.png' %}"
+                     alt="Titanic"/>
             </div>
+            <p><input id="movieinput" type="text"
+                      name="actorname" value=" Enter a movie name..." size="21"></p>
+
         </div>
+    </div>
 
-        <div class="menubox" style="background:#adadad">
+    <h1 class="steps">
+        <img class="steps" src="{% static 'img/explore/3.png' %}" alt="1">
+        Choose your filters
+    </h1>
 
-                <img class="steps" src="{% static 'img/explore/3.png' %}" alt="3">
-                <h1 class="steps">Filters</h1>
+    <div id="scrollmenu" class="menubox">
+
 
         <ul class="menu">
-		<li id="actors"><a href="#">Actors / Director <span>4</span></a>
-			<ul>
+            <li id="actors"><a href="#">Actors / Director <span>4</span></a>
+                <ul>
                     <form>
-				<li class="listactor">
+                        <li class="listactor">
                             <p class="director">
-                            <input type="checkbox" name="director" value="director">
-                            <span class="name">Woody Allen</span>
-                            </p>
-                        </li>
-
-				<li class="listactor">
-                            <p class="actor">
-                            <input type="checkbox" name="actor" value="actor1">
-                            <span class="name">Cate Blanchett</span>
-                            </p>                       
-                        </li>
-
-				<li class="listactor">
-                            <p class="actor">
-                            <input type="checkbox" name="actor" value="actor2">
-                            <span class="name">Alec Baldwin</span>
+                                <input type="checkbox" name="director" value="director">
+                                <span class="name">Woody Allen</span>
                             </p>
                         </li>
 
                         <li class="listactor">
                             <p class="actor">
-                            <input type="checkbox" name="actor" value="actor3">
-                            <span class="name">Sally Hawkins</span>
+                                <input type="checkbox" name="actor" value="actor1">
+                                <span class="name">Cate Blanchett</span>
+                            </p>
+                        </li>
+
+                        <li class="listactor">
+                            <p class="actor">
+                                <input type="checkbox" name="actor" value="actor2">
+                                <span class="name">Alec Baldwin</span>
+                            </p>
+                        </li>
+
+                        <li class="listactor">
+                            <p class="actor">
+                                <input type="checkbox" name="actor" value="actor3">
+                                <span class="name">Sally Hawkins</span>
                             </p>
                         </li>
 
                     </form>
-			</ul>
-		</li>
+                </ul>
+            </li>
 
-		<li id="genres"><a href="#">Genre<span>3</span></a>
-			<ul>
+            <li id="genres"><a href="#">Genre<span>3</span></a>
+                <ul>
                     <form>
-				<li class="subitem1">   
+                        <li class="subitem1">
                             <p class="genre">
                                 <input type="checkbox" name="genre" value="genre1">
                                 <span class="name">Comedy</span>
                             </p>
                         </li>
-                        <li class="subitem2"> 
+                        <li class="subitem2">
                             <p class="genre">
                                 <input type="checkbox" name="genre" value="genre2">
                                 <span class="name">Thriller</span>
                             </p>
                         </li>
-                        <li class="subitem2"> 
+                        <li class="subitem2">
                             <p class="genre">
                                 <input type="checkbox" name="genre" value="genre3">
                                 <span class="name">Drama</span>
-                            </p>   
+                            </p>
                         </li>
                     </form>
-			</ul>
-		</li>
+                </ul>
+            </li>
 
-		<li id="budget"><a href="#">Budget</a>
-			<ul>
-				<li class="listbudget">
+            <li id="budget"><a href="#">Budget</a>
+                <ul>
+                    <li class="listbudget">
                         <label for="amount"></label>
-                        <input type="text" id="amount" style="background:transparent;border: 0; font-size:0.9em; color: #f6931f; font-weight: bold;"/>
+                        <input type="text" id="amount"
+                               style="background:transparent;border: 0; font-size:0.9em; color: #f6931f; font-weight: bold;"/>
+
                         <div id="slider-range" style="background-color:white;">
                         </div>
-                        </li>
-			</ul>
-		</li>
-		<li id="reviews"><a href="#">Reviews</a>
-			<ul>
-			<li class="listreviews">
-                    <a href="#">
-                        <ul class="nostyle" id="examples">
-                        <li id="ex_1b">
-                        <div class="rateit bigstars" id="rateit" data-rateit-starwidth="32" data-rateit-starheight="32">
-                        </div>
-                        <div>
-                            <span id="value5"></span>
-                            <span id="hover5"></span>
-                        </div>
-                        <script type="text/javascript">
-                            $("#rateit").bind('rated', function (event, value) {
-                                $('#value5').text('You\'ve rated it: ' + value);
-                            });
-                        </script>
-
                     </li>
+                </ul>
+            </li>
+            <li id="reviews"><a href="#">Reviews</a>
+                <ul>
+                    <li class="listreviews">
 
-                </ul></li>
-			</ul>
-		</li>
-	</ul>
+                        <ul class="nostyle" id="examples">
+                            <li id="ex_1b">
+                                <div class="rateit bigstars" id="rateit" data-rateit-starwidth="32"
+                                     data-rateit-starheight="32">
+                                </div>
+                                <div>
+                                    <span id="value5"></span>
+                                    <span id="hover5"></span>
+                                </div>
+                                <script type="text/javascript">
+                                    $("#rateit").bind('rated', function (event, value) {
+                                        $('#value5').text('You\'ve rated it: ' + value);
+                                    });
+                                </script>
+
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
 
 
-                        <script type=";text/javascript">
+        <script type=";text/javascript">
                             $("#rateit").bind('rated', function (event, value) {
                                 $('#value5').text('You\'ve rated it: ' + value);
                                 valueStar=value;
                             });
 
-                        </script>
 
-                    </li>
+        </script>
 
-                </ul>
+        </li>
 
-
-                <script src="{% static 'javascript/explore/jquery.rateit.js' %}" type="text/javascript"></script>
-                <script>
-                    //build toc
-                    var toc = [];
-                    $('#examples > li').each(function (i, e) {
+        </ul>
 
 
-                        if (i > 0)
-                            toc.push(', ');
-                        toc.push('<a href="#')
-                        toc.push(e.id)
-                        toc.push('">')
-                        var title = $(e).find('h3:first').text();
-                        title = title.substring(title.indexOf(')') + 2);
-                        toc.push(title);
-                        toc.push('</a>');
-
-                    });
-
-                    $('#toc').html(toc.join(''));
-
-                </script>
+        <script src="{% static 'javascript/explore/jquery.rateit.js' %}" type="text/javascript"></script>
+        <script>
+            //build toc
+            var toc = [];
+            $('#examples > li').each(function (i, e) {
 
 
-            </div>
-        </div>
+                if (i > 0)
+                    toc.push(', ');
+                toc.push('<a href="#')
+                toc.push(e.id)
+                toc.push('">')
+                var title = $(e).find('h3:first').text();
+                title = title.substring(title.indexOf(')') + 2);
+                toc.push(title);
+                toc.push('</a>');
+
+            });
+
+            $('#toc').html(toc.join(''));
+
+        </script>
+
+
     </div>
+</div>
+
 {% endblock %}
        
