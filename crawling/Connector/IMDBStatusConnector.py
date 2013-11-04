@@ -300,19 +300,28 @@ class IMDBFilmStatusConnector:
             self.logger.debug("-> Film status modified")
             return True
 
-<<<<<<< HEAD
     def setFilmPriority(self, imdb_id, priority):
         self.logger.debug("Set the film Priority for IMDB ID {0} to {1} in the database".format(imdb_id, priority))
         
         s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        
         s.priority = priority
-=======
+        
+        try:
+            s.save()
+        except Exception as e:
+            self.logger.warning("-> The film status couldn't be saved")
+            self.logger.warning("-> Error: {}".format(e))
+            return False
+        else:
+            self.logger.debug("-> Film priority modified")
+            return True
+
     def setPosterStatus(self, imdb_id, status):
         self.logger.debug("Set the Poster status (Film Image) for IMDB ID {0} to {1} in the database".format(imdb_id, status))
         
         s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
         s.film_image = status
->>>>>>> 2a18249874cdd26efebfa39f5f6aacf1fd9ba138
 
         try:
             s.save()
@@ -321,14 +330,9 @@ class IMDBFilmStatusConnector:
             self.logger.warning("-> Error: {}".format(e))
             return False
         else:
-<<<<<<< HEAD
-            self.logger.debug("-> Film priority modified")
-            return True
-=======
             self.logger.debug("-> Film status modified")
             return True
 
->>>>>>> 2a18249874cdd26efebfa39f5f6aacf1fd9ba138
 ####################################################################
 
 class IMDBPersonStatusConnector:
