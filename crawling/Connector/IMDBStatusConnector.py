@@ -408,6 +408,15 @@ class IMDBPersonStatusConnector:
         self.logger.debug("-> Status: {}".format(status))
         return status
 
+    def getDownloadedStatus(self,imdb_id):
+        self.logger.debug("Get the film Downloaded status for Person IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
+        status = s.downloaded
+
+        self.logger.debug("-> Status: {}".format(status))
+        return status
+
     def getNotDownloaded(self):
         self.logger.debug("Get the Person IMDB IDs in the database with downloaded=0")
         
@@ -461,7 +470,7 @@ class IMDBPersonStatusConnector:
 class IMDBCompanyStatusConnector:
      
     def __init__(self):
-        self.logger = initLogger.getLogger(ConnectorConfig.IMDB_PERSON_STATUS_CONNECTOR_LOGGER_NAME)
+        self.logger = initLogger.getLogger(ConnectorConfig.IMDB_COMPANY_STATUS_CONNECTOR_LOGGER_NAME)
     
     ###############################################################################
     def getIsDownloaded(self, imdb_id):
@@ -527,6 +536,15 @@ class IMDBCompanyStatusConnector:
         
         s = IMDBCompanyStatus.objects.get(imdb_id=imdb_id)
         status = s.extracted
+
+        self.logger.debug("-> Status: {}".format(status))
+        return status
+
+    def getDownloadedStatus(self,imdb_id):
+        self.logger.debug("Get the film Downloaded status for Company IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBCompanyStatus.objects.get(imdb_id=imdb_id)
+        status = s.downloaded
 
         self.logger.debug("-> Status: {}".format(status))
         return status
