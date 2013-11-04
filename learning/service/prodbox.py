@@ -84,7 +84,7 @@ class CinemaService(LearningService):
             gkey = genBoxOffice(self.films.iterator())
             v =  DictVectorizer(dtype=np.float32)
             self.box_office_matrix = v.fit_transform(gkey)
-            self.create_cobject('box_office', self.budget_matrix)
+            self.create_cobject('box_office', self.box_office_matrix)
         else:
             self.box_office_matrix = self.get_cobject('box_office').get_content()
 
@@ -200,7 +200,7 @@ class CinemaService(LearningService):
             self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++', verbose=1)
             self.keywords_reduced_KM = self.keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
             # 0 means closer to centroids.
-            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced))
+            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM))
         else:
             self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM = self.get_cobject('keywords').get_content()
         self.nb_keywords = self.keyword_matrix.shape[1]
