@@ -3,25 +3,28 @@
 {% load static %}
 
 {% block extrahead %}
+    <meta charset="windows-1252">
+    <meta name="viewport" content="width=device-width">
+    
+    <!-- Appels de scripts -->
+    <script type="text/javascript" src="{% static 'javascript/explore/cadreFinal.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/explore/chargement.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/explore/carrousel.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/explore/resultatsProches.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/explore/bulleInfo.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/explore/icheck.js' %}"></script>        
+    <script type="text/javascript" src="{% static 'javascript/explore/moviesearch.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/explore/jquery.rateit.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'javascript/explore/rateit.js' %}" ></script>
+    
+    <!-- Appels css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/explore/explore.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/explore/checkboxes.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/explore/rateit.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/line/red.css' %}"/>
 
-<meta charset="windows-1252">
-<meta name="viewport" content="width=device-width">
-
-<link rel="stylesheet" type="text/css" href="{% static 'css/resultscommun.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/explore.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/lightbox.css' %}" />
-
-<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> <!-- modules ui -->
-<script src="{% static 'javascript/lightbox-2.6.min.js' %}"></script>
-
-<script type="text/javascript" src="{% static 'javascript/explore/cadreFinal.js' %}"></script>
-<script type="text/javascript" src="{% static 'javascript/explore/chargement.js' %}"></script>
-<script type="text/javascript" src="{% static 'javascript/explore/carrousel.js' %}"></script>
-<script type="text/javascript" src="{% static 'javascript/explore/resultatsProches.js' %}"></script>
-<script type="text/javascript" src="{% static 'javascript/explore/bulleInfo.js' %}"></script>
-
-{% block explore_extrahead %}
-{% endblock %}
+    {% block explore_extrahead %}
+    {% endblock %}
 {% endblock %}
 
 {% block content %}

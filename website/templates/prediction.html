@@ -3,18 +3,18 @@
 {% load static %}
 
 {% block extrahead %}
-<!--<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700' rel='stylesheet' type='text/css'>-->
-<!--<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>-->
-<!--<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>-->
-<meta charset="windows-1252">
-<meta name="viewport" content="width=device-width">
-<link rel="stylesheet" type="text/css" href="{% static 'css/resultscommun.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/prediction_menu.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/prediction_results.css' %}" />
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"> <!-- modules ui -->
-<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> <!-- modules ui -->
-<script src="{% static 'javascript/lightbox-2.6.min.js' %}"></script>
-<link href="{% static 'css/lightbox.css' %}" rel="stylesheet" />
+
+    <meta charset="windows-1252">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- Appels de scripts--> 
+    <script src="{% static 'javascript/prediction/icheck.js' %}"></script>
+    <script src="{% static 'javascript/prediction/numbers.js' %}"></script>
+
+    <!-- Appels css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/prediction_menu.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/prediction_results.css' %}" />
+
     {% block prediction_extrahead %}
     {% endblock %}
 {% endblock %}

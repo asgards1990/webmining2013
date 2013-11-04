@@ -2,17 +2,30 @@
 <html lang="en">
     <head>
         {% load static %}
+        <!-- Appels de scripts -->
+        <script type="text/javascript" src="{% static 'javascript/commun/jquery.js' %}" ></script> <!-- bibliothèque jquery -->
+        <script type="text/javascript" src="{% static 'javascript/commun/jquery-ui.js' %}"></script> <!-- modules ui -->
+        <script type="text/javascript" src="{% static 'javascript/commun/accordion.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/commun/icheck.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/commun/slider.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/commun/lightbox-2.6.min.js' %}"></script>
+
+        <!-- Appels css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/commun/commun.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/commun/menucommun.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/commun/lightbox.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/commun/accordion.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/square/red.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/commun/jquery-ui.css' %}"> 
+
+        <!-- Appels de fonts -->
         <link href='http://fonts.googleapis.com/css?family=Fenix&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>-->
-        
-        <title>ProdBox</title>
-        
-        <link rel="stylesheet" type="text/css" href="{% static 'css/commun.css' %}"/>
-        <script src="{% static 'javascript/jquery.js' %}" ></script> <!-- bibliothèque jquery -->
+        <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+                
         {% block extrahead %}
         {% endblock %}
+        <title>ProdBox</title>
     </head>
 
     <body>
