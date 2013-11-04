@@ -124,18 +124,19 @@ def searchresults(request, nomFilm):
 
         return render(request, 'prediction.html',locals())
 
-def keywordGenre1(request):
+def keywordGenre(request):
     if request.method == 'POST':
-        genre_name = request.POST.get('genre')
+        genre_id= request.POST.get('genre')
     else:
         return HttpResponse("Erreur")
 
     try:
-        genre = Genre.objects.get(name = genre_name)
+        genre = Genre.objects.get(id = genre_id)
     except:
         return HttpReponse("Genre not found")
     
     tab=list()
+    
     for result in GenrePopularKeyword.objects.filter(genre=genre).order_by('occurences')[:10] :
         tab.append(result.keyword)
 
