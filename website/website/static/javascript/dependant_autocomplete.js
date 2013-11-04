@@ -114,7 +114,7 @@ $(document).ready(function() {
 
 
 
-/*function ajoutKeywordSuggest(keyword) {
+function ajoutKeywordSuggest(keyword) {
 
 var newKeyword = document.createElement('div');
 newKeyword.className="keyword";
@@ -151,8 +151,9 @@ document.getElementById("keywordSuggest").appendChild(newKeyword);
 
 return newImg1;
 return newImg1;
-};*/
+};
 
+/*function Hello (data) {alert('hello')};*/
 
 
 
@@ -163,7 +164,7 @@ $(document).ready(function() {
         var genre2 = $('#id_genre2');
         var id1 = genre1.val();
         var id2 = genre2.val();
-        urlSubmit = 'http://Senellart.com:8080/suggest/';
+        urlSubmit = 'http://senellart.com:8080/suggest/';
 
         if (id1) {
             var value1 = $('#id_genre1-deck').clone().children().children().remove().end().text();
@@ -172,20 +173,24 @@ $(document).ready(function() {
             if (id2) {
                 var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
                 alert (value2);
-                };
-           /* else {
-                $.post({
-                    url: urlSubmit,
-                    msg="json.request"+JSON.stringify(???: 'value1', )
-                    success:function callback(response){
+                }
+            else {
+               var args = {'str' : value1, 'nbresults' : 10};
+               alert("on est l¨¤");
+              $.post(urlSubmit, "json_request="+JSON.stringify(args), HELLO(data), "json")
+                    /*function callback(tab) {
                         if (response.success) {
                             for (k=0;k<10;k++) {
-                            ajoutKeywordSuggest(response.resuslts[k]);
+                            ajoutKeywordSuggest(response.results[k][1]);
                             };
                         }
-                    });
-                };*/
-            };
+                        else {
+                            return ('error');
+                            };
+                        };*/
+                  
+                };
+            }
         /*else {if (id2) {
             var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
                 $.ajax({

@@ -131,13 +131,9 @@ def filmInfo(request):
         return HttpResponse("Erreur")
 
     try:
-        idDuFilm = Film.objects.get(imdb_id = film_id)
+        film = Film.objects.get(imdb_id = film_id)
     except:
         return HttpReponse("movie not found")
     
-    tab=list()
-    
-    for result in GenrePopularKeyword.objects.filter(genre=genre).order_by('occurences')[:10] :
-        tab.append(result.keyword)
 
-    return HttpResponse(simplejson.dumps(tab), mimetype='application/json')
+    return HttpResponse('hello')
