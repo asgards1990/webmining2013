@@ -13,27 +13,26 @@ autocomplete_light.register(Film, FilmAutocomplete)
 # Autocompletion pour une personne
 class PersonAutocomplete(autocomplete_light.AutocompleteModelTemplate):
     search_fields=['name']
-    autocomplete_js_attributes={'placeholder': 'Name ?',}
     choice_template = 'autocomplete/person_autocomplete.html'
     
 autocomplete_light.register(Person, PersonAutocomplete, name='Actor',
-                            choices = (Person.objects.filter(actorweight__rank__isnull=False)))
+                            choices = (Person.objects.filter(actorweight__rank__isnull=False)), autocomplete_js_attributes={'placeholder': 'Add an actor by name',})
                             
 autocomplete_light.register(Person, PersonAutocomplete, name='Director',
- 
-                           choices = (Person.objects.filter(films_from_director__imdb_id__isnull=False)).distinct())
+                           choices = (Person.objects.filter(films_from_director__imdb_id__isnull=False)).distinct()
+                           , autocomplete_js_attributes={'placeholder': 'Add a director by name',})
                            
 # Autocompletion simple genre-keywords
                            
 class GenreAutocomplete(autocomplete_light.AutocompleteModelBase):
     search_fields=['name']
-    autocomplete_js_attributes={'placeholder': 'Genre ?','minimum_characters': 0,}
+    autocomplete_js_attributes={'placeholder': 'Add a genre','minimum_characters': 0,}
 
 autocomplete_light.register(Genre, GenreAutocomplete)
 
 class KeywordAutocomplete(autocomplete_light.AutocompleteModelBase):
     search_fields=['word']
-    autocomplete_js_attributes={'placeholder': 'Keyword ?',}
+    autocomplete_js_attributes={'placeholder': 'Add a keyword',}
     
     def choices_for_request(self):
         q=self.request.GET.get('q','')
@@ -53,7 +52,7 @@ autocomplete_light.register(Keyword, KeywordAutocomplete)
 
 class Genre1Autocomplete(autocomplete_light.AutocompleteModelBase):
     search_fields=['name']
-    autocomplete_js_attributes={'placeholder': 'Genre ?','minimum_characters': 0,}
+    autocomplete_js_attributes={'placeholder': 'Add a genre','minimum_characters': 0,}
     
     def choices_for_request(self):
         q=self.request.GET.get('q','')
@@ -69,7 +68,7 @@ autocomplete_light.register(Genre, Genre1Autocomplete, name='genre1')
 
 class Genre2Autocomplete(autocomplete_light.AutocompleteModelBase):
     search_fields=['name']
-    autocomplete_js_attributes={'placeholder': 'Genre ?','minimum_characters': 0,}
+    autocomplete_js_attributes={'placeholder': 'Add a genre','minimum_characters': 0,}
     
     def choices_for_request(self):
         q=self.request.GET.get('q','')
@@ -88,7 +87,7 @@ autocomplete_light.register(Genre, Genre2Autocomplete, name='genre2')
 
 class KeywordAutocomplete(autocomplete_light.AutocompleteModelBase):
     search_fields=['word']
-    autocomplete_js_attributes={'placeholder': 'Keyword ?','minimum_characters': 1,}
+    autocomplete_js_attributes={'placeholder': 'Add a keyword','minimum_characters': 1,}
     
     def choices_for_request(self):
         q=self.request.GET.get('q','')

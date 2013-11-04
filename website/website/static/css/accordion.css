@@ -66,27 +66,27 @@ border-radius:3px;
 
 }
 .menu ul li:last-child a {
-	border-bottom: 1px solid #33373d;
+	border-bottom: 1px solid #d51c21;
 }
 .menu ul li:last-child p {
 	border-bottom: 1px solid #33373d;
 }
 .menu > li > a:hover, .menu > li > a.active {
 	background-color: #d51c21;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(69, 199, 235)),to(rgb(38, 152, 219)));
-	background-image: -webkit-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
-	background-image: -moz-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
-	background-image: -o-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
-	background-image: -ms-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
-	background-image: linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#EA5255),to(#d51c21));
+	background-image: -webkit-linear-gradient(top, #EA5255, #d51c21);
+	background-image: -moz-linear-gradient(top, #EA5255, #d51c21);
+	background-image: -o-linear-gradient(top, #EA5255, #d51c21);
+	background-image: -ms-linear-gradient(top, #EA5255, #d51c21);
+	background-image: linear-gradient(top, #EA5255, #d51c21);
 	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#45c7eb', EndColorStr='#2698db');
-	border-bottom: 1px solid #103c56;
-	-webkit-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
-	-moz-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
-	box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+	border-bottom: 1px solid #d51c21;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #EA5255;
+	-moz-box-shadow: inset 0px 1px 0px 0px #EA5255;
+	box-shadow: inset 0px 1px 0px 0px #EA5255;
 }
 .menu > li > a.active {
-	border-bottom: 1px solid #1a638f;
+	border-bottom: 1px solid #d51c21;
 }
 .menu > li > a:before {
 	content: '';
@@ -125,7 +125,7 @@ border-radius:3px;
 	font-weight: 500;
 }
 .menu > li > a:hover span, .menu > li a.active span {
-	background: #2173a1;
+	background: #8A090C;
 }
 .menu > li > ul li a:before{
 	font-size: 8px;

@@ -3,13 +3,11 @@
 {% load static %}
 
 {% block prediction_extrahead %}
-    <script src="{% static 'javascript/slider.js' %}"></script>
-
     <link rel="stylesheet" href="{% static 'css/accordion.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/square/red.css' %}"/>
     <script src="{% static 'javascript/accordion.js' %}"></script>
     <script src="{% static 'javascript/jquery.icheck.js' %}"></script>
-
+    <script src="{% static 'javascript/slider.js' %}"></script>
     <script>
         $(document).ready(function () {
             $('#release input').iCheck({
@@ -19,8 +17,6 @@
             });
         });
     </script>
-
-
     {% include 'autocomplete_light/static.html' %}
     {{ form.media }}
 {% endblock %}
