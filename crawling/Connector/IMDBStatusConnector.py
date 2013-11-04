@@ -158,6 +158,12 @@ class IMDBFilmStatusConnector:
         status = IMDBFilmStatus.objects.filter(downloaded=1, extracted=0).order_by('priority')
         return map(lambda s: s.imdb_id, status)
 
+    def getDownloadedNotExtractedFiltered(self, year_min, priority_max):
+        self.logger.debug("Get the Film IMDB IDs in the database with downloaded=1 and extracted=0 (year_min={0}, priority_max={1})".format(year_min, priority_max))
+
+        status = IMDBFilmStatus.objects.filter(downloaded=1, extracted=0, year__gte=year_min, priority__lte=priority_max).order_by('priority')
+        return map(lambda s: s.imdb_id, status)
+
     def getFilmPriority(self, imdb_id):
         self.logger.debug("Get the film priority for IMDB ID {} in the database:".format(imdb_id))
         
