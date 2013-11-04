@@ -5,6 +5,7 @@ from cinema.models import *
 import filmsfilter as flt
 import numpy as np
 import scipy
+from dimreduce import *
 
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
@@ -32,34 +33,150 @@ class TableDependentCachedObject(CachedObject):
             print('Table "' + self.table_name + ' not found.')
 
 class CinemaService(LearningService):
-    def __init__(self):
-        super(CinemaService, self).__init__()
-        
-        self.films = flt.filter1()
+
+    def loadFilms(self):
+	self.films = flt.filter1()
         if not self.is_loaded('films'):
-            #self.films = flt.filter1()
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
         else:
             self.indexes = self.get_cobject('films').get_content()
-        self.nbfilms = len(self.indexes)
-        
-        self.dim_keywords = 30
-        if not self.is_loaded('keywords'):
-            gkey = genKeywords(self.films.iterator())
-            v =  DictVectorizer(dtype=int)
-            self.keyword_matrix = v.fit_transform(gkey)
-            self.keyword_names = v.get_feature_names()
-            
-            self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++', verbose=1)
-            self.keywords_reduced = self.keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
-            # 0 means closer to centroids.
-            
-            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced))
+        self.nb_films = len(self.indexes)
+
+    def loadImdb(self):
+	if not self.is_loaded('imdb'):
+	    g_user_rating = genImdbUserRating(self.films.iterator())
+	    v_user_rating = DictVectorizer(dtype=np.float32)
+	    self.imdb_user_rating_matrix = v_user_rating.fit_transform(g_user_rating)
+	    g_nb_user_ratings = genImdbNbUserRatings(self.films.iterator())
+	    v_nb_user_ratings = DictVectorizer(dtype=int)
+	    self.imdb_nb_user_ratings_matrix = v_nb_user_ratings.fit_transform(g_nb_user_ratings)
+	    g_nb_user_reviews = genImdbNbUserReviews(self.films.iterator())
+	    v_nb_user_reviews = DictVectorizer(dtype=int)
+	    self.imdb_nb_user_reviews_matrix = v_nb_user_reviews.fit_transform(g_nb_user_reviews)
+	    g_nb_reviews = genImdbNbReviews(self.films.iterator())
+	    v_nb_reviews = DictVectorizer(dtype=int)
+	    self.imdb_nb_reviews_matrix = v_nb_reviews.fit_transform(g_nb_reviews)
+	    self.create_cobject('imdb', (self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix))
+	else:
+	    self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix = self.get_cobject('imdb').get_content()
+
+    def loadReleaseDate(self):
+        if not self.is_loaded('release_date'):
+            gkey = genReleaseDate(self.films.iterator())
+            v =  DictVectorizer(dtype=date)
+            self.release_date_matrix = v.fit_transform(gkey)
+            self.create_cobject('release_date', self.release_date_matrix)
         else:
-            self.keyword_names, self.keyword_matrix, self.keywords_reduced = self.get_cobject('keywords').get_content()
-        self.nbkeywords = self.keyword_matrix.shape[1]
-        
+            self.release_date_matrix = self.get_cobject('release_date').get_content()
+
+    def loadRuntime(self):
+        if not self.is_loaded('runtime'):
+            gkey = genRuntime(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.runtime_matrix = v.fit_transform(gkey)
+            self.create_cobject('runtime', self.runtime_matrix)
+        else:
+            self.runtime_matrix = self.get_cobject('runtime').get_content()
+
+    def loadBoxOffice(self):
+        if not self.is_loaded('box_office'):
+            gkey = genBoxOffice(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.box_office_matrix = v.fit_transform(gkey)
+            self.create_cobject('box_office', self.budget_matrix)
+        else:
+            self.box_office_matrix = self.get_cobject('box_office').get_content()
+
+    def loadGenres(self):
+        if not self.is_loaded('genres'):
+            gkey = genGenres(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.genres_matrix = v.fit_transform(gkey)
+            self.genres_names = v.get_feature_names()
+            self.create_cobject('genres', (self.genres_names, self.genres_matrix))
+        else:
+            self.genres_names, self.genres_matrix = self.get_cobject('genres').get_content()
+
+    def loadBudget(self):
+        if not self.is_loaded('budget'):
+            gkey = genBudget(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.budget_matrix = v.fit_transform(gkey)
+            self.create_cobject('budget', self.budget_matrix)
+        else:
+            self.budget_matrix = self.get_cobject('budget').get_content()
+
+    def loadPrizes(self):
+        if not self.is_loaded('prizes'):
+            gkey = genPrizes(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.prizes_matrix = v.fit_transform(gkey)
+            self.prizes_names = v.get_feature_names()
+            self.create_cobject('prizes', (self.prizes_names, self.prizes_matrix))
+        else:
+            self.prizes_names, self.prizes_matrix = self.get_cobject('prizes').get_content()
+
+    def loadCountries(self):
+        if not self.is_loaded('countries'):
+            gkey = genCountries(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.countries_matrix = v.fit_transform(gkey)
+            self.countries_names = v.get_feature_names()
+            self.create_cobject('countries', (self.countries_names, self.countries_matrix))
+        else:
+            self.countries_names, self.countries_matrix = self.get_cobject('countries').get_content()
+
+    def loadLanguages(self):
+        if not self.is_loaded('languages'):
+            gkey = genLanguages(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.languages_matrix = v.fit_transform(gkey)
+            self.languages_names = v.get_feature_names()
+            self.create_cobject('languages', (self.languages_names, self.languages_matrix))
+        else:
+            self.languages_names, self.languages_matrix = self.get_cobject('languages').get_content()
+
+    def loadMetacriticScore(self):
+        if not self.is_loaded('metacritic_score'):
+            gkey = genMetacriticScore(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.metacritic_score_matrix = v.fit_transform(gkey)
+            self.create_cobject('metacritic_score', self.metacritic_score_matrix)
+        else:
+            self.metacritic_score_matrix = self.get_cobject('metacritic_score').get_content()
+
+    def loadProductionCompanies(self):
+        if not self.is_loaded('production_companies'):
+            gkey = genProductionCompanies(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.production_companies_matrix = v.fit_transform(gkey)
+            self.production_companies_names = v.get_feature_names()
+            self.create_cobject('production_companies', (self.production_companies_names, self.production_companies_matrix))
+        else:
+            self.production_companies_names, self.production_companies_matrix = self.get_cobject('production_companies').get_content()
+
+    def loadReviews(self):
+        if not self.is_loaded('reviews'):
+            gkey = genReviews(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.reviews_matrix = v.fit_transform(gkey)
+            self.reviews_names = v.get_feature_names()
+            self.create_cobject('reviews', (self.reviews_names, self.reviews_matrix))
+        else:
+            self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
+
+    def loadSeason(self):
+        if not self.is_loaded('season'):
+            gkey = genSeason(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.season_matrix = v.fit_transform(gkey)
+            self.season_names = v.get_feature_names()
+            self.create_cobject('season', (self.season_names, self.season_matrix))
+        else:
+            self.season_names, self.season_matrix = self.get_cobject('season').get_content()
+
+    def loadStats(self):
         if not self.is_loaded('genre_stats'):
             self.filmsbygenre = {}
             self.keywordsbygenre = {}
@@ -73,65 +190,112 @@ class CinemaService(LearningService):
         else:
             self.filmsbygenre, self.keywordsbygenre = self.get_cobject('genre_stats').get_content()
 
+    def loadKeywords(self):
+        self.dim_keywords = 30 #TODO : optimize
+        if not self.is_loaded('keywords'):
+            gkey = genKeywords(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.keyword_matrix = v.fit_transform(gkey)
+            self.keyword_names = v.get_feature_names()
+            self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++', verbose=1)
+            self.keywords_reduced_KM = self.keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
+            # 0 means closer to centroids.
+            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced))
+        else:
+            self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM = self.get_cobject('keywords').get_content()
+        self.nb_keywords = self.keyword_matrix.shape[1]
+
+    def loadActors(self):
+	self.dim_actors = 10 #TODO : optimize
         if not self.is_loaded('actors'):
             v = DictVectorizer(dtype=int)
-            self.actor_matrix = v.fit_transform(genActorsTuples2(self.films.iterator()))
+            self.actor_matrix = v.fit_transform(genActorsTuples(self.films.iterator()))
             self.actor_names = v.get_feature_names()
-            self.create_cobject('actors', (self.actor_names, self.actor_matrix))
+	    self.actor_reduced_SC = getReducedActorsFeatureSC(self.films,self.dim_actors) # uses dimreduce
+            self.create_cobject('actors', (self.actor_names, self.actor_matrix, self.actor_reduced_SC))
         else:
-            self.actor_names, self.actor_matrix = self.get_cobject('actors').get_content()
+            self.actor_names, self.actor_matrix, self.actor_reduced_SC = self.get_cobject('actors').get_content()
 
-        self.dim_writers = 20 # must be lower than dim_keywords
+    def loadWriters(self):
+        self.dim_writers = 20 # must be lower than dim_keywords #TODO : optimize
         if not self.is_loaded('writers'):
             v=DictVectorizer(dtype=int)
-            writer_matrix = v.fit_transform(genWriters(self.films.iterator()))
+            self.writer_matrix = v.fit_transform(genWriters(self.films.iterator()))
             self.writer_names = v.get_feature_names()
-            # Distance to keywords' centroids of writers.
-            self.writer_keyword_matrix = writer_matrix.transpose() * self.keywords_reduced
-            
+            self.writer_keyword_matrix = self.writer_matrix.transpose() * self.keywords_reduced #TODO : average?	
+	    # First method: Spectral Clustering
             self.writer_SC = SpectralClustering(n_clusters = self.dim_writers, eigen_solver='arpack', affinity="nearest_neighbors")
             writer_labels = self.writer_SC.fit_predict(self.writer_keyword_matrix)
-            self.proj_writers = scipy.sparse.csc_matrix(writer_labels==0, dtype=int).transpose()
+            self.proj_writers_SC = scipy.sparse.csc_matrix(writer_labels==0, dtype=int).transpose()
             for i in range(1, self.dim_writers):
-                self.proj_writers = scipy.sparse.hstack([self.proj_writers, scipy.sparse.csc_matrix(writer_labels==i, dtype=int).transpose()])
-            self.writer_reduced = writer_matrix * self.proj_writers
-            
-            self.create_cobject('writers', (self.writer_names, self.writer_keyword_matrix, self.writer_reduced, self.proj_writers))
+                self.proj_writers_SC = scipy.sparse.hstack([self.proj_writers, scipy.sparse.csc_matrix(writer_labels==i, dtype=int).transpose()])
+            self.writer_reduced_SC = self.writer_matrix * self.proj_writers
+            # Second method: Average of keywords features
+	    self writer_reduced_avg =  self.writer_matrix * self.writer_keyword_matrix #TODO : average?
+            self.create_cobject('writers', (self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg))
         else:
-            self.writer_names, self.writer_keyword_matrix, self.writer_reduced, self.proj_writers = self.get_cobject('writers').get_content()
-
+            self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg = self.get_cobject('writers').get_content()
         self.nbwriters = len(self.writer_names)
 
-        # TODO : load other variables
+    def loadWriters(self):
+	#TODO (sur le modele de loadWriters)
+	return
 
-        self.dim_actors = 20
-        s = raw_input('Start Spectral Clustering on actors ?')
-        if s=='y':
-            self.firstKM = MiniBatchKMeans(n_clusters=500, init='k-means++', n_init=1, init_size=2000, batch_size=3000, verbose=1)
-            first_reduction = self.firstKM.fit_transform(self.actor_matrix)
-            #first_reduction = np.exp( - first_reduction ** 2 ) # go from distance to similarity matrix
-            
-            #self.firstSVD = TruncatedSVD(n_components = 500, n_iterations = 100)
-            #first_reduction = self.firstSVD.fit_transform(self.actor_matrix)
-            
-            self.actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=10)
-            self.actor_labels = self.actors_SC.fit_predict(first_reduction.transpose())
-            self.proj_actors = scipy.sparse.csc_matrix(self.actor_labels==0, dtype=int).transpose()
-            for i in range(1, self.dim_actors):
-                self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(self.actor_labels==i, dtype=int).transpose()])
-            self.actor_reduced = first_reduction * self.proj_actors
-            self.actor_reduced = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
-            self.topic_actors = []
-            for i in range(self.dim_actors):
-                tot = np.sum(self.firstKM.cluster_centers_[self.firstKM.labels_[self.actor_labels == i]], axis=0)
-                #tot = self.firstSVD.inverse_transform(self.actor_labels == i)[0,:]
-                persons = []
-                for person in (np.array(self.actor_names)[np.argsort(-tot)[:10]]).tolist():
-                    try:
-                        persons.append( Person.objects.get(imdb_id = person[:9]) )
-                    except:
-                        continue
-                self.topic_actors.append((persons))
+    def __init__(self):
+        super(CinemaService, self).__init__()
+	# Load films data
+	self.loadFilms()
+	# Load prediction features
+	self.loadActors()
+	self.loadDirectors()
+	self.loadSeason()
+	self.loadBudget()
+	self.loadKeywords()
+	self.loadGenres()
+	# Load prediction labels
+	self.loadBoxOffice()
+	self.loadPrizes()
+	self.loadReviews()
+	# Load other features
+	self.loadStats()
+	self.loadWriters()
+	self.loadRuntime()
+	self.loadMetacriticScore()
+	self.loadReleaseDate()
+	self.loadProductionCompanies()
+	self.loadImdb()
+	self.loadCountries()
+	self.loadLanguages()
+
+# VIEUX CODE BENJAMIN
+#        self.dim_actors = 20
+#        s = raw_input('Start Spectral Clustering on actors ?')
+#        if s=='y':
+#            self.firstKM = MiniBatchKMeans(n_clusters=500, init='k-means++', n_init=1, init_size=2000, batch_size=3000, verbose=1)
+#            first_reduction = self.firstKM.fit_transform(self.actor_matrix)
+#            #first_reduction = np.exp( - first_reduction ** 2 ) # go from distance to similarity matrix
+#            
+#            #self.firstSVD = TruncatedSVD(n_components = 500, n_iterations = 100)
+#            #first_reduction = self.firstSVD.fit_transform(self.actor_matrix)
+#            
+#            self.actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=10)
+#            self.actor_labels = self.actors_SC.fit_predict(first_reduction.transpose())
+#            self.proj_actors = scipy.sparse.csc_matrix(self.actor_labels==0, dtype=int).transpose()
+#            for i in range(1, self.dim_actors):
+#                self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(self.actor_labels==i, dtype=int).transpose()])
+#            self.actor_reduced = first_reduction * self.proj_actors
+#            self.actor_reduced = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
+#            self.topic_actors = []
+#            for i in range(self.dim_actors):
+#                tot = np.sum(self.firstKM.cluster_centers_[self.firstKM.labels_[self.actor_labels == i]], axis=0)
+#                #tot = self.firstSVD.inverse_transform(self.actor_labels == i)[0,:]
+#                persons = []
+#                for person in (np.array(self.actor_names)[np.argsort(-tot)[:10]]).tolist():
+#                    try:
+#                        persons.append( Person.objects.get(imdb_id = person[:9]) )
+#                    except:
+#                        continue
+#                self.topic_actors.append((persons))
 
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
@@ -413,4 +577,4 @@ class CinemaService(LearningService):
         except exceptions.KeyError:
             pass
 
-        return crit_out
+        return crit_outl

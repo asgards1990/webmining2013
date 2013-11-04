@@ -43,6 +43,9 @@ def genImdbNbUserReviews(iter_films):
 def genImdbNbReviews(iter_films):
     return genNullableFeature(iter_films,'imdb_nb_reviews')
 
+def genReleaseDate(iter_films):
+    return genNullableFeature(iter_films,'release_date')
+
 def genSeason(iter_films):
     while True:
         film = next(iter_films)
