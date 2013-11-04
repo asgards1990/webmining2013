@@ -108,3 +108,99 @@ $(document).ready(function() {
         console.log(genre1WidgetElement, 'data is', genre1WidgetElement.yourlabsWidget().autocomplete.data)
     })
 });
+
+
+
+
+
+
+function ajoutKeywordSuggest(keyword) {
+
+var newKeyword = document.createElement('div');
+newKeyword.className="keyword";
+
+
+var newName = document.createElement('span');
+newName.className="name";
+
+
+newName.appendChild(document.createTextNode(keyword));
+
+
+
+var newDelete = document.createElement('span');                               
+newDelete.className="delete";
+
+
+var newImg1 = document.createElement('img');
+newImg1.className="suppress1";
+newImg1.src="img/DeleteGrey.jpg" 
+
+
+var newImg2 = document.createElement('img');
+newImg2.className="suppress2"; 
+newImg2.src="img/DeleteRed.png" ;
+
+
+newKeyword.appendChild(newName);
+newKeyword.appendChild(newDelete);
+newDelete.appendChild(newImg1);
+newDelete.appendChild(newImg2);
+
+document.getElementById("keywordSuggest").appendChild(newKeyword);
+
+return newImg1;
+return newImg1;
+};
+
+
+
+
+
+$(document).ready(function() {
+    $('body').on('change', '.autocomplete-light-widget select[name$=genre2]', function() {
+        var genre1 = $('#id_genre1_text');
+        var genre2 = $('#id_genre2_text');
+        var id1 = genre1.val();
+        var id2 = genre2.val();
+        urlUnGenre = cinema/keywordGenre/
+
+        
+
+        if (id1) {
+        
+            if (id2) {
+                };
+            else {
+                $.ajax({
+                    type:"POST",
+                    url: urlUnGenre,
+                    data: {genre: value1}
+                    success:function(tab){
+                        for (k=0;k<10;k++) {
+                            
+                        
+                    });
+                };
+            };
+        else {if (id2) {
+                $.ajax({
+                    type:"POST",
+                    url: urlUnGenre
+                    data: {genre: value2}
+                    success:function(tab){
+                    });
+                };
+            else {
+                $.ajax({
+                    type:"POST",
+                    url: urlUnGenre
+                    data: {genre: value1}
+                    
+                    success:function(tab){
+                    });
+                };
+            };
+        
+            
+            
