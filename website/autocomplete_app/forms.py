@@ -22,15 +22,20 @@ class MultipleDirectorSearchForm(FixedModelForm):
         
 #Formulaire de selection genre + keywords
 class GKSearchForm(FixedModelForm):
+    genre = forms.ModelChoiceField(Person.objects.all(),widget=autocomplete_light.ChoiceWidget('GenreAutocomplete'))
+    keyword = forms.ModelMultipleChoiceField(Person.objects.all(),widget=autocomplete_light.MultipleChoiceWidget('KeywordAutocomplete'))
     class Media :
-        js = ('javascript/dependant_autocomplete.js',)
+        js = ('javascript/dependant_autocomplete_simple.js',)
     class Meta :
         model = GKSearch
         widgets = autocomplete_light.get_widgets_dict(GKSearch)
         
 class PredictionForm(FixedModelForm):
     actors = forms.ModelMultipleChoiceField(Person.objects.all(),widget=autocomplete_light.MultipleChoiceWidget('Actor'))
-    directors = forms.ModelMultipleChoiceField(Person.objects.all(),widget=autocomplete_light.MultipleChoiceWidget('Actor'))
+    directors = forms.ModelChoiceField(Person.objects.all(),widget=autocomplete_light.ChoiceWidget('Director'))
+    genre1 = forms.ModelChoiceField(Person.objects.all(),widget=autocomplete_light.ChoiceWidget('genre1'))
+    genre2 = forms.ModelChoiceField(Person.objects.all(),widget=autocomplete_light.ChoiceWidget('genre2'))
+    keyword = forms.ModelMultipleChoiceField(Person.objects.all(),widget=autocomplete_light.MultipleChoiceWidget('keyword_complex'))
     class Media :
         js = ('javascript/dependant_autocomplete.js',)
     class Meta :

@@ -23,6 +23,8 @@ class Handler(tornado.web.RequestHandler):
                         query_results = self.app_learn.search_request(args)
                     elif self.method=='predict':
                         query_results = self.app_learn.predict_request(args)
+                    elif self.method=='suggest_keywords':
+                        query_results = self.app_learn.suggest_keywords(args)
                     else:
                         raise service.objects.ParsingError('')
                     query_results['success'] = True

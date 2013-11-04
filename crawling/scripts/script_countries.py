@@ -107,11 +107,11 @@ input = """
 </a></td>
   <td><a href="/country/th">Thailand
 </a></td>
-  <td><a href="/country/gb">United Kingdom
+  <td><a href="/country/gb">UK
 </a></td>
 </tr>
 <tr>
-  <td><a href="/country/us">United States
+  <td><a href="/country/us">USA
 </a></td>
 </table>
 

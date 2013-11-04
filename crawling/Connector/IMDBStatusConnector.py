@@ -71,7 +71,7 @@ class IMDBFilmStatusConnector:
     
     ###############################################################################
 
-    # GET METHODS
+    # GET METHODS
 
     def getFilmMainPageStatus(self, imdb_id):
         self.logger.debug("Get the film Main Page status for IMDB ID {} in the database:".format(imdb_id))
@@ -127,6 +127,25 @@ class IMDBFilmStatusConnector:
         self.logger.debug("-> Status: {}".format(status))
         return status
 
+    def getIsDownloaded(self, imdb_id):
+        self.logger.debug("Determine if the film {} can be downloaded:".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.downloaded
+        
+        self.logger.debug("-> Status: {}".format(status))
+        return True if status==1 else False
+
+    def getExtractedStatus(self,imdb_id):
+        self.logger.debug("Get the film Extracted status for FILM IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        status = s.extracted
+
+        self.logger.debug("-> Status: {}".format(status))
+        return status
+
+
     def getNotDownloaded(self):
         self.logger.debug("Get the Film IMDB IDs in the database with downloaded=0")
         
@@ -150,7 +169,7 @@ class IMDBFilmStatusConnector:
 
     ###############################################################################
 
-    # SET METHODS
+    # SET METHODS
 
     def setFilmMainPageStatus(self, imdb_id, status):
         self.logger.debug("Set the film Main Page status for IMDB ID {0} to {1} in the database".format(imdb_id, status))
@@ -281,11 +300,19 @@ class IMDBFilmStatusConnector:
             self.logger.debug("-> Film status modified")
             return True
 
+<<<<<<< HEAD
     def setFilmPriority(self, imdb_id, priority):
         self.logger.debug("Set the film Priority for IMDB ID {0} to {1} in the database".format(imdb_id, priority))
         
         s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
         s.priority = priority
+=======
+    def setPosterStatus(self, imdb_id, status):
+        self.logger.debug("Set the Poster status (Film Image) for IMDB ID {0} to {1} in the database".format(imdb_id, status))
+        
+        s = IMDBFilmStatus.objects.get(imdb_id=imdb_id)
+        s.film_image = status
+>>>>>>> 2a18249874cdd26efebfa39f5f6aacf1fd9ba138
 
         try:
             s.save()
@@ -294,8 +321,14 @@ class IMDBFilmStatusConnector:
             self.logger.warning("-> Error: {}".format(e))
             return False
         else:
+<<<<<<< HEAD
             self.logger.debug("-> Film priority modified")
             return True
+=======
+            self.logger.debug("-> Film status modified")
+            return True
+
+>>>>>>> 2a18249874cdd26efebfa39f5f6aacf1fd9ba138
 ####################################################################
 
 class IMDBPersonStatusConnector:
@@ -304,6 +337,14 @@ class IMDBPersonStatusConnector:
         self.logger = initLogger.getLogger(ConnectorConfig.IMDB_PERSON_STATUS_CONNECTOR_LOGGER_NAME)
     
     ###############################################################################
+    def getIsDownloaded(self, imdb_id):
+        self.logger.debug("Determine if the film {} can be downloaded:".format(imdb_id))
+        
+        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
+        status = s.downloaded
+        
+        self.logger.debug("-> Status: {}".format(status))
+        return True if status==1 else False
 
     def id_exists(self, imdb_id):
         self.logger.debug("Find if the person with IMDB ID {} exists in the database:".format(imdb_id))
@@ -321,7 +362,7 @@ class IMDBPersonStatusConnector:
         self.logger.debug("Insert a person status for IMDB ID {0} into the database (if not exists)".format(imdb_id))
         
         if not self.id_exists(imdb_id):
-            person_status = IMDBPersonStatus(imdb_id=imdb_id, 
+            person_status = IMDBPersonStatus(imdb_id=imdb_id,
                                              downloaded=0, extracted=0)
             try:
                 person_status.save()
@@ -352,18 +393,9 @@ class IMDBPersonStatusConnector:
     
     ###############################################################################
 
-    # GET METHODS
+    # GET METHODS
 
-    def getDownloadedStatus(self, imdb_id):
-        self.logger.debug("Get the film Downloaded status for Person IMDB ID {} in the database:".format(imdb_id))
-        
-        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
-        status = s.downloaded
-
-        self.logger.debug("-> Status: {}".format(status))
-        return status
-
-    def getExtractedStatus(self, imdb_id):
+    def getExtractedStatus(self,imdb_id):
         self.logger.debug("Get the film Extracted status for Person IMDB ID {} in the database:".format(imdb_id))
         
         s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
@@ -386,7 +418,7 @@ class IMDBPersonStatusConnector:
 
     ###############################################################################
 
-    # SET METHODS
+    # SET METHODS
 
     def setDownloadedStatus(self, imdb_id, status):
         self.logger.debug("Set the Downloaded status for Person IMDB ID {0} to {1} in the database".format(imdb_id, status))
@@ -428,6 +460,14 @@ class IMDBCompanyStatusConnector:
         self.logger = initLogger.getLogger(ConnectorConfig.IMDB_PERSON_STATUS_CONNECTOR_LOGGER_NAME)
     
     ###############################################################################
+    def getIsDownloaded(self, imdb_id):
+        self.logger.debug("Determine if the film {} can be downloaded:".format(imdb_id))
+        
+        s = IMDBCompanyStatus.objects.get(imdb_id=imdb_id)
+        status = s.downloaded
+        
+        self.logger.debug("-> Status: {}".format(status))
+        return True if status==1 else False
 
     def id_exists(self, imdb_id):
         self.logger.debug("Find if the company with IMDB ID {} exists in the database:".format(imdb_id))
@@ -445,7 +485,7 @@ class IMDBCompanyStatusConnector:
         self.logger.debug("Insert a company status for IMDB ID {0} into the database (if not exists)".format(imdb_id))
         
         if not self.id_exists(imdb_id):
-            company_status = IMDBCompanyStatus(imdb_id=imdb_id, 
+            company_status = IMDBCompanyStatus(imdb_id=imdb_id,
                                              downloaded=0, extracted=0)
             try:
                 company_status.save()
@@ -476,18 +516,9 @@ class IMDBCompanyStatusConnector:
     
     ###############################################################################
 
-    # GET METHODS
+    # GET METHODS
 
-    def getDownloadedStatus(self, imdb_id):
-        self.logger.debug("Get the film Downloaded status for Company IMDB ID {} in the database:".format(imdb_id))
-        
-        s = IMDBCompanyStatus.objects.get(imdb_id=imdb_id)
-        status = s.downloaded
-
-        self.logger.debug("-> Status: {}".format(status))
-        return status
-
-    def getExtractedStatus(self, imdb_id):
+    def getExtractedStatus(self,imdb_id):
         self.logger.debug("Get the film Extracted status for Company IMDB ID {} in the database:".format(imdb_id))
         
         s = IMDBCompanyStatus.objects.get(imdb_id=imdb_id)
@@ -510,7 +541,7 @@ class IMDBCompanyStatusConnector:
 
     ###############################################################################
 
-    # SET METHODS
+    # SET METHODS
 
     def setDownloadedStatus(self, imdb_id, status):
         self.logger.debug("Set the Downloaded status for Company IMDB ID {0} to {1} in the database".format(imdb_id, status))
@@ -543,4 +574,3 @@ class IMDBCompanyStatusConnector:
         else:
             self.logger.debug("-> Company status modified")
             return True
-

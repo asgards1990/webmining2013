@@ -49,8 +49,8 @@ class CustomedCleaner_HTML(Cleaner):
 
    def __init__(self):
       Cleaner.__init__(self,
-            scripts = True,\
-            javascript = True,\
+            scripts = False,\
+            javascript = False,\
             comments = True,\
             style = False,\
             links = True,\
