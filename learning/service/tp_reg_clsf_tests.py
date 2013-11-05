@@ -7,10 +7,11 @@ import classification as clsf
 import pylab as pl
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.preprocessing import Imputer
+import dimreduce as dr
 
 ### FILTER FILMS FROM DB ###########################
     
-films = flt.filter3(2006) # (filter2 returns 100 films for tests)
+films = flt.filter2(400) # (filter2 returns 100 films for tests)
 
 ### CREATE FEATURES ###########################
 
@@ -23,10 +24,10 @@ for content_type, fun in [
             (np.float32, genMetacriticScore),
             (np.int, genSeason),
             (np.float32, genRuntime),
-            (np.float32, genImdbUserRating),
-            (np.float32, genImdbNbUserReviews),
-            (np.float32, genImdbNbReviews),
-            (np.float32, genImdbNbUserRatings),
+            #(np.float32, genImdbUserRating),
+            #(np.float32, genImdbNbUserReviews),
+            #(np.float32, genImdbNbReviews),
+            #(np.float32, genImdbNbUserRatings),
             (np.int, genGenres),
             (np.int, genCountries),
             #(int, genKeywords),
@@ -41,6 +42,11 @@ for content_type, fun in [
     X0 = fun(films.iterator())
     X.append(this_vec.fit_transform(X0).toarray())
     feature_names += this_vec.get_feature_names()
+
+X.append(dr.getReducedActorsFeature(films, 20))
+for i in range(20):
+    feature_names += ['actor_' + str(i), ]
+
 X = np.concatenate(X,axis=1)
 
 ### CREATE LABELS ###########################
@@ -72,7 +78,7 @@ def classify():
         print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
         i=i+1
 
-#classify()
+classify()
 
 ### REGRESSION ###########################################
 

@@ -42,6 +42,10 @@ myconfig.py
 *.sql
 *.sqlite
 
+# Config files #
+################
+*_config.py
+
 # OS generated files #
 ######################
 .DS_Store
