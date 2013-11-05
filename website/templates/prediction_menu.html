@@ -3,24 +3,7 @@
 {% load static %}
 
 {% block prediction_extrahead %}
-    <script src="{% static 'javascript/slider.js' %}"></script>
-
-    <link rel="stylesheet" href="{% static 'css/accordion.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/square/red.css' %}"/>
-    <script src="{% static 'javascript/accordion.js' %}"></script>
-    <script src="{% static 'javascript/jquery.icheck.js' %}"></script>
-
-    <script>
-        $(document).ready(function () {
-            $('#release input').iCheck({
-                checkboxClass: 'icheckbox_square-red',
-                radioClass: 'iradio_square-red',
-                //increaseArea: '20%' // optional
-            });
-        });
-    </script>
-
-
+<!-- Appels annexes -->
     {% include 'autocomplete_light/static.html' %}
     {{ form.media }}
 {% endblock %}
@@ -35,7 +18,7 @@
 
             <!-- Acteurs -->
 
-            <li class="item1"><a href="#">Actors<span>340</span></a>
+            <li class="item1" id="prediction_item_actors"><a href="#">Actors<span>0</span></a>
                 <ul class="menubox">
                     <div id="actorsearch">
                         {% if form.errors %}
@@ -54,7 +37,7 @@
 
             <!-- Genres -->
     
-		<li class="item2"><a href="#">Genres<span>147</span></a>
+		<li class="item2" id="prediction_item_genres"><a href="#">Genres<span>0</span></a>
                 <ul class="menubox">
                     <div id="genresearch">
                         {% for field in form.visible_fields %}
@@ -71,7 +54,7 @@
                 </ul>
 		</li>
 
-		<li class="item3"><a href="#">Keywords<span>340</span></a>
+		<li class="item3" id="prediction_item_keyword"><a href="#">Keywords<span>0</span></a>
                 <ul class="menubox">
                     <div id="keywordssearch">
                         {% for field in form.visible_fields %}
@@ -80,10 +63,12 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+                    <div id="keywordSuggest">
+                    </div>
                 </ul>
 		</li>
 
-		<li class="item4"><a href="#">Director<span>222</span></a>
+		<li class="item4"><a href="#">Director</a>
             <ul class="menubox">
                 <div id="directorsearch">
                     {% for field in form.visible_fields %}
@@ -95,7 +80,7 @@
             </ul>
 		</li>
 
-		<li class="item5"><a href="#">Range<span>222</span></a>
+		<li class="item5"><a href="#">Range</a>
             <ul class="menubox">
                 <h1>
                     <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
@@ -104,7 +89,7 @@
             </ul>
 		</li>
 
-		<li class="item6"><a href="#">Release Date<span>222</span></a>
+		<li class="item6"><a href="#">Release Date</a>
             <ul class="menubox">
                 <div class="seasonbox">
                     <img class="season" src="{% static 'img/prediction/SpringRed.jpg' %}" alt="Spring">

@@ -1,30 +1,75 @@
 var carrouselDispo;
 
-function carrousel(nomDuCadre){
+
+function carrousel(nomDuCadre,data){
+	//alert("hello")
+	var tableauId=new Array;
+	var repLien=new Array;
+	//alert(data.nbresults)
+	var nombre = data.nbresults;
+	//alert(nombre);
+	var ontTousRep=new Array;
+	for (var i=0;i < nombre;i++){
+		ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=0;
+	}
+	for (var i=0;i < nombre;i++){
+		tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=data.results[i].id;		//remplacer 0 par i
+		//Bloc à changer quand on peut récupérer les infos sur notre propre serv
+		function encap(i,data,nombre){
+			return function(data){
+				repLien[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=eval("(" + data + ")").Poster;
+				ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=1;
+				var mult=1;
+				for(var j=0; j<nombre;j++){
+					mult=mult*ontTousRep[5+((1-2*(j%2))*(Math.floor(j/2)+1))];
+				}
+				if (mult==1) {
+					repLien[5]="../pesto/static/img/explore/film1.jpg";
+					for(var j=nombre;j<10;j++){
+						repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../pesto/static/img/explore/filmVide.jpg";
+					}
+					carrousel2(nomDuCadre,repLien)
+				}
+			}
+		}
+		$.get("http://www.omdbapi.com/?i=" + tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))], encap(i,data,nombre))
+	}
+}
+
+function carrousel2(nomDuCadre,lienImage){
+	//alert(lienImage)
+	var largeur=75;//1*contenu.width;
+	var hauteur=100;//1*contenu.height;
 	var imageLoaded=new Array;
+	var coeffLargeur=new Array;
+	var coeffHauteur=new Array;
 	for(var l=0; l <11;l++){imageLoaded[l]=false;}
 	carrouselDispo=false;
 	var imageinter=new Array;
 	for(var l=0; l <11;l++){
 		imageinter[l]=new Image();
-		imageinter[l].src = "../pesto/static/img/explore/film"+(l+1)+".jpg";
+		imageinter[l].src = lienImage[l];//"film"+(l+1)+".jpg";
+		//coeffLargeur[l]=75/imageinter[l].width;
+		//coeffHauteur[l]=100/imageinter[l].height;
 		imageinter[l].onload = scopeChargement(l);
 	}
-	
-	function scopeChargement(l){return function(){imageLoaded[l]=true; toutEstCharge()}}
+	function scopeChargement(l){return function(){coeffLargeur[l]=75/imageinter[l].width;coeffHauteur[l]=100/imageinter[l].height;imageLoaded[l]=true; toutEstCharge()}}
 
 	function toutEstCharge(){
+		//alert(imageLoaded)
 		if(imageLoaded[0]==true && imageLoaded[1]==true && imageLoaded[2]==true && imageLoaded[3]==true && imageLoaded[4]==true && imageLoaded[5]==true && imageLoaded[6]==true && imageLoaded[7]==true && imageLoaded[8]==true && imageLoaded[9]==true && imageLoaded[10]==true){
+			//alert("!!!!!!!")
 			actionAFaire();
 		}
 	}
 
 	function actionAFaire() {
 
-	var contenu = new Image();
-	contenu.src= "../pesto/static/img/explore/film1.jpg";
-	var largeur=1*contenu.width;
-	var hauteur=1*contenu.height;
+	//var contenu = new Image();
+	//contenu.src= "film1.jpg";
+	//var largeur=75;//1*contenu.width;
+	//var hauteur=100;//1*contenu.height;
+	//alert(largeur + " " + hauteur)
 	
 	var listCanvas;
 
@@ -69,9 +114,9 @@ function carrousel(nomDuCadre){
             		height = imageinter[h].height;
         		var context = $("#canv"+(h+1))[0].getContext("2d");
         		for (var i = 0; i <= height / 2; ++i) {
-            			context.setTransform(coeffAffiche[h+1][0], coeffAffiche[h+1][1]*i/height,coeffAffiche[h+1][2], coeffAffiche[h+1][3], coeffAffiche[h+1][4], coeffAffiche[h+1][5]);
+            			context.setTransform(coeffLargeur[h]*coeffAffiche[h+1][0], coeffHauteur[h]*coeffAffiche[h+1][1]*i/height,coeffLargeur[h]*coeffAffiche[h+1][2], coeffHauteur[h]*coeffAffiche[h+1][3], coeffAffiche[h+1][4], coeffAffiche[h+1][5]);
             			context.drawImage(imageinter[h], 0, height/2-i, width, 2, 0, height/2-i, width, 2);
-            			context.setTransform(coeffAffiche[h+1][0], -coeffAffiche[h+1][1]*i/height,-coeffAffiche[h+1][2], coeffAffiche[h+1][3], coeffAffiche[h+1][4], coeffAffiche[h+1][5]);
+            			context.setTransform(coeffLargeur[h]*coeffAffiche[h+1][0], -coeffHauteur[h]*coeffAffiche[h+1][1]*i/height,-coeffLargeur[h]*coeffAffiche[h+1][2], coeffHauteur[h]*coeffAffiche[h+1][3], coeffAffiche[h+1][4], coeffAffiche[h+1][5]);
             			context.drawImage(imageinter[h],0, height/2+i, width, 2, 0, height/2+i, width, 2);
         		}
     		//};
@@ -107,7 +152,10 @@ function carrousel(nomDuCadre){
 			arrivee=(numeroAffiche+9)%11+1;
 		}
 		var image=new Image();
-		image.src="../pesto/static/img/explore/film"+pos.slice(4)+".jpg";
+		//image.src=imageinter[pos.slice(4)-1].src;
+		image=imageinter[pos.slice(4)-1];
+		//alert(coeffLargeur[0])
+		//alert(pos.slice(4)-1)
 		//image.src="film1.jpg";
 		var width=image.width;
 		var height=image.height;
@@ -118,17 +166,17 @@ function carrousel(nomDuCadre){
 		canvas.width = 1;
   		canvas.width = w;
         	for (var i = 0; i <= height / 2; ++i) {
-            		context.setTransform(coeffAffiche[depart][0]+(coeffAffiche[arrivee][0]-coeffAffiche[depart][0])*etape/nombreDePas,
-				(coeffAffiche[depart][1]+(coeffAffiche[arrivee][1]-coeffAffiche[depart][1])*etape/nombreDePas) * i / height,
-				coeffAffiche[depart][2]+(coeffAffiche[arrivee][2]-coeffAffiche[depart][2])*etape/nombreDePas,
-				coeffAffiche[depart][3]+(coeffAffiche[arrivee][3]-coeffAffiche[depart][3])*etape/nombreDePas,
+            		context.setTransform((coeffAffiche[depart][0]+(coeffAffiche[arrivee][0]-coeffAffiche[depart][0])*etape/nombreDePas)*coeffLargeur[pos.slice(4)-1],
+				((coeffAffiche[depart][1]+(coeffAffiche[arrivee][1]-coeffAffiche[depart][1])*etape/nombreDePas) * i / height)*coeffHauteur[pos.slice(4)-1],
+				(coeffAffiche[depart][2]+(coeffAffiche[arrivee][2]-coeffAffiche[depart][2])*etape/nombreDePas)*coeffLargeur[pos.slice(4)-1],
+				(coeffAffiche[depart][3]+(coeffAffiche[arrivee][3]-coeffAffiche[depart][3])*etape/nombreDePas)*coeffHauteur[pos.slice(4)-1],
 				coeffAffiche[depart][4]+(coeffAffiche[arrivee][4]-coeffAffiche[depart][4])*etape/nombreDePas,
 				coeffAffiche[depart][5]+(coeffAffiche[arrivee][5]-coeffAffiche[depart][5])*etape/nombreDePas);
             		context.drawImage(image, 0, height / 2 - i, width, 2, 0, height / 2 - i, width, 2);
-            		context.setTransform(coeffAffiche[depart][0]+(coeffAffiche[arrivee][0]-coeffAffiche[depart][0])*etape/nombreDePas,
-				-(coeffAffiche[depart][1]+(coeffAffiche[arrivee][1]-coeffAffiche[depart][1])*etape/nombreDePas) * i / height,
-				coeffAffiche[depart][2]+(coeffAffiche[arrivee][2]-coeffAffiche[depart][2])*etape/nombreDePas,
-				coeffAffiche[depart][3]+(coeffAffiche[arrivee][3]-coeffAffiche[depart][3])*etape/nombreDePas,
+            		context.setTransform((coeffAffiche[depart][0]+(coeffAffiche[arrivee][0]-coeffAffiche[depart][0])*etape/nombreDePas)*coeffLargeur[pos.slice(4)-1],
+				(-(coeffAffiche[depart][1]+(coeffAffiche[arrivee][1]-coeffAffiche[depart][1])*etape/nombreDePas) * i / height)*coeffHauteur[pos.slice(4)-1],
+				(coeffAffiche[depart][2]+(coeffAffiche[arrivee][2]-coeffAffiche[depart][2])*etape/nombreDePas)*coeffLargeur[pos.slice(4)-1],
+				(coeffAffiche[depart][3]+(coeffAffiche[arrivee][3]-coeffAffiche[depart][3])*etape/nombreDePas)*coeffHauteur[pos.slice(4)-1],
 				coeffAffiche[depart][4]+(coeffAffiche[arrivee][4]-coeffAffiche[depart][4])*etape/nombreDePas,
 				coeffAffiche[depart][5]+(coeffAffiche[arrivee][5]-coeffAffiche[depart][5])*etape/nombreDePas);
             		context.drawImage(image, 0, height / 2 + i, width, 2, 0, height / 2 + i, width, 2);
@@ -296,94 +344,95 @@ function carrousel(nomDuCadre){
 			var position=positioninv.indexOf("canv"+entier);
 			switch(position){
 				case 1:
-					decalerUnCranDroite(4,2,false)
-					setTimeout(function(){decalerUnCranDroite(4,2,false)},400/2)//+50)
-					setTimeout(function(){decalerUnCranDroite(4,2,false)},2*400/2)//+2*50)
-					setTimeout(function(){decalerUnCranDroite(4,2,false)},3*400/2)//+3*50)
-					setTimeout(function(){decalerUnCranDroite(4,2,true)},4*400/2)//+4*50)
+					decalerUnCranDroite(3,2,false)
+					setTimeout(function(){decalerUnCranDroite(3,2,false)},400/2)//+50)
+					setTimeout(function(){decalerUnCranDroite(3,2,false)},2*400/2)//+2*50)
+					setTimeout(function(){decalerUnCranDroite(3,2,false)},3*400/2)//+3*50)
+					setTimeout(function(){decalerUnCranDroite(3,2,true)},4*400/2)//+4*50)
 					break;
 				case 2:
-					decalerUnCranDroite(4,2,false)
-					setTimeout(function(){decalerUnCranDroite(4,2,false)},400/2)//+50)
-					setTimeout(function(){decalerUnCranDroite(4,2,false)},2*400/2)//+2*50)
-					setTimeout(function(){decalerUnCranDroite(4,2,true)},3*400/2)//+3*50)
+					decalerUnCranDroite(3,2,false)
+					setTimeout(function(){decalerUnCranDroite(3,2,false)},400/2)//+50)
+					setTimeout(function(){decalerUnCranDroite(3,2,false)},2*400/2)//+2*50)
+					setTimeout(function(){decalerUnCranDroite(3,2,true)},3*400/2)//+3*50)
 					break;
 				case 3:
-					decalerUnCranDroite(4,2,false)
-					setTimeout(function(){decalerUnCranDroite(4,2,false)},400/2)//+50)
-					setTimeout(function(){decalerUnCranDroite(4,2,true)},2*400/2)//+2*50)
+					decalerUnCranDroite(3,2,false)
+					setTimeout(function(){decalerUnCranDroite(3,2,false)},400/2)//+50)
+					setTimeout(function(){decalerUnCranDroite(3,2,true)},2*400/2)//+2*50)
 					break;
 				case 4:
-					decalerUnCranDroite(4,1.5,false)
-					setTimeout(function(){decalerUnCranDroite(4,1.5,true)},400/1.5)//+50)
+					decalerUnCranDroite(3,1.5,false)
+					setTimeout(function(){decalerUnCranDroite(3,1.5,true)},400/1.5)//+50)
 					break;
 				case 5:
-					decalerUnCranDroite(4,1,true)
+					decalerUnCranDroite(3,1,true)
 					break;
 				case 6:
 					enCours=false;
 					break;
 				case 7:
-					decalerUnCranGauche(4,1,true)
+					decalerUnCranGauche(3,1,true)
 					break;
 				case 8:
-					decalerUnCranGauche(4,1.5,false)
-					setTimeout(function(){decalerUnCranGauche(4,1.5,true)},400/1.5)//+50)
+					decalerUnCranGauche(3,1.5,false)
+					setTimeout(function(){decalerUnCranGauche(3,1.5,true)},400/1.5)//+50)
 					break;
 				case 9:
-					decalerUnCranGauche(4,2,false)
-					setTimeout(function(){decalerUnCranGauche(4,2,false)},400/2)//+50)
-					setTimeout(function(){decalerUnCranGauche(4,2,true)},2*400/2)//+2*50)
+					decalerUnCranGauche(3,2,false)
+					setTimeout(function(){decalerUnCranGauche(3,2,false)},400/2)//+50)
+					setTimeout(function(){decalerUnCranGauche(3,2,true)},2*400/2)//+2*50)
 					break;
 				case 10:
-					decalerUnCranGauche(4,2,false)
-					setTimeout(function(){decalerUnCranGauche(4,2,false)},400/2)//+50)
-					setTimeout(function(){decalerUnCranGauche(4,2,false)},2*400/2)//+2*50)
-					setTimeout(function(){decalerUnCranGauche(4,2,true)},3*400/2)//+3*50)
+					decalerUnCranGauche(3,2,false)
+					setTimeout(function(){decalerUnCranGauche(3,2,false)},400/2)//+50)
+					setTimeout(function(){decalerUnCranGauche(3,2,false)},2*400/2)//+2*50)
+					setTimeout(function(){decalerUnCranGauche(3,2,true)},3*400/2)//+3*50)
 					break;
 				case 11:
-					decalerUnCranGauche(4,2,false)
-					setTimeout(function(){decalerUnCranGauche(4,2,false)},400/2)//+50)
-					setTimeout(function(){decalerUnCranGauche(4,2,false)},2*400/2)//+2*50)
-					setTimeout(function(){decalerUnCranGauche(4,2,false)},3*400/2)//+3*50)
-					setTimeout(function(){decalerUnCranGauche(4,2,true)},4*400/2)//+4*50)
+					decalerUnCranGauche(3,2,false)
+					setTimeout(function(){decalerUnCranGauche(3,2,false)},400/2)//+50)
+					setTimeout(function(){decalerUnCranGauche(3,2,false)},2*400/2)//+2*50)
+					setTimeout(function(){decalerUnCranGauche(3,2,false)},3*400/2)//+3*50)
+					setTimeout(function(){decalerUnCranGauche(3,2,true)},4*400/2)//+4*50)
 					break;
 			}
 		}	
 	}
 
 
-	$("#canv1").click(function(){if(carrouselDispo==true){
+	$("#canv1").click(function(){if(carrouselDispo==true && imageinter[0].src.slice(-12) != "filmVide.jpg"){
+		//alert(imageinter[0].src.slice(-12))
 		defClic(1);chargementBulleInfo("cadreInfo","Film 1");}
 	});
-	$("#canv2").click(function(){if(carrouselDispo==true){
+	$("#canv2").click(function(){if(carrouselDispo==true && imageinter[1].src.slice(-12) != "filmVide.jpg"){
 		defClic(2);chargementBulleInfo("cadreInfo","Film 2");}
 	});
-	$("#canv3").click(function(){if(carrouselDispo==true){
+	$("#canv3").click(function(){if(carrouselDispo==true && imageinter[2].src.slice(-12) != "filmVide.jpg"){
 		defClic(3);chargementBulleInfo("cadreInfo","Film 3");}
 	});
-	$("#canv4").click(function(){if(carrouselDispo==true){
+	$("#canv4").click(function(){if(carrouselDispo==true && imageinter[3].src.slice(-12) != "filmVide.jpg"){
 		defClic(4);chargementBulleInfo("cadreInfo","Film 4");}
 	});
-	$("#canv5").click(function(){if(carrouselDispo==true){
+	$("#canv5").click(function(){if(carrouselDispo==true && imageinter[4].src.slice(-12) != "filmVide.jpg"){
 		defClic(5);chargementBulleInfo("cadreInfo","Film 5");}
 	});
-	$("#canv6").click(function(){if(carrouselDispo==true){
+	$("#canv6").click(function(){if(carrouselDispo==true && imageinter[5].src.slice(-12) != "filmVide.jpg"){
 		defClic(6);chargementBulleInfo("cadreInfo","Film 6");}
 	});
-	$("#canv7").click(function(){if(carrouselDispo==true){
+	$("#canv7").click(function(){if(carrouselDispo==true && imageinter[6].src.slice(-12) != "filmVide.jpg"){
 		defClic(7);chargementBulleInfo("cadreInfo","Film 7");}
 	});
-	$("#canv8").click(function(){if(carrouselDispo==true){
+	$("#canv8").click(function(){if(carrouselDispo==true && imageinter[7].src.slice(-12) != "filmVide.jpg"){
 		defClic(8);chargementBulleInfo("cadreInfo","Film 8");}
 	});
-	$("#canv9").click(function(){if(carrouselDispo==true){
+	$("#canv9").click(function(){if(carrouselDispo==true && imageinter[8].src.slice(-12) != "filmVide.jpg"){
 		defClic(9);chargementBulleInfo("cadreInfo","Film 9");}
 	});
-	$("#canv10").click(function(){if(carrouselDispo==true){
+	$("#canv10").click(function(){if(carrouselDispo==true && imageinter[9].src.slice(-12) != "filmVide.jpg"){
 		defClic(10);chargementBulleInfo("cadreInfo","Film 10");}
 	});
-	$("#canv11").click(function(){if(carrouselDispo==true){
+	$("#canv11").click(function(){if(carrouselDispo==true && imageinter[10].src.slice(-12) != "filmVide.jpg"){
 		defClic(11);chargementBulleInfo("cadreInfo","Film 11");}
 	});
 	

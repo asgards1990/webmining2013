@@ -2,6 +2,8 @@ import numpy as np
 from cinema.models import *
 import datetime
 
+#TODO : uniformize generator functions' names
+
 def getSeason(date):
     if not date:
         return 'no-season'
@@ -43,21 +45,32 @@ def genImdbNbUserReviews(iter_films):
 def genImdbNbReviews(iter_films):
     return genNullableFeature(iter_films,'imdb_nb_reviews')
 
+def genReleaseDate(iter_films):
+    return genNullableFeature(iter_films,'release_date')
+
+def genLanguages(iter_films):
+    while True:
+        film = next(iter_films)
+        if film.language:
+            yield {'language' : film.language.identifier}
+        else:
+            yield {'language' : '_nothing'}
+
 def genSeason(iter_films):
     while True:
         film = next(iter_films)
 	yield {'season':getSeason(film.release_date)}
 
-def genFeature(iter_films,feature_name, feature_content_name):
+def genFeature(iter_films, feature_name, feature_content_name):
     while True:
         film = next(iter_films)
-	attr = getattr(film,feature_name)
+        attr = getattr(film, feature_name)
         if attr.count() == 0:
             yield {'_nothing' : 1}
         else:
             d = {}
             for item in attr.all():
-		content = getattr(item, feature_content_name)
+                content = getattr(item, feature_content_name)
                 d[content] = 1
             yield d
 
@@ -79,7 +92,7 @@ def genWriters(iter_films):
 def genProductionCompanies(iter_films):
     return genFeature(iter_films,'production_companies', 'imdb_id')
 
-def hashIds(iter_films):
+def hashIndexes(iter_films):
     d = {}
     k = 0
     for film in iter_films:
@@ -90,7 +103,7 @@ def hashIds(iter_films):
 def genPrizes(iter_films):
     while True:
         film = next(iter_films)
-	prizes = Prize.objects.filter(film=film)
+        prizes = Prize.objects.filter(film=film)
         if prizes.count() == 0:
             yield {'_nothing' : 1}
         else:
@@ -102,7 +115,7 @@ def genPrizes(iter_films):
 def genReviews(iter_films):
     while True:
         film = next(iter_films)
-	reviews = Review.objects.filter(film=film)
+        reviews = Review.objects.filter(film=film)
         if reviews.count() == 0:
             yield {'_nothing' : 1}
         else:
@@ -114,7 +127,7 @@ def genReviews(iter_films):
 def genActorsTuples(iter_films):
     while True:
         film = next(iter_films)
-	aws = ActorWeight.objects.filter(film=film)
+        aws = ActorWeight.objects.filter(film=film)
         if aws.count() == 0:
             yield {'_nothing' : 1}
         else:
@@ -123,10 +136,26 @@ def genActorsTuples(iter_films):
                 d[aw.actor.imdb_id+'_'+str(aw.rank)+'_'+str(aw.star)] = 1
             yield d
 
+def genActorsTuples2(iter_films):
+    while True:
+        film = next(iter_films)
+        aws = ActorWeight.objects.filter(film = film)
+        if aws.count() == 0:
+            yield {'_nothing' : 1}
+        else:
+            d = {}
+            for aw in aws.all():
+                if aw.star:
+                    d[aw.actor.imdb_id + '_star'] = 1
+                else:
+                    d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
+            yield d
+
+
 def genActors(iter_films):
     while True:
         film = next(iter_films)
-	aws = ActorWeight.objects.filter(film=film)
+        aws = ActorWeight.objects.filter(film=film)
         if aws.count() == 0:
             yield {'_nothing' : 1}
         else:
@@ -134,4 +163,3 @@ def genActors(iter_films):
             for aw in aws.all():
                 d[aw.actor.imdb_id] = 1
             yield d
-

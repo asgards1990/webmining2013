@@ -1,0 +1,99 @@
+/* Checkboxes */
+
+#filters [type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+    position: absolute;
+}
+
+#filters [type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 4em;
+    cursor: pointer;
+}
+
+#filters [type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before,
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+    content: '';
+    position: absolute;
+}
+
+#filters [type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+    left: 0;
+    top: -3px;
+    width: 65px;
+    height: 30px;
+    background: #D6D6D6; /*background color*/
+    border: 1px solid #444444; /*color of border when unchecked*/
+    border-radius: 15px;
+    -webkit-transition: background-color .2s;
+    -moz-transition: background-color .2s;
+    -ms-transition: background-color .2s;
+    transition: background-color .2s;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-top: -1px;
+}
+
+#filters [type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+    width: 20px;
+    height: 20px;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    transition: all .2s;
+    border-radius: 50%;
+    background: #444444; /*color ob background when unchecked*/
+    top: 2px;
+    left: 5px;
+}
+
+/* on checked */
+#filters [type="checkbox"]:checked + label:before {
+
+    border: 1px solid #D51C21; /*color of border when checked*/
+
+}
+
+#filters [type="checkbox"]:checked + label:after {
+    background: #D51C21; /*color of circle when checked*/
+    top: 2px;
+    left: 40px;
+}
+
+#filters [type="checkbox"]:checked + label .ui,
+[type="checkbox"]:not(:checked) + label .ui:before,
+[type="checkbox"]:checked + label .ui:after {
+    position: absolute;
+    right: 0.2em;
+    width: 4.8em;
+    border-radius: 15px;
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 22px;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    transition: all .2s;
+}
+
+#filters [type="checkbox"]:not(:checked) + label .ui:before {
+    content: "No";
+    left: 0.5em;
+}
+
+#filters [type="checkbox"]:checked + label .ui:after {
+    content: "Yes";
+    color: #d51c21;
+
+}
+
+#filters .filter p {
+    margin:0 auto;
+}

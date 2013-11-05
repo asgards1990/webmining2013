@@ -24,6 +24,7 @@
     display:table-cell;
     vertical-align:middle;
     height:100%;
+    text-align:center;
 }
 
 #id_actors-deck p, #id_directors-deck p {
@@ -51,7 +52,17 @@
     width:50px;
 }
 
+#id_actors-deck .photo img, #id_directors-deck .photo img{
+    width:50px;
+}
+
 /* menubox acteur : rendu en cours de selection */
+
+#id_actors-wrapper, #id_directors-wrapper {
+    width:100%;
+    text-align:center;
+    float:left;
+}
 
 #id_actors-wrapper .yourlabs-autocomplete >*, #id_directors-wrapper .yourlabs-autocomplete >* {
     display:table;
@@ -76,6 +87,10 @@
     width:3em;
 }
 
+#id_actors-wrapper .yourlabs-autocomplete .photo img, #id_directors-wrapper .yourlabs-autocomplete .photo img{
+    width:3em;
+}
+
 /* menubox genre */
 
 #genresearch {
@@ -97,6 +112,12 @@
 
 /* menubox keywords */
 
+#id_keyword-wrapper, #id_keyword-wrapper {
+    width:100%;
+    text-align:center;
+    float:left;
+}
+
 #id_keyword-deck >* {
     float:left;
     padding:0 0 5px 0;
@@ -108,30 +129,13 @@
     width:100%;
 }
 
-/* Autres */
+/* menubox range*/
 
 #slider-range {
     margin: 10px;
 }
 
-#release.menubox:after { /*implementation de ClearFix*/
-    content: " "; 
-    visibility: hidden;
-    display: block;
-    height: 0;
-    clear: both;
-
-}
-
-/* Code de Clearfix
-.clearfix:after {
-   content: " "; 
-   visibility: hidden;
-   display: block;
-   height: 0;
-   clear: both;
-}*/
-
+/* menubox release date*/
 
 #release .seasonbox {
     width:23%;
@@ -142,7 +146,6 @@
     text-align:center;
 }
 
-
 .seasonbox label {
     display:block;
 }
@@ -152,65 +155,6 @@
     max-width:3em;
 }
 
-#results {
-    overflow:auto;
-    text-align:center;
-}
-
-#prizes {
-    /*width: 345px;*/
-    width:47%;
-    display:inline-block;
-    height:330px;
-    border:1px dashed blue;
-    margin:50px 1%;
-}
-
-#boxoffice {
-    /*width:240px;*/
-    display:inline-block;
-    width:47%;
-    height:330px;
-    border:1px dashed magenta;
-    margin:50px 1%;
-}
-
-#reviews {
-    /*width:700px;*/
-    display:inline-block;
-    width:90%; 
-    position:relative;
-    height:320px;
-    border: 1px dashed maroon;
-    margin-left:auto;
-    margin-right:auto;
-}
-
-#reviews .moreinfo{
- font-size: 1.1em; 
- position: absolute;
- bottom:0; right:0;
- width: 8%; 
- height: 1.5em; 
- padding-top:0.3em; /*permet le centrage vertical*/ 
- text-align: center;  
-  overflow:auto;
-    border-bottom:2px solid black;
-   background: linear-gradient(rgb(213, 28, 33) 50%, rgb(215,46,28) 50%) repeat scroll 0% 0% transparent;
-    background-color: transparent;
-    background-image: linear-gradient(rgb(213, 28, 33) 0%, rgb(215,46,28) 50%);
-    background-repeat: repeat;
-    background-attachment: scroll;
-    background-position: 0% 0%;
-    background-clip: border-box;
-    background-origin: padding-box;
-    background-size: auto auto;
-	border-radius:17px 17px 17px 17px;
-}
-
-#reviews .moreinfo a{
-color: beige;
-}
 
 
 
