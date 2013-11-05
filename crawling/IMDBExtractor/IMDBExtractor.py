@@ -505,7 +505,6 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
                director = definePerson(d.id_)
                if director:
                   director.name=self.director_name_list[i]
-                  logger.debug("Association person id : {} avec le nom {}".format(d.id_,self.director_name_list[i]))
                   director.save()
                   f.directors.add(director)
                   f.save()
@@ -515,17 +514,16 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
                writer = definePerson(w.id_)
                if writer:
                   writer.name=self.writer_name_list[i]
-                  logger.debug("Association person id : {} avec le nom {}".format(d.id_,self.director_name_list[i]))
                   writer.save()
                   f.writers.add(writer)
                   f.save()
                i+=1
             actor_index=1
+            i=0
             for a in self.actors:
               actor = definePerson(a.id_)
               if actor:
-                 actor.name=self.actor_name_list[actor_index-1]
-                 logger.debug("Association person id : {} avec le nom {}".format(d.id_,self.director_name_list[i]))
+                 actor.name=self.actor_name_list[i]
                  actor.save()
                  actor_weight = defineActorWeight(actor,f)
                  if actor_weight:
@@ -533,6 +531,7 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
                     actor_weight.film = f
                     actor_weight.save()
                     actor_index +=1
+              i+=1
             logger.info('Mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors'.format(self.id_))
          except Exception as e:
             logger.error('La mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors a échoué'.format(self.id_))
