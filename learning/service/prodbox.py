@@ -13,6 +13,7 @@ from sklearn.preprocessing import normalize, Imputer
 from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
+import dateutil.parser
 
 import re
 
@@ -34,11 +35,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.filter2(300)
-        #print('Check in service : ')
-        #for film in self.films.all():
-        #    if film.imdb_nb_reviews==None:
-        #        print 'None found'
+        self.films = flt.filter1()
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -91,7 +88,7 @@ class CinemaService(LearningService):
     def loadReleaseDate(self):
         if not self.is_loaded('release_date'):
             gkey = genReleaseDate(self.films.iterator())
-            v =  DictVectorizer(dtype=date) # TODO : WARNING : THIS IS NOT CORRECT
+            v =  DictVectorizer(dtype=int)
             self.release_date_matrix = v.fit_transform(gkey)
             self.create_cobject('release_date', self.release_date_matrix)
         else:
@@ -317,7 +314,7 @@ class CinemaService(LearningService):
         # Load films data
         self.loadFilms()
         # Load prediction features
-        self.loadActors() # TODO : Enable Spectral clustering
+        self.loadActors()
         self.loadDirectors()
         self.loadSeason()
         self.loadBudget()
@@ -332,7 +329,7 @@ class CinemaService(LearningService):
         self.loadWriters()
         self.loadRuntime()
         self.loadMetacriticScore()
-        #self.loadReleaseDate() #TODO DOES NOT WORK
+        self.loadReleaseDate()
         self.loadProductionCompanies()
         self.loadImdb()
         self.loadCountries()
@@ -343,7 +340,7 @@ class CinemaService(LearningService):
         self.high_weight = 1 # for the distance definition
         self.low_weight = 0 # for the distance definition
         self.loadSearchClustering()
-        print('Loadings finished')
+        print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
@@ -409,19 +406,22 @@ class CinemaService(LearningService):
         else:
             raise ParsingError('Please define the IMDb identfier, the number of expected results and search criteria.')
    
-    def applyFilter(filters): #returns indexes of films that respect our filters
-	    indexes_fitting_filters = self.budget_matrix >= filters['budget']['min']
-	    indexes_fitting_filters = indexes_fitting_filters and self.budget_matrix <= filters['budget']['max'] 
-	    indexes_fitting_filters = indexes_fitting_filters and self.release_date_matrix <= filters['release_period']['end'] 
-	    indexes_fitting_filters = indexes_fitting_filters and self.release_date_matrix >= filters['release_period']['begin']
-	    indexes_fitting_filters = indexes_fitting_filters and self.metacritic_score_matrix >= filters['reviews']['min']
-	    for genre in filters['genres']:
-	        indexes_fitting_filters = indexes_fitting_filters and self.genres_matrix[:,self.genre_names.index(genre.name)]
-	    for director in filters['directors']:
-		    indexes_fitting_filters = indexes_fitting_filters and self.director_matrix[:,self.director_names.index(director.imdb_id)]
-	    for actor in filters['directors']:
-		    indexes_fitting_filters = indexes_fitting_filters and self.actor_matrix[:,self.actor_names.index(actor.imdb_id)] #TODO WARNING, CORRECT ONLY WITH NON-TUPLES ACTORS
-	    return list(self.indexes[indexes_fitting_filters].values())
+    def applyFilter(self,filters): #returns indexes of films that respect our filters #TODO : see if it's possible to do boolean operations directly on sparse matrices
+        indexes_fitting_filters = self.budget_matrix.toarray() >= filters['budget']['min']
+        indexes_fitting_filters = indexes_fitting_filters * (self.budget_matrix.toarray() <= filters['budget']['max'])
+        #indexes_fitting_filters = indexes_fitting_filters and self.release_date_matrix <= filters['release_period']['end']
+        #indexes_fitting_filters = indexes_fitting_filters and self.release_date_matrix >= filters['release_period']['begin']
+        #TODO: check release_period!
+        indexes_fitting_filters = indexes_fitting_filters * (self.metacritic_score_matrix.toarray() >= filters['reviews']['min'])
+        for genre in filters['genres']:
+            indexes_fitting_filters = indexes_fitting_filters * (self.genres_matrix[:,self.genres_names.index(genre.name)].toarray())
+        for director in filters['directors']:
+            indexes_fitting_filters = indexes_fitting_filters * (self.director_matrix[:,self.director_names.index(director.imdb_id)].toarray())
+        for actor in filters['directors']:
+            indexes_fitting_filters = indexes_fitting_filters * (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray()) #TODO WARNING, CORRECT ONLY WITH NON-TUPLES ACTORS
+        indexes_fitting_filters = indexes_fitting_filters.reshape(1,indexes_fitting_filters.shape[0])[0]
+        indexes_fitting_filters = np.where(indexes_fitting_filters==1)[0]
+        return list(indexes_fitting_filters)
 
     def compute_search(self, film, nb_results, criteria, filters=None):
         try:
@@ -436,7 +436,7 @@ class CinemaService(LearningService):
         # Apply filters
         print('--> Applying filters...')
         if filters!=None:
-            indexes_fitting_filters = applyFilter(filters) #TODO : test applyFilter
+            indexes_fitting_filters = self.applyFilter(filters) #TODO : test applyFilter
         else:
             indexes_fitting_filters = list(self.indexes.values())
         indexes_fitting_filters = np.array(indexes_fitting_filters)
@@ -455,22 +455,32 @@ class CinemaService(LearningService):
                 print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
                 indexes_of_cluster = np.where(labels == cluster)[0]
                 indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
-                samples = X[list(indexes),:]
-                neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
-                neigh.fit(samples)
-                (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
-                local_nb_results_found = loc_distances[0].shape[0]
-                print('--> Found '+str(local_nb_results_found)+' results in this cluster')
-                nb_results_found = nb_results_found + local_nb_results_found
-                distances.append(loc_distances[0])
-                neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
+                if indexes != []:
+                    samples = X[list(indexes),:]
+                    neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
+                    neigh.fit(samples)
+                    (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
+                    local_nb_results_found = loc_distances[0].shape[0]
+                    print('--> Found '+str(local_nb_results_found)+' results in this cluster')
+                    nb_results_found = nb_results_found + local_nb_results_found
+                    distances.append(loc_distances[0])
+                    neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
         neighbors_indexes = np.concatenate(neighbors_indexes)
         distances = np.concatenate(distances)
         distances = distances[1:] # because the film being studied is the closest neighbor...
         neighbors_indexes = neighbors_indexes[1:]
+        #Now we reorder items because they may be unordered if there are filters
+        new_order = distances.argsort()
+        distances = distances[new_order]
+        neighbors_indexes = neighbors_indexes[new_order]
+        #Return results
         res = []
         for i in range(nb_results):
             res.append((distances[i],self.films[neighbors_indexes[i]]))
+        print 'Film picked : ' #TODO : remove this line
+        print self.films[film_index] #TODO : remove this line
+        print 'Neighbors : ' #TODO : remove this line
+        print res #TODO : remove this line
         return res
 
     def parse_search_filter(self, filt_in):
