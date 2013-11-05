@@ -98,7 +98,7 @@ person_conn =  Connector.IMDBStatusConnector.IMDBPersonStatusConnector()
 company_conn =  Connector.IMDBStatusConnector.IMDBCompanyStatusConnector()
 
 class getIMDBFilm(threading.Thread):
-    def __init__(self, nom = 'getIMDBFilm',year_min,year_max,priority_max):
+    def __init__(self, year_min,year_max,priority_max,nom = 'getIMDBFilm'):
         threading.Thread.__init__(self)
         self.nom = nom
         self._stopevent = threading.Event( )
