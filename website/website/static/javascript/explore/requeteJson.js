@@ -3,46 +3,10 @@ $(document).ready(function(){
 //envoiDeLaRequete()
 //alert("hello")
 setTimeout(function(){envoiDeLaRequeteSearch()},1000)
+//setTimeout(function(){envoiDeLaRequetePredict()},1000)
 //$("#title").click(function(){envoiDeLaRequeteSearch()})
 //$("#title").click(function(){envoiDeLaRequetePredict()})
 })
-
-function genererRequetePredict(){
-	var requestInter=new Object();
-	requestInter.actors=new Array();
-	for(var i=0;i<document.getElementById("actorsdesc").getElementsByClassName("actor").length;i++){
-		requestInter.actors[i]=document.getElementById("actorsdesc").getElementsByClassName("actor")[i].id;
-	}
-	requestInter.genres=new Array();
-	for(var i=0;i<document.getElementById("genre").getElementsByClassName("genre").length;i++){
-		requestInter.genres[i]=document.getElementById("genre").getElementsByClassName("genre")[i].value;
-	}
-	requestInter.keywords=new Array();
-	for(var i=0;i<document.getElementById("keywordsdesc").getElementsByClassName("name").length;i++){
-		requestInter.keywords[i]=document.getElementById("keywordsdesc").getElementsByClassName("name")[i].textContent;
-	}
-	requestInter.directors=new Array();
-	for(var i=0;i<document.getElementById("directors").getElementsByClassName("director").length;i++){
-		requestInter.directors[i]=document.getElementById("directors").getElementsByClassName("director")[i].id;
-	}
-	//requestInter.budget=10.2;
-	//
-	//requestInter.release_period=new Object();
-	//requestInter.release_period.season="summer";
-	//requestInter.language="fr";
-	
-	return requestInter;
-}
-
-function envoiDeLaRequetePredict(){
-	alert(JSON.stringify(genererRequetePredict()))
-	$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
-}
-
-function fctCallbackPredict(data){
-	alert(JSON.stringify(data))
-	//arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches");carrousel("cadreCoverflow");
-}
 
 
 function genererRequeteSearch(){
@@ -54,39 +18,40 @@ function genererRequeteSearch(){
 	requestInter.criteria.genre=$("#genre").prop("checked");
 	requestInter.criteria.budget=$("#budgets").prop("checked");
 	requestInter.criteria.review=$("#review").prop("checked");
-	/*requestInter.filter=new Object();
+	requestInter.filter=new Object();
 	requestInter.filter.actors=new Array();
 	var compteur=0;
-	for(var i=0;i<document.getElementById("actors").getElementsByClassName("actor").length;i++){
+	/*for(var i=0;i<document.getElementById("actors").getElementsByClassName("actor").length;i++){
 		if (document.getElementById("actors").getElementsByClassName("actor")[i].children[0].checked==true){
 			requestInter.filter.actors[compteur]=document.getElementById("actors").getElementsByClassName("actor")[i].children[1].id;
 			compteur=compteur+1;
 		}
-	}
-	requestInter.filter.directors=new Array();
+	}*/
+	/*requestInter.filter.directors=new Array();
 	compteur=0;
 	for(var i=0;i<document.getElementById("actors").getElementsByClassName("director").length;i++){
 		if (document.getElementById("actors").getElementsByClassName("director")[i].children[0].checked==true){
 			requestInter.filter.directors[compteur]=document.getElementById("actors").getElementsByClassName("director")[i].children[1].id;
 			compteur=compteur+1;
 		}
-	}
+	}*/
 	requestInter.filter.genres=new Array();
 	compteur=0;
-	for(var i=0;i<document.getElementById("genres").getElementsByClassName("genre").length;i++){
-		if (document.getElementById("genres").getElementsByClassName("genre")[i].children[0].checked==true){
-			requestInter.filter.genres[compteur]=document.getElementById("genres").getElementsByClassName("genre")[i].children[1].textContent;
+	for(var i=0;i<document.getElementById("genres").getElementsByClassName("icheckbox_line-red").length;i++){
+		//alert("hello")
+		if (document.getElementById("genres").getElementsByClassName("icheckbox_line-red")[i].children[0].checked==true){
+			requestInter.filter.genres[compteur]=document.getElementById("genres").getElementsByClassName("icheckbox_line-red")[i].textContent;
 			compteur=compteur+1;
 		}
 	}
 	requestInter.filter.budget=new Object();
-	requestInter.filter.budget.min=budgetMin;
-	requestInter.filter.budget.max=budgetMax;
-	requestInter.filter.reviews=new Object();
-	requestInter.filter.reviews.min=valueStar;
-	/*requestInter.filter.release_period=new Object();
-	requestInter.filter.release_period.begin="1900-01-01"; //inutile
-	requestInter.filter.release_period.end="2100-01-01"; //inutile*/
+	requestInter.filter.budget.min=document.getElementById("amount").value.slice(1,document.getElementById("amount").value.slice(1,-1).indexOf("-")-1);
+	requestInter.filter.budget.max=document.getElementById("amount").value.slice(document.getElementById("amount").value.slice(1,-1).indexOf("-")+4,-1);
+	/*requestInter.filter.reviews=new Object();
+	requestInter.filter.reviews.min=valueStar;*/
+	//requestInter.filter.release_period=new Object();
+	//requestInter.filter.release_period.begin="1900-01-01"; //inutile
+	//requestInter.filter.release_period.end="2100-01-01"; //inutile
 	return requestInter;
 }
 
