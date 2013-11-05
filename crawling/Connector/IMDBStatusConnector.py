@@ -155,7 +155,7 @@ class IMDBFilmStatusConnector:
     def getDownloadedNotExtracted(self):
         self.logger.debug("Get the Film IMDB IDs in the database with downloaded=1 and extracted=0")
 
-        status = IMDBFilmStatus.objects.filter(downloaded=1, extracted=0).order_by("priority")
+        status = IMDBFilmStatus.objects.filter(downloaded=1, extracted=0, year__gte 1990, year__lte=2000, priority__lte=400).order_by("priority")
         return map(lambda s: s.imdb_id, status)
 
     ###############################################################################
