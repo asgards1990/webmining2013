@@ -6,7 +6,7 @@ function carrousel(nomDuCadre,data){
 	var tableauId=new Array;
 	var repLien=new Array;
 	//alert(data.nbresults)
-	var nombre = data.nbresults;
+	var nombre = data.results.length;
 	//alert(nombre);
 	var ontTousRep=new Array;
 	for (var i=0;i < nombre;i++){
