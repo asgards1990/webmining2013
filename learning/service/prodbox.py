@@ -4,6 +4,7 @@ from status.models import TableUpdateTime
 from cinema.models import Film, Person, Genre, Keyword
 import filmsfilter as flt
 import numpy as np
+from scipy.sparse import hstack
 import scipy
 from dimreduce import *
 from sklearn.neighbors import NearestNeighbors
@@ -13,6 +14,9 @@ from sklearn.preprocessing import normalize, Imputer
 from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.cross_validation import cross_val_score
 
 import re
 
@@ -34,7 +38,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.filter2(300)
+        self.films = flt.filter2(50)
         #print('Check in service : ')
         #for film in self.films.all():
         #    if film.imdb_nb_reviews==None:
@@ -537,7 +541,7 @@ class CinemaService(LearningService):
                 lang = Language.objects.get(identifier = str(args['language']))
             except Language.DoesNotExist, exceptions.KeyError :
                 pass
-        results = self.compute_predict(self.parse_criteria(args), language = lang)
+        results = self.compute_predict(self.parse_predict_criteria(args), language = lang)
         
         # Build query_results
         query_results = {}
@@ -632,8 +636,87 @@ class CinemaService(LearningService):
                                          }
                }
         '''
+        X = []
+        feature_names = []
+
+        # TODO: Actors features
+        # TODO: Directores features
+        # Seasons features
+        X.append(self.season_matrix)
+        feature_names += self.season_names
+        # Budget feature
+        X.append(self.budget_matrix)
+        feature_names += ['budget',]
+        # TODO: Keywords deatures
+        # Genres features
+        X.append(self.genres_matrix)
+        feature_names += self.genres_names
+        
+        # Concatenate matrices 
+        X = hstack(X)
+
         return {}
-    
+
+    def benchmark(self):
+
+        X = []
+        feature_names = []
+
+        # TODO: Actors features
+        # TODO: Directores features
+        # Seasons features
+        X.append(self.season_matrix)
+        feature_names += self.season_names
+        # Budget feature
+        X.append(self.budget_matrix)
+        feature_names += ['budget',]
+        # TODO: Keywords deatures
+        # Genres features
+        X.append(self.genres_matrix)
+        feature_names += self.genres_names
+        
+        # Concatenate matrices 
+        X = hstack(X).toarray()       
+        
+        ### For the Box Office ###
+        y = self.box_office_matrix.data
+        y_log = np.log(y)
+        
+        # CLASSIFICATION
+        print('\nClassification for the Box Office...')
+        
+        thresh = np.median(y_log)
+        y_bin = y_log > thresh
+        
+        clf = RandomForestClassifier()
+        
+        scores = cross_val_score(clf, X, y_bin, cv=3)
+        print 'Classification score : ', scores.mean()
+        
+        clf.fit(X, y_bin)
+        fi = clf.feature_importances_
+        fi_indexes = fi.argsort()[-5:] # The 5 most important features
+        i=1
+        for index in reversed(fi_indexes):
+            print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
+            i=i+1
+        
+        # REGRESSION
+        print('\nRegression...')
+        clf = RandomForestRegressor()
+        
+        scores = cross_val_score(clf, X, y_log, cv=3)
+        print 'Classification score : ', scores.mean()
+        
+        clf.fit(X, y_log)
+        fi = clf.feature_importances_
+        fi_indexes = fi.argsort()[-5:] # The 5 most important features
+        i=1
+        for index in reversed(fi_indexes):
+            print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
+            i=i+1
+        return
+
     def parse_predict_criteria(self, crit_in):
         crit_out = {}
         
