@@ -73,7 +73,7 @@ function envoiDeLaRequetePredict(){
 	data.genre_box_office.neighbors[1].original_title="Gravity";
 	data.genre_box_office.neighbors[1].value=300;
 	data.critics=new Object;
-	data.critics.average=0.4;
+	data.critics.average=0.65147;
 	data.critics.reviews=new Array;
 	data.critics.reviews[0]=new Object;
 	data.critics.reviews[0].journal="Télérama";
@@ -200,7 +200,7 @@ function fctCallbackPredict(data){
 	boiteGeneral.id="boiteGeneral"
 	boiteGeneral.style.cssText="float : left; width:80%; height:30%;border:1px solid Black"
 	boiteBoxOffice.appendChild(boiteGeneral);
-	var titre1=document.createTextNode("General");
+	var titre1=document.createTextNode("Général");
 	titre1.id="titre1"
 	boiteGeneral.appendChild(titre1);
 	var boiteClassement1=document.createElement("div");
@@ -262,6 +262,51 @@ function fctCallbackPredict(data){
 	titreFilmBas2.textContent=chercherTitre(data, "bas",data.genre_box_office.rank , "genre");
 	boiteFilmBas2.appendChild(titreFilmBas2);
 	
+	var boiteReviews=document.getElementById("reviews");
+	var boiteMoyenne=document.createElement("div");
+	boiteMoyenne.id="boiteMoyenne"
+	boiteMoyenne.style.cssText="width:80%; height:30%;border:1px solid Black;"
+	boiteReviews.appendChild(boiteMoyenne);
+	var conteneurNote=document.createElement("div");
+	boiteMoyenne.appendChild(conteneurNote);
+	var note=document.createTextNode((data.critics.average*5+" ").slice(0,3)+"/5");
+	conteneurNote.appendChild(note);
+	var cadreEtoile=document.createElement("canvas");
+	cadreEtoile.style.cssText=""
+	cadreEtoile.id="cadreEtoile";
+	cadreEtoile.setAttribute("width", 250);
+	cadreEtoile.setAttribute("height", 50);
+	boiteMoyenne.appendChild(cadreEtoile);
+	var etoile=new Image();
+	etoile.src="../pesto/static/img/explore/reviews.png"
+	etoile.onload=function(){
+		var width = etoile.width,height = etoile.height;
+        var context = $("#cadreEtoile")[0].getContext("2d");
+		function dessinerLigne(i,translation){
+			return function(){
+				context.setTransform(0.5, 0,0,0.5,0.5*translation, 0);
+            	context.drawImage(etoile,width-i,0,2,height,width-i,0,2,height);	
+			}
+		}
+		function dessinerLigne2(i,translation){
+			return function(){
+				context.setTransform(0.5, 0,0,0.5,0.5*translation, 0);
+            	context.drawImage(etoile,width-i,0,2,height,width-i,0,2,height);	
+			}
+		}
+		var nombreEtoile=Math.floor(data.critics.average*5);
+		var reste=data.critics.average*5-Math.floor(data.critics.average*5);
+		var vitesse=5;
+		var espaceEntreEtoiles=10;
+		for (var j=0;j<nombreEtoile;j++){
+			for (var i = 0; i<=width; ++i) {
+				setTimeout(dessinerLigne(i,j*width+espaceEntreEtoiles),(width-i)*vitesse+width*vitesse*j);
+			}
+		}
+        for (var i = width*(1-reste); i<=width; ++i) {
+            setTimeout(dessinerLigne2(i,nombreEtoile*width+espaceEntreEtoiles),(width-i)*vitesse+width*vitesse*nombreEtoile);
+		}
+	}
 	
 	//arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches");carrousel("cadreCoverflow");
 }

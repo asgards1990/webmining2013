@@ -1,8 +1,34 @@
+var requete;
+
+function changement(titre){
+	envoiDeLaRequeteSearch();
+	/*if (requete!=undefined){
+	requete.abort();
+	}
+	//alert("!!!")
+	requete=$.get("http://www.omdbapi.com/?i=" + "tt1951264", function(data){alert(data)})
+	if (requete!=undefined){
+	requete.abort();
+	}
+	//alert("!!!")
+	requete=$.get("http://www.omdbapi.com/?i=" + "tt2294629", function(data){alert(data)})
+	if (requete!=undefined){
+	requete.abort();
+	}
+	//alert("!!!")
+	requete=$.get("http://www.omdbapi.com/?i=" + "tt1981115", function(data){alert(data)})*/
+}
+
 
 $(document).ready(function(){
 //envoiDeLaRequete()
 //alert("hello")
-setTimeout(function(){envoiDeLaRequeteSearch()},1000)
+$(".checkbox").change(function(){changement("tt1951264");})
+$(".iCheck-helper").click(function(){changement("tt2294629");})
+
+//document.getElementById("amount").onchange=function(){alert("!!!")};//change(function(){alert("checkbox truc3!!!")})
+$( "#slider-range" ).on( "slidechange", function( event, ui ) {changement("tt1981115");} );
+//setTimeout(function(){envoiDeLaRequeteSearch();},1000)
 //setTimeout(function(){envoiDeLaRequetePredict()},1000)
 //$("#title").click(function(){envoiDeLaRequeteSearch()})
 //$("#title").click(function(){envoiDeLaRequetePredict()})
@@ -58,7 +84,7 @@ function genererRequeteSearch(){
 function envoiDeLaRequeteSearch(){
 	//alert("hello")
 	alert(JSON.stringify(genererRequeteSearch()))
-	//$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
+	//requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
 	var data=new Object;
 	data.success=true;
 	data.nbresults=4;
@@ -84,6 +110,6 @@ function envoiDeLaRequeteSearch(){
 
 function fctCallbackSearch(data){
 	alert(JSON.stringify(data))
-	arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches",data);carrousel("cadreCoverflow",data);
+	//arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches",data);carrousel("cadreCoverflow",data);
 }
 
