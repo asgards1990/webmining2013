@@ -477,16 +477,19 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
    def extractActors(self):
       logger.debug("Extract Actors : ")
       actor_url_list = self.extractor.extractXpathElement('//td[@itemprop="actor"]/a/@href')
+      self.actor_name_list =  self.extractor.extractXpathText('//td[@itemprop="actor"]/a/span')
       return createPersonList(actor_url_list)
 
    def extractDirectors(self):
       logger.debug("Extract Diretors : ")
       director_url_list = self.extractor.extractXpathElement('//a[contains(@href,"ttfc_fc_dr")]/@href')
+      self.director_name_list = self.extractor.extractXpathText('//a[contains(@href,"ttfc_fc_dr")]')
       return createPersonList(director_url_list)
 
    def extractWriters(self):
       logger.debug("Extract Writers: ")
       writer_url_list = self.extractor.extractXpathElement('//a[contains(@href,"ttfc_fc_wr")]/@href')
+      self.writer_name_list = self.extractor.extractXpathText('//a[contains(@href,"ttfc_fc_wr")]')
       return createPersonList(writer_url_list)
 
  
@@ -497,20 +500,33 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
       f = defineFilm(self.id_)
       if f:
          try:
+            i=0
             for d in self.directors:
                director = definePerson(d.id_)
                if director:
+                  director.name=self.director_name_list[i]
+                  logger.debug("Association person id : {} avec le nom {}".format(d.id_,self.director_name_list[i]))
+                  director.save()
                   f.directors.add(director)
                   f.save()
+               i+=1
+            i=0
             for w in self.writers:
                writer = definePerson(w.id_)
                if writer:
+                  writer.name=self.writer_name_list[i]
+                  logger.debug("Association person id : {} avec le nom {}".format(d.id_,self.director_name_list[i]))
+                  writer.save()
                   f.writers.add(writer)
                   f.save()
+               i+=1
             actor_index=1
             for a in self.actors:
               actor = definePerson(a.id_)
               if actor:
+                 actor.name=self.actor_name_list[actor_index-1]
+                 logger.debug("Association person id : {} avec le nom {}".format(d.id_,self.director_name_list[i]))
+                 actor.save()
                  actor_weight = defineActorWeight(actor,f)
                  if actor_weight:
                     actor_weight.rank = actor_index
