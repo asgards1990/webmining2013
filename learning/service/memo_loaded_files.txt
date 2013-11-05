@@ -1,0 +1,69 @@
+self.films
+self.indexes
+self.nb_films
+self.imdb_user_rating_matrix
+self.imdb_nb_user_ratings_matrix
+self.imdb_nb_user_reviews_matrix
+self.imdb_nb_reviews_matrix
+self.release_date_matrix
+self.runtime_matrix
+self.box_office_matrix
+self.genres_names
+self.genres_matrix
+self.budget_matrix
+self.prizes_matrix
+self.prizes_names
+self.countries_names
+self.countries_matrix
+self.languages_names
+self.languages_matrix
+self.metacritic_score_matrix
+self.production_companies_names
+self.production_companies_matrix
+self.reviews_matrix
+self.reviews_names
+self.season_matrix
+self.season_names
+self.filmsbygenre
+self.keywordsbygenre
+self.nb_keywords
+self.dim_keywords
+self.keyword_names
+self.keyword_matrix
+self.keywords_reduced_KM
+self.dim_actors
+self.actor_names
+self.actor_matrix
+self.actor_reduced_SC
+self.dim_writers
+self.writer_names 
+self.writer_keyword_matrix
+self.writer_reduced_SC
+self.proj_writers_SC
+self.writer_reduced_avg
+self.dim_directors
+self.director_names 
+self.director_actor_matrix
+self.director_reduced_SC
+self.proj_directors_SC
+self.director_reduced_avg
+self.search_clustering (self.search_clustering[k] = {'labels':KM.labels_, 'cluster_centers':KM.cluster_centers_})
+cobject('films', self.indexes)
+cobject('imdb',(self.imdb_user_rating_matrix,self.imdb_nb_user_ratings_matrix,self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix))
+cobject('release_date', self.release_date_matrix)
+cobject('runtime', self.runtime_matrix)
+cobject('box_office', self.box_office_matrix)
+cobject('genres', (self.genres_names, self.genres_matrix))
+cobject('budget', self.budget_matrix)
+cobject('prizes', (self.prizes_names, self.prizes_matrix))
+cobject('countries', (self.countries_names, self.countries_matrix))
+cobject('languages', (self.languages_names, self.languages_matrix))
+cobject('metacritic_score', self.metacritic_score_matrix)
+cobject('production_companies', (self.production_companies_names, self.production_companies_matrix))
+cobject('reviews', (self.reviews_names, self.reviews_matrix))
+cobject('season', (self.season_names, self.season_matrix))
+cobject('genre_stats', (self.filmsbygenre, self.keywordsbygenre))
+cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM))
+cobject('actors', (self.actor_names, self.actor_matrix, self.actor_reduced_SC))
+cobject('writers', (self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg))
+cobject('directors', (self.director_names, self.director_actor_matrix, self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg))

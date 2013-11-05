@@ -4,6 +4,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestRegressor
 
 def getRandomForestRegressorCVScore(X,y,completer):
-    clf_class = RandomForestRegressor()
-    pipeline_class = Pipeline([('completer', completer), ('clf', clf_class)])
-    return cross_val_score(pipeline_class, X, y, cv=3)
+    clf = RandomForestRegressor()
+    pipeline = Pipeline([('completer', completer), ('clf', clf)])
+    clf.fit(X, y)
+    return (cross_val_score(pipeline, X, y, cv=3), clf.feature_importances_)

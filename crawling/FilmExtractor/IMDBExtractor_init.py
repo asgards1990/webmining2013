@@ -22,6 +22,10 @@ logger = initLogger.getLogger(FilmExtractorConfig.EXTRACTOR_IMDB_INIT_LOGGER_NAM
 
 ###################################################################
 
+year_min=2000
+year_max=2005
+priority_max=400
+
 def extractOneMovie(imdb_id):
    FilmExtractor.IMDB_Extractor.IMDB_SuperExtractor(imdb_id) 
 
@@ -94,14 +98,14 @@ person_conn =  Connector.IMDBStatusConnector.IMDBPersonStatusConnector()
 company_conn =  Connector.IMDBStatusConnector.IMDBCompanyStatusConnector()
 
 class getIMDBFilm(threading.Thread):
-    def __init__(self, nom = 'getIMDBFilm'):
+    def __init__(self, year_min,year_max,priority_max,nom = 'getIMDBFilm'):
         threading.Thread.__init__(self)
         self.nom = nom
         self._stopevent = threading.Event( )
     def run(self):
        time_to_sleep = 0
        while True:
-          film_id_tab = film_conn.getDownloadedNotExtracted()[:100]
+          film_id_tab = film_conn.getDownloadedNotExtractedFiltered(year_min=year_min,year_max=year_max,priority_max=priority_max)[:100]
           if len(film_id_tab)==0:
              time.sleep(time_to_sleep)
              time_to_sleep = time_to_sleep*2 + 60
@@ -147,7 +151,7 @@ class getIMDBCompany(threading.Thread):
                 FilmExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
 
 
-IMDB_FILM_EXTRACTOR = getIMDBFilm()
+IMDB_FILM_EXTRACTOR = getIMDBFilm(year_min,year_max,priority_max)
 IMDB_PERSON_EXTRACTOR = getIMDBPerson()
 IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 

@@ -23,6 +23,8 @@ class Handler(tornado.web.RequestHandler):
                         query_results = self.app_learn.search_request(args)
                     elif self.method=='predict':
                         query_results = self.app_learn.predict_request(args)
+                    elif self.method=='suggest_keywords':
+                        query_results = self.app_learn.suggest_keywords(args)
                     else:
                         raise service.objects.ParsingError('')
                     query_results['success'] = True
@@ -39,6 +41,6 @@ class Handler(tornado.web.RequestHandler):
         self.finish(tornado.escape.json_encode({'success' : False, 'error' : err_msg }))
 
     def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "senellart.com")
-        self.set_header("Access-Control-Allow-Origin", "tiresias.enst.fr")
-        self.set_header("Access-Control-Allow-Origin", "null") # Uncomment to enable acces from every host.
+        #self.set_header("Access-Control-Allow-Origin", "senellart.com")
+        #self.set_header("Access-Control-Allow-Origin", "tiresias.enst.fr")
+        self.set_header("Access-Control-Allow-Origin", "*") # Uncomment to enable acces from every host.

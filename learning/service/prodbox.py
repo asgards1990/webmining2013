@@ -1,7 +1,24 @@
 from objects import *
-from status.models import *
-from cinema.models import *
+from vectorizers import *
+from status.models import TableUpdateTime
+from cinema.models import Film, Person, Genre, Keyword
+import filmsfilter as flt
 import numpy as np
+from scipy.sparse import hstack
+import scipy
+from dimreduce import *
+from sklearn.neighbors import NearestNeighbors
+from sklearn.feature_extraction import DictVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.preprocessing import normalize, Imputer
+from sklearn.cluster import MiniBatchKMeans, KMeans
+from sklearn.decomposition import TruncatedSVD
+from sklearn.cluster import SpectralClustering
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.cross_validation import cross_val_score
+
+import re
 
 import exceptions
 
@@ -9,7 +26,7 @@ class TableDependentCachedObject(CachedObject):
     def __init__(self, name, table_name, content = None):
         __init__(self, name, content = content)
         self.table_name = table_name
-
+    
     def update_status(self):
         try:
             field = TableUpdateTime.objects.get(model_name = self.table_name)
@@ -19,6 +36,346 @@ class TableDependentCachedObject(CachedObject):
             print('Table "' + self.table_name + ' not found.')
 
 class CinemaService(LearningService):
+    
+    def loadFilms(self):
+        self.films = flt.filter2(50)
+        #print('Check in service : ')
+        #for film in self.films.all():
+        #    if film.imdb_nb_reviews==None:
+        #        print 'None found'
+        if not self.is_loaded('films'):
+            self.indexes = hashIndexes(self.films.iterator())
+            self.create_cobject('films', self.indexes)
+        else:
+            self.indexes = self.get_cobject('films').get_content()
+        self.nb_films = len(self.indexes)
+    
+    def loadImdb(self):
+        if not self.is_loaded('imdb'):
+            g_user_rating = genImdbUserRating(self.films.iterator())
+            v_user_rating = DictVectorizer(dtype=np.float32)
+            self.imdb_user_rating_matrix = v_user_rating.fit_transform(g_user_rating)
+            g_nb_user_ratings = genImdbNbUserRatings(self.films.iterator())
+            v_nb_user_ratings = DictVectorizer(dtype=int)
+            self.imdb_nb_user_ratings_matrix = v_nb_user_ratings.fit_transform(g_nb_user_ratings)
+            g_nb_user_reviews = genImdbNbUserReviews(self.films.iterator())
+            v_nb_user_reviews = DictVectorizer(dtype=np.float32)
+            self.imdb_nb_user_reviews_matrix = v_nb_user_reviews.fit_transform(g_nb_user_reviews)
+            # Now we complete missing values with 0
+            for i in range(self.imdb_nb_user_reviews_matrix.shape[0]):
+                if np.isnan(self.imdb_nb_user_reviews_matrix[i,0]):
+                    self.imdb_nb_user_reviews_matrix[i,0]=0
+            g_nb_reviews = genImdbNbReviews(self.films.iterator())
+            v_nb_reviews = DictVectorizer(dtype=np.float32)
+            self.imdb_nb_reviews_matrix = v_nb_reviews.fit_transform(g_nb_reviews)
+            # Now we complete missing values with 0
+            for i in range(self.imdb_nb_reviews_matrix.shape[0]):
+                if np.isnan(self.imdb_nb_reviews_matrix[i,0]):
+                    self.imdb_nb_reviews_matrix[i,0]=0
+            self.create_cobject('imdb', (self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix))
+        else:
+                self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix = self.get_cobject('imdb').get_content()
+   
+    def loadBudget(self):
+        if not self.is_loaded('budget'):
+            gkey = genBudget(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.budget_matrix = v.fit_transform(gkey)
+            # Now we complete missing values
+            for i in range(self.budget_matrix.shape[0]):
+                if np.isnan(self.budget_matrix[i,0]):
+                    self.budget_matrix[i,0]=-1
+            completer = Imputer(missing_values=-1)
+            completer.fit(self.budget_matrix)
+            self.budget_matrix = completer.transform(self.budget_matrix) #TODO: answer this question: use log instead ?
+            self.create_cobject('budget', self.budget_matrix)
+        else:
+            self.budget_matrix = self.get_cobject('budget').get_content()
+    
+    def loadReleaseDate(self):
+        if not self.is_loaded('release_date'):
+            gkey = genReleaseDate(self.films.iterator())
+            v =  DictVectorizer(dtype=date) # TODO : WARNING : THIS IS NOT CORRECT
+            self.release_date_matrix = v.fit_transform(gkey)
+            self.create_cobject('release_date', self.release_date_matrix)
+        else:
+            self.release_date_matrix = self.get_cobject('release_date').get_content()
+    
+    def loadRuntime(self):
+        if not self.is_loaded('runtime'):
+            gkey = genRuntime(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.runtime_matrix = v.fit_transform(gkey)
+            self.create_cobject('runtime', self.runtime_matrix)
+        else:
+            self.runtime_matrix = self.get_cobject('runtime').get_content()
+    
+    def loadBoxOffice(self):
+        if not self.is_loaded('box_office'):
+            gkey = genBoxOffice(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.box_office_matrix = v.fit_transform(gkey)
+            self.create_cobject('box_office', self.box_office_matrix)
+        else:
+            self.box_office_matrix = self.get_cobject('box_office').get_content()
+    
+    def loadGenres(self):
+        if not self.is_loaded('genres'):
+            gkey = genGenres(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.genres_matrix = v.fit_transform(gkey)
+            self.genres_names = v.get_feature_names()
+            self.create_cobject('genres', (self.genres_names, self.genres_matrix))
+        else:
+            self.genres_names, self.genres_matrix = self.get_cobject('genres').get_content()
+    
+    def loadPrizes(self):
+        if not self.is_loaded('prizes'):
+            gkey = genPrizes(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.prizes_matrix = v.fit_transform(gkey)
+            self.prizes_names = v.get_feature_names()
+            self.create_cobject('prizes', (self.prizes_names, self.prizes_matrix))
+        else:
+            self.prizes_names, self.prizes_matrix = self.get_cobject('prizes').get_content()
+    
+    def loadCountries(self):
+        if not self.is_loaded('countries'):
+            gkey = genCountries(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.countries_matrix = v.fit_transform(gkey)
+            self.countries_names = v.get_feature_names()
+            self.create_cobject('countries', (self.countries_names, self.countries_matrix))
+        else:
+            self.countries_names, self.countries_matrix = self.get_cobject('countries').get_content()
+    
+    def loadLanguages(self):
+        if not self.is_loaded('languages'):
+            gkey = genLanguages(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.languages_matrix = v.fit_transform(gkey)
+            self.languages_names = v.get_feature_names()
+            self.create_cobject('languages', (self.languages_names, self.languages_matrix))
+        else:
+            self.languages_names, self.languages_matrix = self.get_cobject('languages').get_content()
+    
+    def loadMetacriticScore(self):
+        if not self.is_loaded('metacritic_score'):
+            gkey = genMetacriticScore(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.metacritic_score_matrix = v.fit_transform(gkey)
+            self.create_cobject('metacritic_score', self.metacritic_score_matrix)
+        else:
+            self.metacritic_score_matrix = self.get_cobject('metacritic_score').get_content()
+    
+    def loadProductionCompanies(self):
+        if not self.is_loaded('production_companies'):
+            gkey = genProductionCompanies(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.production_companies_matrix = v.fit_transform(gkey)
+            self.production_companies_names = v.get_feature_names()
+            self.create_cobject('production_companies', (self.production_companies_names, self.production_companies_matrix))
+        else:
+            self.production_companies_names, self.production_companies_matrix = self.get_cobject('production_companies').get_content()
+    
+    def loadReviews(self):
+        if not self.is_loaded('reviews'):
+            gkey = genReviews(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.reviews_matrix = v.fit_transform(gkey)
+            self.reviews_names = v.get_feature_names()
+            self.create_cobject('reviews', (self.reviews_names, self.reviews_matrix))
+        else:
+            self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
+    
+    def loadSeason(self):
+        if not self.is_loaded('season'):
+            gkey = genSeason(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.season_matrix = v.fit_transform(gkey)
+            self.season_names = v.get_feature_names()
+            self.create_cobject('season', (self.season_names, self.season_matrix))
+        else:
+            self.season_names, self.season_matrix = self.get_cobject('season').get_content()
+    
+    def loadStats(self):
+        if not self.is_loaded('genre_stats'):
+            self.keywordsbygenre = self.genres_matrix.transpose() * self.keyword_matrix
+            self.create_cobject('genre_stats', self.keywordsbygenre)
+        else:
+            self.keywordsbygenre = self.get_cobject('genre_stats').get_content()
+    
+    def loadKeywords(self):
+        self.dim_keywords = 30 #TODO : optimize
+        if not self.is_loaded('keywords'):
+            gkey = genKeywords(self.films.iterator())
+            v =  DictVectorizer(dtype=int)
+            self.keyword_matrix = v.fit_transform(gkey)
+            self.keyword_names = v.get_feature_names()
+            self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++')
+            self.keywords_reduced_KM = self.keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
+            # 0 means closer to centroids.
+            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM))
+        else:
+            self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM = self.get_cobject('keywords').get_content()
+        self.nb_keywords = self.keyword_matrix.shape[1]
+    
+    def loadActors(self):
+        self.dim_actors = 10 #TODO : optimize
+        if not self.is_loaded('actors'):
+            v = DictVectorizer(dtype=int)
+            self.actor_matrix = v.fit_transform(genActorsTuples2(self.films.iterator()))
+            self.actor_names = v.get_feature_names()
+            # TODO : play on arguments (ex: n_neighbors) in spectral clustering #TODO : later, maybe normalize actor_matrix (mais je pense pas)
+            
+            #self.actor_reduced_SC = reduceDimBySpectralClustering(self.actor_matrix, self.actor_names, self.dim_actors) # uses dimreduce
+            actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=8)
+            actor_labels = actors_SC.fit_predict(self.actor_matrix.transpose())
+            self.proj_actors = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
+            for i in range(1, self.dim_actors):
+                self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
+            self.actor_reduced_SC = self.actor_matrix * self.proj_actors
+            self.actor_reduced_SC = normalize(self.actor_reduced_SC.astype(np.double), norm='l1', axis=1)
+            
+            #self.actor_reduced_SC = self.actor_matrix # TODO
+            self.create_cobject('actors', (self.actor_names, self.actor_matrix, self.actor_reduced_SC))
+        else:
+            self.actor_names, self.actor_matrix, self.actor_reduced_SC = self.get_cobject('actors').get_content()
+        self.nb_actors = self.actor_matrix.shape[1]
+    
+    def loadWriters(self):
+        self.dim_writers = 20 # must be lower than dim_keywords #TODO : optimize
+        keywords_reduced = self.keywords_reduced_KM
+        if not self.is_loaded('writers'):
+            v=DictVectorizer(dtype=int)
+            self.writer_matrix = v.fit_transform(genWriters(self.films.iterator()))
+            self.writer_names = v.get_feature_names()
+            self.writer_keyword_matrix = normalize(self.writer_matrix.transpose().astype(np.double), norm='l1', axis=1).astype(np.double) * keywords_reduced
+            # First method: Spectral Clustering
+            self.writer_SC = SpectralClustering(n_clusters = self.dim_writers, eigen_solver='arpack', affinity="nearest_neighbors")
+            writer_labels = self.writer_SC.fit_predict(self.writer_keyword_matrix)
+            self.proj_writers_SC = scipy.sparse.csc_matrix(writer_labels==0, dtype=int).transpose()
+            for i in range(1, self.dim_writers):
+                self.proj_writers_SC = scipy.sparse.hstack([self.proj_writers_SC, scipy.sparse.csc_matrix(writer_labels==i, dtype=int).transpose()])
+            self.writer_reduced_SC = self.writer_matrix * self.proj_writers_SC
+            # Second method: Average of keywords features
+            self.writer_reduced_avg =  normalize(self.writer_matrix.astype(np.double), norm='l1', axis=1) * self.writer_keyword_matrix
+            self.create_cobject('writers', (self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg))
+        else:
+            self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg = self.get_cobject('writers').get_content()
+        self.nb_writers = len(self.writer_names)
+    
+    def loadDirectors(self):
+        self.dim_directors = 20 # must be lower than dim_actors #TODO : optimize
+        actor_reduced = self.actor_reduced_SC
+        if not self.is_loaded('directors'):
+            v=DictVectorizer(dtype=int)
+            self.director_matrix = v.fit_transform(genDirectors(self.films.iterator()))
+            self.director_names = v.get_feature_names()
+            self.director_actor_matrix = normalize(self.director_matrix.transpose().astype(np.double), norm='l1', axis=1) * actor_reduced
+            # First method: Spectral Clustering
+            self.director_SC = SpectralClustering(n_clusters = self.dim_directors, eigen_solver='arpack', affinity="nearest_neighbors")
+            director_labels = self.director_SC.fit_predict(self.director_actor_matrix)
+            self.proj_directors_SC = scipy.sparse.csc_matrix(director_labels==0, dtype=int).transpose()
+            for i in range(1, self.dim_directors):
+                self.proj_directors_SC = scipy.sparse.hstack([self.proj_directors_SC, scipy.sparse.csc_matrix(director_labels==i, dtype=int).transpose()])
+            self.director_reduced_SC = self.director_matrix * self.proj_directors_SC
+            # Second method: Average of actors features
+            self.director_reduced_avg =  normalize(self.director_matrix.astype(np.double), norm='l1', axis=1) * self.director_actor_matrix
+            self.create_cobject('directors', (self.director_names, self.director_actor_matrix, self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg))
+        else:
+            self.director_names, self.director_actor_matrix, self.director_reduced_SC, self.proj_directors_SC, self.directors_reduced_avg = self.get_cobject('directors').get_content()
+        self.nb_directors = len(self.director_names)
+    
+    def loadSearchClustering(self):
+        if not self.is_loaded('search_clustering'):
+            self.search_clustering = {}
+            for k in range(16):
+                print('Doing search clustering number '+str(k+1)+'/16')
+                X = self.getWeightedSearchFeatures(k)
+                KM = KMeans(n_clusters=self.n_clusters_search)
+                KM.fit_predict(X)
+                self.search_clustering[k] = {'labels' : KM.labels_, 'cluster_centers' : KM.cluster_centers_}
+            self.create_cobject('search_clustering',self.search_clustering)
+        else:
+            self.search_clustering = self.get_cobject('search_clustering').get_content()
+
+    def getWeightedSearchFeatures(self,k):
+        X_people = scipy.sparse.hstack([self.actor_reduced_SC,self.director_reduced_SC]) #TODO:play on clustering types
+        X_budget = self.budget_matrix
+        X_review = self.reviews_matrix
+        X_genre =  self.genres_matrix
+        X_budget = X_budget/np.max(X_budget)
+        X_review = X_review/100 # because grades should be in [0,1] #WARNING BDD DAVID OU BENJAMIN
+        X_review = X_review/X_review.shape[1] #divide by number of columns
+        X_genre = X_genre/X_genre.shape[1] #divide by number of columns
+        X_people = X_people/X_people.shape[1] #divide by number of columns
+        people_weight = self.high_weight if (k>>0)%2 else self.low_weight
+        budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
+        review_weight = self.high_weight if (k>>2)%2 else self.low_weight
+        genre_weight = self.high_weight if (k>>3)%2 else self.low_weight
+        return scipy.sparse.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
+        
+    def __init__(self):
+        super(CinemaService, self).__init__()
+        # Load films data
+        self.loadFilms()
+        # Load prediction features
+        self.loadActors() # TODO : Enable Spectral clustering
+        self.loadDirectors()
+        self.loadSeason()
+        self.loadBudget()
+        self.loadKeywords()
+        self.loadGenres()
+        # Load prediction labels
+        self.loadBoxOffice()
+        self.loadPrizes()
+        self.loadReviews()
+        # Load other features
+        self.loadStats()
+        self.loadWriters()
+        self.loadRuntime()
+        self.loadMetacriticScore()
+        #self.loadReleaseDate() #TODO DOES NOT WORK
+        self.loadProductionCompanies()
+        self.loadImdb()
+        self.loadCountries()
+        self.loadLanguages()
+        # Load search clusterings
+        self.n_clusters_search = 20
+        self.p_norm = 2 # p-norm used for distances
+        self.high_weight = 1 # for the distance definition
+        self.low_weight = 0 # for the distance definition
+        self.loadSearchClustering()
+        print('Loadings finished')
+    
+    def suggest_keywords(self, args):
+        if args.has_key('str') and args.has_key('nbresults'):
+            if args['nbresults'].__class__ == int and args['nbresults'] >= 0:
+                tot = np.zeros(self.nb_keywords)
+                rex = re.compile(args['str'])
+                found = [(rex.search(m)!=None) for m in self.keyword_names]
+                if args.has_key('filter') and args['filter'].__class__ == list:
+                    for element in args['filter']:
+                        try:
+                            value, genre = element
+                            tot += found * (value * self.keywordsbygenre[self.genres_names.index(genre)].toarray()[0,:])
+                        except ValueError:
+                            raise ParsingError('Unfound genre ' + genre + '.')
+                else:
+                    tot = found * np.sum(self.keyword_matrix.toarray(), axis=0)
+                ind = list(np.argsort(-tot)[:min(args['nbresults'], self.nb_films)])
+                results = []
+                for i in ind:
+                    if np.abs(tot[i]) > 0:
+                        results.append( (tot[i], self.keyword_names[i] ) )
+                return {'results' : results}
+            else:
+                raise ParsingError('Wrong format for nbresults.')
+        else:
+            raise ParsingError('Please define a string and the expected number of results.')
+    
+    
     def search_request(self, args):
         if args.has_key('id') and args.has_key('nbresults') and args.has_key('criteria'):
             if (args['nbresults'].__class__==int) and (args['criteria'].__class__==dict):
@@ -55,19 +412,77 @@ class CinemaService(LearningService):
                 raise ParsingError('Wrong format for nbresults or criteria.')
         else:
             raise ParsingError('Please define the IMDb identfier, the number of expected results and search criteria.')
+   
+    def applyFilter(filters): #returns indexes of films that respect our filters
+	    indexes_fitting_filters = self.budget_matrix >= filters['budget']['min']
+	    indexes_fitting_filters = indexes_fitting_filters and self.budget_matrix <= filters['budget']['max'] 
+	    indexes_fitting_filters = indexes_fitting_filters and self.release_date_matrix <= filters['release_period']['end'] 
+	    indexes_fitting_filters = indexes_fitting_filters and self.release_date_matrix >= filters['release_period']['begin']
+	    indexes_fitting_filters = indexes_fitting_filters and self.metacritic_score_matrix >= filters['reviews']['min']
+	    for genre in filters['genres']:
+	        indexes_fitting_filters = indexes_fitting_filters and self.genres_matrix[:,self.genre_names.index(genre.name)]
+	    for director in filters['directors']:
+		    indexes_fitting_filters = indexes_fitting_filters and self.director_matrix[:,self.director_names.index(director.imdb_id)]
+	    for actor in filters['directors']:
+		    indexes_fitting_filters = indexes_fitting_filters and self.actor_matrix[:,self.actor_names.index(actor.imdb_id)] #TODO WARNING, CORRECT ONLY WITH NON-TUPLES ACTORS
+	    return list(self.indexes[indexes_fitting_filters].values())
 
-    def compute_search(self, film, nbresults, criteria, filters=None):
-        '''
-        Return a list of couples (value, film) 
-        '''
-        return []
+    def compute_search(self, film, nb_results, criteria, filters=None):
+        try:
+            film_index = self.indexes[film.imdb_id]
+        except KeyError:
+            raise ParsingError("Film not found.")
+        # Select cluster information according to criteria
+        criteria_binary = criteria['actor_director'] + 2*criteria['budget'] + 4*criteria['review'] + 8*criteria['genre']
+        search_clustering = self.search_clustering[criteria_binary]
+        labels = search_clustering['labels']
+        cluster_centers = search_clustering['cluster_centers']
+        # Apply filters
+        print('--> Applying filters...')
+        if filters!=None:
+            indexes_fitting_filters = applyFilter(filters) #TODO : test applyFilter
+        else:
+            indexes_fitting_filters = list(self.indexes.values())
+        indexes_fitting_filters = np.array(indexes_fitting_filters)
+        print('--> Start looking for neighbors...')
+        # Find neighbors
+        X = self.getWeightedSearchFeatures(criteria_binary).toarray()
+        film_index = self.indexes[film.imdb_id]
+        distance_to_each_cluster = []
+        distance_to_each_cluster = np.array([np.linalg.norm(X[film_index]-cluster_center,self.p_norm) for cluster_center in cluster_centers])
+        clusters_by_distance = distance_to_each_cluster.argsort()
+        nb_results_found=0
+        distances=[]
+        neighbors_indexes=[]
+        for cluster in clusters_by_distance:
+            if nb_results_found < nb_results +1:
+                print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
+                indexes_of_cluster = np.where(labels == cluster)[0]
+                indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
+                samples = X[list(indexes),:]
+                neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
+                neigh.fit(samples)
+                (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
+                local_nb_results_found = loc_distances[0].shape[0]
+                print('--> Found '+str(local_nb_results_found)+' results in this cluster')
+                nb_results_found = nb_results_found + local_nb_results_found
+                distances.append(loc_distances[0])
+                neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
+        neighbors_indexes = np.concatenate(neighbors_indexes)
+        distances = np.concatenate(distances)
+        distances = distances[1:] # because the film being studied is the closest neighbor...
+        neighbors_indexes = neighbors_indexes[1:]
+        res = []
+        for i in range(nb_results):
+            res.append((distances[i],self.films[neighbors_indexes[i]]))
+        return res
 
     def parse_search_filter(self, filt_in):
         if filt_in.__class__ != dict:
             return None
-
+        
         filt_out = {}
-
+        
         if filt_in.has_key('actors'):
             if filt_in['actors'].__class__ == list:
                 filt_out['actors'] = []
@@ -76,7 +491,7 @@ class CinemaService(LearningService):
                         filt_out['actors'].append( Person.objects.get(imdb_id=str(person_id)) )
                     except Person.DoesNotExist:
                         continue
-
+        
         if filt_in.has_key('directors'):
             if filt_in['directors'].__class__ == list:
                 filt_out['directors'] =[]
@@ -85,7 +500,7 @@ class CinemaService(LearningService):
                         filt_out['directors'].append( Person.objects.get(imdb_id=str(person_id)) )
                     except Person.DoesNotExist:
                         pass
-
+        
         if filt_in.has_key('genres'):
             if filt_in['genres'].__class__ == list:
                 filt_out['genres'] =[]
@@ -115,9 +530,9 @@ class CinemaService(LearningService):
             filt_out['release_period']['end'] = dateutil.parser.parse( filt_in['release_period']['end'] ).date()
         except exceptons.ValueError, exceptions.KeyError:
             pass
-
+        
         return filt_out
-
+    
     def predict_request(self, args):
         # Get results
         lang = None
@@ -126,7 +541,7 @@ class CinemaService(LearningService):
                 lang = Language.objects.get(identifier = str(args['language']))
             except Language.DoesNotExist, exceptions.KeyError :
                 pass
-        results = self.compute_predict(self.parse_criteria(args), language = lang)
+        results = self.compute_predict(self.parse_predict_criteria(args), language = lang)
         
         # Build query_results
         query_results = {}
@@ -178,7 +593,7 @@ class CinemaService(LearningService):
                             'keywords' : keywords
                             })
             grades.append(item['grade'])
-            
+        
         critics['reviews'] = reviews
         critics['average'] = np.mean(grades)
         query_results['critics'] = critics
@@ -193,7 +608,7 @@ class CinemaService(LearningService):
         
         # Return data
         return query_results
-
+    
     def compute_predict(self, criteria, language=None):
         '''
         Return {'prizes' : list of {'institution' : Institution Object,
@@ -221,11 +636,90 @@ class CinemaService(LearningService):
                                          }
                }
         '''
+        X = []
+        feature_names = []
+
+        # TODO: Actors features
+        # TODO: Directores features
+        # Seasons features
+        X.append(self.season_matrix)
+        feature_names += self.season_names
+        # Budget feature
+        X.append(self.budget_matrix)
+        feature_names += ['budget',]
+        # TODO: Keywords deatures
+        # Genres features
+        X.append(self.genres_matrix)
+        feature_names += self.genres_names
+        
+        # Concatenate matrices 
+        X = hstack(X)
+
         return {}
+
+    def benchmark(self):
+
+        X = []
+        feature_names = []
+
+        # TODO: Actors features
+        # TODO: Directores features
+        # Seasons features
+        X.append(self.season_matrix)
+        feature_names += self.season_names
+        # Budget feature
+        X.append(self.budget_matrix)
+        feature_names += ['budget',]
+        # TODO: Keywords deatures
+        # Genres features
+        X.append(self.genres_matrix)
+        feature_names += self.genres_names
+        
+        # Concatenate matrices 
+        X = hstack(X).toarray()       
+        
+        ### For the Box Office ###
+        y = self.box_office_matrix.data
+        y_log = np.log(y)
+        
+        # CLASSIFICATION
+        print('\nClassification for the Box Office...')
+        
+        thresh = np.median(y_log)
+        y_bin = y_log > thresh
+        
+        clf = RandomForestClassifier()
+        
+        scores = cross_val_score(clf, X, y_bin, cv=3)
+        print 'Classification score : ', scores.mean()
+        
+        clf.fit(X, y_bin)
+        fi = clf.feature_importances_
+        fi_indexes = fi.argsort()[-5:] # The 5 most important features
+        i=1
+        for index in reversed(fi_indexes):
+            print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
+            i=i+1
+        
+        # REGRESSION
+        print('\nRegression...')
+        clf = RandomForestRegressor()
+        
+        scores = cross_val_score(clf, X, y_log, cv=3)
+        print 'Classification score : ', scores.mean()
+        
+        clf.fit(X, y_log)
+        fi = clf.feature_importances_
+        fi_indexes = fi.argsort()[-5:] # The 5 most important features
+        i=1
+        for index in reversed(fi_indexes):
+            print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
+            i=i+1
+        return
 
     def parse_predict_criteria(self, crit_in):
         crit_out = {}
-
+        
         if crit_in.has_key('actors'):
             if crit_in['actors'].__class__ == list:
                 crit_out['actors'] = []
@@ -234,7 +728,7 @@ class CinemaService(LearningService):
                         crit_out['actors'].append(Person.objects.get(imdb_id=str(person_id)))
                     except Person.DoesNotExist, exceptions.TypeError:
                         pass
-
+        
         if crit_in.has_key('genres'):
             if crit_in['genres'].__class__ == list:
                 crit_out['genres'] = []
@@ -243,7 +737,7 @@ class CinemaService(LearningService):
                         crit_out['genres'].append(Genre.objects.get(imdb_id=str(genre)))
                     except Genre.DoesNotExist, exceptions.TypeError:
                         pass
-
+        
         if crit_in.has_key('directors'):
             if crit_in['directors'].__class__ == list:
                 crit_out['directors'] = []
@@ -252,7 +746,7 @@ class CinemaService(LearningService):
                         crit_out['directors'].append(Person.objects.get(imdb_id=str(person_id)))
                     except Person.DoesNotExist, exceptions.TypeError:
                         pass
-
+        
         if crit_in.has_key('keywords'):
             if crit_in['keywords'].__class__ == list:
                 crit_out['keywords'] = []
@@ -261,7 +755,7 @@ class CinemaService(LearningService):
                         crit_out['keywords'].append(Keyword.objects.get(word=str(keyword)))
                     except Keyword.DoesNotExist:
                         crit_out['keywords'].append(str(keyword))
-
+        
         if crit_in.has_key('budget'):
             if crit_in['budget'].__class__ == float:
                 crit_out['budget'] = crit_in['budget']
@@ -271,5 +765,38 @@ class CinemaService(LearningService):
                 crit_out['release_period'] = crit_in['release_period']
         except exceptions.KeyError:
             pass
+        
+        return crit_outl
 
-        return crit_out
+
+# VIEUX CODE BENJAMIN
+#        self.dim_actors = 20
+#        s = raw_input('Start Spectral Clustering on actors ?')
+#        if s=='y':
+#            self.firstKM = MiniBatchKMeans(n_clusters=500, init='k-means++', n_init=1, init_size=2000, batch_size=3000, verbose=1)
+#            first_reduction = self.firstKM.fit_transform(self.actor_matrix)
+#            #first_reduction = np.exp( - first_reduction ** 2 ) # go from distance to similarity matrix
+#
+#            #self.firstSVD = TruncatedSVD(n_components = 500, n_iterations = 100)
+#            #first_reduction = self.firstSVD.fit_transform(self.actor_matrix)
+#
+#            self.actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=10)
+#            self.actor_labels = self.actors_SC.fit_predict(first_reduction.transpose())
+#            self.proj_actors = scipy.sparse.csc_matrix(self.actor_labels==0, dtype=int).transpose()
+#            for i in range(1, self.dim_actors):
+#                self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(self.actor_labels==i, dtype=int).transpose()])
+#            self.actor_reduced = first_reduction * self.proj_actors
+#            self.actor_reduced = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
+#            self.topic_actors = []
+#            tot0 = np.asarray( np.sum(self.actor_matrix.todense(), axis=0) )[0, :]
+#            for i in range(self.dim_actors):
+#                tot = np.sum(self.firstKM.cluster_centers_[self.firstKM.labels_[self.actor_labels == i]], axis=0)
+#                 tot = tot0 * (self.actor_labels == i)
+#                #tot = self.firstSVD.inverse_transform(self.actor_labels == i)[0,:]
+#                persons = []
+#                for person in (np.array(self.actor_names)[np.argsort(-tot)[:10]]).tolist():
+#                    try:
+#                        persons.append( Person.objects.get(imdb_id = person[:9]) )
+#                    except:
+#                        continue
+#                self.topic_actors.append((persons))
