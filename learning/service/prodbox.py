@@ -657,20 +657,29 @@ class CinemaService(LearningService):
 
         return {}
 
-    def benchmark(self):
+    def benchmark(self): # BROUILLON POUR LE PREDICT
 
         X = []
         feature_names = []
 
-        # TODO: Actors features
-        # TODO: Directores features
+        # Actors features
+        X.append(self.actor_reduced_SC)
+        for i in range(self.actor_reduced_SC.shape[1]):
+            feature_names = ['actor_feat_' + str(i),]
+        # Directores features
+        X.append(self.director_reduced_SC)
+        for i in range(self.director_reduced_SC.shape[1]):
+            feature_names = ['director_feat_' + str(i),]
         # Seasons features
         X.append(self.season_matrix)
         feature_names += self.season_names
         # Budget feature
         X.append(self.budget_matrix)
         feature_names += ['budget',]
-        # TODO: Keywords deatures
+        # Keywords deatures
+        X.append(self.keywords_reduced_KM)
+        for i in range(self.keywords_reduced_KM.shape[1]):
+            feature_names = ['keyword_feat_' + str(i),]
         # Genres features
         X.append(self.genres_matrix)
         feature_names += self.genres_names
