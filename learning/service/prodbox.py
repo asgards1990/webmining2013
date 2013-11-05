@@ -34,7 +34,11 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.filter1()
+        self.films = flt.filter2(300)
+        #print('Check in service : ')
+        #for film in self.films.all():
+        #    if film.imdb_nb_reviews==None:
+        #        print 'None found'
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -51,14 +55,38 @@ class CinemaService(LearningService):
             v_nb_user_ratings = DictVectorizer(dtype=int)
             self.imdb_nb_user_ratings_matrix = v_nb_user_ratings.fit_transform(g_nb_user_ratings)
             g_nb_user_reviews = genImdbNbUserReviews(self.films.iterator())
-            v_nb_user_reviews = DictVectorizer(dtype=int)
+            v_nb_user_reviews = DictVectorizer(dtype=np.float32)
             self.imdb_nb_user_reviews_matrix = v_nb_user_reviews.fit_transform(g_nb_user_reviews)
+            # Now we complete missing values with 0
+            for i in range(self.imdb_nb_user_reviews_matrix.shape[0]):
+                if np.isnan(self.imdb_nb_user_reviews_matrix[i,0]):
+                    self.imdb_nb_user_reviews_matrix[i,0]=0
             g_nb_reviews = genImdbNbReviews(self.films.iterator())
-            v_nb_reviews = DictVectorizer(dtype=int)
+            v_nb_reviews = DictVectorizer(dtype=np.float32)
             self.imdb_nb_reviews_matrix = v_nb_reviews.fit_transform(g_nb_reviews)
+            # Now we complete missing values with 0
+            for i in range(self.imdb_nb_reviews_matrix.shape[0]):
+                if np.isnan(self.imdb_nb_reviews_matrix[i,0]):
+                    self.imdb_nb_reviews_matrix[i,0]=0
             self.create_cobject('imdb', (self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix))
         else:
                 self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix = self.get_cobject('imdb').get_content()
+   
+    def loadBudget(self):
+        if not self.is_loaded('budget'):
+            gkey = genBudget(self.films.iterator())
+            v =  DictVectorizer(dtype=np.float32)
+            self.budget_matrix = v.fit_transform(gkey)
+            # Now we complete missing values
+            for i in range(self.budget_matrix.shape[0]):
+                if np.isnan(self.budget_matrix[i,0]):
+                    self.budget_matrix[i,0]=-1
+            completer = Imputer(missing_values=-1)
+            completer.fit(self.budget_matrix)
+            self.budget_matrix = completer.transform(self.budget_matrix) #TODO: answer this question: use log instead ?
+            self.create_cobject('budget', self.budget_matrix)
+        else:
+            self.budget_matrix = self.get_cobject('budget').get_content()
     
     def loadReleaseDate(self):
         if not self.is_loaded('release_date'):
@@ -96,22 +124,6 @@ class CinemaService(LearningService):
             self.create_cobject('genres', (self.genres_names, self.genres_matrix))
         else:
             self.genres_names, self.genres_matrix = self.get_cobject('genres').get_content()
-    
-    def loadBudget(self):
-        if not self.is_loaded('budget'):
-            gkey = genBudget(self.films.iterator())
-            v =  DictVectorizer(dtype=np.float32)
-            self.budget_matrix = v.fit_transform(gkey)
-            # Now we complete missing values
-            for i in range(self.budget_matrix.shape[0]):
-                if np.isnan(self.budget_matrix[i,0]):
-                    self.budget_matrix[i,0]=-1
-            completer = Imputer(missing_values=-1)
-            completer.fit(self.budget_matrix)
-            self.budget_matrix = completer.transform(self.budget_matrix) #TODO: answer this question: use log instead ?
-            self.create_cobject('budget', self.budget_matrix)
-        else:
-            self.budget_matrix = self.get_cobject('budget').get_content()
     
     def loadPrizes(self):
         if not self.is_loaded('prizes'):
@@ -196,7 +208,7 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=int)
             self.keyword_matrix = v.fit_transform(gkey)
             self.keyword_names = v.get_feature_names()
-            self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++', verbose=1)
+            self.keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++')
             self.keywords_reduced_KM = self.keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
             # 0 means closer to centroids.
             self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM))
@@ -210,17 +222,18 @@ class CinemaService(LearningService):
             v = DictVectorizer(dtype=int)
             self.actor_matrix = v.fit_transform(genActorsTuples2(self.films.iterator()))
             self.actor_names = v.get_feature_names()
-            # Normalize actor matrix ?
-            # TODO : play on arguments (ex: n_neighbors) in spectral clustering
-            # self.actor_reduced_SC = reduceDimBySpectralClustering(self.actor_matrix, self.actor_names, self.dim_actors) # uses dimreduce
-            #self.actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=8)
-            #actor_labels = self.actors_SC.fit_predict(self.actor_matrix.transpose())
-            #self.proj_actors = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
-            #for i in range(1, self.dim_actors):
-            #    self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
-            #self.actor_reduced_SC = first_reduction * self.proj_actors
-            #self.actor_reduced_SC = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
-            self.actor_reduced_SC = self.actor_matrix # TODO
+            # TODO : play on arguments (ex: n_neighbors) in spectral clustering #TODO : later, maybe normalize actor_matrix (mais je pense pas)
+            
+            #self.actor_reduced_SC = reduceDimBySpectralClustering(self.actor_matrix, self.actor_names, self.dim_actors) # uses dimreduce
+            actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=8)
+            actor_labels = actors_SC.fit_predict(self.actor_matrix.transpose())
+            self.proj_actors = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
+            for i in range(1, self.dim_actors):
+                self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
+            self.actor_reduced_SC = self.actor_matrix * self.proj_actors
+            self.actor_reduced_SC = normalize(self.actor_reduced_SC.astype(np.double), norm='l1', axis=1)
+            
+            #self.actor_reduced_SC = self.actor_matrix # TODO
             self.create_cobject('actors', (self.actor_names, self.actor_matrix, self.actor_reduced_SC))
         else:
             self.actor_names, self.actor_matrix, self.actor_reduced_SC = self.get_cobject('actors').get_content()
@@ -274,6 +287,7 @@ class CinemaService(LearningService):
         if not self.is_loaded('search_clustering'):
             self.search_clustering = {}
             for k in range(16):
+                print('Doing search clustering number '+str(k+1)+'/16')
                 X = self.getWeightedSearchFeatures(k)
                 KM = KMeans(n_clusters=self.n_clusters_search)
                 KM.fit_predict(X)
@@ -320,7 +334,7 @@ class CinemaService(LearningService):
         self.loadMetacriticScore()
         #self.loadReleaseDate() #TODO DOES NOT WORK
         self.loadProductionCompanies()
-        #self.loadImdb() #TODO beware of None values
+        self.loadImdb()
         self.loadCountries()
         self.loadLanguages()
         # Load search clusterings
@@ -329,6 +343,7 @@ class CinemaService(LearningService):
         self.high_weight = 1 # for the distance definition
         self.low_weight = 0 # for the distance definition
         self.loadSearchClustering()
+        print('Loadings finished')
     
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
