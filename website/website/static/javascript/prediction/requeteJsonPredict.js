@@ -129,8 +129,140 @@ function envoiDeLaRequetePredict(){
 		
 }
 
+function chercherTitre(data, position, rang, type){
+	//alert(position + " "+ rang + " "+ type)
+	if (type=="general"){
+		if (position=="haut"){
+			var repRang=-1;
+			var rep=-1;
+			for(var i=0;i<data.general_box_office.neighbors.length;i++){
+				if(data.general_box_office.neighbors[i].rank>repRang && data.general_box_office.neighbors[i].rank<rang){
+					repRang=data.general_box_office.neighbors[i].rank;
+					rep=i;
+				}
+			}
+			if(rep==-1){return "";}
+			else{
+				return data.general_box_office.neighbors[rep].rank + " - " + data.general_box_office.neighbors[rep].original_title + " - $ " + data.general_box_office.neighbors[rep].value + " M";
+			}
+		}
+		else{
+			var repRang=-1;
+			var rep=-1;
+			for(var i=0;i<data.general_box_office.neighbors.length;i++){
+				if((repRang=-1 || data.general_box_office.neighbors[i].rank<repRang) && data.general_box_office.neighbors[i].rank>rang){
+					repRang=data.general_box_office.neighbors[i].rank;
+					rep=i;
+				}
+			}
+			if(rep==-1){return "";}
+			else{
+				return data.general_box_office.neighbors[rep].rank + " - " + data.general_box_office.neighbors[rep].original_title + " - $ " + data.general_box_office.neighbors[rep].value + " M";
+			}
+		}
+	}
+	else{
+		if (position=="haut"){
+			var repRang=-1;
+			var rep=-1;
+			for(var i=0;i<data.genre_box_office.neighbors.length;i++){
+				if(data.genre_box_office.neighbors[i].rank>repRang && data.genre_box_office.neighbors[i].rank<rang){
+					repRang=data.genre_box_office.neighbors[i].rank;
+					rep=i;
+				}
+			}
+			if(rep==-1){return "";}
+			else{
+				return data.genre_box_office.neighbors[rep].rank + " - " + data.genre_box_office.neighbors[rep].original_title + " - $ " + data.genre_box_office.neighbors[rep].value + " M";
+			}
+		}
+		else{
+			var repRang=-1;
+			var rep=-1;
+			for(var i=0;i<data.genre_box_office.neighbors.length;i++){
+				if((repRang=-1 || data.genre_box_office.neighbors[i].rank<repRang) && data.genre_box_office.neighbors[i].rank>rang){
+					repRang=data.genre_box_office.neighbors[i].rank;
+					rep=i;
+				}
+			}
+			if(rep==-1){return "";}
+			else{
+				return data.genre_box_office.neighbors[rep].rank + " - " + data.genre_box_office.neighbors[rep].original_title + " - $ " + data.genre_box_office.neighbors[rep].value + " M";
+			}
+		}
+	}
+}
+
 function fctCallbackPredict(data){
 	alert(JSON.stringify(data))
+	var boiteBoxOffice=document.getElementById("boxoffice");
+	var boiteGeneral=document.createElement("div");
+	boiteGeneral.id="boiteGeneral"
+	boiteGeneral.style.cssText="float : left; width:80%; height:30%;border:1px solid Black"
+	boiteBoxOffice.appendChild(boiteGeneral);
+	var titre1=document.createTextNode("General");
+	titre1.id="titre1"
+	boiteGeneral.appendChild(titre1);
+	var boiteClassement1=document.createElement("div");
+	boiteClassement1.id="boiteClassement1"
+	boiteClassement1.style.cssText="width:100%; height:70%;border:1px Black solid"
+	boiteGeneral.appendChild(boiteClassement1);
+	var boiteFilmHaut1=document.createElement("div");
+	var boiteFilmMilieu1=document.createElement("div");
+	var boiteFilmBas1=document.createElement("div");
+	boiteFilmHaut1.id="boiteFilmHaut1";
+	boiteFilmHaut1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+	boiteClassement1.appendChild(boiteFilmHaut1);
+	boiteFilmMilieu1.id="boiteFilmMilieu1";
+	boiteFilmMilieu1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+	boiteClassement1.appendChild(boiteFilmMilieu1);
+	boiteFilmBas1.id="boiteFilmBas1";
+	boiteFilmBas1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+	boiteClassement1.appendChild(boiteFilmBas1);
+	var titreFilmHaut1=document.createTextNode("");
+	titreFilmHaut1.textContent=chercherTitre(data, "haut",data.general_box_office.rank , "general");
+	boiteFilmHaut1.appendChild(titreFilmHaut1);
+	var titreFilmMilieu1=document.createTextNode("");
+	titreFilmMilieu1.textContent=data.general_box_office.rank + " - $ " + data.general_box_office.value + " M";
+	boiteFilmMilieu1.appendChild(titreFilmMilieu1);
+	var titreFilmBas1=document.createTextNode("");
+	titreFilmBas1.textContent=chercherTitre(data, "bas",data.general_box_office.rank , "general");
+	boiteFilmBas1.appendChild(titreFilmBas1);
+	
+	var boiteGenre=document.createElement("div");
+	boiteGenre.id="boiteGenre"
+	boiteGenre.style.cssText="float : left; width:80%; height:30%;border:1px Black solid"
+	boiteBoxOffice.appendChild(boiteGenre);
+	var titre2=document.createTextNode("Genre");
+	titre2.id="titre2"
+	boiteGenre.appendChild(titre2);
+	var boiteClassement2=document.createElement("div");
+	boiteClassement2.id="boiteClassement2";
+	boiteClassement2.style.cssText="width:100%; height:70%;border:1px Black solid"
+	boiteGenre.appendChild(boiteClassement2);
+	var boiteFilmHaut2=document.createElement("div");
+	var boiteFilmMilieu2=document.createElement("div");
+	var boiteFilmBas2=document.createElement("div");
+	boiteFilmHaut2.id="boiteFilmHaut2";
+	boiteFilmHaut2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+	boiteClassement2.appendChild(boiteFilmHaut2);
+	boiteFilmMilieu2.id="boiteFilmMilieu2";
+	boiteFilmMilieu2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+	boiteClassement2.appendChild(boiteFilmMilieu2);
+	boiteFilmBas2.id="boiteFilmBas2";
+	boiteFilmBas2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+	boiteClassement2.appendChild(boiteFilmBas2);
+	var titreFilmHaut2=document.createTextNode("");
+	titreFilmHaut2.textContent=chercherTitre(data, "haut",data.genre_box_office.rank , "genre");
+	boiteFilmHaut2.appendChild(titreFilmHaut2);
+	var titreFilmMilieu2=document.createTextNode("");
+	titreFilmMilieu2.textContent=data.genre_box_office.rank + " - $ " + data.genre_box_office.value + " M";
+	boiteFilmMilieu2.appendChild(titreFilmMilieu2);
+	var titreFilmBas2=document.createTextNode("");
+	titreFilmBas2.textContent=chercherTitre(data, "bas",data.genre_box_office.rank , "genre");
+	boiteFilmBas2.appendChild(titreFilmBas2);
+	
+	
 	//arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches");carrousel("cadreCoverflow");
 }
 
