@@ -41,6 +41,6 @@ class Handler(tornado.web.RequestHandler):
         self.finish(tornado.escape.json_encode({'success' : False, 'error' : err_msg }))
 
     def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "senellart.com")
-        self.set_header("Access-Control-Allow-Origin", "tiresias.enst.fr")
-        self.set_header("Access-Control-Allow-Origin", "null") # Uncomment to enable acces from every host.
+        #self.set_header("Access-Control-Allow-Origin", "senellart.com")
+        #self.set_header("Access-Control-Allow-Origin", "tiresias.enst.fr")
+        self.set_header("Access-Control-Allow-Origin", "*") # Uncomment to enable acces from every host.
