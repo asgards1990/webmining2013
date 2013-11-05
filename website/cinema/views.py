@@ -134,6 +134,8 @@ def filmInfo(request):
         film = Film.objects.get(imdb_id = film_id)
     except:
         return HttpReponse("movie not found")
+
+    self.set_header("Access-Control-Allow-Origin", "*")
     
 
     return HttpResponse('hello')
