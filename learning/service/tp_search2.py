@@ -44,7 +44,7 @@ def applyFilter(filters): #returns indexes of films that respect our filters
 
 ####### Step 1 :Get films ##########################################
 
-films = flt.filter2(1000)
+films = flt.filter2(100)
 
 ####### Step 2 : Define parameters ###################################
 
