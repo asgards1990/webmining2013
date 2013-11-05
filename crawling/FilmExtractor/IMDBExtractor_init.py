@@ -155,13 +155,13 @@ IMDB_FILM_EXTRACTOR = getIMDBFilm(year_min,year_max,priority_max)
 IMDB_PERSON_EXTRACTOR = getIMDBPerson()
 IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 
-#IMDB_FILM_EXTRACTOR.start()
-#IMDB_PERSON_EXTRACTOR.start()
-#IMDB_COMPANY_EXTRACTOR.start()
+IMDB_FILM_EXTRACTOR.start()
+IMDB_PERSON_EXTRACTOR.start()
+IMDB_COMPANY_EXTRACTOR.start()
 
 #reExtractBuggyFilm()
    
-reExtractOneMovie("tt0119698")
+#reExtractOneMovie("tt0119698")
 
 #Exemple avec des devises Japonaises : tt0119698
 #Exemple avec des devises € : tt302994
