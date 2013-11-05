@@ -199,7 +199,7 @@ function sign(x) { if (x>=0){return 1} else{return -1}}
 
 function montrerResultats(nomDuCadre,data){
 	//alert("hello2")
-	var nbrResultats=data.nbresults;
+	var nbrResultats=data.results.length;
 	var Afficher=new Array;
 	var nomFilm=new Array;
 	for (var i = nbrResultats;i<10;i++){
