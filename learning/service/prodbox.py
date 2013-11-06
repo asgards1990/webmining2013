@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms(n=50)
+        self.films = flt.getFilms()
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -258,7 +258,7 @@ class CinemaService(LearningService):
                 self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
                 for i in range(1, self.dim_actors):
                     self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
-                self.actor_reduced_SC = self.actor_matrix * self.proj_actors
+                self.actor_reduced_SC = self.actor_matrix * self.proj_actors_SC
                 self.actor_reduced_SC = normalize(self.actor_reduced_SC.astype(np.double), norm='l1', axis=1)
             except MemoryError:
                 self.actor_reduced_SC = None
@@ -362,7 +362,7 @@ class CinemaService(LearningService):
 
     def loadPredictFeatures(self):
         actor_reduced = self.actor_reduced_KM #TODO : play
-        keyword_reduced = self.keyword_reduced_KM #TODO : play
+        keyword_reduced = self.keywords_reduced_KM #TODO : play
         director_reduced = self.director_reduced_KM #TODO : play
         self.predict_features = scipy.sparse.hstack([actor_reduced,director_reduced,keyword_reduced,self.budget_matrix,self.season_matrix])
         self.predict_features_names = np.concatenate([['actor_feat_'+str(i) for i in range(actor_reduced.shape[1])],
