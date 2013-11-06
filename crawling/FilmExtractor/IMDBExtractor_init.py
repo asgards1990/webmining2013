@@ -35,18 +35,26 @@ def setUnextractedToOneMovie(imdb_id):
 def reExtractOneMovie(imdb_id):
    setUnextractedToOneMovie(imdb_id)
    extractOneMovie(imdb_id)
-
 def setUnextractedToBuggyFilm():
    """Met le bit extracted à 0 sur les personnes bugguées"""
-   IMDBFilmStatus.objects.filter(english_title="").update(extracted=0)
+   object_list = Film.objects.filter(english_title="")
+   film_id_tab = map(lambda s: s.imdb_id, object_list)
+   for film_id in film_id_tab:
+      setUnextractedToOneMovie(imdb_id)
 
 def setUnextractedToBuggyPerson():
    """Met le bit extracted à 0 sur les personnes bugguées"""
-   IMDBPersonStatus.objects.filter(name=="").update(extracted=0)
+   object_list = Person.objects.filter(name="")
+   person_id_tab = map(lambda s: s.imdb_id, object_list)
+   for person_id in person_id_tab:
+      Connector.IMDBStatusConnector.IMDBPersonStatusConnector().setExtractedStatus(person_id, "0")
 
 def setUnextractedToAllPerson():
    """Met le bit extracted à 0 sur toutes les personnes"""
-   IMDBPersonStatus.objects.all().update(extracted=0)
+   object_list = Person.objects.all()
+   person_id_tab = map(lambda s: s.imdb_id, object_list)
+   for person_id in person_id_tab:
+      Connector.IMDBStatusConnector.IMDBPersonStatusConnector().setExtractedStatus(person_id, "0")
 
 def reExtractAllPerson():
    """Ré extrait toutes les personnes dont le champ name est nul (caractéristique d'un bug)"""
@@ -60,7 +68,10 @@ def reExtractAllPerson():
 
 def setUnextractedToBuggyCompany():
    """Met le bit extracted à 0 sur les personnes bugguées"""
-   IMDBCompanyStatus.objects.filter(name=="").update(extracted=0)
+   object_list = ProductionCompany.objects.filter(name="")
+   company_id_tab = map(lambda s: s.imdb_id, object_list)
+   for company_id in company_id_tab:
+      Connector.IMDBStatusConnector.IMDBPCompanyStatusConnector().setExtractedStatus(company_id, "0")
 
 def reExtractBuggyPerson():
    """Ré extrait toutes les personnes dont le champ name est nul (caractéristique d'un bug)"""
@@ -98,14 +109,14 @@ person_conn =  Connector.IMDBStatusConnector.IMDBPersonStatusConnector()
 company_conn =  Connector.IMDBStatusConnector.IMDBCompanyStatusConnector()
 
 class getIMDBFilm(threading.Thread):
-    def __init__(self, year_min,year_max,priority_max,nom = 'getIMDBFilm'):
+    def __init__(self, nom = 'getIMDBFilm',year_min, year_max,priority_max):
         threading.Thread.__init__(self)
         self.nom = nom
         self._stopevent = threading.Event( )
     def run(self):
        time_to_sleep = 0
        while True:
-          film_id_tab = film_conn.getDownloadedNotExtractedFiltered(year_min=year_min,year_max=year_max,priority_max=priority_max)[:100]
+          film_id_tab = film_conn.getDownloadedNotExtractedFiltered(year_min, year_max, priority_max)[:100]
           if len(film_id_tab)==0:
              time.sleep(time_to_sleep)
              time_to_sleep = time_to_sleep*2 + 60
@@ -131,7 +142,7 @@ class getIMDBPerson(threading.Thread):
              time_to_sleep = 0
 
              for person_id in person_id_tab:
-                FilmExtractor.IMDB_Extractor.IMDB_PersonExtractor(person_id)
+                PersonExtractor.IMDB_Extractor.IMDB_PersonExtractor(person_id)
 
 class getIMDBCompany(threading.Thread):
     def __init__(self, nom = 'getIMDBCompany'):
@@ -148,22 +159,21 @@ class getIMDBCompany(threading.Thread):
           else:
              time_to_sleep = 0
              for company_id in company_id_tab:
-                FilmExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
+                CompanyExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
 
 
 IMDB_FILM_EXTRACTOR = getIMDBFilm(year_min,year_max,priority_max)
-#IMDB_PERSON_EXTRACTOR = getIMDBPerson()
-#IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
+IMDB_PERSON_EXTRACTOR = getIMDBPerson()
+IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 
-IMDB_FILM_EXTRACTOR.start()
+#IMDB_FILM_EXTRACTOR.start()
 #IMDB_PERSON_EXTRACTOR.start()
 #IMDB_COMPANY_EXTRACTOR.start()
 
 #reExtractBuggyFilm()
    
-#reExtractOneMovie("tt0119698")
+reExtractOneMovie("tt3029940")
 
-#Exemple avec des devises Japonaises : tt0119698
+#Exemple avec des devises Japonaises : tt0245429
 #Exemple avec des devises € : tt302994
-#Exemple avec des devises £ : 
 #Exemple avec des Reviews decalees : tt0390221
