@@ -133,13 +133,13 @@ newDelete.className="delete";
 
 var newImg1 = document.createElement('img');
 newImg1.className="add1";
-newImg1.src="../pesto/static/img/prediction/DeleteGrey.jpg";
-keywordClick(newImg1);
+newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+//keywordClick(newImg1);
 
 
 var newImg2 = document.createElement('img');
 newImg2.className="add2"; 
-newImg2.src="../pesto/static/img/prediction/DeleteRed.png";
+newImg2.src="../pesto/static/img/prediction/AddBlue.png";
 
 
 newKeyword.appendChild(newDelete);
@@ -149,10 +149,12 @@ newDelete.appendChild(newImg1);
 newDelete.appendChild(newImg2);
 
 document.getElementById("keywordSuggest").appendChild(newKeyword);
+
 };
 
 function keywordClick (icone) {
-icone.click(function(){
+$(check).click(function(){
+alert('hello1');
 if((this.className=="suppress1")&&(this.id=="suggest")){
 var element = this.parentNode.parentNode;
 
@@ -178,11 +180,11 @@ keywords = document.getElementById("id_keyword-deck");
 element.getElementsByClassName("add1")[0].id="suggest";
 element.getElementsByClassName("add1")[0].className="suppress1";
 keywords.appendChild(element);
-}
-}
+};
+};
 
 });
-}
+};
 
 
 function callback_suggest (resp) {
@@ -226,8 +228,7 @@ $(document).ready(function() {
 				 var args2 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value2]]};
 				 $.post(urlSubmit, "json_request="+JSON.stringify(args1), callback_suggest, "json");
 				 $.post(urlSubmit, "json_request="+JSON.stringify(args2), callback_suggest, "json");
-				 ajoutKeywordSuggest("12");
-				 ajoutKeywordSuggest("12");
+			
 				
                 
                 }
@@ -240,11 +241,7 @@ $(document).ready(function() {
                };
               
                $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
-			  
-			   
-			   ajoutKeywordSuggest("1");
-			   ajoutKeywordSuggest("1");
-
+	
 	                  
                 };
             }
@@ -262,8 +259,7 @@ $(document).ready(function() {
 			   
 			  $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
 			   
-			  ajoutKeywordSuggest("2");
-			  ajoutKeywordSuggest("2");
+	
                 };
 			};
 		});
@@ -295,8 +291,7 @@ $(document).ready(function() {
 				var args2 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value2]]};
 				$.post(urlSubmit, "json_request="+JSON.stringify(args1), callback_suggest, "json");
 				$.post(urlSubmit, "json_request="+JSON.stringify(args2), callback_suggest, "json");
-				ajoutKeywordSuggest("12");
-				ajoutKeywordSuggest("12");
+			
 				
                 
                 }
@@ -309,10 +304,7 @@ $(document).ready(function() {
                };
               
               $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
-			  
-			   
-			  ajoutKeywordSuggest("1");
-			  ajoutKeywordSuggest("1");
+
 
 	                  
                 };
@@ -330,9 +322,7 @@ $(document).ready(function() {
                };
 			   
 			  $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
-			   
-			  ajoutKeywordSuggest("2");
-			  ajoutKeywordSuggest("2");
+
                 };
 			};
 		});
