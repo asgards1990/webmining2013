@@ -5,6 +5,7 @@ from cinema.forms import HomeForm, ResultsForm, PredictionForm
 from cinema.models import *
 from django.db.models import Q
 from django.utils import simplejson
+from django.core import serializers
 
 
 # Choix du formulaire
@@ -126,19 +127,20 @@ def searchresults(request, nomFilm):
         return render(request, 'prediction.html',locals())
 
 def filmInfo(request):
-##    if request.method == 'POST':
-##        film_id= request.POST.get('film_id')
-##    else:
-##        return HttpResponse("Erreur")
-##
-##    try:
-##        film = Film.objects.get(imdb_id = film_id)
-##    except:
-##        return HttpReponse("movie not found",)
+    if request.method == 'POST':
+        film_id= request.POST.get('film_id')
+    else:
+       return HttpResponse("Erreur")
 
-    response = HttpResponse('hello')
+    try:
+        film = Film.objects.get(imdb_id = film_id)
+    except:
+        return HttpReponse("movie not found",)
+    
+    data = serializers.serialize('json', film)
+    response = HttpResponse(data, mimetype="application/json")
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
-    print "ok"
+
     return response
