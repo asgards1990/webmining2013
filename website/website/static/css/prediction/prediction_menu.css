@@ -150,16 +150,25 @@ overflow:auto;
 padding: 0.6em;
 }
 
+
+.listbudget{
+text-align: center;
+font-size: 1em;
+background-color: white;
+overflow:auto;
+}
+
 .listbudget input{
 text-align:center;
 }
+
 /* menubox release date*/
 
-#release .seasonbox {
-    width:23%;
+.seasonbox {
+    width:21%;
     text-align:center;
-    float:left;
-    margin:0 1%;
+    /*float:left;*/
+    margin:4% 1%;
     display:inline-block;
     text-align:center;
 }

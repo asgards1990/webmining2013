@@ -84,18 +84,29 @@
             </ul>
 		</li>
 
-		<li class="item5"><a href="#">Range</a>
+
+		<li class="item5"><a href="#">Budget</a>
             <ul>
-                    <li class="listbudget">
+                <li class="listbudget">
                     <label for="amount"></label>
-                    <input type="text" id="amount" style="background:transparent;border: 0; font-size:0.9em; color: #f6931f; font-weight: bold;"/>
+                    <input type="text" id="amount"
+                           style="text-align:center;margin-top:0.7em;background:transparent;border:0; font-size:0.9em; color: rgb(80,88,100); font-weight: bold"/>
+
                     <div id="slider-range" style="background-color:white;"></div>
-                    </li>
-                </ul>
+                </li>
+            </ul>
+            <!--<ul class="menubox">
+                <h1>
+                    <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
+                </h1>
+                <div id="slider-range"></div>
+            </ul>-->
 		</li>
 
 		<li class="item6"><a href="#">Release Date</a>
-            <ul class="menubox" id="release">
+
+            <ul class="menubox" id="release" style="background:white">
+
                 <div class="seasonbox">
                     <img class="season" src="{% static 'img/prediction/SpringRed.jpg' %}" alt="Spring">
                     <figcaption class="season">
