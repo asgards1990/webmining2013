@@ -9,10 +9,10 @@
     'nbresults' : 10,
     'criteria' :
     {
-    'actor_director' : $("#search#actor_director").is("checked"),
-    'genre' : $("#search#genre").is("checked"),
-    'budget' : $("#search#budget").is("checked"),
-    'review' : $("#search#review").is("checked")
+    'actor_director' : $("#search #actor_director").prop("checked"),
+    'genre' : $("#search #genre").prop("checked"),
+    'budget' : $("#search #budget").prop("checked"),
+    'review' : $("#search #review").prop("checked")
     }
     };
     var msg = "json_request="+JSON.stringify(args);

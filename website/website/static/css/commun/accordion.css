@@ -65,9 +65,6 @@ border-radius:3px;
 -moz-border-radius: 3px;
 
 }
-.menu ul li:last-child a {
-	border-bottom: 1px solid #d51c21;
-}
 
 .menu > li > a:hover {
 	background-color: #d51c21;
