@@ -4,8 +4,8 @@
     08/17/2013
     http://rateit.codeplex.com
     Twitter: @gjunge
-
 */
+
 (function ($) {
     $.rateit = {
         aria : {

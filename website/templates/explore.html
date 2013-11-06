@@ -14,9 +14,7 @@
     <script type="text/javascript" src="{% static 'javascript/explore/bulleInfo.js' %}"></script>
     <script type="text/javascript" src="{% static 'javascript/explore/icheck.js' %}"></script>        
     <script type="text/javascript" src="{% static 'javascript/explore/moviesearch.js' %}"></script>
-    <!-- <script type="text/javascript" src="{% static 'javascript/explore/jquery.rateit.js' %}" ></script> -->
     <script type="text/javascript" src="{% static 'javascript/explore/requeteJson.js' %}"></script>
-    <script type="text/javascript" src="{% static 'javascript/explore/rateit.js' %}" ></script>
 
 	
     
@@ -28,6 +26,12 @@
 
     {% block explore_extrahead %}
     {% endblock %}
+
+    <!-- A placer à la fin car buggé -->
+
+    <script type="text/javascript" src="{% static 'javascript/explore/rateit.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'javascript/explore/jquery.rateit.js' %}" ></script>
+
 {% endblock %}
 
 {% block content %}
