@@ -14,7 +14,7 @@ def filter1():
 
 def filter2(n): #like filter1 but returns n films, useful for tests
     print('Nb of films in DB : ' + str(Film.objects.count()))
-    films = Film.objects.exclude(runtime=None).exclude(genres=None).exclude(country=None).exclude(imdb_user_rating=None).exclude(imdb_nb_user_ratings=None).exclude(box_office=None)[:n]
+    films = Film.objects.exclude(runtime=None).exclude(genres=None).exclude(country=None).exclude(imdb_user_rating=None).exclude(imdb_nb_user_ratings=None).exclude(box_office=None).exclude(release_date=None)[:n]
     #for film in films.all():
     #    if film.imdb_nb_user_reviews==None:
     #        film.imdb_nb_user_reviews=0
