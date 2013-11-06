@@ -1,5 +1,7 @@
 // Lien entre genre1 et keywords
 
+//$.ajaxSetup( {headers : {"X-Requested-With" : "Ajax"}});
+
 $(document).ready(function() {
 	var dict={};
     $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
@@ -131,16 +133,18 @@ newDelete.className="delete";
 
 var newImg1 = document.createElement('img');
 newImg1.className="add1";
-newImg1.src="{% static 'img/DeleteGrey.jpg' %}"
+newImg1.src="../pesto/static/img/prediction/DeleteGrey.jpg";
+keywordClick(newImg1);
 
 
 var newImg2 = document.createElement('img');
 newImg2.className="add2"; 
-newImg2.src="img/DeleteRed.png" ;
+newImg2.src="../pesto/static/img/prediction/DeleteRed.png";
 
 
-newKeyword.appendChild(newName);
 newKeyword.appendChild(newDelete);
+newKeyword.appendChild(newName);
+
 newDelete.appendChild(newImg1);
 newDelete.appendChild(newImg2);
 
@@ -170,7 +174,7 @@ var element = this.parentNode.parentNode;
 
 this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 
-keywords = document.getElementById("keywordsdesc");
+keywords = document.getElementById("id_keyword-deck");
 element.getElementsByClassName("add1")[0].id="suggest";
 element.getElementsByClassName("add1")[0].className="suppress1";
 keywords.appendChild(element);
@@ -217,23 +221,29 @@ $(document).ready(function() {
                 }
                };				
 				
-				ajoutKeywordSuggest("12");
-				ajoutKeywordSuggest("12");
+				
+				 var args1 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value1]]};
+				 var args2 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value2]]};
+				 $.post(urlSubmit, "json_request="+JSON.stringify(args1), callback_suggest, "json");
+				 $.post(urlSubmit, "json_request="+JSON.stringify(args2), callback_suggest, "json");
+				 ajoutKeywordSuggest("12");
+				 ajoutKeywordSuggest("12");
 				
                 
                 }
             else {
                var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value1]]};
-              
-              $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
-			  
 			   if (bloc.hasChildNodes()) {
                while (bloc.childNodes.length>=1)
                {bloc.removeChild(bloc.firstChild);
                 }
                };
-			  ajoutKeywordSuggest("1");
-			  ajoutKeywordSuggest("1");
+              
+               $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+			  
+			   
+			   ajoutKeywordSuggest("1");
+			   ajoutKeywordSuggest("1");
 
 	                  
                 };
@@ -242,13 +252,16 @@ $(document).ready(function() {
             var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
 			var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value2]]};
             
-			$.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+			
 			
 				if (bloc.hasChildNodes()) {
 				 while (bloc.childNodes.length>=1)
                  {bloc.removeChild(bloc.firstChild);
                 }
                };
+			   
+			  $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+			   
 			  ajoutKeywordSuggest("2");
 			  ajoutKeywordSuggest("2");
                 };
@@ -277,6 +290,11 @@ $(document).ready(function() {
                 }
                };				
 				
+				
+				var args1 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value1]]};
+				var args2 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value2]]};
+				$.post(urlSubmit, "json_request="+JSON.stringify(args1), callback_suggest, "json");
+				$.post(urlSubmit, "json_request="+JSON.stringify(args2), callback_suggest, "json");
 				ajoutKeywordSuggest("12");
 				ajoutKeywordSuggest("12");
 				
@@ -284,14 +302,15 @@ $(document).ready(function() {
                 }
             else {
                var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value1]]};
-              
-              $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
-			  
 			   if (bloc.hasChildNodes()) {
                while (bloc.childNodes.length>=1)
                {bloc.removeChild(bloc.firstChild);
                 }
                };
+              
+              $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+			  
+			   
 			  ajoutKeywordSuggest("1");
 			  ajoutKeywordSuggest("1");
 
@@ -302,13 +321,16 @@ $(document).ready(function() {
             var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
 			var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value2]]};
             
-			$.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+			
 			
 				if (bloc.hasChildNodes()) {
 				 while (bloc.childNodes.length>=1)
                  {bloc.removeChild(bloc.firstChild);
                 }
                };
+			   
+			  $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+			   
 			  ajoutKeywordSuggest("2");
 			  ajoutKeywordSuggest("2");
                 };
