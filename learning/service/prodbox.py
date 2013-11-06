@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.filter2(50)
+        self.films = flt.filter1()
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -255,9 +255,9 @@ class CinemaService(LearningService):
             try:
                 actors_SC = SpectralClustering(n_clusters=self.dim_actors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_actors)
                 actor_labels = actors_SC.fit_predict(self.actor_matrix.transpose())
-                self.proj_actors = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
+                self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
                 for i in range(1, self.dim_actors):
-                    self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
+                    self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
                 self.actor_reduced_SC = self.actor_matrix * self.proj_actors
                 self.actor_reduced_SC = normalize(self.actor_reduced_SC.astype(np.double), norm='l1', axis=1)
             except MemoryError:
@@ -267,9 +267,9 @@ class CinemaService(LearningService):
             actors_KM = KMeans(n_clusters = self.dim_actors, init='k-means++')
             self.actor_reduced_KM = actors_KM.fit_transform(TfidfTransformer().fit_transform(self.actor_matrix))
             # Save object in cache
-            self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.actor_reduced_KM))
+            self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM))
         else:
-            self.actor_reduced_SC, self.actor_reduced_KM = self.get_cobject('actors_reduced').get_content()
+            self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM = self.get_cobject('actors_reduced').get_content()
   
     def loadWriters(self):
         keywords_reduced = self.keywords_reduced_KM
@@ -419,7 +419,7 @@ class CinemaService(LearningService):
         self.loadSeason()
         self.loadBudget()
         self.loadKeywords()        
-        self.loadKeywordsreduced()
+        self.loadKeywordsReduced()
         self.loadGenres()
         # Load prediction labels
         self.loadBoxOffice()
@@ -716,39 +716,8 @@ class CinemaService(LearningService):
         query_results['bag_of_words'] = bag_of_words
         
         # Return data
-        return query_results 
+        return query_results
     
-    def compute_predict_features(self):
-        X = []
-        feature_names = []
-
-        # Actors features
-        X.append(self.actor_reduced_SC)
-        for i in range(self.actor_reduced_SC.shape[1]):
-            feature_names += ['actor_feat_' + str(i),]
-        # Directores features
-        X.append(self.director_reduced_SC)
-        for i in range(self.director_reduced_SC.shape[1]):
-            feature_names += ['director_feat_' + str(i),]
-        # Seasons features
-        X.append(self.season_matrix)
-        feature_names += self.season_names
-        # Budget feature
-        X.append(self.budget_matrix)
-        feature_names += ['budget',]
-        # Keywords deatures
-        X.append(self.keywords_reduced_KM)
-        for i in range(self.keywords_reduced_KM.shape[1]):
-            feature_names += ['keyword_feat_' + str(i),]
-        # Genres features
-        X.append(self.genres_matrix)
-        feature_names += self.genres_names
-        
-        # Concatenate matrices 
-        X = hstack(X).toarray()
-
-        return (X, feature_names)
-
     def compute_predict(self, criteria, language=None):
         '''
         Return {'prizes' : list of {'institution' : Institution Object,
@@ -776,16 +745,59 @@ class CinemaService(LearningService):
                                          }
                }
         '''
-        (X, feature_name) = self.compute_predict_features() 
+        X = []
+        feature_names = []
+
+        # TODO: Actors features
+        # TODO: Directores features
+        # Seasons features
+        X.append(self.season_matrix)
+        feature_names += self.season_names
+        # Budget feature
+        X.append(self.budget_matrix)
+        feature_names += ['budget',]
+        # TODO: Keywords deatures
+        # Genres features
+        X.append(self.genres_matrix)
+        feature_names += self.genres_names
+        
+        # Concatenate matrices 
+        X = hstack(X)
 
         return {}
 
     def benchmark(self): # BROUILLON POUR LE PREDICT
 
-        (X, feature_names) = self.compute_predict_features()
+        X = []
+        feature_names = []
 
+        # Actors features
+        X.append(self.actor_reduced_SC)
+        for i in range(self.actor_reduced_SC.shape[1]):
+            feature_names = ['actor_feat_' + str(i),]
+        # Directores features
+        X.append(self.director_reduced_SC)
+        for i in range(self.director_reduced_SC.shape[1]):
+            feature_names = ['director_feat_' + str(i),]
+        # Seasons features
+        X.append(self.season_matrix)
+        feature_names += self.season_names
+        # Budget feature
+        X.append(self.budget_matrix)
+        feature_names += ['budget',]
+        # Keywords deatures
+        X.append(self.keywords_reduced_KM)
+        for i in range(self.keywords_reduced_KM.shape[1]):
+            feature_names = ['keyword_feat_' + str(i),]
+        # Genres features
+        X.append(self.genres_matrix)
+        feature_names += self.genres_names
+        
+        # Concatenate matrices 
+        X = hstack(X).toarray()       
+        
         ### For the Box Office ###
-        y = self.box_office_matrix.toarray()
+        y = self.box_office_matrix.data
         y_log = np.log(y)
         
         # CLASSIFICATION
