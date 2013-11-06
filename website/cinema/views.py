@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 import autocomplete_app.forms as forms
 from django.http import HttpResponse
@@ -5,6 +6,13 @@ from cinema.forms import HomeForm, ResultsForm, PredictionForm
 from cinema.models import *
 from django.db.models import Q
 from django.utils import simplejson
+<<<<<<< HEAD
+from django.core import serializers
+=======
+from django.core.serializers import serialize
+from json import *
+
+>>>>>>> 1dd184de84694cd6b0a59a83bed891705049616b
 
 
 # Choix du formulaire
@@ -126,19 +134,45 @@ def searchresults(request, nomFilm):
         return render(request, 'prediction.html',locals())
 
 def filmInfo(request):
-##    if request.method == 'POST':
-##        film_id= request.POST.get('film_id')
-##    else:
-##        return HttpResponse("Erreur")
-##
-##    try:
-##        film = Film.objects.get(imdb_id = film_id)
-##    except:
-##        return HttpReponse("movie not found",)
+    if request.method == 'POST':
+<<<<<<< HEAD
+        film_id= request.POST.get('film_id')
+    else:
+       return HttpResponse("Erreur")
+=======
+        film_id = request.POST.get('film_id')
+    else:
+        return HttpResponse("Erreur")
+>>>>>>> 1dd184de84694cd6b0a59a83bed891705049616b
 
-    response = HttpResponse('hello')
+    try:
+        film = Film.objects.get(imdb_id = film_id)
+    except:
+        return HttpReponse("movie not found",)
+<<<<<<< HEAD
+    
+    data = serializers.serialize('json', film)
+    response = HttpResponse(data, mimetype="application/json")
+=======
+
+		# inter.imdb_id=film.imdb_id
+		# inter.actors=film.actors
+		# inter.genres=film.genres
+		# inter.keywords=film.keywords
+		# inter.writers=film.writers
+		# inter.image_url=film.image_url
+		# inter.ratings=film.imdb_nb_user_ratings
+		# inter.reviews=film.imdb_nb_user_reviews
+		# inter.pitch=film.imdb_summary
+		# inter.resume=film.imdb_storyline
+		# inter.budget=film.budget
+		# inter.box_office=film.box_office
+	
+	inter = "{budget : test}"
+    response = HttpResponse('{"poster" : "'+ film.image_url +'", "plot" : "'+ film.imdb_summary +'"}')#, mimetype='application/json') #json.dumps(film.budget) , mimetype='application/json'
+>>>>>>> 1dd184de84694cd6b0a59a83bed891705049616b
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
-    print "ok"
+
     return response

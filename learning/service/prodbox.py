@@ -236,7 +236,7 @@ class CinemaService(LearningService):
             self.proj_keywords_KM = scipy.sparse.csc_matrix(keyword_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_keywords):
                 self.proj_keywords_KM = scipy.sparse.hstack([self.proj_keywords_KM, scipy.sparse.csc_matrix(keyword_labels_KM==i, dtype=int).transpose()])
-            self.proj_keywords_KM=normalize(self.proj_keywords_KM.astype(np.double),axis=0)
+            self.proj_keywords_KM=normalize(self.proj_keywords_KM.astype(np.double),axis=0, norm='l1')
             self.keywords_reduced_KM = self.keyword_matrix * self.proj_keywords_KM
             # Save object in cache
             self.create_cobject('keywords_reduced', self.keywords_reduced_KM)
@@ -263,9 +263,8 @@ class CinemaService(LearningService):
                 self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_actors):
                     self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels_SC==i, dtype=int).transpose()])
-                self.proj_actors_SC=normalize(self.proj_actors_SC.astype(np.double),axis=0)
+                self.proj_actors_SC=normalize(self.proj_actors_SC.astype(np.double), norm='l1', axis=0)
                 self.actor_reduced_SC = self.actor_matrix * self.proj_actors_SC
-                self.actor_reduced_SC = normalize(self.actor_reduced_SC.astype(np.double), norm='l1', axis=1)
             except MemoryError:
                 self.actor_reduced_SC = None
                 print('Spectral clustering failed for actors due to memory error')
@@ -275,7 +274,7 @@ class CinemaService(LearningService):
             self.proj_actors_KM = scipy.sparse.csc_matrix(actor_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_actors):
                 self.proj_actors_KM = scipy.sparse.hstack([self.proj_actors_KM, scipy.sparse.csc_matrix(actor_labels_KM==i, dtype=int).transpose()])
-            self.proj_actors_KM=normalize(self.proj_actors_KM.astype(np.double),axis=0)
+            self.proj_actors_KM=normalize(self.proj_actors_KM.astype(np.double),axis=0, norm='l1')
             self.actor_reduced_KM = self.actor_matrix * self.proj_actors_KM
             # Save object in cache
             self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM))
@@ -304,7 +303,7 @@ class CinemaService(LearningService):
                 self.proj_writers_SC = scipy.sparse.csc_matrix(writer_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_writers):
                     self.proj_writers_SC = scipy.sparse.hstack([self.proj_writers_SC, scipy.sparse.csc_matrix(writer_labels_SC==i, dtype=int).transpose()])
-                self.proj_writers_SC=normalize(self.proj_writers_SC.astype(np.double),axis=0)
+                self.proj_writers_SC=normalize(self.proj_writers_SC.astype(np.double),axis=0, norm='l1')
                 self.writer_reduced_SC = self.writer_matrix * self.proj_writers_SC
             except MemoryError:
                 self.writer_reduced_SC = None
@@ -317,7 +316,7 @@ class CinemaService(LearningService):
             self.proj_writers_KM = scipy.sparse.csc_matrix(writer_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_writers):
                 self.proj_writers_KM = scipy.sparse.hstack([self.proj_writers_KM, scipy.sparse.csc_matrix(writer_labels_KM==i, dtype=int).transpose()])
-            self.proj_writers_KM=normalize(self.proj_writers_KM.astype(np.double),axis=0)
+            self.proj_writers_KM=normalize(self.proj_writers_KM.astype(np.double),axis=0, norm='l1')
             self.writer_reduced_KM = self.writer_matrix * self.proj_writers_KM
             # Save object in cache
             self.create_cobject('writers_reduced', (self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM))
@@ -349,7 +348,7 @@ class CinemaService(LearningService):
                 self.proj_directors_SC = scipy.sparse.csc_matrix(director_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_directors):
                     self.proj_directors_SC = scipy.sparse.hstack([self.proj_directors_SC, scipy.sparse.csc_matrix(director_labels_SC==i, dtype=int).transpose()])
-                self.proj_directors_SC=normalize(self.proj_directors_SC.astype(np.double),axis=0)
+                self.proj_directors_SC=normalize(self.proj_directors_SC.astype(np.double),axis=0, norm='l1')
                 self.director_reduced_SC = self.director_matrix * self.proj_directors_SC
             except MemoryError:
                 self.director_reduced_SC = None
@@ -362,7 +361,7 @@ class CinemaService(LearningService):
             self.proj_directors_KM = scipy.sparse.csc_matrix(director_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_directors):
                 self.proj_directors_KM = scipy.sparse.hstack([self.proj_directors_KM, scipy.sparse.csc_matrix(director_labels_KM==i, dtype=int).transpose()])
-            self.proj_directors_KM=normalize(self.proj_directors_KM.astype(np.double),axis=0)
+            self.proj_directors_KM=normalize(self.proj_directors_KM.astype(np.double),axis=0, norm='l1')
             self.director_reduced_KM = self.director_matrix * self.proj_directors_KM
             # Save object in cache
             self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM))
