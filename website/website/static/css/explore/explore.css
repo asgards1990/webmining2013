@@ -170,6 +170,24 @@ padding:0.6em;
 .listbudget input{
 text-align:center;
 }
+
+/* Slider Année*/
+
+#slider-rangeyear {
+    margin: 15px;
+}
+
+.listyear{
+text-align: center;
+font-size: 1em;
+background-color: white;
+overflow:auto;
+padding:0.6em;
+}
+
+.listyear input{
+text-align:center;
+}
 /* Reviews */
 
 .rateit{
