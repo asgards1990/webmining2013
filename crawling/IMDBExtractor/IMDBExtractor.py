@@ -396,7 +396,7 @@ class IMDBExtractor_companyCredits(IMDBFilmExtractor):
             for p in self.producers:
                producer = defineProducer(p.id_)
                if producer:
-                 f.production_company.add(producer)
+                 f.production_companies.add(producer)
             f.save()
 
          except Exception as e:
