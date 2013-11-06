@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from autocomplete_app.forms import MultipleActorSearchForm, FilmSearchForm
+import autocomplete_app.forms as forms
 from django.http import HttpResponse
 from cinema.forms import HomeForm, ResultsForm, PredictionForm
 from cinema.models import *

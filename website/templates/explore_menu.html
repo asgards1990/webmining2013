@@ -3,33 +3,43 @@
 {% load static %}
 
 {% block explore_extrahead %}
+    <!-- Appels annexes -->
+    {% include 'autocomplete_light/static.html' %}
+    {{ form.media }}
 {% endblock %}
 
 {% block explore_menu %}
 
-
 <div id="menu">
 
     <!-- Case 1 -->
-    <div id="moviesearch" class="menubox">
+    <div id="moviesearch">
         <img class="steps" src="{% static 'img/explore/1.png' %}" alt="1">
         <h1 class="steps"> Choose a movie</h1>
-        <div class="movie">
-            <div class="photo">
-                <img style="max-height:4em;max-width:4em"src="{% static 'img/explore/questionmark.png' %}" alt="Titanic"/>
+        <form>
+            <div class="movie">
+                <div>
+                {% if form.errors %}
+                    <p style="color: red;">
+                        Please correct the error{{ form.errors|pluralize }} below.
+                    </p>
+                {% endif %}
+                {% for field in form.visible_fields %}
+                        {{ field }}
+                {% endfor %}
+                </div>
             </div>
-            <p><input id="movieinput" type="text" name="actorname" value=" Enter a movie name..." size="21"></p>
-        </div>
+        {% csrf_token %}
+        </form>
     </div>
 
     <!-- Case 3 -->
-    <div class="menubox" style="background:#adadad">
+    <div class="menufilters">
         <form>
         <img class="steps" src="{% static 'img/explore/3.png' %}" alt="3">
-        <h1 class="steps">Filters</h1>
         <ul class="menu">
             <!-- Acteurs -->
-            <li id="actors"><a href="#">Actors / Director <span>4</span></a>
+            <li class="item1" id="actors"><a href="#">Actors / Director <span>4</span></a>
                 <ul>
                 <!-- Exemples !!! -->
                 <li class="listactor">
@@ -54,22 +64,22 @@
             </li>
     
             <!-- Genres -->
-            <li id="genres"><a href="#">Genre<span>3</span></a>
+            <li class="item2" id="genres"><a href="#">Genre<span>3</span></a>
                 <ul>
                     <!-- Exemples !!!-->
-                    <li class="subitem1">   
+                    <li class="listgenre">   
                         <p class="genre">
                         <input type="checkbox" name="genre" value="genre1">
                         <span class="name">Comedy</span>
                         </p>
                     </li>
-                    <li class="subitem2"> 
+                    <li class="listgenre"> 
                         <p class="genre">
                         <input type="checkbox" name="genre" value="genre2">
                         <span class="name">Thriller</span>
                         </p>
                     </li>
-                    <li class="subitem2"> 
+                    <li class="listgenre"> 
                         <p class="genre">
                         <input type="checkbox" name="genre" value="genre3">
                         <span class="name">Drama</span>
@@ -79,7 +89,7 @@
             </li>
     
             <!-- Budget -->
-            <li id="budget"><a href="#">Budget</a>
+            <li class="item3" id="budget"><a href="#">Budget</a>
                 <ul>
                     <li class="listbudget">
                     <label for="amount"></label>
@@ -90,7 +100,7 @@
             </li>
     
                 <!-- Reviews -->
-            <li id="reviews"><a href="#">Reviews</a>
+            <li class="item4" id="reviews"><a href="#">Reviews</a>
                 <ul>
                     <li class="listreviews">
                         <ul class="nostyle" id="examples">

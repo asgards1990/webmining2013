@@ -1,38 +1,39 @@
 /* Page de résultats de prediction */
 
 #results {
+    position: relative;
     overflow:auto;
     text-align:center;
+    margin-left : 23em;
+    width : 1000px;
+}
+.prizes, .boxoffice, .reviews, .bagofwords{
+    position : relative;
+    width:43%;
+    min-height : 20em;
+    float:left;
+    padding: 1%;
+    margin-right:2%;
+    margin-left:2%;
+    border-radius:10px;
+    border: 5px solid #D51C21;
+    background-color : white;
 }
 
-#prizes {
-    /*width: 345px;*/
-    width:47%;
-    display:inline-block;
-    height:330px;
-    border:1px dashed blue;
-    margin:50px 1%;
+#prizes, #boxoffice {
+    margin-bottom:40px;
 }
 
-#boxoffice {
-    /*width:240px;*/
-    display:inline-block;
-    width:47%;
-    height:330px;
-    border:1px dashed magenta;
-    margin:50px 1%;
+.circle{
+    width : 150px;
+    height : 150px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-75px;
+    margin-top:-75px;
 }
 
-#reviews {
-    /*width:700px;*/
-    display:inline-block;
-    width:90%; 
-    position:relative;
-    height:320px;
-    border: 1px dashed maroon;
-    margin-left:auto;
-    margin-right:auto;
-}
 
 #reviews .moreinfo{
  font-size: 1.1em; 

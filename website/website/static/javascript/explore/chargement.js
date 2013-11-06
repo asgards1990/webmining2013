@@ -4,13 +4,13 @@ function loadChargement(nomDuCadre){
   
 	var loader=document.createElement("div");
 	loader.id="loaderProvisoire";
-	loader.style.cssText='position:relative;width:300px;height:100%;margin:0 auto'
+	loader.style.cssText='position:relative;width:300px;height:100%;margin:0 auto;z-index:10;'
 	document.getElementById(nomDuCadre).appendChild(loader);
 	var image=document.createElement("img");
 	image.id="bandeauLoader";
 	image.src="../pesto/static/img/explore/bandecine3.jpg";
 	image.onload=function(){
-	image.style.cssText='position:absolute;top:40%;left:0%;width:100%;height:20%;z-index:1;'
+	image.style.cssText='position:absolute;top:40%;left:0%;width:100%;height:20%;z-index:11;opacity:1;'
 	document.getElementById("loaderProvisoire").appendChild(image);
 	var cache=new Array;
 	var position=new Array;
@@ -24,11 +24,16 @@ function loadChargement(nomDuCadre){
 	for(var i =0; i<14;i++){	
 		cache[i]=document.createElement("div");
 		cache[i].id="cache"+i;
-		cache[i].style.cssText='position:absolute;top:43.5%;left:'+position[i]+'%;width:'+largeur[i]+'%;height:12.8%;z-index:2;background-color:#b0c4de;'//'+(i+1+i*6)+'
+		cache[i].style.cssText='position:absolute;top:43.5%;left:'+position[i]+'%;width:'+largeur[i]+'%;height:12.8%;z-index:12;background-color:#b0c4de;opacity:1;'//'+(i+1+i*6)+'
 		document.getElementById("loaderProvisoire").appendChild(cache[i]);
 	}
+	document.getElementById(nomDuCadre).style.zIndex=10;
+	document.getElementById(nomDuCadre).style.display="";
+	/*var cachetest=document.createElement("div");
+	cachetest.style.cssText="position:relative;top:43.5%;left:42%;width:100%;height:20%;"
+	document.getElementById("loaderProvisoire").appendChild(cachetest);*/
 	var arreter=false;
-	$("#"+nomDuCadre).click(function(){arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches");carrousel("cadreCoverflow");})
+	//$("#"+nomDuCadre).click(function(){arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches");carrousel("cadreCoverflow");})
 	var compteur=0;
 	function inOut(compteur){$("#cache"+(compteur%14)).fadeOut(50,function(){if(arreter==false){inOut(compteur+1)}});$("#cache"+((compteur+9)%14)).fadeIn(50);}
 	inOut(0);

@@ -1,15 +1,16 @@
 /* Checkboxes */
 
-#filters [type="checkbox"]:not(:checked),
-[type="checkbox"]:checked {
-    position: absolute;
+.checkbox{
+    position : relative;
 }
 
+/* Style de la case totale */
 #filters [type="checkbox"]:not(:checked) + label,
 [type="checkbox"]:checked + label {
-    position: relative;
-    padding-left: 4em;
+    position: absolute;
     cursor: pointer;
+    left : 3em;
+    top : 4px;
 }
 
 #filters [type="checkbox"]:not(:checked) + label:before,
@@ -20,14 +21,19 @@
     position: absolute;
 }
 
+/* Style de la case avec yes et no */
 #filters [type="checkbox"]:not(:checked) + label:before,
 [type="checkbox"]:checked + label:before {
     left: 0;
     top: -3px;
     width: 65px;
     height: 30px;
-    background: #D6D6D6; /*background color*/
-    border: 1px solid #444444; /*color of border when unchecked*/
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(114, 122, 134)),to(rgb(80, 88, 100)));
+    background-image: -webkit-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -moz-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -o-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -ms-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
     border-radius: 15px;
     -webkit-transition: background-color .2s;
     -moz-transition: background-color .2s;
@@ -40,40 +46,41 @@
     margin-top: -1px;
 }
 
+/* Style du rond de couleur */
 #filters [type="checkbox"]:not(:checked) + label:after,
 [type="checkbox"]:checked + label:after {
-    width: 20px;
-    height: 20px;
+    width: 17px;
+    height: 17px;
     -webkit-transition: all .2s;
     -moz-transition: all .2s;
     -ms-transition: all .2s;
     transition: all .2s;
     border-radius: 50%;
-    background: #444444; /*color ob background when unchecked*/
-    top: 2px;
-    left: 5px;
+    background: white;
+    top: 3px;
+    left: 7px;
 }
 
-/* on checked */
-#filters [type="checkbox"]:checked + label:before {
-
-    border: 1px solid #D51C21; /*color of border when checked*/
-
-}
-
+/*circle when checked*/
 #filters [type="checkbox"]:checked + label:after {
-    background: #D51C21; /*color of circle when checked*/
-    top: 2px;
-    left: 40px;
+    width: 16px;
+    height: 16px;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#EA5255),to(#d51c21));
+    background-image: -webkit-linear-gradient(top, #EA5255, #d51c21);
+    background-image: -moz-linear-gradient(top, #EA5255, #d51c21);
+    background-image: -o-linear-gradient(top, #EA5255, #d51c21);
+    background-image: -ms-linear-gradient(top, #EA5255, #d51c21);
+    background-image: linear-gradient(top, #EA5255, #d51c21);
+    border : 1px solid #D51C21;
+    left: 41px;
 }
 
+/*Boîte de texte*/
 #filters [type="checkbox"]:checked + label .ui,
 [type="checkbox"]:not(:checked) + label .ui:before,
 [type="checkbox"]:checked + label .ui:after {
     position: absolute;
-    right: 0.2em;
     width: 4.8em;
-    border-radius: 15px;
     font-size: 1em;
     font-weight: bold;
     line-height: 22px;
@@ -83,17 +90,17 @@
     transition: all .2s;
 }
 
+/*Boîte de texte not checked*/
 #filters [type="checkbox"]:not(:checked) + label .ui:before {
     content: "No";
+    color: white;
     left: 0.5em;
 }
 
+/*Boîte de texte checked*/
 #filters [type="checkbox"]:checked + label .ui:after {
     content: "Yes";
-    color: #d51c21;
-
+    color: white;
+    right: 1.1em;
 }
 
-#filters .filter p {
-    margin:0 auto;
-}
