@@ -3,10 +3,11 @@ from vectorizers import *
 from status.models import TableUpdateTime
 from cinema.models import Film, Person, Genre, Keyword
 import filmsfilter as flt
-import numpy as np
-from scipy.sparse import hstack
-import scipy
 from dimreduce import *
+
+import numpy as np
+import scipy
+
 from sklearn.neighbors import NearestNeighbors
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
@@ -14,12 +15,13 @@ from sklearn.preprocessing import normalize, Imputer
 from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
-import dateutil.parser
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.cross_validation import cross_val_score
-from time import time
+from sklearn.neighbors.kde import KernelDensity
 
+from time import time
+import dateutil.parser
 import re
 
 import exceptions
@@ -82,12 +84,18 @@ class CinemaService(LearningService):
             gkey = genBudget(self.films.iterator())
             v =  DictVectorizer(dtype=np.float32)
             self.budget_matrix = v.fit_transform(gkey)
+
+            self.budget_bandwidth = 100.0 # TODO : optimize this parameter
+            budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
+            budget_data = budget_data.reshape( [budget_data.shape[0], 1])
+            kde = KernelDensity(kernel='gaussian', bandwidth=self.budget_bandwidth).fit(budget_data)
+            
             for i in range(self.budget_matrix.shape[0]):
                 if np.isnan(self.budget_matrix[i,0]):
-                    self.budget_matrix[i,0]=-1
-            completer = Imputer(missing_values=-1)
-            completer.fit(self.budget_matrix)
-            self.budget_matrix = completer.transform(self.budget_matrix)
+                    self.budget_matrix[i,0]= kde.sample(1)
+            #completer = Imputer(missing_values=-1)
+            #completer.fit(self.budget_matrix)
+            #self.budget_matrix = completer.transform(self.budget_matrix)
             # Save object in cache
             self.create_cobject('budget', self.budget_matrix)
         else:
@@ -465,7 +473,7 @@ class CinemaService(LearningService):
         self.loadBoxOffice()
         self.loadPrizes()
         self.loadReviews()
-        self.loadReviewsContent()
+        #self.loadReviewsContent()
         # Load other features
         self.loadStats()
         self.loadWriters()
@@ -480,10 +488,10 @@ class CinemaService(LearningService):
         # Load search clusterings
         self.loadSearchClustering()
         # Load predict features
-        self.loadPredictFeatures()
-        self.loadPredictLabels()
+        #self.loadPredictFeatures()
+        #self.loadPredictLabels()
         # Init predict classifier
-        self.init_predict()
+        #self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
