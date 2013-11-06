@@ -159,7 +159,9 @@ text-align:center;
     display:inline-block;
     text-align:center;
 }
-
+#release {
+overflow: auto;
+}
 .seasonbox label {
     display:block;
 }
