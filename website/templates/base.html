@@ -33,8 +33,23 @@
         <div id="header">       
             <div id="title">
                 <a href="../">
-                    <img src="{% static 'img/logo.png' %}" alt="Titre"/>
+                    <img src="{% static 'img/logo_prodbox.png' %}" alt="Titre"/>
                 </a> 
+            </div>
+
+            <a href=""  class="topmenubox">
+                <!-- <img src="{% static 'img/bouton_1.png' %}" alt="ProdBox" id="explore_img"/> -->
+                <h2 id="about_text">About us</h2>
+            </a>
+
+            <a href="mailto:pestowebmining13@gmail.com"  class="topmenubox">
+                <!-- <img src="{% static 'img/bouton_1.png' %}" alt="ProdBox" id="explore_img"/> -->
+                <h2 id="mail_text">Contact</h2>
+            </a>
+
+            <div class="topmenubox">
+                <!-- <img src="{% static 'img/bouton_1.png' %}" alt="ProdBox" id="explore_img"/> -->
+                <h2 id="vertbar">&#124</h2>
             </div>
 
             <a href="../prediction/"  class="topmenubox">
@@ -45,14 +60,19 @@
             <a href="../explore/"  class="topmenubox">
                 <!-- <img src="{% static 'img/bouton_1.png' %}" alt="ProdBox" id="explore_img"/> -->    
                 <h2 id="explore_text">Explore</h2>
-            </a> 
+            </a>
+
+
+
+
         </div>
 
         {% block content %}
         {% endblock %}
 
         <div id="footer">
-            <h3>Copyright Pesto WebMining 2013.</h3>
+            <h3 style="float:left;">Copyright Pesto WebMining 2013.</h3>
+
         </div>
 
     </body>

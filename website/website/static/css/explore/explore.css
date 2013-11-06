@@ -48,6 +48,17 @@ img.steps {
     width:100%;
 }
 
+#id_title_original-deck > * {
+    font-size:1.1em;
+    font-weight:bold;
+    color: #D51C21;
+    margin:0;
+    padding:0;
+    background-color: rgba(255,255,255,0.8);
+    border-radius:5px;
+    border:1px solid grey;
+}
+
 /* Case 2 + titre */
 
 #distancecriteria {

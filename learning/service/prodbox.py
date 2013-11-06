@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms(50)
+        self.films = flt.getFilms()
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -198,6 +198,12 @@ class CinemaService(LearningService):
         else:
             self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
     
+    def loadReviewsContent(self):
+        gkey = genReviewsContent(self.films.iterator())
+        self.reviews_content = []
+        for d in gkey:
+            self.reviews_content.append(d.values())
+
     def loadSeason(self):
         if not self.is_loaded('season'):
             gkey = genSeason(self.films.iterator())
@@ -246,7 +252,7 @@ class CinemaService(LearningService):
     def loadActors(self):
         if not self.is_loaded('actors'):
             v = DictVectorizer(dtype=int)
-            self.actor_matrix = v.fit_transform(genActorsTuples2(self.films.iterator())) #TODO : later, maybe normalize actor_matrix (mais je pense pas)
+            self.actor_matrix = v.fit_transform(genActorsTuples3(self.films.iterator())) #TODO : later, maybe normalize actor_matrix (mais je pense pas)
             self.actor_names = v.get_feature_names()
             # Save object in cache
             self.create_cobject('actors', (self.actor_matrix,self.actor_names))
@@ -366,7 +372,7 @@ class CinemaService(LearningService):
             # Save object in cache
             self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM))
         else:
-            self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg = self.get_cobject('directors_reduced').get_content()
+            self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM = self.get_cobject('directors_reduced').get_content()
 
     def loadSearchClustering(self):
         if not self.is_loaded('search_clustering'):
@@ -406,15 +412,17 @@ class CinemaService(LearningService):
         self.predict_labels_names = ['box_office']
 
     def getWeightedSearchFeatures(self,k):
-        X_people = scipy.sparse.hstack([self.actor_reduced_SC,self.director_reduced_SC]) #TODO:play on clustering types
+        X_people = scipy.sparse.hstack([normalize(self.actor_reduced_SC.astype(np.double),norm='l1',axis=1),normalize(self.director_reduced_SC.astype(np.double),norm='l1',axis=1)])
+        #TODO:play on clustering types
         X_budget = self.budget_matrix
         X_review = self.reviews_matrix
         X_genre =  self.genres_matrix
-        X_budget = X_budget/np.max(X_budget)
+        X_budget = scipy.sparse.csr_matrix(np.log(X_budget.toarray()))
+        X_budget = X_budget/max(X_budget.data)
         X_review = X_review/100 # because grades should be in [0,1] #TODO WARNING BDD DAVID OU BENJAMIN
-        X_review = X_review/X_review.shape[1] #divide by number of columns
-        X_genre = X_genre/X_genre.shape[1] #divide by number of columns
-        X_people = X_people/X_people.shape[1] #divide by number of columns
+        X_review = normalize(X_review.astype(np.double),norm='l1',axis=1) #normalize
+        X_genre = normalize(X_genre.astype(np.double),norm='l1',axis=1) #normalize
+        X_people = X_people/2 #normalize
         people_weight = self.high_weight if (k>>0)%2 else self.low_weight
         budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight
@@ -455,6 +463,7 @@ class CinemaService(LearningService):
         self.loadBoxOffice()
         self.loadPrizes()
         self.loadReviews()
+        self.loadReviewsContent()
         # Load other features
         self.loadStats()
         self.loadWriters()
@@ -471,6 +480,8 @@ class CinemaService(LearningService):
         # Load predict features
         self.loadPredictFeatures()
         self.loadPredictLabels()
+        # Init predict classifier
+        self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -499,8 +510,8 @@ class CinemaService(LearningService):
         else:
             raise ParsingError('Please define a string and the expected number of results.')
     
-    
     def search_request(self, args):
+        #print args
         if args.has_key('id') and args.has_key('nbresults') and args.has_key('criteria'):
             if (args['nbresults'].__class__==int) and (args['criteria'].__class__==dict):
                 nbresults = args['nbresults']
@@ -517,6 +528,7 @@ class CinemaService(LearningService):
                                 results = self.compute_search(film, nbresults, crit, filters = self.parse_search_filter(args['filter']) )
                             else:
                                 results = self.compute_search(film, nbresults, crit)
+                            #print results
                             query_results = {'nbresults' : nbresults, 'results' : []}
                             for (v, f) in results:
                                 query_results['results'].append(
@@ -607,13 +619,9 @@ class CinemaService(LearningService):
         neighbors_indexes = neighbors_indexes[new_order]
         #Return results
         res = []
+        #list_films = list(self.films.all())
         for i in range(nb_results):
             res.append((distances[i],self.films[neighbors_indexes[i]]))
-        #TODO : remove 4 next lines
-        print 'Film picked : '
-        print self.films[film_index]
-        print 'Neighbors : '
-        print res
         return res
 
     def parse_search_filter(self, filt_in):
@@ -680,7 +688,7 @@ class CinemaService(LearningService):
                 lang = Language.objects.get(identifier = str(args['language']))
             except Language.DoesNotExist, exceptions.KeyError :
                 pass
-        results = self.compute_predict(self.parse_predict_criteria(args), language = lang)
+        results = self.compute_predict(self.vectorize_predict_criteria(args), language = lang)
         
         # Build query_results
         query_results = {}
@@ -720,16 +728,12 @@ class CinemaService(LearningService):
         
         # Fill query_results['critics']
         critics = {}
-        keywords = []
-        for keyword in results['keywords']:
-            keyword.append(keyword.word)
         
         reviews = []
         grades = []
         for item in results['reviews']:
             reviews.append({'journal' : item['journal'].name,
-                            'grade' : item['grade'],
-                            'keywords' : keywords
+                            'grade' : item['grade']
                             })
             grades.append(item['grade'])
         
@@ -747,8 +751,24 @@ class CinemaService(LearningService):
         
         # Return data
         return query_results
-    
-    def compute_predict(self, criteria, language=None):
+   
+    def init_predict(self):
+        X = self.predict_features.toarray()
+        feature_names = self.predict_features_names
+        
+        y = self.predict_labels.toarray()
+        
+        # BOX OFFICE
+        self.box_office_clf = RandomForestRegressor()
+        
+        y = y[:,0]
+        y_log = np.log(y)
+
+        self.box_office_clf.fit(X, y_log)
+
+        return
+
+    def compute_predict(self, x_vector, language=None):
         '''
         Return {'prizes' : list of {'institution' : Institution Object,
                                     'win' : boolean,
@@ -776,103 +796,91 @@ class CinemaService(LearningService):
                }
         '''
         
-        
-        X = self.predict_features.toarray()
-        feature_names = self.predict_features_names
-        
-        y = self.predict_labels.toarray()
-        
-        ##################
-        ### BOX OFFICE ###
-        ##################
-        
-        y = y[:,0]
-        y_log = np.log(y)
+        predicted_box_office = np.exp(self.box_office_clf.predict(x_vector))
 
-        clf = RandomForestRegressor()
-       
-        clf.fit(X, y_log)
+        results = {'prizes' : [],
+                   'general_box_office' :
+                        {'rank' : 0, # TODO
+                         'value' : predicted_box_office,
+                         'neighbors' : []},
+                    'genre_box_office' :
+                        {'rank' : 0, # TODO
+                         'value' : predicted_box_office,
+                         'neighbors' : []},
+                    'reviews': [],
+                    'bag_of_words': []}                   
 
-        #film = Film(
+        return results
 
-        d_actor = {}
-        if len(criteria['actors']) == 0:
-            d_actor = {'_nothing' : 1}
-        else:
-            for actor in criteria['actors']:
-                d_actor[actor.imdb_id + '_star'] = 1 # STAR BY DEFAULT?
-        v_actor = DictVectorizer(dtype=int)
-        x_actor_matrix = v_actor.fit_transform(d_actor)
-        x_actor_reduced_SC = x_actor_matrix * self.proj_actors_SC
+    def vectorize_predict_criteria(self, crit):
 
-        d_director = {}
-        if len(criteria['directors']) == 0:
-            d_director = {'_nothing' : 1}
-        else:
-            for director in criteria['directors']:
-                d_director[director.imdb_id] = 1 #
-        x_director_matrix = v_director.fit_transform(d_director)
-        x_director_reduced_SC = x_director_matrix * self.proj_directors_SC
+        x_actor_vector = np.zeros([1,len(self.actor_names)])
+        if crit.has_key('actors'):
+            if crit['actors'].__class__ == list:
+                i = 0
+                for feat in self.actor_names:
+                    for actor in crit['actors']:
+                        if re.findall(actor, feat):
+                            x_actor_vector[0,i] = 1 # ALL STARS?
+                i += 1
+        x_actor_reduced = x_actor_vector * self.proj_actors_KM
 
+        x_genres_vector = np.zeros([1, len(self.genres_names)])
+        if crit.has_key('genres'):
+            if crit['genres'].__class__ == list:
+                i = 0 
+                for feat in self.genres_names:
+                    for genres in crit['genres']:
+                        if re.findall(genres, feat):
+                            x_genres_vector[0,i] = 1
+                i += 1
 
-       
-        
-        #d{}
-        #d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
+        x_director_vector = np.zeros([1, len(self.director_names)])
+        if crit.has_key('directors'):
+            if crit['directors'].__class__ == list:
+                i = 0 
+                for feat in self.director_names:
+                    for director in crit['directors']:
+                        if re.findall(director, feat):
+                            x_director_vector[0,i] = 1
+                i += 1
+        x_director_reduced = x_director_vector * self.proj_directors_KM
 
+        x_keyword_vector = np.zeros([1, len(self.keyword_names)])
+        if crit.has_key('keywords'):
+            if crit['keywords'].__class__ == list:
+                i = 0
+                for feat in self.keyword_names:
+                    for keyword in crit['keywords']:
+                        if re.findall(keyword, feat):
+                            x_keyword_vector[0,i] = 1 
+                i += 1
+        x_keyword_reduced = x_keyword_vector * self.proj_keywords_KM
 
-        return {}
+        x_budget_vector = np.zeros([1,1])
+        if crit.has_key('budget'):
+            if crit['budget'].__class__ == float:
+                x_budget_vector[1,1] = crit['budget']
 
-    def parse_predict_criteria(self, crit_in):
-        crit_out = {}
-        
-        if crit_in.has_key('actors'):
-            if crit_in['actors'].__class__ == list:
-                crit_out['actors'] = []
-                for person_id in crit_in['actors']:
-                    try:
-                        crit_out['actors'].append(Person.objects.get(imdb_id=str(person_id)))
-                    except Person.DoesNotExist, exceptions.TypeError:
-                        pass
-        
-        if crit_in.has_key('genres'):
-            if crit_in['genres'].__class__ == list:
-                crit_out['genres'] = []
-                for genre in crit_in['genres']:
-                    try:
-                        crit_out['genres'].append(Genre.objects.get(imdb_id=str(genre)))
-                    except Genre.DoesNotExist, exceptions.TypeError:
-                        pass
-        
-        if crit_in.has_key('directors'):
-            if crit_in['directors'].__class__ == list:
-                crit_out['directors'] = []
-                for person_id in crit_in['directors']:
-                    try:
-                        crit_out['directors'].append(Person.objects.get(imdb_id=str(person_id)))
-                    except Person.DoesNotExist, exceptions.TypeError:
-                        pass
-        
-        if crit_in.has_key('keywords'):
-            if crit_in['keywords'].__class__ == list:
-                crit_out['keywords'] = []
-                for keyword in crit_in['keywords']:
-                    try:
-                        crit_out['keywords'].append(Keyword.objects.get(word=str(keyword)))
-                    except Keyword.DoesNotExist:
-                        crit_out['keywords'].append(str(keyword))
-        
-        if crit_in.has_key('budget'):
-            if crit_in['budget'].__class__ == float:
-                crit_out['budget'] = crit_in['budget']
-        
+        x_season_vector = np.zeros([1, len(self.season_names)]) # Default Season?
         try:
-            if crit_in['release_period']['season'] in ['winter', 'spring', 'summer', 'fall']:
-                crit_out['release_period'] = crit_in['release_period']
+            for feat in self.genres_names:
+                i = 0
+                if re.findall(crit['release_period']['season'], feat):
+                    x_season_vector[0,i] = 1
+                i += 1
         except exceptions.KeyError:
             pass
-        
-        return crit_outl
+
+        x_vector = np.hstack([
+            x_actor_reduced,
+            x_director_reduced,
+            x_keyword_reduced,
+            x_budget_vector,
+            x_season_vector,
+            x_genres_vector,])
+
+        return x_vector
 
 
 # VIEUX CODE BENJAMIN
