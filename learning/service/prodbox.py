@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms()
+        self.films = flt.getFilms(n=50)
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -367,7 +367,7 @@ class CinemaService(LearningService):
         self.predict_features = scipy.sparse.hstack([actor_reduced,director_reduced,keyword_reduced,self.budget_matrix,self.season_matrix])
         self.predict_features_names = np.concatenate([['actor_feat_'+str(i) for i in range(actor_reduced.shape[1])],
                                                 ['director_feat_'+str(i) for i in range(director_reduced.shape[1])],
-                                                ['keyword_feat_'+str(i) for i in range(keyword_reduce.shape[1])],
+                                                ['keyword_feat_'+str(i) for i in range(keyword_reduced.shape[1])],
                                                 ['budget'],
                                                 self.season_names])
 
