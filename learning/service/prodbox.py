@@ -794,18 +794,18 @@ class CinemaService(LearningService):
        
         clf.fit(X, y_log)
 
-        film = Film(
+        #film = Film(
 
 
 
-        v = DictVectorizer(dtype=int)
+        #v = DictVectorizer(dtype=int)
         
         
-        x_actor = v.fit_transform(genActorsTuples2(self.films.iterator()))
+        #x_actor = v.fit_transform(genActorsTuples2(self.films.iterator()))
         
         
-        d{}
-        d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
+        #d{}
+        #d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
 
 
         return {}
