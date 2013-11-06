@@ -6,7 +6,7 @@ body {
     background-image: -moz-radial-gradient(center, ellipse farthest-side, white 0%, #EDEDED 100%);
     background-image: -webkit-radial-gradient(center, ellipse farthest-side, white 0%, #EDEDED 100%);
     background: -webkit-radial-gradient(center, ellipse farthest-side, white 0%, #EDEDED 100%);
-    min-width : 85em;
+    min-width : 1280px;
 }
 
 h1  {
