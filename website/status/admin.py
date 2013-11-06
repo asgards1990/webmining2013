@@ -13,7 +13,7 @@ class IMDBFilmStatusAdmin(admin.ModelAdmin):
     list_filter = ('year', 'downloaded', 'extracted',)
 
 class IMDBPersonStatusAdmin(admin.ModelAdmin):
-    list_display = ('imdb_id', 'downloaded', 'extracted')
+    list_display = ('imdb_id', 'downloaded', 'extracted', 'priority', 'name')
     search_fields = ('imdb_id',)
     list_filter = ('downloaded', 'extracted',)
 

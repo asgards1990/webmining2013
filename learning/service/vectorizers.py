@@ -46,7 +46,11 @@ def genImdbNbReviews(iter_films):
     return genNullableFeature(iter_films,'imdb_nb_reviews')
 
 def genReleaseDate(iter_films):
-    return genNullableFeature(iter_films,'release_date')
+    while True:
+        film = next(iter_films)
+	yield {'year':film.release_date.year,
+            'month':film.release_date.month,
+            'day':film.release_date.day}
 
 def genLanguages(iter_films):
     while True:

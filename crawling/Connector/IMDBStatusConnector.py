@@ -373,7 +373,8 @@ class IMDBPersonStatusConnector:
         
         if not self.id_exists(imdb_id):
             person_status = IMDBPersonStatus(imdb_id=imdb_id,
-                                             downloaded=0, extracted=0)
+                                             downloaded=0, extracted=0,
+                                             priority=1000000, name=0)
             try:
                 person_status.save()
             except Exception as e:
@@ -422,17 +423,35 @@ class IMDBPersonStatusConnector:
 
         self.logger.debug("-> Status: {}".format(status))
         return status
+ 
+    def getPriority(self,imdb_id):
+        self.logger.debug("Get the film Priority for Person IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
+        status = s.priority
+
+        self.logger.debug("-> Priority: {}".format(status))
+        return status
+
+    def getNameStatus(self,imdb_id):
+        self.logger.debug("Get the film Name status for Person IMDB ID {} in the database:".format(imdb_id))
+        
+        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
+        status = s.name
+
+        self.logger.debug("-> Status: {}".format(status))
+        return status
 
     def getNotDownloaded(self):
         self.logger.debug("Get the Person IMDB IDs in the database with downloaded=0")
         
-        status = IMDBPersonStatus.objects.filter(downloaded=0)
+        status = IMDBPersonStatus.objects.filter(downloaded=0).order_by('priority')
         return map(lambda s: s.imdb_id, status)
 
     def getDownloadedNotExtracted(self):
         self.logger.debug("Get the Person IMDB IDs in the database with downloaded=1 and extracted=0")
 
-        status = IMDBPersonStatus.objects.filter(downloaded=1, extracted=0)
+        status = IMDBPersonStatus.objects.filter(downloaded=1, extracted=0).order_by('priority')
         return map(lambda s: s.imdb_id, status)
 
     ###############################################################################
@@ -460,6 +479,38 @@ class IMDBPersonStatusConnector:
         
         s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
         s.extracted = status
+
+        try:
+            s.save()
+        except Exception as e:
+            self.logger.warning("-> The person status couldn't be saved")
+            self.logger.warning("-> Error: {}".format(e))
+            return False
+        else:
+            self.logger.debug("-> Person status modified")
+            return True
+
+    def setPriority(self, imdb_id, status):
+        self.logger.debug("Set the Priority for Person IMDB ID {0} to {1} in the database".format(imdb_id, status))
+        
+        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
+        s.priority = status
+
+        try:
+            s.save()
+        except Exception as e:
+            self.logger.warning("-> The person status couldn't be saved")
+            self.logger.warning("-> Error: {}".format(e))
+            return False
+        else:
+            self.logger.debug("-> Priority status modified")
+            return True
+
+    def setNameStatus(self, imdb_id, status):
+        self.logger.debug("Set the Name status for Person IMDB ID {0} to {1} in the database".format(imdb_id, status))
+        
+        s = IMDBPersonStatus.objects.get(imdb_id=imdb_id)
+        s.name = status
 
         try:
             s.save()

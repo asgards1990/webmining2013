@@ -3,7 +3,6 @@
 #menu {
     float:left;
     width:16em;
-    margin-top:2em;
     margin-left:1.5em;
 }
   
@@ -20,6 +19,14 @@
     text-align : center;
 }
 
+#container{
+    width:100%;
+    min-width:980px;
+    max-width:1920px;
+    margin:0 auto;
+    overflow:auto;
+    padding-top:2em;
+}
 
 
 
