@@ -150,7 +150,7 @@ overflow:auto;
 padding: 0.6em;
 }
 
-<<<<<<< HEAD
+
 .listbudget{
 text-align: center;
 font-size: 1em;
@@ -158,11 +158,10 @@ background-color: white;
 overflow:auto;
 }
 
-=======
 .listbudget input{
 text-align:center;
 }
->>>>>>> da3a2ee3a4dc1296c3f4502c02ab7f31db6b79dd
+
 /* menubox release date*/
 
 .seasonbox {
