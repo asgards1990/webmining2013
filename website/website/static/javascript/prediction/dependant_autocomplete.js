@@ -174,15 +174,15 @@ $(document).ready(function() {
 
         if (id1) {
             var value1 = $('#id_genre1-deck').clone().children().children().remove().end().text();
-            alert (value1);
+          
         
             if (id2) {
                 var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
-                alert (value2);
+                
                 }
             else {
                var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value1]]};
-               alert("on est l¨¤");
+              
               $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json")
                     /*function callback(tab) {
                         if (response.success) {

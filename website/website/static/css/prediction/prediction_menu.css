@@ -103,13 +103,21 @@
 
 /* menubox keywords */
 
+#keywordSuggest {
+	text-align:center;
+}
+
+.keyword {
+	text-align:center;
+}
+
 #id_keyword-wrapper, #id_keyword-wrapper {
     width:100%;
     text-align:center;
     float:left;
 }
 
-#id_keyword-deck >* {
+#id_keyword-deck >*, .keyword {
     float:left;
     padding:0 0 5px 0;
     margin:0;
