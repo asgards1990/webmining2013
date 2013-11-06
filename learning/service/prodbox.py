@@ -366,7 +366,7 @@ class CinemaService(LearningService):
             # Save object in cache
             self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM))
         else:
-            self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg = self.get_cobject('directors_reduced').get_content()
+            self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM = self.get_cobject('directors_reduced').get_content()
 
     def loadSearchClustering(self):
         if not self.is_loaded('search_clustering'):
@@ -406,15 +406,17 @@ class CinemaService(LearningService):
         self.predict_labels_names = ['box_office']
 
     def getWeightedSearchFeatures(self,k):
-        X_people = scipy.sparse.hstack([self.actor_reduced_SC,self.director_reduced_SC]) #TODO:play on clustering types
+        X_people = scipy.sparse.hstack([normalize(self.actor_reduced_SC.astype(np.double),norm='l1',axis=1),normalize(self.director_reduced_SC.astype(np.double),norm='l1',axis=1)])
+        #TODO:play on clustering types
         X_budget = self.budget_matrix
         X_review = self.reviews_matrix
         X_genre =  self.genres_matrix
-        X_budget = X_budget/np.max(X_budget)
+        X_budget = scipy.sparse.csr_matrix(np.log(X_budget.toarray()))
+        X_budget = X_budget/max(X_budget.data)
         X_review = X_review/100 # because grades should be in [0,1] #TODO WARNING BDD DAVID OU BENJAMIN
-        X_review = X_review/X_review.shape[1] #divide by number of columns
-        X_genre = X_genre/X_genre.shape[1] #divide by number of columns
-        X_people = X_people/X_people.shape[1] #divide by number of columns
+        X_review = normalize(X_review.astype(np.double),norm='l1',axis=1) #normalize
+        X_genre = normalize(X_genre.astype(np.double),norm='l1',axis=1) #normalize
+        X_people = X_people/2 #normalize
         people_weight = self.high_weight if (k>>0)%2 else self.low_weight
         budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight
@@ -499,8 +501,8 @@ class CinemaService(LearningService):
         else:
             raise ParsingError('Please define a string and the expected number of results.')
     
-    
     def search_request(self, args):
+        #print args
         if args.has_key('id') and args.has_key('nbresults') and args.has_key('criteria'):
             if (args['nbresults'].__class__==int) and (args['criteria'].__class__==dict):
                 nbresults = args['nbresults']
@@ -517,6 +519,7 @@ class CinemaService(LearningService):
                                 results = self.compute_search(film, nbresults, crit, filters = self.parse_search_filter(args['filter']) )
                             else:
                                 results = self.compute_search(film, nbresults, crit)
+                            #print results
                             query_results = {'nbresults' : nbresults, 'results' : []}
                             for (v, f) in results:
                                 query_results['results'].append(
@@ -610,10 +613,10 @@ class CinemaService(LearningService):
         for i in range(nb_results):
             res.append((distances[i],self.films[neighbors_indexes[i]]))
         #TODO : remove 4 next lines
-        print 'Film picked : '
-        print self.films[film_index]
-        print 'Neighbors : '
-        print res
+        #print 'Film picked : '
+        #print self.films[film_index]
+        #print 'Neighbors : '
+        #print res
         return res
 
     def parse_search_filter(self, filt_in):
