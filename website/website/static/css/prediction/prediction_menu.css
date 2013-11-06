@@ -103,6 +103,11 @@
 
 /* menubox keywords */
 
+.add1, .add2, .suppress1, .suppress2 {
+	cursor: pointer;
+}
+
+
 #keywordSuggest {
 	display: block;
 	text-align:center;
