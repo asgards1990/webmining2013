@@ -135,7 +135,7 @@
 /* menubox range*/
 
 #slider-range {
-    margin: 10px;
+    margin: 15px;
 }
 
 .listbudget{
@@ -143,8 +143,12 @@ text-align: center;
 font-size: 1em;
 background-color: white;
 overflow:auto;
+padding: 0.6em;
 }
 
+.listbudget input{
+text-align:center;
+}
 /* menubox release date*/
 
 #release .seasonbox {
