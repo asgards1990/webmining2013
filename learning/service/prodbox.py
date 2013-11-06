@@ -198,6 +198,12 @@ class CinemaService(LearningService):
         else:
             self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
     
+    def loadReviewsContent(self):
+        gkey = genReviewsContent(self.films.iterator())
+        self.reviews_content = []
+        for d in gkey:
+            self.reviews_content.append(d.values())
+
     def loadSeason(self):
         if not self.is_loaded('season'):
             gkey = genSeason(self.films.iterator())
@@ -455,6 +461,7 @@ class CinemaService(LearningService):
         self.loadBoxOffice()
         self.loadPrizes()
         self.loadReviews()
+        self.loadReviewsContent()
         # Load other features
         self.loadStats()
         self.loadWriters()

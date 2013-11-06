@@ -128,6 +128,15 @@ def genReviews(iter_films):
                 d[review.journal.name] = review.grade
             yield d
 
+def genReviewsContent(iter_films):
+    while True:
+        film = next(iter_films)
+        reviews = Review.objects.filter(film=film)
+        d = {}
+        for review in reviews.all():
+            d[review.journal.name] = review.summary
+        yield d
+
 def genActorsTuples(iter_films):
     while True:
         film = next(iter_films)
