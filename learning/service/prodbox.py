@@ -423,6 +423,7 @@ class CinemaService(LearningService):
         self.loadSearchClustering()
         # Load predict features
         self.loadPredictFeatures()
+        self.loadPredictLabels()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
