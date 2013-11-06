@@ -162,22 +162,7 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
 
    def extractPoster(self):
       logger.debug("Extract Poster : ")
-      poster = self.extractor.extractXpathElement('//td[@id="img_primary"]/*/a/img/@src')
-      try:
-         u = urllib.urlopen(poster[0]) 
-         content=u.read()
-         path="{}{}.{}".format(IMDBExtractorConfig.POSTER_PATH,self.id_,poster[0].split(".")[-1])
-         logger.debug("Sauvegarde de l'image {} vers le chemin {}".format(poster[0].split(".")[-1],path))
-         f=open(path,'wb')
-         f.write(content)
-         f.close()
-      except Exception as e:
-         logger.error('Impossible de sauvegarder le poster, Error : {}'.format(e))
-      try:
-        IMDBFilmStatusConnector().setPosterStatus(self.id_,1)
-      except Exception as e:
-         logger.error('Erreur lors du changement de statut "Poster" dans la base : {}'.format(e))
-         
+      return self.extractor.extractXpathElement('//td[@id="img_primary"]/*/a/img/@src')
 
    def extractYear(self):
       logger.debug("Extract Year : ")
@@ -281,7 +266,6 @@ class IMDBExtractor_Film(IMDBFilmExtractor):
 
       self.english_title = (lambda x : x[0] if len(x)>0 else None)(self.extractTitle()) 
       self.original_title = (lambda x : x[0] if len(x)>0 else self.english_title)(self.extractOriginalTitle()) 
-      self.extractPoster()
       self.release_date = (lambda x : convertDate(x[0]) if len(x)>0  else None)(self.extractReleaseDate())
       self.runtime =(lambda x : x[0].split(' ')[0].replace(",","") if len(x)>0 else None)(self.extractRuntime())
       try:
@@ -412,7 +396,7 @@ class IMDBExtractor_companyCredits(IMDBFilmExtractor):
             for p in self.producers:
                producer = defineProducer(p.id_)
                if producer:
-                 f.production_companies.add(producer)
+                 f.production_company.add(producer)
             f.save()
 
          except Exception as e:
@@ -477,19 +461,16 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
    def extractActors(self):
       logger.debug("Extract Actors : ")
       actor_url_list = self.extractor.extractXpathElement('//td[@itemprop="actor"]/a/@href')
-      self.actor_name_list =  self.extractor.extractXpathText('//td[@itemprop="actor"]/a/span')
       return createPersonList(actor_url_list)
 
    def extractDirectors(self):
       logger.debug("Extract Diretors : ")
       director_url_list = self.extractor.extractXpathElement('//a[contains(@href,"ttfc_fc_dr")]/@href')
-      self.director_name_list = self.extractor.extractXpathText('//a[contains(@href,"ttfc_fc_dr")]')
       return createPersonList(director_url_list)
 
    def extractWriters(self):
       logger.debug("Extract Writers: ")
       writer_url_list = self.extractor.extractXpathElement('//a[contains(@href,"ttfc_fc_wr")]/@href')
-      self.writer_name_list = self.extractor.extractXpathText('//a[contains(@href,"ttfc_fc_wr")]')
       return createPersonList(writer_url_list)
 
  
@@ -500,38 +481,26 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
       f = defineFilm(self.id_)
       if f:
          try:
-            i=0
             for d in self.directors:
                director = definePerson(d.id_)
                if director:
-                  director.name=self.director_name_list[i]
-                  director.save()
                   f.directors.add(director)
                   f.save()
-               i+=1
-            i=0
             for w in self.writers:
                writer = definePerson(w.id_)
                if writer:
-                  writer.name=self.writer_name_list[i]
-                  writer.save()
                   f.writers.add(writer)
                   f.save()
-               i+=1
             actor_index=1
-            i=0
             for a in self.actors:
               actor = definePerson(a.id_)
               if actor:
-                 actor.name=self.actor_name_list[i]
-                 actor.save()
                  actor_weight = defineActorWeight(actor,f)
                  if actor_weight:
                     actor_weight.rank = actor_index
                     actor_weight.film = f
                     actor_weight.save()
                     actor_index +=1
-              i+=1
             logger.info('Mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors'.format(self.id_))
          except Exception as e:
             logger.error('La mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors a échoué'.format(self.id_))
@@ -647,27 +616,26 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
       logger.debug('Mise en forme des Awards')
       award_tab=[]
       for i in range(1,len(institution_list)+1):
-         try:
-            logger.debug( '########### {}  ##############'.format(institution_list[i-1]) )
-         except:
-            institution_list[i-1]=md5.new("{}".format(random.random())).hexdigest() 
-            logger.debug( ' NEW ID ########### {}  ##############'.format(institution_list[i-1]) )
          for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
-            award_detail = []
-            logger.debug(award_category_status[0])
-            logger.debug(award_category_list[0])
-            logger.debug(award_year_list[i-1])
-            logger.debug(j)
+            try:
+               award_detail = []
+               logger.debug(award_category_status[0])
+               logger.debug(award_category_list[0])
+               logger.debug(award_year_list[i-1])
+               logger.debug(j)
            
-            award_detail.append(award_category_status[0]) #WIN/NPMINATED
-            award_detail.append(award_category_list[0])   #Palme d'or
-            award_detail.append(award_year_list[i-1])       #2013
-            award_detail.append(institution_list[i-1])     #Cannes Film Festival
+               award_detail.append(award_category_status[0]) #WIN/NPMINATED
+               award_detail.append(award_category_list[0])   #Palme d'or
+               award_detail.append(award_year_list[i-1])       #2013
+               award_detail.append(institution_list[i-1])     #Cannes Film Festival
 
-	    award_category_status.pop(0)
-            award_category_list.pop(0)
+     	       award_category_status.pop(0)
+               award_category_list.pop(0)
 
+            except:
+               pass
          award_tab.append(award_detail)
+
       return award_tab
 
    def extractContent(self):
@@ -799,19 +767,19 @@ def convertCurrency(val):
          return val.split("$")[1]
       elif val[0] == u'\xa3':
         logger.debug("Conversion du montant livres vers dollars")
-        return int(int(val[1:])*1.603157)
+        return int(int(val[1:])*0.623284)
       elif val[0] == u'\u20ac' :
         logger.debug("Conversion du montant euros vers dollars")
-        return int(int(val[1:])*1.360673)
+        return int(int(val[1:])*0.727236)
       elif len(val)>3 and val[:3]=="JPY":
         logger.debug("Conversion du montant euros vers dollars")
-        return int(int(val.split("JPY")[1])*0.010171)
+        return int(int(val.split("JPY")[1])*98.381090)
       elif len(val)>3 and val[:3]=="FRF":
-        logger.debug("Conversion du montant francs vers dollars")
-        return int(int(val.split("FRF")[1])*0.207433)
+       logger.debug("Conversion du montant francs vers dollars")
+       return int(int(val.split("FRF")[1])*4.770356)
       else:
-        logger.debug("Devise du budget non reconnue")
-        return None
+         logger.debug("Devise du budget non reconnue")
+         return None
    except Exception as e:
       logger.error("Impossible de convertir la devise : Error : {} ".format(val,e))
 
