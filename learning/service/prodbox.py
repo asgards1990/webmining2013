@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms()
+        self.films = flt.getFilms(50)
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -796,13 +796,27 @@ class CinemaService(LearningService):
 
         #film = Film(
 
+        d_actor = {}
+        if len(criteria['actors']) == 0:
+            d_actor = {'_nothing' : 1}
+        else:
+            for actor in criteria['actors']:
+                d_actor[actor.imdb_id + '_star'] = 1 # STAR BY DEFAULT?
+        v_actor = DictVectorizer(dtype=int)
+        x_actor_matrix = v_actor.fit_transform(d_actor)
+        x_actor_reduced_SC = x_actor_matrix * self.proj_actors_SC
+
+        d_director = {}
+        if len(criteria['directors']) == 0:
+            d_director = {'_nothing' : 1}
+        else:
+            for director in criteria['directors']:
+                d_director[director.imdb_id] = 1 #
+        x_director_matrix = v_director.fit_transform(d_director)
+        x_director_reduced_SC = x_director_matrix * self.proj_directors_SC
 
 
-        #v = DictVectorizer(dtype=int)
-        
-        
-        #x_actor = v.fit_transform(genActorsTuples2(self.films.iterator()))
-        
+       
         
         #d{}
         #d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
