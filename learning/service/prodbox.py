@@ -364,12 +364,20 @@ class CinemaService(LearningService):
         actor_reduced = self.actor_reduced_KM #TODO : play
         keyword_reduced = self.keywords_reduced_KM #TODO : play
         director_reduced = self.director_reduced_KM #TODO : play
-        self.predict_features = scipy.sparse.hstack([actor_reduced,director_reduced,keyword_reduced,self.budget_matrix,self.season_matrix])
-        self.predict_features_names = np.concatenate([['actor_feat_'+str(i) for i in range(actor_reduced.shape[1])],
-                                                ['director_feat_'+str(i) for i in range(director_reduced.shape[1])],
-                                                ['keyword_feat_'+str(i) for i in range(keyword_reduced.shape[1])],
-                                                ['budget'],
-                                                self.season_names])
+        self.predict_features = scipy.sparse.hstack([
+            actor_reduced,
+            director_reduced,
+            keyword_reduced,
+            self.budget_matrix,
+            self.season_matrix,
+            self.genres_matrix])
+        self.predict_features_names = np.concatenate([
+            ['actor_feat_' + str(i) for i in range(actor_reduced.shape[1])],
+            ['director_feat_' + str(i) for i in range(director_reduced.shape[1])],
+            ['keyword_feat_' + str(i) for i in range(keyword_reduced.shape[1])],
+            ['budget'],
+            self.season_names,
+            self.genres_names])
 
     def loadPredictLabels(self):
         self.predict_labels = self.box_office_matrix
@@ -745,63 +753,20 @@ class CinemaService(LearningService):
                                          }
                }
         '''
-        X = []
-        feature_names = []
-
-        # TODO: Actors features
-        # TODO: Directores features
-        # Seasons features
-        X.append(self.season_matrix)
-        feature_names += self.season_names
-        # Budget feature
-        X.append(self.budget_matrix)
-        feature_names += ['budget',]
-        # TODO: Keywords deatures
-        # Genres features
-        X.append(self.genres_matrix)
-        feature_names += self.genres_names
-        
-        # Concatenate matrices 
-        X = hstack(X)
 
         return {}
 
     def benchmark(self): # BROUILLON POUR LE PREDICT
 
-        X = []
-        feature_names = []
-
-        # Actors features
-        X.append(self.actor_reduced_SC)
-        for i in range(self.actor_reduced_SC.shape[1]):
-            feature_names = ['actor_feat_' + str(i),]
-        # Directores features
-        X.append(self.director_reduced_SC)
-        for i in range(self.director_reduced_SC.shape[1]):
-            feature_names = ['director_feat_' + str(i),]
-        # Seasons features
-        X.append(self.season_matrix)
-        feature_names += self.season_names
-        # Budget feature
-        X.append(self.budget_matrix)
-        feature_names += ['budget',]
-        # Keywords deatures
-        X.append(self.keywords_reduced_KM)
-        for i in range(self.keywords_reduced_KM.shape[1]):
-            feature_names = ['keyword_feat_' + str(i),]
-        # Genres features
-        X.append(self.genres_matrix)
-        feature_names += self.genres_names
-        
-        # Concatenate matrices 
-        X = hstack(X).toarray()       
+        X = self.predict_features.toarray()
+        feature_names = self.predict_features_names
         
         ### For the Box Office ###
         y = self.box_office_matrix.data
         y_log = np.log(y)
         
         # CLASSIFICATION
-        print('\nClassification for the Box Office...')
+        print('\nRandom Forest classification for the Box Office...')
         
         thresh = np.median(y_log)
         y_bin = y_log > thresh
@@ -820,7 +785,7 @@ class CinemaService(LearningService):
             i=i+1
         
         # REGRESSION
-        print('\nRegression...')
+        print('\nRandom Forest regression...')
         clf = RandomForestRegressor()
         
         scores = cross_val_score(clf, X, y_log, cv=3)
