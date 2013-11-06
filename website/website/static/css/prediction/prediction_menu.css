@@ -129,6 +129,13 @@
     margin: 10px;
 }
 
+.listbudget{
+text-align: center; 
+font-size: 1em;
+background-color: white;
+overflow:auto;
+}
+
 /* menubox release date*/
 
 #release .seasonbox {
@@ -148,6 +155,7 @@
     max-height:3em;
     max-width:3em;
 }
+
 
 
 
