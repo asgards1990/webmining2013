@@ -735,7 +735,7 @@ class CinemaService(LearningService):
         (X, feature_names) = self.compute_predict_features()
 
         ### For the Box Office ###
-        y = self.box_office_matrix.data
+        y = self.box_office_matrix.toarray()
         y_log = np.log(y)
         
         # CLASSIFICATION
