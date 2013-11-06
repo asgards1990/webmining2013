@@ -118,6 +118,7 @@
     float:left;
 }
 
+
 #id_keyword-deck >* , .newKeyword{
     float:left;
     padding:0 0 5px 0;
@@ -132,14 +133,26 @@
 
 #id_keyword-wrapper input:before{
     width:100%;
+    white-space: normal;
 }
 
 /* menubox range*/
 
 #slider-range {
-    margin: 10px;
+    margin: 15px;
 }
 
+.listbudget{
+text-align: center; 
+font-size: 1em;
+background-color: white;
+overflow:auto;
+padding: 0.6em;
+}
+
+.listbudget input{
+text-align:center;
+}
 /* menubox release date*/
 
 #release .seasonbox {
@@ -159,6 +172,7 @@
     max-height:3em;
     max-width:3em;
 }
+
 
 
 
