@@ -1,12 +1,12 @@
 from django import forms
 import autocomplete_light
 from models import PersonsSearch, GKSearch, Prediction
-from cinema.models import Person
+from cinema.models import Person,Film
 from autocomplete_light import FixedModelForm
         
 # Selection d'un film
 class FilmSearchForm(forms.Form):        
-    title_original = forms.CharField(widget=autocomplete_light.TextWidget('FilmAutocomplete'))
+    title_original = forms.ModelChoiceField(Person.objects.all(),widget=autocomplete_light.ChoiceWidget('FilmAutocomplete'))
           
 # Selection multiple d'acteurs        
 class MultipleActorSearchForm(FixedModelForm):
