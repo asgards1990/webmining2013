@@ -103,6 +103,8 @@
 
 /* menubox keywords */
 
+
+
 #keywordSuggest {
 	display: block;
 	text-align:center;
@@ -119,7 +121,7 @@
 }
 
 
-#id_keyword-deck >* , .newKeyword{
+#id_keyword-deck >*  {
     float:left;
     padding:0 0 5px 0;
     margin:0;
@@ -129,7 +131,51 @@
     white-space: nowrap;
 }
 
+.newKeyword {
+    float:left;
+    padding:0 0 5px 0;
+    margin:0 0.4em;
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
 
+
+.add1, .add2, .suppress1, .suppress2 {
+	cursor: pointer;
+}
+
+.suppress1, .add1{
+	z-index: 10;
+	opacity: 1;
+}
+
+.suppress2, .add2{
+	z-index: 0;
+}
+.delete { position:relative; width: 16px; height: 16px; display: inline-block; margin:1px }
+
+.delete img {
+ position: absolute;
+ bottom: 0;
+ left: 0;
+ top:1px;
+ width: 100%;
+ height: 100%;
+ cursor: pointer;
+}
+
+
+.newKeyword:hover .suppress1{
+opacity: 0;
+transition-duration: 0.5s;
+}
+
+.newKeyword:hover .add1{
+opacity: 0;
+transition-duration: 0.5s;
+}
 
 #id_keyword-wrapper input:before{
     width:100%;

@@ -1,5 +1,7 @@
 // Lien entre genre1 et keywords
 
+//$.ajaxSetup( {headers : {"X-Requested-With" : "Ajax"}});
+
 $(document).ready(function() {
 	var dict={};
     $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
@@ -131,23 +133,57 @@ newDelete.className="delete";
 
 var newImg1 = document.createElement('img');
 newImg1.className="add1";
-newImg1.src="img/DeleteGrey.jpg" 
+newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+//keywordClick(newImg1);
 
 
 var newImg2 = document.createElement('img');
 newImg2.className="add2"; 
-newImg2.src="img/DeleteRed.png" ;
+newImg2.src="../pesto/static/img/prediction/AddBlue.png";
 
 
-newKeyword.appendChild(newName);
 newKeyword.appendChild(newDelete);
+newKeyword.appendChild(newName);
+
 newDelete.appendChild(newImg1);
 newDelete.appendChild(newImg2);
 
 document.getElementById("keywordSuggest").appendChild(newKeyword);
 
-return newImg1;
-return newImg1;
+};
+
+function keywordClick (icone) {
+$(check).click(function(){
+alert('hello1');
+if((this.className=="suppress1")&&(this.id=="suggest")){
+var element = this.parentNode.parentNode;
+
+this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+
+suggestion = document.getElementById("keywordsugg");
+
+
+element.getElementsByClassName("suppress1")[0].className="add1";
+
+suggestion.appendChild(element);
+}
+
+else {if (this.className=="suppress1") {
+this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+}
+else {
+var element = this.parentNode.parentNode;
+
+this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+
+keywords = document.getElementById("id_keyword-deck");
+element.getElementsByClassName("add1")[0].id="suggest";
+element.getElementsByClassName("add1")[0].className="suppress1";
+keywords.appendChild(element);
+};
+};
+
+});
 };
 
 
@@ -164,72 +200,137 @@ function callback_suggest (resp) {
 
 
 $(document).ready(function() {
+	
     $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
         var genre1 = $('#id_genre1');
         var genre2 = $('#id_genre2');
         var id1 = genre1.val();
         var id2 = genre2.val();
         urlSubmit = 'http://senellart.com:8080/suggest/';
+		var bloc = document.getElementById("keywordSuggest");
 
         if (id1) {
             var value1 = $('#id_genre1-deck').clone().children().children().remove().end().text();
-			alert(value1);
+
           
         
             if (id2) {
                 var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
+				
+				 if (bloc.hasChildNodes()) {
+				 while (bloc.childNodes.length>=1)
+                 {bloc.removeChild(bloc.firstChild);
+                }
+               };				
+				
+				
+				 var args1 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value1]]};
+				 var args2 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value2]]};
+				 $.post(urlSubmit, "json_request="+JSON.stringify(args1), callback_suggest, "json");
+				 $.post(urlSubmit, "json_request="+JSON.stringify(args2), callback_suggest, "json");
+			
+				
                 
                 }
             else {
                var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value1]]};
+			   if (bloc.hasChildNodes()) {
+               while (bloc.childNodes.length>=1)
+               {bloc.removeChild(bloc.firstChild);
+                }
+               };
               
-              $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
-			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
-			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
-			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
-			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
-			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
-			  
-                    /*function callback(tab) {
-                        if (response.success) {
-                            for (k=0;k<10;k++) {
-                            ajoutKeywordSuggest(response.results[k][1]);
-                            };
-                        }
-                        else {
-                            return ('error');
-                            };
-                        };*/
-                  
+               $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+	
+	                  
                 };
             }
-        /*else {if (id2) {
+        else {if (id2) {
             var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
-                $.ajax({
-                    type:"POST",
-                    url: urlUnGenre
-                    data: {genre: value2}
-                    success:function(tab){
-                        for (k=0;k<10;k++) {
-                            ajoutKeywordSuggest(tab[k]);
-                            };
-                        }
-                    });
+			var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value2]]};
+            
+			
+			
+				if (bloc.hasChildNodes()) {
+				 while (bloc.childNodes.length>=1)
+                 {bloc.removeChild(bloc.firstChild);
+                }
+               };
+			   
+			  $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+			   
+	
                 };
+			};
+		});
+		
+		$('body').on('change', '.autocomplete-light-widget select[name$=genre2]', function() {
+        var genre1 = $('#id_genre1');
+        var genre2 = $('#id_genre2');
+        var id1 = genre1.val();
+        var id2 = genre2.val();
+        urlSubmit = 'http://senellart.com:8080/suggest/';
+		var bloc = document.getElementById("keywordSuggest");
+
+        if (id1) {
+            var value1 = $('#id_genre1-deck').clone().children().children().remove().end().text();
+
+          
+        
+            if (id2) {
+                var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
+				
+				 if (bloc.hasChildNodes()) {
+				 while (bloc.childNodes.length>=1)
+                 {bloc.removeChild(bloc.firstChild);
+                }
+               };				
+				
+				
+				var args1 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value1]]};
+				var args2 = {'str' : '', 'nbresults' : 5, filter:[[1.0, value2]]};
+				$.post(urlSubmit, "json_request="+JSON.stringify(args1), callback_suggest, "json");
+				$.post(urlSubmit, "json_request="+JSON.stringify(args2), callback_suggest, "json");
+			
+				
+                
+                }
             else {
-                $.ajax({
-                    type:"POST",
-                    url: urlUnGenre
-                    data: {genre: value1}
-                    
-                    success:function(tab){
-                          for (k=0;k<10;k++) {
-                            ajoutKeywordSuggest(tab[k]);
-                            };
-                          }
-                        
-                    });
+               var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value1]]};
+			   if (bloc.hasChildNodes()) {
+               while (bloc.childNodes.length>=1)
+               {bloc.removeChild(bloc.firstChild);
+                }
+               };
+              
+              $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+
+
+	                  
                 };
-            };*/
-        });
-    });
+            }
+        else {if (id2) {
+            var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
+			var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value2]]};
+            
+			
+			
+				if (bloc.hasChildNodes()) {
+				 while (bloc.childNodes.length>=1)
+                 {bloc.removeChild(bloc.firstChild);
+                }
+               };
+			   
+			  $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+
+                };
+			};
+		});
+	});
+				
+				
+            
+                          
+                        
+                    
+            

@@ -97,10 +97,11 @@ class CinemaService(LearningService):
             gkey = genReleaseDate(self.films.iterator())
             v =  DictVectorizer(dtype=int)
             self.release_date_matrix = v.fit_transform(gkey)
+            self.release_date_names = v.get_feature_names()
             # Save object in cache
-            self.create_cobject('release_date', self.release_date_matrix)
+            self.create_cobject('release_date', (self.release_date_matrix,self.release_date_names))
         else:
-            self.release_date_matrix = self.get_cobject('release_date').get_content()
+            self.release_date_matrix,self.release_date_names = self.get_cobject('release_date').get_content()
     
     def loadRuntime(self):
         if not self.is_loaded('runtime'):
@@ -550,19 +551,36 @@ class CinemaService(LearningService):
             raise ParsingError('Please define the IMDb identfier, the number of expected results and search criteria.')
    
     def applyFilter(self,filters): #returns indexes of films that respect our filters 
-        #TODO : see if it's possible to do boolean operations directly on sparse matrices
+        # Filter budget
         indexes_fitting_filters = self.budget_matrix.toarray() >= filters['budget']['min']
         indexes_fitting_filters = indexes_fitting_filters * (self.budget_matrix.toarray() <= filters['budget']['max'])
-        #indexes_fitting_filters = indexes_fitting_filters and self.release_date_matrix <= filters['release_period']['end']
-        #indexes_fitting_filters = indexes_fitting_filters and self.release_date_matrix >= filters['release_period']['begin']
-        #TODO: check release_period!
+        # Filter release_date
+        years=self.release_date_matrix[:,self.release_date_names.index('year')].toarray()
+        aux_max_release_date = years <= filters['release_period']['end'].year
+        aux_min_release_date = years >= filters['release_period']['begin'].year
+        indexes_fitting_filters = indexes_fitting_filters * aux_max_release_date 
+        indexes_fitting_filters = indexes_fitting_filters * aux_min_release_date
+        # Filter reviews
         indexes_fitting_filters = indexes_fitting_filters * (self.metacritic_score_matrix.toarray() >= filters['reviews']['min'])
-        for genre in filters['genres']:
-            indexes_fitting_filters = indexes_fitting_filters * (self.genres_matrix[:,self.genres_names.index(genre.name)].toarray())
-        for director in filters['directors']:
-            indexes_fitting_filters = indexes_fitting_filters * (self.director_matrix[:,self.director_names.index(director.imdb_id)].toarray())
-        for actor in filters['directors']:
-            indexes_fitting_filters = indexes_fitting_filters * (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray()) #TODO WARNING, CORRECT ONLY WITH NON-TUPLES ACTORS
+        # Filter genres
+        if filters['genres']!=[]:
+            aux_genres = np.zeros(indexes_fitting_filters.shape)
+            for genre in filters['genres']:
+                aux_genres = aux_genres + (self.genres_matrix[:,self.genres_names.index(genre.name)].toarray())
+            indexes_fitting_filters = indexes_fitting_filters * (aux_genres != 0)
+        # Filter directors
+        if filters['directors']!=[]:
+            aux_directors = np.zeros(indexes_fitting_filters.shape)
+            for director in filters['directors']:
+                aux_directors = aux_directors + (self.director_matrix[:,self.director_names.index(director.imdb_id)].toarray())
+            indexes_fitting_filters = indexes_fitting_filters * (aux_directors != 0)
+        # Filter actors
+        if filters['actors']!=[]:
+            aux_actors = np.zeros(indexes_fitting_filters.shape)
+            for actor in filters['actors']:
+                aux_actors = aux_actors + (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray()) #TODO WARNING, CORRECT ONLY WITH NON-TUPLES ACTORS
+            indexes_fitting_filters = indexes_fitting_filters * (aux_actors != 0)
+        # Return results
         indexes_fitting_filters = indexes_fitting_filters.reshape(1,indexes_fitting_filters.shape[0])[0]
         indexes_fitting_filters = np.where(indexes_fitting_filters==1)[0]
         return list(indexes_fitting_filters)
@@ -622,6 +640,10 @@ class CinemaService(LearningService):
         #list_films = list(self.films.all())
         for i in range(nb_results):
             res.append((distances[i],self.films[neighbors_indexes[i]]))
+        print 'Film picked : '
+        print self.films[film_index]
+        for item in res:
+            print item
         return res
 
     def parse_search_filter(self, filt_in):
