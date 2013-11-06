@@ -113,8 +113,8 @@ $(document).ready(function() {
 
 function ajoutKeywordSuggest(keyword) {
 
-var newKeyword = document.createElement('div');
-newKeyword.className="keyword";
+var newKeyword = document.createElement('span');
+newKeyword.className="newKeyword";
 
 
 var newName = document.createElement('span');
@@ -150,7 +150,6 @@ return newImg1;
 return newImg1;
 };
 
-/*function Hello (data) {alert('hello')};*/
 
 function callback_suggest (resp) {
     if (resp.success) {
@@ -174,6 +173,7 @@ $(document).ready(function() {
 
         if (id1) {
             var value1 = $('#id_genre1-deck').clone().children().children().remove().end().text();
+			alert(value1);
           
         
             if (id2) {
@@ -183,7 +183,13 @@ $(document).ready(function() {
             else {
                var args = {'str' : '', 'nbresults' : 10, filter:[[1.0, value1]]};
               
-              $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json")
+              $.post(urlSubmit, "json_request="+JSON.stringify(args), callback_suggest, "json");
+			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
+			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
+			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
+			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
+			  ajoutKeywordSuggest("sdqfgsdfgsdfgsdfgsdfg");
+			  
                     /*function callback(tab) {
                         if (response.success) {
                             for (k=0;k<10;k++) {

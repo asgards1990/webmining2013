@@ -104,12 +104,13 @@
 /* menubox keywords */
 
 #keywordSuggest {
+	display: block;
 	text-align:center;
+	float:left;
+	width:100%;
 }
 
-.keyword {
-	text-align:center;
-}
+
 
 #id_keyword-wrapper, #id_keyword-wrapper {
     width:100%;
@@ -117,7 +118,8 @@
     float:left;
 }
 
-#id_keyword-deck >* {
+
+#id_keyword-deck >* , .newKeyword{
     float:left;
     padding:0 0 5px 0;
     margin:0;
@@ -126,6 +128,8 @@
     text-overflow:ellipsis;
     white-space: nowrap;
 }
+
+
 
 #id_keyword-wrapper input:before{
     width:100%;
