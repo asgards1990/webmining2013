@@ -2,51 +2,30 @@ var requete;
 
 function changement(){
 	envoiDeLaRequeteSearch();
-	$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0499549",function(data){alert($.parseJSON(data).plot)}); //$.parseJSON(data).plot
-	//setTimeout(function(){unloadChargement("sousCadreResultats")},2000)
-	/*if (requete!=undefined){
-	requete.abort();
-	}
-	//alert("!!!")
-	requete=$.get("http://www.omdbapi.com/?i=" + "tt1951264", function(data){alert(data)})
-	if (requete!=undefined){
-	requete.abort();
-	}
-	//alert("!!!")
-	requete=$.get("http://www.omdbapi.com/?i=" + "tt2294629", function(data){alert(data)})
-	if (requete!=undefined){
-	requete.abort();
-	}
-	//alert("!!!")
-	requete=$.get("http://www.omdbapi.com/?i=" + "tt1981115", function(data){alert(data)})*/
+	//$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0499549",function(data){alert($.parseJSON(data).etitle)}); //$.parseJSON(data).plot
 }
 
 
 $(document).ready(function(){
-//envoiDeLaRequete()
-//alert("hello")
+
 $(".checkbox").change(function(){changement();})
 $(".iCheck-helper").click(function(){changement();})
-
-//document.getElementById("amount").onchange=function(){alert("!!!")};//change(function(){alert("checkbox truc3!!!")})
+$("#rateit").click(function(){changement();})
 $( "#slider-range" ).on( "slidechange", function( event, ui ) {changement();} );
-//setTimeout(function(){envoiDeLaRequeteSearch();},1000)
-//setTimeout(function(){envoiDeLaRequetePredict()},1000)
-//$("#title").click(function(){envoiDeLaRequeteSearch()})
-//$("#title").click(function(){envoiDeLaRequetePredict()})
+
 })
 
 
 function genererRequeteSearch(){
 	var requestInter=new Object();
-	requestInter.id=document.getElementById("moviesearch").children[0].id;
+	requestInter.id="tt0499549";//document.getElementById("moviesearch").children[0].id;
 	requestInter.nbresults=10;
 	requestInter.criteria=new Object();
 	requestInter.criteria.actor_director=$("#acteurs").prop("checked");
 	requestInter.criteria.genre=$("#genre").prop("checked");
 	requestInter.criteria.budget=$("#budgets").prop("checked");
 	requestInter.criteria.review=$("#review").prop("checked");
-	requestInter.filter=new Object();
+	/*requestInter.filter=new Object();
 	requestInter.filter.actors=new Array();
 	var compteur=0;
 	/*for(var i=0;i<document.getElementById("actors").getElementsByClassName("actor").length;i++){
@@ -63,7 +42,7 @@ function genererRequeteSearch(){
 			compteur=compteur+1;
 		}
 	}*/
-	requestInter.filter.genres=new Array();
+	/*requestInter.filter.genres=new Array();
 	compteur=0;
 	for(var i=0;i<document.getElementById("genres").getElementsByClassName("icheckbox_line-red").length;i++){
 		//alert("hello")
@@ -84,10 +63,12 @@ function genererRequeteSearch(){
 }
 
 function envoiDeLaRequeteSearch(){
-	//alert("hello")
 	arreter=false;
 	loadChargement("sousCadreResultats");
 	//alert(JSON.stringify(genererRequeteSearch()))
+	if (requete!=undefined){
+		requete.abort();
+	}
 	//requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
 	var data=new Object;
 	data.success=true;
@@ -113,7 +94,7 @@ function envoiDeLaRequeteSearch(){
 }
 
 function fctCallbackSearch(data){
-	//alert(JSON.stringify(data))
+	alert(JSON.stringify(data))
 	setTimeout(
 		function(){
 			unloadChargement("sousCadreResultats");
