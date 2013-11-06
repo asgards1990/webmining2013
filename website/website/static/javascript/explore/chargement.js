@@ -18,9 +18,9 @@ function loadChargement(nomDuCadre){
 	position[6]=43.05;position[7]=50.5;position[8]=57.6;position[9]=64.7;position[10]=71.9;position[11]=78.9;
 	position[12]=86.1;position[13]=92.9;
 	var largeur=new Array;
-	largeur[0]=5.8;largeur[1]=6;largeur[2]=5.9;largeur[3]=5.9;largeur[4]=6;largeur[5]=6;
-	largeur[6]=6;largeur[7]=5.9;largeur[8]=6;largeur[9]=5.9;largeur[10]=5.9;largeur[11]=6.1;
-	largeur[12]=5.8;largeur[13]=6;
+	largeur[0]=5.8;largeur[1]=6.1;largeur[2]=5.9;largeur[3]=5.9;largeur[4]=6;largeur[5]=6;
+	largeur[6]=6;largeur[7]=6;largeur[8]=6.1;largeur[9]=6;largeur[10]=6;largeur[11]=6.1;
+	largeur[12]=5.8;largeur[13]=6.1;
 	for(var i =0; i<14;i++){	
 		cache[i]=document.createElement("div");
 		cache[i].id="cache"+i;
