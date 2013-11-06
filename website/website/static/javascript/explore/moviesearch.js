@@ -162,6 +162,9 @@ $(document).ready(function(){
                 }
                };
 
+             var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
+             chiffre.removeChild(chiffre.firstChild);
+             chiffre.appendChild(document.createTextNode(2));
 
         
             
@@ -193,6 +196,10 @@ $(document).ready(function(){
                {ul.removeChild(ul.firstChild);
                 }
                };
+
+           var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
+           chiffre.removeChild(chiffre.firstChild);
+           chiffre.appendChild(document.createTextNode(3));
 
            
             
