@@ -135,6 +135,7 @@ def filmInfo(request):
     else:
         return HttpResponse("Erreur")
 
+
     try:
         film = Film.objects.get(imdb_id = film_id)
     except:
@@ -155,6 +156,7 @@ def filmInfo(request):
 	
 	inter = "{budget : test}"
     response = HttpResponse('{"poster" : "'+ film.image_url +'", "plot" : "'+ film.imdb_summary +'"}')#, mimetype='application/json') #json.dumps(film.budget) , mimetype='application/json'
+
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'

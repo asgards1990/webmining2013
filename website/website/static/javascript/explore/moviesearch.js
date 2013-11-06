@@ -183,6 +183,7 @@ $(document).ready(function(){
             
             ajoutActors(actor1);
             ajoutActors(actor2);
+            //$.post("http://localhost:8000/cinema/filmInfo/","tt0443649", function (data) {alert(data.budget);})
         });
     });
                         
