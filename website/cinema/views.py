@@ -6,13 +6,9 @@ from cinema.forms import HomeForm, ResultsForm, PredictionForm
 from cinema.models import *
 from django.db.models import Q
 from django.utils import simplejson
-<<<<<<< HEAD
-from django.core import serializers
-=======
 from django.core.serializers import serialize
 from json import *
 
->>>>>>> 1dd184de84694cd6b0a59a83bed891705049616b
 
 
 # Choix du formulaire
@@ -135,25 +131,15 @@ def searchresults(request, nomFilm):
 
 def filmInfo(request):
     if request.method == 'POST':
-<<<<<<< HEAD
-        film_id= request.POST.get('film_id')
-    else:
-       return HttpResponse("Erreur")
-=======
         film_id = request.POST.get('film_id')
     else:
         return HttpResponse("Erreur")
->>>>>>> 1dd184de84694cd6b0a59a83bed891705049616b
+
 
     try:
         film = Film.objects.get(imdb_id = film_id)
     except:
         return HttpReponse("movie not found",)
-<<<<<<< HEAD
-    
-    data = serializers.serialize('json', film)
-    response = HttpResponse(data, mimetype="application/json")
-=======
 
 		# inter.imdb_id=film.imdb_id
 		# inter.actors=film.actors
@@ -170,7 +156,7 @@ def filmInfo(request):
 	
 	inter = "{budget : test}"
     response = HttpResponse('{"poster" : "'+ film.image_url +'", "plot" : "'+ film.imdb_summary +'"}')#, mimetype='application/json') #json.dumps(film.budget) , mimetype='application/json'
->>>>>>> 1dd184de84694cd6b0a59a83bed891705049616b
+
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
