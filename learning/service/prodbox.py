@@ -236,6 +236,14 @@ class CinemaService(LearningService):
             v = DictVectorizer(dtype=int)
             self.actor_matrix = v.fit_transform(genActorsTuples2(self.films.iterator())) #TODO : later, maybe normalize actor_matrix (mais je pense pas)
             self.actor_names = v.get_feature_names()
+            # Save object in cache
+            self.create_cobject('actors', (self.actor_names, self.actor_matrix))
+        else:
+            self.actor_names, self.actor_matrix = self.get_cobject('actors').get_content()
+        self.nb_actors = self.actor_matrix.shape[1]
+
+    def loadActorsReduced(self):
+        if not self.is_loaded('actors_reduced'):
             # First clustering method: Spectral Clustering
             try:
                 actors_SC = SpectralClustering(n_clusters=self.dim_actors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_actors)
@@ -252,11 +260,10 @@ class CinemaService(LearningService):
             actors_KM = KMeans(n_clusters = self.dim_actors, init='k-means++')
             self.actor_reduced_KM = actors_KM.fit_transform(TfidfTransformer().fit_transform(self.actor_matrix))
             # Save object in cache
-            self.create_cobject('actors', (self.actor_names, self.actor_matrix, self.actor_reduced_SC, self.actor_reduced_KM))
+            self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.actor_reduced_KM))
         else:
-            self.actor_names, self.actor_matrix, self.actor_reduced_SC, self.actor_reduced_KM = self.get_cobject('actors').get_content()
-        self.nb_actors = self.actor_matrix.shape[1]
-    
+            self.actor_reduced_SC, self.actor_reduced_KM = self.get_cobject('actors_reduced').get_content()
+  
     def loadWriters(self):
         keywords_reduced = self.keywords_reduced_KM
         if not self.is_loaded('writers'):
@@ -264,6 +271,14 @@ class CinemaService(LearningService):
             self.writer_matrix = v.fit_transform(genWriters(self.films.iterator()))
             self.writer_names = v.get_feature_names()
             self.writer_keyword_matrix = normalize(self.writer_matrix.transpose().astype(np.double), norm='l1', axis=1).astype(np.double) * keywords_reduced
+            # Save object in cache
+            self.create_cobject('writers', (self.writer_matrix, self.writer_names, self.writer_keyword_matrix))
+        else:
+            self.writer_matrix, self.writer_names, self.writer_keyword_matrix = self.get_cobject('writers').get_content()
+        self.nb_writers = len(self.writer_names)
+    
+    def loadWritersReduced(self):
+        if not self.is_loaded('writers_reduced'):
             # First clustering method: Spectral Clustering
             try:
                 self.writer_SC = SpectralClustering(n_clusters=self.dim_writers,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_writers)
@@ -281,11 +296,10 @@ class CinemaService(LearningService):
             writers_KM = KMeans(n_clusters = self.dim_writers, init='k-means++')
             self.writer_reduced_KM = writers_KM.fit_transform(TfidfTransformer().fit_transform(self.writer_matrix))
             # Save object in cache
-            self.create_cobject('writers', (self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM))
+            self.create_cobject('writers_reduced', (self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM))
         else:
-            self.writer_names, self.writer_keyword_matrix, self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM = self.get_cobject('writers').get_content()
-        self.nb_writers = len(self.writer_names)
-    
+            self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM = self.get_cobject('writers_reduced').get_content()
+
     def loadDirectors(self):
         if self.actor_reduced_SC == None:
             actor_reduced = self.actor_reduced_KM
@@ -332,6 +346,21 @@ class CinemaService(LearningService):
         else:
             self.search_clustering = self.get_cobject('search_clustering').get_content()
 
+    def loadPredictFeatures(self):
+        actor_reduced = self.actor_reduced_KM #TODO : play
+        keyword_reduced = self.keyword_reduced_KM #TODO : play
+        director_reduced = self.director_reduced_KM #TODO : play
+        self.predict_features = scipy.sparse.hstack([actor_reduced,director_reduced,keyword_reduced,self.budget_matrix,self.season_matrix])
+        self.predict_features_names = np.concatenate([['actor_feat_'+str(i) for i in range(actor_reduced.shape[1])],
+                                                ['director_feat_'+str(i) for i in range(director_reduced.shape[1])],
+                                                ['keyword_feat_'+str(i) for i in range(keyword_reduce.shape[1])],
+                                                ['budget'],
+                                                self.season_names])
+
+    def loadPredictLabels(self):
+        self.predict_labels = self.box_office_matrix
+        self.predict_labels_names = ['box_office']
+
     def getWeightedSearchFeatures(self,k):
         X_people = scipy.sparse.hstack([self.actor_reduced_SC,self.director_reduced_SC]) #TODO:play on clustering types
         X_budget = self.budget_matrix
@@ -370,6 +399,7 @@ class CinemaService(LearningService):
         self.loadFilms()
         # Load prediction features
         self.loadActors()
+        self.loadActorsReduced()
         self.loadDirectors()
         self.loadSeason()
         self.loadBudget()
@@ -391,6 +421,9 @@ class CinemaService(LearningService):
         self.loadLanguages()
         # Load search clusterings
         self.loadSearchClustering()
+        # Load predict features
+        self.loadPredictFeatures()
+        self.loadPredictLabels()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
