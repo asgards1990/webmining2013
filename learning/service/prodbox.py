@@ -344,7 +344,7 @@ class CinemaService(LearningService):
             # Save object in cache
             self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM))
         else:
-            self.director_reduced_SC, self.proj_directors_SC, self.directors_reduced_avg = self.get_cobject('directors_reduced').get_content()
+            self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg = self.get_cobject('directors_reduced').get_content()
 
     def loadSearchClustering(self):
         if not self.is_loaded('search_clustering'):
