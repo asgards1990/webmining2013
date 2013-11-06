@@ -16,7 +16,7 @@
     position: relative;
     display: -moz-inline-box;
     display: inline-block;
-    background: url('pesto/static/img/explore/star.gif');
+    background: url("/pesto/static/img/explore/star.gif");
     height: 16px;
     outline: none;
 }
@@ -41,18 +41,18 @@
 
 div.bigstars div.rateit-range
 {
-    background: url('pesto/static/img/explore/star.gif');
+    background: url("/pesto/static/img/explore/star-white32.png");
     height: 32px;
 }
 
 div.bigstars div.rateit-hover
 {
-    background: url('pesto/static/img/explore/star.gif');
+    background: url("/pesto/static/img/explore/star-gold32.png");
 }
 
 div.bigstars div.rateit-selected
 {
-    background: url('pesto/static/img/explore/star.gif');
+    background: url("/pesto/static/img/explore/star-gold32.png");
 }
 
 
