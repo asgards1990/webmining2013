@@ -110,6 +110,12 @@
                                     <span id="value5"></span>
                                     <span id="hover5"></span>
                                 </div>
+                                <script type="text/javascript">
+                                    $("#rateit").bind('rated', function (event, value) { $('#value5').text('You\'ve rated it: ' + value); });
+                                    $("#rateit").bind('reset', function () { $('#value5').text('Rating reset'); });
+                                    //$("#rateit").bind('over', function (event, value) { $('#hover5').text('Hovering over: ' + value); });
+                                //if text wanted when hovering.
+                                </script>  
                             </li>
                         </ul>
                     </li>

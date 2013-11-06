@@ -57,7 +57,7 @@ img.steps {
     padding: 5px;
     border: solid 2px #d51c21;
     border-radius: 5px;
-    width: 64em;
+    width: 72%;
     background-image: -moz-radial-gradient(center, ellipse farthest-side, white 20%, #EDEDED 100%);
     background-image: -webkit-radial-gradient(center, ellipse farthest-side, white 20%, #EDEDED 100%);
     background: -webkit-radial-gradient(center, ellipse farthest-side, white 20%, #EDEDED 100%);}
@@ -101,8 +101,7 @@ img.steps {
     text-align: center;
     margin: 0 auto;
     margin-left:21em;
-    width: 64em;
-    min-width: 60em;
+    width: 72%;
     padding: 5px;
     margin-top : 3em;
 }
