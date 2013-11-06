@@ -104,12 +104,13 @@
 /* menubox keywords */
 
 #keywordSuggest {
+	display: block;
 	text-align:center;
+	float:left;
+	width:100%;
 }
 
-.keyword {
-	text-align:center;
-}
+
 
 #id_keyword-wrapper, #id_keyword-wrapper {
     width:100%;
@@ -117,7 +118,8 @@
     float:left;
 }
 
-#id_keyword-deck >* {
+
+#id_keyword-deck >* , .newKeyword{
     float:left;
     padding:0 0 5px 0;
     margin:0;
@@ -127,6 +129,8 @@
     white-space: nowrap;
 }
 
+
+
 #id_keyword-wrapper input:before{
     width:100%;
     white-space: normal;
@@ -135,9 +139,18 @@
 /* menubox range*/
 
 #slider-range {
-    margin: 10px;
+    margin: 15px;
 }
 
+.listbudget{
+text-align: center; 
+font-size: 1em;
+background-color: white;
+overflow:auto;
+padding: 0.6em;
+}
+
+<<<<<<< HEAD
 .listbudget{
 text-align: center;
 font-size: 1em;
@@ -145,6 +158,11 @@ background-color: white;
 overflow:auto;
 }
 
+=======
+.listbudget input{
+text-align:center;
+}
+>>>>>>> da3a2ee3a4dc1296c3f4502c02ab7f31db6b79dd
 /* menubox release date*/
 
 .seasonbox {
@@ -164,6 +182,7 @@ overflow:auto;
     max-height:3em;
     max-width:3em;
 }
+
 
 
 
