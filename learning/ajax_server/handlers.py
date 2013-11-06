@@ -15,7 +15,7 @@ class Handler(tornado.web.RequestHandler):
         self.method = method
 
     def post(self):
-        if self.request.headers.get('X-Requested-With') == "XMLHttpRequest":
+        if true or self.request.headers.get('X-Requested-With') == "XMLHttpRequest":
             try:
                 args = tornado.escape.json_decode(self.get_argument("json_request"))
                 try:
