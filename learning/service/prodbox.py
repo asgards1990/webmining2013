@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms(50)
+        self.films = flt.getFilms()
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -610,13 +610,9 @@ class CinemaService(LearningService):
         neighbors_indexes = neighbors_indexes[new_order]
         #Return results
         res = []
+        #list_films = list(self.films.all())
         for i in range(nb_results):
             res.append((distances[i],self.films[neighbors_indexes[i]]))
-        #TODO : remove 4 next lines
-        #print 'Film picked : '
-        #print self.films[film_index]
-        #print 'Neighbors : '
-        #print res
         return res
 
     def parse_search_filter(self, filt_in):
