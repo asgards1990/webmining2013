@@ -9,5 +9,6 @@ def prediction(request):
     return render(request, 'prediction_menu.html', {'form': form})
 	
 def explore(request):
-    return render(request, 'explore_menu.html')
+    form=forms.FilmSearchForm()
+    return render(request, 'explore_menu.html', {'form': form})
 
