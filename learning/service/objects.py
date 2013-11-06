@@ -45,6 +45,7 @@ class CachedObject:
     def set_content(self, obj):
         self.obj = obj
         self.modified = True
+        self.saved = False
 
     def save(self):
         if not self.saved:

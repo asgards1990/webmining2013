@@ -2,6 +2,8 @@ import numpy as np
 from cinema.models import *
 import datetime
 
+#TODO : uniformize generator functions' names
+
 def getSeason(date):
     if not date:
         return 'no-season'
@@ -43,12 +45,27 @@ def genImdbNbUserReviews(iter_films):
 def genImdbNbReviews(iter_films):
     return genNullableFeature(iter_films,'imdb_nb_reviews')
 
+def genReleaseDate(iter_films):
+    while True:
+        film = next(iter_films)
+	yield {'year':film.release_date.year,
+            'month':film.release_date.month,
+            'day':film.release_date.day}
+
+def genLanguages(iter_films):
+    while True:
+        film = next(iter_films)
+        if film.language:
+            yield {'language' : film.language.identifier}
+        else:
+            yield {'language' : '_nothing'}
+
 def genSeason(iter_films):
     while True:
         film = next(iter_films)
 	yield {'season':getSeason(film.release_date)}
 
-def genFeature(iter_films,feature_name, feature_content_name):
+def genFeature(iter_films, feature_name, feature_content_name):
     while True:
         film = next(iter_films)
         attr = getattr(film, feature_name)

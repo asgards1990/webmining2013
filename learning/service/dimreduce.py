@@ -4,7 +4,7 @@ import scipy
 from sklearn.cluster import SpectralClustering
 from vectorizers import *
 
-def getReducedActorsFeature(films, n_clusters, print_clusters=False):  #returns reduced actors features by spectral clustering
+def getReducedActorsFeatureSC(films, n_clusters, print_clusters=False):  #returns reduced actors features by spectral clustering
 	vec = DictVectorizer(dtype=int)
 	generator = genActorsTuples(films.iterator()) 
 	X = vec.fit_transform(generator)

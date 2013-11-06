@@ -89,6 +89,43 @@ createClick("movieinput");
 
 });
 
+function ajoutActors (actor) {
+
+    var father = document.createElement('li');
+    father.className="listactor";
+
+    
+    var paragraph = document.createElement('p');
+    paragraph.className="actor";
+
+    var check = document.createElement('input');
+    check.type="checkbox";
+
+    var name = document.createElement('span');
+    name.className="name";
+
+    var text = actor.first_name + " " + actor.last_name;
+    name.appendChild(document.createTextNode(text));
+
+    paragraph.appendChild(check);
+    paragraph.appendChild(name);
+
+    father.appendChild(paragraph);
+
+    };
+    
+    
+
+
+
+    
+
+##                <li class="listactor">
+##                    <p class="actor">
+##                    <input type="checkbox" name="actor" value="actor1">
+##                    <span class="name">Cate Blanchett</span>
+##                    </p>                       
+##                </li>
 	
 
 
