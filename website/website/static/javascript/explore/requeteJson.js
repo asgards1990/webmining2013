@@ -2,6 +2,7 @@ var requete;
 
 function changement(){
 	envoiDeLaRequeteSearch();
+	//setTimeout(function(){unloadChargement("sousCadreResultats")},2000)
 	/*if (requete!=undefined){
 	requete.abort();
 	}
@@ -85,7 +86,6 @@ function envoiDeLaRequeteSearch(){
 	//alert("hello")
 	arreter=false;
 	loadChargement("sousCadreResultats");
-	document.getElementById("sousCadreResultats").style.zIndex=10;
 	alert(JSON.stringify(genererRequeteSearch()))
 	//requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
 	var data=new Object;
@@ -113,7 +113,14 @@ function envoiDeLaRequeteSearch(){
 
 function fctCallbackSearch(data){
 	alert(JSON.stringify(data))
-	//setTimeout(function(){arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches",data);carrousel("cadreCoverflow",data);
-	//},1000)
-	}
+	setTimeout(
+		function(){
+			unloadChargement("sousCadreResultats");
+			$("#cadreProches").empty();
+			$("#cadreCoverflow").empty();
+			montrerResultats("cadreProches",data);
+			carrousel("cadreCoverflow",data);
+		}
+	,1000)
+}
 

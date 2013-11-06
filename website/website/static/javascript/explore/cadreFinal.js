@@ -1,13 +1,13 @@
 $(document).ready(function(){
 	document.getElementById("results").style.position="relative";
 	document.getElementById("cadreResultats").style.position="relative";
-	document.getElementById("cadreResultats").style.overflow="auto";
-	var surSousCadreResultats =document.createElement("div");
+	//document.getElementById("cadreResultats").style.overflow="auto";
+	/*var surSousCadreResultats =document.createElement("div");
 	surSousCadreResultats.id="surSousCadreResultats";
-	surSousCadreResultats.style.cssText="width:100%;height:100%; position: relative; margin-right:2%;"
+	surSousCadreResultats.style.cssText="width:100%;height:100%; position: relative; margin-right:2%;"*/
 	var sousCadreResultats =document.createElement("div");
 	sousCadreResultats.id="sousCadreResultats";
-	sousCadreResultats.style.cssText="width:100%;height:31.2em; position: absolute;top:0px;left:0px; margin-right:2%;z-index:-1;background-color:Grey;opacity:0.5;display:none;"
+	sousCadreResultats.style.cssText="width:100%;height:31.8em; position: absolute;top:0px;left:0px; margin-right:2%;z-index:-1;background-color:rgba(150,150,150,0.8);display:none;"
 	var sousCadreResultats2 =document.createElement("div");
 	sousCadreResultats2.id="sousCadreResultats2";
 	sousCadreResultats2.style.cssText="width:100%;height:100%; position: relative;margin-right:2%;z-index:0;opacity:1;background-color:White;"
@@ -23,9 +23,9 @@ $(document).ready(function(){
 	var cadreInfo = document.createElement("div");
 	cadreInfo.style.cssText="float:left;width:20%;height:20em;z-index:2"//border:1px solid #000;"
 	cadreInfo.id="cadreInfo";
-	document.getElementById("cadreResultats").appendChild(surSousCadreResultats);
+	//document.getElementById("cadreResultats").appendChild(surSousCadreResultats);
 	document.getElementById("results").appendChild(sousCadreResultats);
-	document.getElementById("surSousCadreResultats").appendChild(sousCadreResultats2);
+	document.getElementById("cadreResultats").appendChild(sousCadreResultats2);
 	document.getElementById("sousCadreResultats2").appendChild(surCadreCoverflow);
 	document.getElementById("surCadreCoverflow").appendChild(cadreCoverflow);
 	document.getElementById("sousCadreResultats2").appendChild(cadreProches);
