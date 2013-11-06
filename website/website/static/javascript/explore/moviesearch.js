@@ -162,6 +162,9 @@ $(document).ready(function(){
                 }
                };
 
+             var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
+             chiffre.removeChild(chiffre.firstChild);
+             chiffre.appendChild(document.createTextNode(2));
 
         
             
@@ -180,6 +183,7 @@ $(document).ready(function(){
             
             ajoutActors(actor1);
             ajoutActors(actor2);
+            //$.post("http://localhost:8000/cinema/filmInfo/","tt0443649", function (data) {alert(data.budget);})
         });
     });
                         
@@ -193,6 +197,10 @@ $(document).ready(function(){
                {ul.removeChild(ul.firstChild);
                 }
                };
+
+           var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
+           chiffre.removeChild(chiffre.firstChild);
+           chiffre.appendChild(document.createTextNode(3));
 
            
             

@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms(n=50)
+        self.films = flt.getFilms(50)
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -232,7 +232,12 @@ class CinemaService(LearningService):
     def loadKeywordsReduced(self):
         if not self.is_loaded('keywords_reduced'):
             keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++')
-            self.keywords_reduced_KM = keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
+            keyword_labels_KM = keywords_KM.fit_predict(TfidfTransformer().fit_transform(self.keyword_matrix).transpose())
+            self.proj_keywords_KM = scipy.sparse.csc_matrix(keyword_labels_KM==0, dtype=int).transpose()
+            for i in range(1, self.dim_keywords):
+                self.proj_keywords_KM = scipy.sparse.hstack([self.proj_keywords_KM, scipy.sparse.csc_matrix(keyword_labels_KM==i, dtype=int).transpose()])
+            self.proj_keywords_KM=normalize(self.proj_keywords_KM.astype(np.double),axis=0, norm='l1')
+            self.keywords_reduced_KM = self.keyword_matrix * self.proj_keywords_KM
             # Save object in cache
             self.create_cobject('keywords_reduced', self.keywords_reduced_KM)
         else:
@@ -244,9 +249,9 @@ class CinemaService(LearningService):
             self.actor_matrix = v.fit_transform(genActorsTuples2(self.films.iterator())) #TODO : later, maybe normalize actor_matrix (mais je pense pas)
             self.actor_names = v.get_feature_names()
             # Save object in cache
-            self.create_cobject('actors', (self.actor_names, self.actor_matrix))
+            self.create_cobject('actors', (self.actor_matrix,self.actor_names))
         else:
-            self.actor_names, self.actor_matrix = self.get_cobject('actors').get_content()
+            self.actor_matrix, self.actor_names = self.get_cobject('actors').get_content()
         self.nb_actors = self.actor_matrix.shape[1]
 
     def loadActorsReduced(self):
@@ -254,18 +259,23 @@ class CinemaService(LearningService):
             # First clustering method: Spectral Clustering
             try:
                 actors_SC = SpectralClustering(n_clusters=self.dim_actors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_actors)
-                actor_labels = actors_SC.fit_predict(self.actor_matrix.transpose())
-                self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
+                actor_labels_SC = actors_SC.fit_predict(self.actor_matrix.transpose())
+                self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_actors):
-                    self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
+                    self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels_SC==i, dtype=int).transpose()])
+                self.proj_actors_SC=normalize(self.proj_actors_SC.astype(np.double), norm='l1', axis=0)
                 self.actor_reduced_SC = self.actor_matrix * self.proj_actors_SC
-                self.actor_reduced_SC = normalize(self.actor_reduced_SC.astype(np.double), norm='l1', axis=1)
             except MemoryError:
                 self.actor_reduced_SC = None
                 print('Spectral clustering failed for actors due to memory error')
             # Second clustering method: KMeans clustering with tf-idf
             actors_KM = KMeans(n_clusters = self.dim_actors, init='k-means++')
-            self.actor_reduced_KM = actors_KM.fit_transform(TfidfTransformer().fit_transform(self.actor_matrix))
+            actor_labels_KM = actors_KM.fit_predict(TfidfTransformer().fit_transform(self.actor_matrix).transpose())
+            self.proj_actors_KM = scipy.sparse.csc_matrix(actor_labels_KM==0, dtype=int).transpose()
+            for i in range(1, self.dim_actors):
+                self.proj_actors_KM = scipy.sparse.hstack([self.proj_actors_KM, scipy.sparse.csc_matrix(actor_labels_KM==i, dtype=int).transpose()])
+            self.proj_actors_KM=normalize(self.proj_actors_KM.astype(np.double),axis=0, norm='l1')
+            self.actor_reduced_KM = self.actor_matrix * self.proj_actors_KM
             # Save object in cache
             self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM))
         else:
@@ -288,11 +298,12 @@ class CinemaService(LearningService):
         if not self.is_loaded('writers_reduced'):
             # First clustering method: Spectral Clustering
             try:
-                self.writer_SC = SpectralClustering(n_clusters=self.dim_writers,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_writers)
-                writer_labels = self.writer_SC.fit_predict(self.writer_keyword_matrix)
-                self.proj_writers_SC = scipy.sparse.csc_matrix(writer_labels==0, dtype=int).transpose()
+                writer_SC = SpectralClustering(n_clusters=self.dim_writers,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_writers)
+                writer_labels_SC = writer_SC.fit_predict(self.writer_keyword_matrix)
+                self.proj_writers_SC = scipy.sparse.csc_matrix(writer_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_writers):
-                    self.proj_writers_SC = scipy.sparse.hstack([self.proj_writers_SC, scipy.sparse.csc_matrix(writer_labels==i, dtype=int).transpose()])
+                    self.proj_writers_SC = scipy.sparse.hstack([self.proj_writers_SC, scipy.sparse.csc_matrix(writer_labels_SC==i, dtype=int).transpose()])
+                self.proj_writers_SC=normalize(self.proj_writers_SC.astype(np.double),axis=0, norm='l1')
                 self.writer_reduced_SC = self.writer_matrix * self.proj_writers_SC
             except MemoryError:
                 self.writer_reduced_SC = None
@@ -301,7 +312,12 @@ class CinemaService(LearningService):
             self.writer_reduced_avg =  normalize(self.writer_matrix.astype(np.double), norm='l1', axis=1) * self.writer_keyword_matrix
             # Third clustering method: KMeans clustering with tf-idf
             writers_KM = KMeans(n_clusters = self.dim_writers, init='k-means++')
-            self.writer_reduced_KM = writers_KM.fit_transform(TfidfTransformer().fit_transform(self.writer_matrix))
+            writer_labels_KM = writers_KM.fit_predict(TfidfTransformer().fit_transform(self.writer_matrix).transpose())
+            self.proj_writers_KM = scipy.sparse.csc_matrix(writer_labels_KM==0, dtype=int).transpose()
+            for i in range(1, self.dim_writers):
+                self.proj_writers_KM = scipy.sparse.hstack([self.proj_writers_KM, scipy.sparse.csc_matrix(writer_labels_KM==i, dtype=int).transpose()])
+            self.proj_writers_KM=normalize(self.proj_writers_KM.astype(np.double),axis=0, norm='l1')
+            self.writer_reduced_KM = self.writer_matrix * self.proj_writers_KM
             # Save object in cache
             self.create_cobject('writers_reduced', (self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM))
         else:
@@ -327,11 +343,12 @@ class CinemaService(LearningService):
         if not self.is_loaded('directors_reduced'):
             # First clustering method: Spectral Clustering
             try:
-                self.director_SC = SpectralClustering(n_clusters=self.dim_directors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_directors)
-                director_labels = self.director_SC.fit_predict(self.director_actor_matrix)
-                self.proj_directors_SC = scipy.sparse.csc_matrix(director_labels==0, dtype=int).transpose()
+                director_SC = SpectralClustering(n_clusters=self.dim_directors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_directors)
+                director_labels_SC = director_SC.fit_predict(self.director_actor_matrix)
+                self.proj_directors_SC = scipy.sparse.csc_matrix(director_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_directors):
-                    self.proj_directors_SC = scipy.sparse.hstack([self.proj_directors_SC, scipy.sparse.csc_matrix(director_labels==i, dtype=int).transpose()])
+                    self.proj_directors_SC = scipy.sparse.hstack([self.proj_directors_SC, scipy.sparse.csc_matrix(director_labels_SC==i, dtype=int).transpose()])
+                self.proj_directors_SC=normalize(self.proj_directors_SC.astype(np.double),axis=0, norm='l1')
                 self.director_reduced_SC = self.director_matrix * self.proj_directors_SC
             except MemoryError:
                 self.director_reduced_SC = None
@@ -340,7 +357,12 @@ class CinemaService(LearningService):
             self.director_reduced_avg =  normalize(self.director_matrix.astype(np.double), norm='l1', axis=1) * self.director_actor_matrix
             # Third clustering method: KMeans clustering with tf-idf
             directors_KM = KMeans(n_clusters = self.dim_directors, init='k-means++')
-            self.director_reduced_KM = directors_KM.fit_transform(TfidfTransformer().fit_transform(self.director_matrix))
+            director_labels_KM = directors_KM.fit_predict(TfidfTransformer().fit_transform(self.director_matrix).transpose())
+            self.proj_directors_KM = scipy.sparse.csc_matrix(director_labels_KM==0, dtype=int).transpose()
+            for i in range(1, self.dim_directors):
+                self.proj_directors_KM = scipy.sparse.hstack([self.proj_directors_KM, scipy.sparse.csc_matrix(director_labels_KM==i, dtype=int).transpose()])
+            self.proj_directors_KM=normalize(self.proj_directors_KM.astype(np.double),axis=0, norm='l1')
+            self.director_reduced_KM = self.director_matrix * self.proj_directors_KM
             # Save object in cache
             self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM))
         else:
@@ -753,52 +775,53 @@ class CinemaService(LearningService):
                                          }
                }
         '''
-
-        return {}
-
-    def benchmark(self): # BROUILLON POUR LE PREDICT
-
+        
+        
         X = self.predict_features.toarray()
         feature_names = self.predict_features_names
         
-        ### For the Box Office ###
-        y = self.box_office_matrix.data
+        y = self.predict_labels.toarray()
+        
+        ##################
+        ### BOX OFFICE ###
+        ##################
+        
+        y = y[:,0]
         y_log = np.log(y)
-        
-        # CLASSIFICATION
-        print('\nRandom Forest classification for the Box Office...')
-        
-        thresh = np.median(y_log)
-        y_bin = y_log > thresh
-        
-        clf = RandomForestClassifier()
-        
-        scores = cross_val_score(clf, X, y_bin, cv=3)
-        print 'Classification score : ', scores.mean()
-        
-        clf.fit(X, y_bin)
-        fi = clf.feature_importances_
-        fi_indexes = fi.argsort()[-5:] # The 5 most important features
-        i=1
-        for index in reversed(fi_indexes):
-            print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
-            i=i+1
-        
-        # REGRESSION
-        print('\nRandom Forest regression...')
+
         clf = RandomForestRegressor()
-        
-        scores = cross_val_score(clf, X, y_log, cv=3)
-        print 'Classification score : ', scores.mean()
-        
+       
         clf.fit(X, y_log)
-        fi = clf.feature_importances_
-        fi_indexes = fi.argsort()[-5:] # The 5 most important features
-        i=1
-        for index in reversed(fi_indexes):
-            print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
-            i=i+1
-        return
+
+        #film = Film(
+
+        d_actor = {}
+        if len(criteria['actors']) == 0:
+            d_actor = {'_nothing' : 1}
+        else:
+            for actor in criteria['actors']:
+                d_actor[actor.imdb_id + '_star'] = 1 # STAR BY DEFAULT?
+        v_actor = DictVectorizer(dtype=int)
+        x_actor_matrix = v_actor.fit_transform(d_actor)
+        x_actor_reduced_SC = x_actor_matrix * self.proj_actors_SC
+
+        d_director = {}
+        if len(criteria['directors']) == 0:
+            d_director = {'_nothing' : 1}
+        else:
+            for director in criteria['directors']:
+                d_director[director.imdb_id] = 1 #
+        x_director_matrix = v_director.fit_transform(d_director)
+        x_director_reduced_SC = x_director_matrix * self.proj_directors_SC
+
+
+       
+        
+        #d{}
+        #d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
+
+
+        return {}
 
     def parse_predict_criteria(self, crit_in):
         crit_out = {}

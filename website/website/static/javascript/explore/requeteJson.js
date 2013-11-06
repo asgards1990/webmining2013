@@ -2,6 +2,7 @@ var requete;
 
 function changement(){
 	envoiDeLaRequeteSearch();
+	$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0499549",function(data){alert($.parseJSON(data).plot)}); //$.parseJSON(data).plot
 	//setTimeout(function(){unloadChargement("sousCadreResultats")},2000)
 	/*if (requete!=undefined){
 	requete.abort();
@@ -86,7 +87,7 @@ function envoiDeLaRequeteSearch(){
 	//alert("hello")
 	arreter=false;
 	loadChargement("sousCadreResultats");
-	alert(JSON.stringify(genererRequeteSearch()))
+	//alert(JSON.stringify(genererRequeteSearch()))
 	//requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
 	var data=new Object;
 	data.success=true;
@@ -112,7 +113,7 @@ function envoiDeLaRequeteSearch(){
 }
 
 function fctCallbackSearch(data){
-	alert(JSON.stringify(data))
+	//alert(JSON.stringify(data))
 	setTimeout(
 		function(){
 			unloadChargement("sousCadreResultats");
