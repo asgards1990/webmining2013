@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms(n=50)
+        self.films = flt.getFilms()
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -259,8 +259,8 @@ class CinemaService(LearningService):
             # First clustering method: Spectral Clustering
             try:
                 actors_SC = SpectralClustering(n_clusters=self.dim_actors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_actors)
-                actor_labels = actors_SC.fit_predict(self.actor_matrix.transpose())
-                self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
+                actor_labels_SC = actors_SC.fit_predict(self.actor_matrix.transpose())
+                self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_actors):
                     self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels_SC==i, dtype=int).transpose()])
                 self.proj_actors_SC=normalize(self.proj_actors_SC.astype(np.double),axis=0)
@@ -794,18 +794,18 @@ class CinemaService(LearningService):
        
         clf.fit(X, y_log)
 
-        film = Film(
+        #film = Film(
 
 
 
-        v = DictVectorizer(dtype=int)
+        #v = DictVectorizer(dtype=int)
         
         
-        x_actor = v.fit_transform(genActorsTuples2(self.films.iterator()))
+        #x_actor = v.fit_transform(genActorsTuples2(self.films.iterator()))
         
         
-        d{}
-        d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
+        #d{}
+        #d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
 
 
         return {}
