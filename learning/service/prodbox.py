@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.filter1()
+        self.films = flt.filter2(50)
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -716,8 +716,39 @@ class CinemaService(LearningService):
         query_results['bag_of_words'] = bag_of_words
         
         # Return data
-        return query_results
+        return query_results 
     
+    def compute_predict_features(self):
+        X = []
+        feature_names = []
+
+        # Actors features
+        X.append(self.actor_reduced_SC)
+        for i in range(self.actor_reduced_SC.shape[1]):
+            feature_names += ['actor_feat_' + str(i),]
+        # Directores features
+        X.append(self.director_reduced_SC)
+        for i in range(self.director_reduced_SC.shape[1]):
+            feature_names += ['director_feat_' + str(i),]
+        # Seasons features
+        X.append(self.season_matrix)
+        feature_names += self.season_names
+        # Budget feature
+        X.append(self.budget_matrix)
+        feature_names += ['budget',]
+        # Keywords deatures
+        X.append(self.keywords_reduced_KM)
+        for i in range(self.keywords_reduced_KM.shape[1]):
+            feature_names += ['keyword_feat_' + str(i),]
+        # Genres features
+        X.append(self.genres_matrix)
+        feature_names += self.genres_names
+        
+        # Concatenate matrices 
+        X = hstack(X).toarray()
+
+        return (X, feature_names)
+
     def compute_predict(self, criteria, language=None):
         '''
         Return {'prizes' : list of {'institution' : Institution Object,
@@ -745,59 +776,16 @@ class CinemaService(LearningService):
                                          }
                }
         '''
-        X = []
-        feature_names = []
-
-        # TODO: Actors features
-        # TODO: Directores features
-        # Seasons features
-        X.append(self.season_matrix)
-        feature_names += self.season_names
-        # Budget feature
-        X.append(self.budget_matrix)
-        feature_names += ['budget',]
-        # TODO: Keywords deatures
-        # Genres features
-        X.append(self.genres_matrix)
-        feature_names += self.genres_names
-        
-        # Concatenate matrices 
-        X = hstack(X)
+        (X, feature_name) = self.compute_predict_features() 
 
         return {}
 
     def benchmark(self): # BROUILLON POUR LE PREDICT
 
-        X = []
-        feature_names = []
+        (X, feature_names) = self.compute_predict_features()
 
-        # Actors features
-        X.append(self.actor_reduced_SC)
-        for i in range(self.actor_reduced_SC.shape[1]):
-            feature_names = ['actor_feat_' + str(i),]
-        # Directores features
-        X.append(self.director_reduced_SC)
-        for i in range(self.director_reduced_SC.shape[1]):
-            feature_names = ['director_feat_' + str(i),]
-        # Seasons features
-        X.append(self.season_matrix)
-        feature_names += self.season_names
-        # Budget feature
-        X.append(self.budget_matrix)
-        feature_names += ['budget',]
-        # Keywords deatures
-        X.append(self.keywords_reduced_KM)
-        for i in range(self.keywords_reduced_KM.shape[1]):
-            feature_names = ['keyword_feat_' + str(i),]
-        # Genres features
-        X.append(self.genres_matrix)
-        feature_names += self.genres_names
-        
-        # Concatenate matrices 
-        X = hstack(X).toarray()       
-        
         ### For the Box Office ###
-        y = self.box_office_matrix.data
+        y = self.box_office_matrix.toarray()
         y_log = np.log(y)
         
         # CLASSIFICATION
