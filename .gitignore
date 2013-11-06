@@ -8,6 +8,9 @@
 *.so
 *.pyc
 
+#swap files#
+*.swp
+
 
 # Static files #
 ################
