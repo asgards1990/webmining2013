@@ -223,13 +223,20 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=int)
             self.keyword_matrix = v.fit_transform(gkey)
             self.keyword_names = v.get_feature_names()
+            # Save object in cache
+            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix))
+        else:
+            self.keyword_names, self.keyword_matrix = self.get_cobject('keywords').get_content()
+        self.nb_keywords = self.keyword_matrix.shape[1]
+
+    def loadKeywordsReduced(self):
+        if not self.is_loaded('keywords_reduced'):
             keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++')
             self.keywords_reduced_KM = keywords_KM.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix))
             # Save object in cache
-            self.create_cobject('keywords', (self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM))
+            self.create_cobject('keywords_reduced', self.keywords_reduced_KM)
         else:
-            self.keyword_names, self.keyword_matrix, self.keywords_reduced_KM = self.get_cobject('keywords').get_content()
-        self.nb_keywords = self.keyword_matrix.shape[1]
+            self.keywords_reduced_KM = self.get_cobject('keywords_reduced').get_content()
     
     def loadActors(self):
         if not self.is_loaded('actors'):
@@ -310,6 +317,14 @@ class CinemaService(LearningService):
             self.director_matrix = v.fit_transform(genDirectors(self.films.iterator()))
             self.director_names = v.get_feature_names()
             self.director_actor_matrix = normalize(self.director_matrix.transpose().astype(np.double), norm='l1', axis=1) * actor_reduced
+            # Save object in cache
+            self.create_cobject('directors', (self.director_matrix, self.director_names, self.director_actor_matrix))
+        else:
+            self.director_matrix, self.director_names, self.director_actor_matrix = self.get_cobject('directors').get_content()
+        self.nb_directors = len(self.director_names)
+    
+    def loadDirectorsReduced(self):
+        if not self.is_loaded('directors_reduced'):
             # First clustering method: Spectral Clustering
             try:
                 self.director_SC = SpectralClustering(n_clusters=self.dim_directors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_directors)
@@ -327,11 +342,10 @@ class CinemaService(LearningService):
             directors_KM = KMeans(n_clusters = self.dim_directors, init='k-means++')
             self.director_reduced_KM = directors_KM.fit_transform(TfidfTransformer().fit_transform(self.director_matrix))
             # Save object in cache
-            self.create_cobject('directors', (self.director_names, self.director_actor_matrix, self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM))
+            self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM))
         else:
-            self.director_names, self.director_actor_matrix, self.director_reduced_SC, self.proj_directors_SC, self.directors_reduced_avg = self.get_cobject('directors').get_content()
-        self.nb_directors = len(self.director_names)
-    
+            self.director_reduced_SC, self.proj_directors_SC, self.directors_reduced_avg = self.get_cobject('directors_reduced').get_content()
+
     def loadSearchClustering(self):
         if not self.is_loaded('search_clustering'):
             self.search_clustering = {}
@@ -401,9 +415,11 @@ class CinemaService(LearningService):
         self.loadActors()
         self.loadActorsReduced()
         self.loadDirectors()
+        self.loadDirectorsReduced()
         self.loadSeason()
         self.loadBudget()
-        self.loadKeywords()
+        self.loadKeywords()        
+        self.loadKeywordsreduced()
         self.loadGenres()
         # Load prediction labels
         self.loadBoxOffice()
@@ -412,6 +428,7 @@ class CinemaService(LearningService):
         # Load other features
         self.loadStats()
         self.loadWriters()
+        self.loadWritersReduced()
         self.loadRuntime()
         self.loadMetacriticScore()
         self.loadReleaseDate()
