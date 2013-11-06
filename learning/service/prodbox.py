@@ -42,11 +42,11 @@ class CinemaService(LearningService):
     def loadFilms(self):
         self.films = flt.getFilms()
         if not self.is_loaded('films'):
-            self.indexes = hashIndexes(self.films.iterator())
-            self.create_cobject('films', self.indexes)
+            self.fromPktoIndex, self.fromIndextoPk = hashIndexes(self.films.iterator())
+            self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk))
         else:
-            self.indexes = self.get_cobject('films').get_content()
-        self.nb_films = len(self.indexes)
+            self.fromPktoIndex, self.fromIndextoPk = self.get_cobject('films').get_content()
+        self.nb_films = len(self.fromPktoIndex)
     
     def loadImdb(self):
         if not self.is_loaded('imdb'):
@@ -75,7 +75,7 @@ class CinemaService(LearningService):
             # Save object in cache
             self.create_cobject('imdb', (self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix))
         else:
-                self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix = self.get_cobject('imdb').get_content()
+            self.imdb_user_rating_matrix, self.imdb_nb_user_ratings_matrix, self.imdb_nb_user_reviews_matrix,self.imdb_nb_reviews_matrix = self.get_cobject('imdb').get_content()
    
     def loadBudget(self):
         if not self.is_loaded('budget'):
@@ -201,6 +201,7 @@ class CinemaService(LearningService):
             self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
     
     def loadReviewsContent(self):
+        # TODO : finish implementation
         gkey = genReviewsContent(self.films.iterator())
         self.reviews_content = []
         for d in gkey:
@@ -465,7 +466,7 @@ class CinemaService(LearningService):
         self.loadBoxOffice()
         self.loadPrizes()
         self.loadReviews()
-        self.loadReviewsContent()
+        #self.loadReviewsContent() # TODO : finish implementation
         # Load other features
         self.loadStats()
         self.loadWriters()
@@ -488,9 +489,9 @@ class CinemaService(LearningService):
     
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
-            if args['nbresults'].__class__ == int and args['nbresults'] >= 0:
+            if args['nbresults'].__class__ == int and args['nbresults'] >= 0 and args['str'].__class__==str:
                 tot = np.zeros(self.nb_keywords)
-                rex = re.compile(args['str'])
+                rex = re.compile(args['str'].lower())
                 found = [(rex.search(m)!=None) for m in self.keyword_names]
                 if args.has_key('filter') and args['filter'].__class__ == list:
                     for element in args['filter']:
@@ -508,7 +509,7 @@ class CinemaService(LearningService):
                         results.append( (tot[i], self.keyword_names[i] ) )
                 return {'results' : results}
             else:
-                raise ParsingError('Wrong format for nbresults.')
+                raise ParsingError('Wrong format for nbresults or string input.')
         else:
             raise ParsingError('Please define a string and the expected number of results.')
     
@@ -541,7 +542,7 @@ class CinemaService(LearningService):
                                     )
                             return query_results
                         except Film.DoesNotExist:
-                            raise ParsingError('No film for id ' + args['id'])
+                            raise ParsingError('No film with imdb_id ' + args['id'] + '.')
                     else:
                         raise ParsingError('Criteria must be boolean.')
                 except KeyError:
@@ -588,7 +589,7 @@ class CinemaService(LearningService):
 
     def compute_search(self, film, nb_results, criteria, filters=None):
         try:
-            film_index = self.indexes[film.imdb_id]
+            film_index = self.fromPktoIndex[film.pk]
         except KeyError:
             raise ParsingError("Film not found.")
         # Select cluster information according to criteria
@@ -601,12 +602,12 @@ class CinemaService(LearningService):
         if filters!=None:
             indexes_fitting_filters = self.applyFilter(filters) #TODO : test applyFilter
         else:
-            indexes_fitting_filters = list(self.indexes.values())
+            indexes_fitting_filters = range(self.nb_films)
         indexes_fitting_filters = np.array(indexes_fitting_filters)
         #print('--> Start looking for neighbors...')
         # Find neighbors
+        # 30 % time can be saved here with cache
         X = self.getWeightedSearchFeatures(criteria_binary).toarray()
-        film_index = self.indexes[film.imdb_id]
         distance_to_each_cluster = []
         distance_to_each_cluster = np.array([np.linalg.norm(X[film_index]-cluster_center,self.p_norm) for cluster_center in cluster_centers])
         clusters_by_distance = distance_to_each_cluster.argsort()
@@ -638,8 +639,8 @@ class CinemaService(LearningService):
         neighbors_indexes = neighbors_indexes[new_order]
         #Return results
         res = []
-        for i in range(nb_results): #TODO Warning : this loop takes 400 ms
-            res.append((distances[i],self.films[neighbors_indexes[i]])) 
+        for i in range(nb_results):
+            res.append( (distances[i], Film.objects.get(pk = self.fromIndextoPk[ neighbors_indexes[i]])) ) 
         return res
 
     def parse_search_filter(self, filt_in):
