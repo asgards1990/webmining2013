@@ -18,7 +18,7 @@ $( "#slider-range" ).on( "slidechange", function( event, ui ) {changement();} );
 
 function genererRequeteSearch(){
 	var requestInter=new Object();
-	requestInter.id="tt0499549";//document.getElementById("moviesearch").children[0].id;
+	requestInter.id="tt1024648";//document.getElementById("moviesearch").children[0].id;
 	requestInter.nbresults=10;
 	requestInter.criteria=new Object();
 	requestInter.criteria.actor_director=$("#acteurs").prop("checked");
@@ -65,12 +65,12 @@ function genererRequeteSearch(){
 function envoiDeLaRequeteSearch(){
 	arreter=false;
 	loadChargement("sousCadreResultats");
-	//alert(JSON.stringify(genererRequeteSearch()))
+	alert(JSON.stringify(genererRequeteSearch()))
 	if (requete!=undefined){
 		requete.abort();
 	}
-	//requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
-	var data=new Object;
+	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
+	/*var data=new Object;
 	data.success=true;
 	data.nbresults=4;
 	data.results=new Array;
@@ -90,7 +90,7 @@ function envoiDeLaRequeteSearch(){
 	data.results[3].id="tt0816442";
 	data.results[3].title="La Voleuse de livres";
 	data.results[3].value=0;
-	fctCallbackSearch(data);
+	fctCallbackSearch(data);*/
 }
 
 function fctCallbackSearch(data){
