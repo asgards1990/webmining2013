@@ -6,6 +6,7 @@ from cinema.models import *
 from django.db.models import Q
 from django.utils import simplejson
 
+
 # Choix du formulaire
 def formchoice(persontype,request=0) :
     possibilites = ['actor','director','film','genre','prediction']
@@ -125,17 +126,19 @@ def searchresults(request, nomFilm):
         return render(request, 'prediction.html',locals())
 
 def filmInfo(request):
-    if request.method == 'POST':
-        film_id= request.POST.get('film_id')
-    else:
-        return HttpResponse("Erreur")
+##    if request.method == 'POST':
+##        film_id= request.POST.get('film_id')
+##    else:
+##        return HttpResponse("Erreur")
+##
+##    try:
+##        film = Film.objects.get(imdb_id = film_id)
+##    except:
+##        return HttpReponse("movie not found",)
 
-    try:
-        film = Film.objects.get(imdb_id = film_id)
-    except:
-        return HttpReponse("movie not found")
-
-    self.set_header("Access-Control-Allow-Origin", "*")
-    
-
-    return HttpResponse('hello')
+    response = HttpResponse('hello')
+    response['Access-Control-Allow-Origin']  = 'null'
+    response['Access-Control-Allow-Methods'] = 'GET,POST'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    print "ok"
+    return response
