@@ -258,7 +258,7 @@ class CinemaService(LearningService):
                 self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels==0, dtype=int).transpose()
                 for i in range(1, self.dim_actors):
                     self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels==i, dtype=int).transpose()])
-                self.actor_reduced_SC = self.actor_matrix * self.proj_actors
+                self.actor_reduced_SC = self.actor_matrix * self.proj_actors_SC
                 self.actor_reduced_SC = normalize(self.actor_reduced_SC.astype(np.double), norm='l1', axis=1)
             except MemoryError:
                 self.actor_reduced_SC = None
