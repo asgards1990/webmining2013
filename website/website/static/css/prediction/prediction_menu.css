@@ -1,13 +1,3 @@
-/* Gestion global du container */
-
-#predictioncontainer{
-    width:100%;
-    min-width:980px;
-    max-width:1920px;
-    margin:0 auto;
-    overflow:auto;
-}
-
 /* menubox acteur et réalisateur : rendu une fois selectionné */
 
 
@@ -103,7 +93,8 @@
 #genresearch > .autocomplete-light-widget {
     display:table-cell;
     vertical-align:middle;
-    width:49%;
+    width:50%;
+    text-align : center;
 }
 
 #genresearch input {

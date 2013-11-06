@@ -13,6 +13,7 @@
 
     <!-- Appels css -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/prediction_menu.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/logo_milieu.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/prediction_results.css' %}" />
 
     {% block prediction_extrahead %}
@@ -20,7 +21,7 @@
 {% endblock %}
 
 {% block content %}
-<div id="predictioncontainer">
+<div id="container">
 
 <!-- Menu de gauche-->
 
@@ -31,22 +32,33 @@
 <!-- Page de résultat -->
 
     <div id="results">  
-        
-        <div id="prizes">
-            <h1>Prizes </h1>
+        <div id="prizes" class="prizes">
+            <h1 >Prizes </h1>
         </div>
     
-        <div id="boxoffice">
+        <div id="boxoffice" class="boxoffice">
             <h1>Box Office</h1>
         </div>
     
-        <div id="reviews">
+        <div id="reviews" class="reviews">
             <h1>Reviews</h1>
+            <!-- 
             <div class="moreinfo">
             <a href="img/01.jpg" data-lightbox="image-1" title="My caption">More Info</a>
             </div>
+            -->
         </div>
-        
+
+        <div id="bagofwords" class="bagofwords">
+            <h1>Bag of Words</h1>
+        </div>
+
+        <div href="" class="circle">  
+            <div class="wrapper">
+                <img src="{% static 'img/home/bouton_2_contenu.png' %}">
+                <div class="cssdeck" id="cssdeck"></div>
+            </div> 
+         </div>
     </div>
 
 </div>
