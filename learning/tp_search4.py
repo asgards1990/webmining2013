@@ -20,4 +20,9 @@ args={'id':'tt1024648', # Avatar 'tt0499549' # Argo tt1024648' # 2012 'tt1190080
 	'nbresults':10,
     'filter':filters}
 
-serv.search_request(args)
+res = serv.search_request(args)
+
+for item in res['results']:
+    print item
+
+serv.quit()

@@ -18,6 +18,7 @@ import dateutil.parser
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.cross_validation import cross_val_score
+from time import time
 
 import re
 
@@ -512,7 +513,6 @@ class CinemaService(LearningService):
             raise ParsingError('Please define a string and the expected number of results.')
     
     def search_request(self, args):
-        #print args
         if args.has_key('id') and args.has_key('nbresults') and args.has_key('criteria'):
             if (args['nbresults'].__class__==int) and (args['criteria'].__class__==dict):
                 nbresults = args['nbresults']
@@ -523,13 +523,14 @@ class CinemaService(LearningService):
                     crit_budget = crit['budget']
                     crit_review = crit['review']
                     if (crit_act_dir.__class__ == bool) and (crit_genre.__class__==bool) and (crit_budget.__class__==bool) and (crit_review.__class__==bool):
+                        if not (crit_act_dir or crit_genre or crit_budget or crit_review):
+                            raise ParsingError('All criteria are equal to false. Please select at least one criterion.')
                         try:
                             film = Film.objects.get(imdb_id=args['id'])
                             if args.has_key('filter'):
                                 results = self.compute_search(film, nbresults, crit, filters = self.parse_search_filter(args['filter']) )
                             else:
                                 results = self.compute_search(film, nbresults, crit)
-                            #print results
                             query_results = {'nbresults' : nbresults, 'results' : []}
                             for (v, f) in results:
                                 query_results['results'].append(
@@ -596,13 +597,13 @@ class CinemaService(LearningService):
         labels = search_clustering['labels']
         cluster_centers = search_clustering['cluster_centers']
         # Apply filters
-        print('--> Applying filters...')
+        #print('--> Applying filters...')
         if filters!=None:
             indexes_fitting_filters = self.applyFilter(filters) #TODO : test applyFilter
         else:
             indexes_fitting_filters = list(self.indexes.values())
         indexes_fitting_filters = np.array(indexes_fitting_filters)
-        print('--> Start looking for neighbors...')
+        #print('--> Start looking for neighbors...')
         # Find neighbors
         X = self.getWeightedSearchFeatures(criteria_binary).toarray()
         film_index = self.indexes[film.imdb_id]
@@ -614,7 +615,7 @@ class CinemaService(LearningService):
         neighbors_indexes=[]
         for cluster in clusters_by_distance:
             if nb_results_found < nb_results +1:
-                print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
+                #print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
                 indexes_of_cluster = np.where(labels == cluster)[0]
                 indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
                 if indexes != []:
@@ -623,7 +624,7 @@ class CinemaService(LearningService):
                     neigh.fit(samples)
                     (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
                     local_nb_results_found = loc_distances[0].shape[0]
-                    print('--> Found '+str(local_nb_results_found)+' results in this cluster')
+                    #print('--> Found '+str(local_nb_results_found)+' results in this cluster')
                     nb_results_found = nb_results_found + local_nb_results_found
                     distances.append(loc_distances[0])
                     neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
@@ -637,13 +638,8 @@ class CinemaService(LearningService):
         neighbors_indexes = neighbors_indexes[new_order]
         #Return results
         res = []
-        #list_films = list(self.films.all())
-        for i in range(nb_results):
-            res.append((distances[i],self.films[neighbors_indexes[i]]))
-        print 'Film picked : '
-        print self.films[film_index]
-        for item in res:
-            print item
+        for i in range(nb_results): #TODO Warning : this loop takes 400 ms
+            res.append((distances[i],self.films[neighbors_indexes[i]])) 
         return res
 
     def parse_search_filter(self, filt_in):
