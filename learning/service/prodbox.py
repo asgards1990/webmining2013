@@ -753,52 +753,25 @@ class CinemaService(LearningService):
                                          }
                }
         '''
-
-        return {}
-
-    def benchmark(self): # BROUILLON POUR LE PREDICT
-
+        
+        
         X = self.predict_features.toarray()
         feature_names = self.predict_features_names
         
-        ### For the Box Office ###
-        y = self.box_office_matrix.data
+        y = self.predict_labels.toarray()
+        
+        ##################
+        ### BOX OFFICE ###
+        ##################
+        
+        y = y[:,0]
         y_log = np.log(y)
-        
-        # CLASSIFICATION
-        print('\nRandom Forest classification for the Box Office...')
-        
-        thresh = np.median(y_log)
-        y_bin = y_log > thresh
-        
-        clf = RandomForestClassifier()
-        
-        scores = cross_val_score(clf, X, y_bin, cv=3)
-        print 'Classification score : ', scores.mean()
-        
-        clf.fit(X, y_bin)
-        fi = clf.feature_importances_
-        fi_indexes = fi.argsort()[-5:] # The 5 most important features
-        i=1
-        for index in reversed(fi_indexes):
-            print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
-            i=i+1
-        
-        # REGRESSION
-        print('\nRandom Forest regression...')
+
         clf = RandomForestRegressor()
-        
-        scores = cross_val_score(clf, X, y_log, cv=3)
-        print 'Classification score : ', scores.mean()
-        
+       
         clf.fit(X, y_log)
-        fi = clf.feature_importances_
-        fi_indexes = fi.argsort()[-5:] # The 5 most important features
-        i=1
-        for index in reversed(fi_indexes):
-            print(str(i)+'th component : '+feature_names[index]+' with weight '+str(fi[index]))
-            i=i+1
-        return
+
+        return {}
 
     def parse_predict_criteria(self, crit_in):
         crit_out = {}
