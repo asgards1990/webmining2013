@@ -1,5 +1,6 @@
 /* iCheck plugin Line skin, red
 ----------------------------------- */
+
 .icheckbox_line-red,
 .iradio_line-red {
     position: relative;
@@ -25,7 +26,7 @@
         top: 50%;
         left: 13px;
         width: 13px;
-        height: 11px;
+        height: 13px;
         margin: -5px 0 0 0;
         padding: 0;
         overflow: hidden;

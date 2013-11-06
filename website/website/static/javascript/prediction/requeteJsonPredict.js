@@ -34,7 +34,7 @@ function genererRequetePredict(){
 
 function envoiDeLaRequetePredict(){
 	//alert("hello")
-	alert(JSON.stringify(genererRequetePredict()))
+	//alert(JSON.stringify(genererRequetePredict()))
 	//$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
 	var data=new Object;
 	data.success=true;
@@ -194,7 +194,7 @@ function chercherTitre(data, position, rang, type){
 }
 
 function fctCallbackPredict(data){
-	alert(JSON.stringify(data))
+	//alert(JSON.stringify(data))
 	var boiteBoxOffice=document.getElementById("boxoffice");
 	var boiteGeneral=document.createElement("div");
 	boiteGeneral.id="boiteGeneral"

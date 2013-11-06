@@ -4,7 +4,7 @@ import datetime
 serv = CinemaService()
 
 criteria = {'actor_director':True,
-          'budget':True,
+          'budget':False,
           'review':True,
           'genre':True}
 filters = {'actors':[],
@@ -14,8 +14,8 @@ filters = {'actors':[],
 	'reviews':{'min':0.}, #TODO : warning, always use floats!
 	'release_period':{'begin':'1901-01-01','end':'2020-01-01'}
 	}
-#filters=None
-args={'id':'', # Avatar 'tt0499549' # Argo tt1024648' # 2012 'tt1190080' # Intouchables 'tt1675434'
+filters=None
+args={'id':'tt1024648', # Avatar 'tt0499549' # Argo tt1024648' # 2012 'tt1190080' # Intouchables 'tt1675434'
 	'criteria':criteria,
 	'nbresults':10,
     'filter':filters}

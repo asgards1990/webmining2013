@@ -91,41 +91,150 @@ createClick("movieinput");
 
 function ajoutActors (actor) {
 
+    var superior = document.getElementById("actors").getElementsByTagName("ul")[0];
+
     var father = document.createElement('li');
     father.className="listactor";
 
     
     var paragraph = document.createElement('p');
     paragraph.className="actor";
+    paragraph.id = actor.imdb_id;
+  
 
+    
     var check = document.createElement('input');
     check.type="checkbox";
+    check.name="actor";
+    check.value="???";
+    /*check.style.cssText="position: absolute; opacity: 0;";
+
+    var environnement = document.createElement('div');
+    environnement.className="icheckbox_line-red";
+
+
+    var icheck = document.createElement('div');
+    icheck.className="icheck_line-icon";
+
+    var helper = document.createElement('ins');
+    helper.className="iCheck-helper";*/
 
     var name = document.createElement('span');
     name.className="name";
 
     var text = actor.first_name + " " + actor.last_name;
     name.appendChild(document.createTextNode(text));
+    
+
 
     paragraph.appendChild(check);
     paragraph.appendChild(name);
 
+    
     father.appendChild(paragraph);
+    superior.appendChild(father);
+
+
+                $(check).each(function () {
+                var self = $(this),
+                label = self.next(),
+                label_text = label.text();
+
+        label.remove();
+        self.iCheck({
+            checkboxClass: 'icheckbox_line-red',
+            radioClass: 'iradio_line-red',
+            insert: '<div class="icheck_line-icon"></div>' + label_text
+        });
+    });
+
 
     };
     
-    
+$(document).ready(function(){
+    $("#acteurs").click(function(){
+      
+             var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
+           if (ul.hasChildNodes())
+           {
+               while (ul.childNodes.length>=1)
+               {ul.removeChild(ul.firstChild);
+                }
+               };
+
+             var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
+             chiffre.removeChild(chiffre.firstChild);
+             chiffre.appendChild(document.createTextNode(2));
+
+        
+            
+            var actor1 = new Object;
+            actor1.imdb_id="1";
+            actor1.first_name= "Cate";
+            actor1.last_name = "Blanchett";
 
 
 
-    
+            
+            var actor2 = new Object;
+            actor2.imdb_id="2";
+            actor2.first_name= "Brad";
+            actor2.last_name = "Pitt";
+            
+            ajoutActors(actor1);
+            ajoutActors(actor2);
+            //$.post("http://localhost:8000/cinema/filmInfo/","tt0443649", function (data) {alert(data.budget);})
+        });
+    });
+                        
+$(document).ready(function(){
+    $("#budgets").click(function(){
+      
+           var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
+           if (ul.hasChildNodes())
+           {
+               while (ul.childNodes.length>=1)
+               {ul.removeChild(ul.firstChild);
+                }
+               };
 
-##                <li class="listactor">
-##                    <p class="actor">
-##                    <input type="checkbox" name="actor" value="actor1">
-##                    <span class="name">Cate Blanchett</span>
-##                    </p>                       
-##                </li>
+           var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
+           chiffre.removeChild(chiffre.firstChild);
+           chiffre.appendChild(document.createTextNode(3));
+
+           
+            
+            var actor1 = new Object;
+            actor1.imdb_id="1";
+            actor1.first_name= "test1";
+            actor1.last_name = "test1";
+
+
+
+            
+            var actor2 = new Object;
+            actor2.imdb_id="2";
+            actor2.first_name= "test2";
+            actor2.last_name = "test2";
+
+            var actor3 = new Object;
+            actor3.imdb_id="3";
+            actor3.first_name= "test3";
+            actor3.last_name = "test3";
+            
+            ajoutActors(actor1);
+            ajoutActors(actor2);
+            ajoutActors(actor3);
+
+    });
+    });
+
+                /*<li class="listactor">
+                    <p class="actor">
+                    <input type="checkbox" name="actor" value="actor1">
+                    <span class="name">Cate Blanchett</span>
+                    </p>                       
+                </li>*/
 	
 
 

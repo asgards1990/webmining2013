@@ -215,7 +215,7 @@ function montrerResultats(nomDuCadre,data){
 	
 	var cadreInter1 = document.createElement('div');
 	cadreInter1.id="cadreInter1";
-	cadreInter1.style.cssText ='width:100%;height:18em;border: 1px solid Black;'
+	cadreInter1.style.cssText ='width:100%;height:18em;top:0em;position:absolute;'//border: 1px solid Black;'
 	document.getElementById(nomDuCadre).appendChild(cadreInter1);
 
 	var carreCentral = document.createElement('div');

@@ -12,19 +12,22 @@ function carrousel(nomDuCadre,data){
 	for (var i=0;i < nombre;i++){
 		ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=0;
 	}
-	for (var i=0;i < nombre;i++){
-		tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=data.results[i].id;		//remplacer 0 par i
-		//Bloc à changer quand on peut récupérer les infos sur notre propre serv
-		function encap(i,data,nombre){
+	var milieuRep=0;
+	function encap(i,data,nombre){
 			return function(data){
-				repLien[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=eval("(" + data + ")").Poster;
-				ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=1;
-				var mult=1;
+				if(i==nombre){
+					repLien[5]=eval("(" + data + ")").Poster;
+					milieuRep=1;
+				}
+				else{
+					repLien[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=eval("(" + data + ")").Poster;
+					ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=1;
+				}
+				var mult=milieuRep;;
 				for(var j=0; j<nombre;j++){
 					mult=mult*ontTousRep[5+((1-2*(j%2))*(Math.floor(j/2)+1))];
 				}
 				if (mult==1) {
-					repLien[5]="../pesto/static/img/explore/film1.jpg";
 					for(var j=nombre;j<10;j++){
 						repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../pesto/static/img/explore/filmVide.jpg";
 					}
@@ -32,7 +35,16 @@ function carrousel(nomDuCadre,data){
 				}
 			}
 		}
-		$.get("http://www.omdbapi.com/?i=" + tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))], encap(i,data,nombre))
+	
+	for (var i=0;i <= nombre;i++){
+		if (i==nombre){
+			$.get("http://www.omdbapi.com/?i=tt2334873", encap(i,data,nombre))
+		}
+		else{
+			tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=data.results[i].id;		//remplacer 0 par i
+			//Bloc à changer quand on peut récupérer les infos sur notre propre serv
+			$.get("http://www.omdbapi.com/?i=" + tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))], encap(i,data,nombre))
+		}
 	}
 }
 

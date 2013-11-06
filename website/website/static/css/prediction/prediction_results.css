@@ -1,10 +1,10 @@
 /* Page de résultats de prediction */
 
 #results {
+    float:right;
     position: relative;
     overflow:auto;
     text-align:center;
-    margin-left : 23em;
     width : 1000px;
 }
 .prizes, .boxoffice, .reviews, .bagofwords{
