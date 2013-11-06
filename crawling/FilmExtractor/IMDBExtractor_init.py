@@ -109,7 +109,7 @@ person_conn =  Connector.IMDBStatusConnector.IMDBPersonStatusConnector()
 company_conn =  Connector.IMDBStatusConnector.IMDBCompanyStatusConnector()
 
 class getIMDBFilm(threading.Thread):
-    def __init__(self, nom = 'getIMDBFilm',year_min, year_max,priority_max):
+    def __init__(self,year_min, year_max,priority_max, nom = 'getIMDBFilm'):
         threading.Thread.__init__(self)
         self.nom = nom
         self._stopevent = threading.Event( )
@@ -166,13 +166,13 @@ IMDB_FILM_EXTRACTOR = getIMDBFilm(year_min,year_max,priority_max)
 IMDB_PERSON_EXTRACTOR = getIMDBPerson()
 IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 
-#IMDB_FILM_EXTRACTOR.start()
-#IMDB_PERSON_EXTRACTOR.start()
-#IMDB_COMPANY_EXTRACTOR.start()
+IMDB_FILM_EXTRACTOR.start()
+IMDB_PERSON_EXTRACTOR.start()
+IMDB_COMPANY_EXTRACTOR.start()
 
 #reExtractBuggyFilm()
    
-reExtractOneMovie("tt3029940")
+#reExtractOneMovie("tt3029940")
 
 #Exemple avec des devises Japonaises : tt0245429
 #Exemple avec des devises € : tt302994
