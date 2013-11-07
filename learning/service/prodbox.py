@@ -948,8 +948,8 @@ class CinemaService(LearningService):
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
                 i = 0
-                for feat in self.actor_names:
-                    for actor in user_input['actors']:
+                for feat in self.actor_names: #TODO : optimize this huge time-consuming loop
+                    for actor in user_input['actors']: 
                         if re.findall(actor, feat):
                             x_actor_vector[0,i] = 1 # ALL STARS?
                 i += 1
@@ -963,7 +963,7 @@ class CinemaService(LearningService):
         if user_input.has_key('genres'):
             if user_input['genres'].__class__ == list:
                 i = 0 
-                for feat in self.genres_names:
+                for feat in self.genres_names: #TODO : optimize this loop
                     for genres in user_input['genres']:
                         if re.findall(genres, feat):
                             x_genres_vector[0,i] = 1
@@ -973,7 +973,7 @@ class CinemaService(LearningService):
         if user_input.has_key('directors'):
             if user_input['directors'].__class__ == list:
                 i = 0 
-                for feat in self.director_names:
+                for feat in self.director_names: #TODO : optimize this huge time-consuming loop
                     for director in user_input['directors']:
                         if re.findall(director, feat):
                             x_director_vector[0,i] = 1
@@ -988,7 +988,7 @@ class CinemaService(LearningService):
         if user_input.has_key('keywords'):
             if user_input['keywords'].__class__ == list:
                 i = 0
-                for feat in self.keyword_names:
+                for feat in self.keyword_names: #TODO : optimize this huge time-consuming loop
                     for keyword in user_input['keywords']:
                         if re.findall(keyword, feat):
                             x_keyword_vector[0,i] = 1 
