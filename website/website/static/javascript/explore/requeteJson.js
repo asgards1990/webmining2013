@@ -3,8 +3,8 @@ var requete;
 function changement(){
 	//DeLaRequeteSearch();
 	//$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0499549",function(data){alert($.parseJSON(data).etitle)}); //$.parseJSON(data).plot
-
-        //$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",function(data){alert('not happy');alert($.parseJSON(data).budget)}); 
+        //alert('hello');
+       $.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",function(data){console.log(data.actors[0].imdb_id)}); 
 }
 
 
@@ -66,11 +66,12 @@ function genererRequeteSearch(){
 
 function envoiDeLaRequeteSearch(){
 	arreter=false;
-	loadChargement("sousCadreResultats");
-	alert(JSON.stringify(genererRequeteSearch()))
+	console.log(JSON.stringify(genererRequeteSearch()))
 	if (requete!=undefined){
 		requete.abort();
+		unloadChargement("sousCadreResultats");
 	}
+	loadChargement("sousCadreResultats");
 	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
 	/*var data=new Object;
 	data.success=true;
@@ -96,7 +97,7 @@ function envoiDeLaRequeteSearch(){
 }
 
 function fctCallbackSearch(data){
-	alert(JSON.stringify(data))
+	console.log(JSON.stringify(data))
 	setTimeout(
 		function(){
 			unloadChargement("sousCadreResultats");
