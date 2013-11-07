@@ -176,12 +176,14 @@ function keywordClick (icone) {
             else {
                 var element = this.parentNode.parentNode;
                 var remove = document.createElement('span');
-                var text = document.createTextNode(element.getElementsByClassName("name")[0].text);
+                var text = document.createTextNode(element.getElementsByClassName("name")[0].textContent);
+                var xxx = document.createTextNode("X");
+                alert(element.getElementsByClassName("name")[0].textContent);
                 keywords = document.getElementById("id_keyword-deck");
 
                 this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 
-                 if (element.hasChildNodes()){
+                if (element.hasChildNodes()){
                      while (element.childNodes.length>=1)
                          {element.removeChild(element.firstChild);
                     }
@@ -189,11 +191,11 @@ function keywordClick (icone) {
 
                 remove.className="remove div";
                 remove.id="suggest";
-                remove.style="display: inline;";
-
+                remove.style.display="inline";
                 element.className="div hilight";
 
-                remove.appendChild(text);
+                element.appendChild(remove);
+                element.appendChild(text);
                 keywords.appendChild(element);
                 };
             };
