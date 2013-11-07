@@ -1,4 +1,4 @@
-/* Titres cases */
+﻿/* Titres cases */
 
 h1.steps {
     font-variant: small-caps;
@@ -94,7 +94,7 @@ margin-top: 3px;
     vertical-align: middle;
 }
 
-#filters .filter input.img {
+#filters .filter .img {
     max-width: 4em;
     max-height: 4em;
 }
