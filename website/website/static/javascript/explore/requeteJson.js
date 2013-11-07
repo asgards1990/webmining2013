@@ -11,7 +11,8 @@ function verifAuMoinsUnCrit(){
 
 function changement(){
 	if(verifAuMoinsUnCrit()==true){
-		envoiDeLaRequeteSearch();
+		$.post("http://localhost:8000/cinema/getId/","film_name="+"Avatar",function(data){envoiDeLaRequeteSearch(data);});
+		//envoiDeLaRequeteSearch(nomfilm);
 	}
 	else{
 		alert("Please select at least one criterion.")
@@ -19,8 +20,8 @@ function changement(){
 	//$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0499549",function(data){alert($.parseJSON(data).etitle)}); //$.parseJSON(data).plot
         //alert('hello');
        //$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",function(data){console.log(data.actors[0].imdb_id)}); 
+	   $.post("http://localhost:8000/cinema/getId/","film_name="+"Avatar",function(data){console.log(data)}); 
 }
-
 
 $(document).ready(function(){
 
@@ -32,9 +33,9 @@ $( "#slider-rangeyear" ).on( "slidechange", function( event, ui ) {changement();
 })
 
 
-function genererRequeteSearch(){
+function genererRequeteSearch(nomfilm){
 	var requestInter=new Object();
-	requestInter.id="tt1024648";//document.getElementById("moviesearch").children[0].id;
+	requestInter.id=nomfilm;//document.getElementById("moviesearch").children[0].id;
 	requestInter.nbresults=10;
 	requestInter.criteria=new Object();
 	requestInter.criteria.actor_director=$("#acteurs").prop("checked");
@@ -43,50 +44,49 @@ function genererRequeteSearch(){
 	requestInter.criteria.review=$("#review").prop("checked");
 	requestInter.filter=new Object();
 	var compteur=0;
-	for(var i=0;i<document.getElementById("actors").getElementsByClassName("actor").length;i++){
-		if (document.getElementById("actors").getElementsByClassName("actor")[i].children[0].checked==true){
+	for(var i=0;i<document.getElementById("actors").getElementsByClassName("listactor").length;i++){
+		if (document.getElementById("actors").getElementsByClassName("listactor")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
 			compteur=compteur+1;
 		}
 	}
 	if(compteur>0){
 		requestInter.filter.actors=new Array();
 		var compteur=0;
-		for(var i=0;i<document.getElementById("actors").getElementsByClassName("actor").length;i++){
-			if (document.getElementById("actors").getElementsByClassName("actor")[i].children[0].checked==true){
-				requestInter.filter.actors[compteur]=document.getElementById("actors").getElementsByClassName("actor")[i].children[1].id;
+		for(var i=0;i<document.getElementById("actors").getElementsByClassName("listactor").length;i++){
+			if (document.getElementById("actors").getElementsByClassName("listactor")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
+				requestInter.filter.actors[compteur]=document.getElementById("actors").getElementsByClassName("listactor")[i].children[0].id;
 				compteur=compteur+1;
 			}
 		}
 	}
 	var compteur=0;
-	for(var i=0;i<document.getElementById("actors").getElementsByClassName("director").length;i++){
-		if (document.getElementById("actors").getElementsByClassName("director")[i].children[0].checked==true){
+	for(var i=0;i<document.getElementById("actors").getElementsByClassName("listdirector").length;i++){
+		if (document.getElementById("actors").getElementsByClassName("listdirector")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
 			compteur=compteur+1;
 		}
 	}
 	if(compteur>0){
 		requestInter.filter.directors=new Array();
 		compteur=0;
-		for(var i=0;i<document.getElementById("actors").getElementsByClassName("director").length;i++){
-			if (document.getElementById("actors").getElementsByClassName("director")[i].children[0].checked==true){
-				requestInter.filter.directors[compteur]=document.getElementById("actors").getElementsByClassName("director")[i].children[1].id;
+		for(var i=0;i<document.getElementById("actors").getElementsByClassName("listdirector").length;i++){
+			if (document.getElementById("actors").getElementsByClassName("listdirector")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
+				requestInter.filter.directors[compteur]=document.getElementById("actors").getElementsByClassName("listdirector")[i].children[0].id;
 				compteur=compteur+1;
 			}
 		}
 	}
 	var compteur=0;
-	for(var i=0;i<document.getElementById("genres").getElementsByClassName("icheckbox_line-red").length;i++){
-		if (document.getElementById("genres").getElementsByClassName("icheckbox_line-red")[i].children[0].checked==true){
+	for(var i=0;i<document.getElementById("genres").getElementsByClassName("listgenre").length;i++){
+		if (document.getElementById("genres").getElementsByClassName("listgenre")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
 			compteur=compteur+1;
 		}
 	}
 	if(compteur>0){
 		requestInter.filter.genres=new Array();
 		compteur=0;
-		for(var i=0;i<document.getElementById("genres").getElementsByClassName("icheckbox_line-red").length;i++){
-			//alert("hello")
-			if (document.getElementById("genres").getElementsByClassName("icheckbox_line-red")[i].children[0].checked==true){
-				requestInter.filter.genres[compteur]=document.getElementById("genres").getElementsByClassName("icheckbox_line-red")[i].textContent;
+		for(var i=0;i<document.getElementById("genres").getElementsByClassName("listgenre").length;i++){
+			if (document.getElementById("genres").getElementsByClassName("listgenre")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
+				requestInter.filter.genres[compteur]=document.getElementById("genres").getElementsByClassName("listgenre")[i].getElementsByClassName("icheckbox_line-red")[0].textContent;
 				compteur=compteur+1;
 			}
 		}
@@ -102,9 +102,9 @@ function genererRequeteSearch(){
 	return requestInter;
 }
 
-function envoiDeLaRequeteSearch(){
+function envoiDeLaRequeteSearch(nomfilm){
 	arreter=false;
-	console.log(JSON.stringify(genererRequeteSearch()))
+	console.log(JSON.stringify(genererRequeteSearch(nomfilm)))
 	if (requete!=undefined){
 		requete.abort();
 		unloadChargement("sousCadreResultats");
