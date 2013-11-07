@@ -775,7 +775,7 @@ class CinemaService(LearningService):
         try:
             if (filt_in['reviews']['min'].__class__ == float or filt_in['reviews']['min'].__class__ == int):
                 filt_out['reviews'] =  {}
-                filt_out['reviews']['min'] = float(filt_in['reviews']['min'])
+                filt_out['reviews']['min'] = 100*float(filt_in['reviews']['min'])
         except exceptions.KeyError:
             pass
         
