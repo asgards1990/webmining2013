@@ -570,7 +570,7 @@ class CinemaService(LearningService):
     
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
-            if args['nbresults'].__class__ == int and args['nbresults'] >= 0 and args['str'].__class__==str:
+            if args['nbresults'].__class__ == int and args['nbresults'] >= 0:
                 tot = np.zeros(self.nb_keywords)
                 rex = re.compile(args['str'].lower())
                 found = [(rex.search(m)!=None) for m in self.keyword_names]
@@ -590,7 +590,7 @@ class CinemaService(LearningService):
                         results.append( (tot[i], self.keyword_names[i] ) )
                 return {'results' : results}
             else:
-                raise ParsingError('Wrong format for nbresults or string input.')
+                raise ParsingError('Wrong format for nbresults.')
         else:
             raise ParsingError('Please define a string and the expected number of results.')
     
