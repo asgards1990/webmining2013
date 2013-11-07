@@ -52,9 +52,11 @@
 #results h1 {
     display: table-cell;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 25px;
+    word-wrap:break-word;
     width: 25px;
     color: white;
+    vertical-align:top;
     margin:0;
 }
 
