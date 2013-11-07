@@ -1,4 +1,6 @@
 var requete;
+var idFilm;
+var text;
 
 function verifAuMoinsUnCrit(){
 	if($("#acteurs").prop("checked")==true || $("#genre").prop("checked")==true || $("#budgets").prop("checked")==true || $("#review").prop("checked")==true){
@@ -15,7 +17,6 @@ function changement2(){
 	$("#genre").prop("checked",true);
 	$("#budgets").prop("checked",true);
 	$("#review").prop("checked",true);
-	var text;
 	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
 		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
 			text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
@@ -50,7 +51,7 @@ function changement(){
 }
 
 $(document).ready(function(){
-chargementBulleInfo("cadreInfo","test")
+//chargementBulleInfo("cadreInfo","test")
 $(".checkbox").change(function(){changement();})
 //$(".iCheck-helper").click(function(){changement();})
 $("#rateit").click(function(){changement();})
@@ -61,6 +62,7 @@ $( "#slider-rangeyear" ).on( "slidechange", function( event, ui ) {changement();
 
 function genererRequeteSearch(nomfilm,init){
 	var requestInter=new Object();
+	//alert("nomfilm")
 	requestInter.id=nomfilm;//document.getElementById("moviesearch").children[0].id;
 	requestInter.nbresults=10;
 	if(init==false){
@@ -138,6 +140,7 @@ function genererRequeteSearch(nomfilm,init){
 }
 
 function envoiDeLaRequeteSearch(nomfilm,init){
+	idFilm=nomfilm;
 	arreter=false;
 	console.log(JSON.stringify(genererRequeteSearch(nomfilm,init)))
 	if (requete!=undefined){
@@ -145,7 +148,7 @@ function envoiDeLaRequeteSearch(nomfilm,init){
 		unloadChargement("sousCadreResultats");
 	}
 	loadChargement("sousCadreResultats");
-	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackSearch,"json")
+	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
 	/*var data=new Object;
 	data.success=true;
 	data.nbresults=4;
