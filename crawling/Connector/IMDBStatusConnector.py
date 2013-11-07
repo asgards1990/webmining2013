@@ -463,10 +463,10 @@ class IMDBPersonStatusConnector:
         status = IMDBPersonStatus.objects.filter(downloaded=1, extracted=0).order_by('priority')
         return map(lambda s: s.imdb_id, status)
 
-    def getDownloadedNoImage(self):
+    def getDownloadedNoImage(self,priority_min,priority_max):
         self.logger.debug("Get the Person IMDB IDs in the database with downloaded=1 and image=0")
 
-        status = IMDBPersonStatus.objects.filter(downloaded=1, image=0).order_by('priority')
+        status = IMDBPersonStatus.objects.filter(downloaded=1, image=0, priority__lte=priority_max,priority__gte=priority_min ).order_by('priority')
         return map(lambda s: s.imdb_id, status)
 
     ###############################################################################
