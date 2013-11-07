@@ -28,6 +28,8 @@ import re
 
 import exceptions
 
+from scipy.stats import poisson
+
 class TableDependentCachedObject(CachedObject):
     def __init__(self, name, table_name, content = None):
         __init__(self, name, content = content)
@@ -87,11 +89,12 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=np.float32)
             self.budget_matrix = v.fit_transform(gkey)
 
-            self.budget_bandwidth = 100.0 # TODO : optimize this parameter
+            self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
             budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
             budget_data = budget_data.reshape( [budget_data.shape[0], 1])
             kde = KernelDensity(kernel='gaussian', bandwidth=self.budget_bandwidth).fit(budget_data)
-            
+            # 
+
             for i in range(self.budget_matrix.shape[0]):
                 if np.isnan(self.budget_matrix[i,0]):
                     self.budget_matrix[i,0]= kde.sample(1)
@@ -293,6 +296,15 @@ class CinemaService(LearningService):
             self.actor_matrix, self.actor_names = self.get_cobject('actors').get_content()
         self.nb_actors = self.actor_matrix.shape[1]
 
+    def loadActorsReduced2(self):
+        # Third method : heuristic
+        theta = 0.5
+        actor_weight_matrix = self.rank_matrix
+        rv = poisson(theta)
+        actor_weight_matrix.data = rv.pmf(actor_weight_matrix.data).astype(np.float32)
+        self.actors_share_bo = normalize(actor_weight_matrix.todense(), axis=1, norm='l1').T * self.box_office_matrix
+        
+
     def loadActorsReduced(self):
         if not self.is_loaded('actors_reduced'):
             # First clustering method: Spectral Clustering
@@ -317,6 +329,7 @@ class CinemaService(LearningService):
                 self.proj_actors_KM = scipy.sparse.hstack([self.proj_actors_KM, scipy.sparse.csc_matrix(actor_labels_KM==i, dtype=int).transpose()])
             self.proj_actors_KM=normalize(self.proj_actors_KM.astype(np.double),axis=0, norm='l1')
             self.actor_reduced_KM = self.actor_matrix * self.proj_actors_KM
+
             # Save object in cache
             self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM))
         else:
@@ -552,12 +565,12 @@ class CinemaService(LearningService):
         self.loadPredictFeatures()
         self.loadPredictLabels()
         # Init predict classifier
-        self.init_predict()
+        #self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
-            if args['nbresults'].__class__ == int and args['nbresults'] >= 0 and args['str'].__class__==str:
+            if args['nbresults'].__class__ == int and args['nbresults'] >= 0:
                 tot = np.zeros(self.nb_keywords)
                 rex = re.compile(args['str'].lower())
                 found = [(rex.search(m)!=None) for m in self.keyword_names]
@@ -577,7 +590,7 @@ class CinemaService(LearningService):
                         results.append( (tot[i], self.keyword_names[i] ) )
                 return {'results' : results}
             else:
-                raise ParsingError('Wrong format for nbresults or string input.')
+                raise ParsingError('Wrong format for nbresults.')
         else:
             raise ParsingError('Please define a string and the expected number of results.')
     
@@ -626,8 +639,8 @@ class CinemaService(LearningService):
         indexes_fitting_filters = indexes_fitting_filters * (self.budget_matrix.toarray() <= filters['budget']['max'])
         # Filter release_date
         years=self.release_date_matrix[:,self.release_date_names.index('year')].toarray()
-        aux_max_release_date = years <= filters['release_period']['end'].year
-        aux_min_release_date = years >= filters['release_period']['begin'].year
+        aux_max_release_date = years <= filters['release_period']['end']
+        aux_min_release_date = years >= filters['release_period']['begin']
         indexes_fitting_filters = indexes_fitting_filters * aux_max_release_date 
         indexes_fitting_filters = indexes_fitting_filters * aux_min_release_date
         # Filter reviews
@@ -687,7 +700,7 @@ class CinemaService(LearningService):
                 #print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
                 indexes_of_cluster = np.where(labels == cluster)[0]
                 indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
-                if indexes != []:
+                if len(indexes)>0:
                     samples = X[list(indexes),:]
                     neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
                     neigh.fit(samples)
@@ -697,17 +710,18 @@ class CinemaService(LearningService):
                     nb_results_found = nb_results_found + local_nb_results_found
                     distances.append(loc_distances[0])
                     neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
-        neighbors_indexes = np.concatenate(neighbors_indexes)
-        distances = np.concatenate(distances)
-        distances = distances[1:] # because the film being studied is the closest neighbor...
-        neighbors_indexes = neighbors_indexes[1:]
-        #Now we reorder items because they may be unordered if there are filters
-        new_order = distances.argsort()
-        distances = distances[new_order]
-        neighbors_indexes = neighbors_indexes[new_order]
+        if len(neighbors_indexes)>0:
+            neighbors_indexes = np.concatenate(neighbors_indexes)
+            distances = np.concatenate(distances)
+            distances = distances[1:] # because the film being studied is the closest neighbor...
+            neighbors_indexes = neighbors_indexes[1:]
+            #Now we reorder items because they may be unordered if there are filters
+            new_order = distances.argsort()
+            distances = distances[new_order]
+            neighbors_indexes = neighbors_indexes[new_order]
         #Return results
         res = []
-        for i in range(nb_results):
+        for i in range(len(distances)):
             res.append( (distances[i], Film.objects.get(pk = self.fromIndextoPk[ neighbors_indexes[i]])) ) 
         return res
 
@@ -948,8 +962,8 @@ class CinemaService(LearningService):
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
                 i = 0
-                for feat in self.actor_names:
-                    for actor in user_input['actors']:
+                for feat in self.actor_names: #TODO : optimize this huge time-consuming loop
+                    for actor in user_input['actors']: 
                         if re.findall(actor, feat):
                             x_actor_vector[0,i] = 1 # ALL STARS?
                 i += 1
@@ -963,7 +977,7 @@ class CinemaService(LearningService):
         if user_input.has_key('genres'):
             if user_input['genres'].__class__ == list:
                 i = 0 
-                for feat in self.genres_names:
+                for feat in self.genres_names: #TODO : optimize this loop
                     for genres in user_input['genres']:
                         if re.findall(genres, feat):
                             x_genres_vector[0,i] = 1
@@ -973,7 +987,7 @@ class CinemaService(LearningService):
         if user_input.has_key('directors'):
             if user_input['directors'].__class__ == list:
                 i = 0 
-                for feat in self.director_names:
+                for feat in self.director_names: #TODO : optimize this huge time-consuming loop
                     for director in user_input['directors']:
                         if re.findall(director, feat):
                             x_director_vector[0,i] = 1
@@ -988,7 +1002,7 @@ class CinemaService(LearningService):
         if user_input.has_key('keywords'):
             if user_input['keywords'].__class__ == list:
                 i = 0
-                for feat in self.keyword_names:
+                for feat in self.keyword_names: #TODO : optimize this huge time-consuming loop
                     for keyword in user_input['keywords']:
                         if re.findall(keyword, feat):
                             x_keyword_vector[0,i] = 1 
