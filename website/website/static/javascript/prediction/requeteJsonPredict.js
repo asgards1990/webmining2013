@@ -193,122 +193,122 @@ function chercherTitre(data, position, rang, type){
 	}
 }
 
-function fctCallbackPredict(data){
-	//alert(JSON.stringify(data))
-	var boiteBoxOffice=document.getElementById("boxoffice");
-	var boiteGeneral=document.createElement("div");
-	boiteGeneral.id="boiteGeneral"
-	boiteGeneral.style.cssText="float : left; width:80%; height:30%;border:1px solid Black"
-	boiteBoxOffice.appendChild(boiteGeneral);
-	var titre1=document.createTextNode("Général");
-	titre1.id="titre1"
-	boiteGeneral.appendChild(titre1);
-	var boiteClassement1=document.createElement("div");
-	boiteClassement1.id="boiteClassement1"
-	boiteClassement1.style.cssText="width:100%; height:70%;border:1px Black solid"
-	boiteGeneral.appendChild(boiteClassement1);
-	var boiteFilmHaut1=document.createElement("div");
-	var boiteFilmMilieu1=document.createElement("div");
-	var boiteFilmBas1=document.createElement("div");
-	boiteFilmHaut1.id="boiteFilmHaut1";
-	boiteFilmHaut1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
-	boiteClassement1.appendChild(boiteFilmHaut1);
-	boiteFilmMilieu1.id="boiteFilmMilieu1";
-	boiteFilmMilieu1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
-	boiteClassement1.appendChild(boiteFilmMilieu1);
-	boiteFilmBas1.id="boiteFilmBas1";
-	boiteFilmBas1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
-	boiteClassement1.appendChild(boiteFilmBas1);
-	var titreFilmHaut1=document.createTextNode("");
-	titreFilmHaut1.textContent=chercherTitre(data, "haut",data.general_box_office.rank , "general");
-	boiteFilmHaut1.appendChild(titreFilmHaut1);
-	var titreFilmMilieu1=document.createTextNode("");
-	titreFilmMilieu1.textContent=data.general_box_office.rank + " - $ " + data.general_box_office.value + " M";
-	boiteFilmMilieu1.appendChild(titreFilmMilieu1);
-	var titreFilmBas1=document.createTextNode("");
-	titreFilmBas1.textContent=chercherTitre(data, "bas",data.general_box_office.rank , "general");
-	boiteFilmBas1.appendChild(titreFilmBas1);
-	
-	var boiteGenre=document.createElement("div");
-	boiteGenre.id="boiteGenre"
-	boiteGenre.style.cssText="float : left; width:80%; height:30%;border:1px Black solid"
-	boiteBoxOffice.appendChild(boiteGenre);
-	var titre2=document.createTextNode("Genre");
-	titre2.id="titre2"
-	boiteGenre.appendChild(titre2);
-	var boiteClassement2=document.createElement("div");
-	boiteClassement2.id="boiteClassement2";
-	boiteClassement2.style.cssText="width:100%; height:70%;border:1px Black solid"
-	boiteGenre.appendChild(boiteClassement2);
-	var boiteFilmHaut2=document.createElement("div");
-	var boiteFilmMilieu2=document.createElement("div");
-	var boiteFilmBas2=document.createElement("div");
-	boiteFilmHaut2.id="boiteFilmHaut2";
-	boiteFilmHaut2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
-	boiteClassement2.appendChild(boiteFilmHaut2);
-	boiteFilmMilieu2.id="boiteFilmMilieu2";
-	boiteFilmMilieu2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
-	boiteClassement2.appendChild(boiteFilmMilieu2);
-	boiteFilmBas2.id="boiteFilmBas2";
-	boiteFilmBas2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
-	boiteClassement2.appendChild(boiteFilmBas2);
-	var titreFilmHaut2=document.createTextNode("");
-	titreFilmHaut2.textContent=chercherTitre(data, "haut",data.genre_box_office.rank , "genre");
-	boiteFilmHaut2.appendChild(titreFilmHaut2);
-	var titreFilmMilieu2=document.createTextNode("");
-	titreFilmMilieu2.textContent=data.genre_box_office.rank + " - $ " + data.genre_box_office.value + " M";
-	boiteFilmMilieu2.appendChild(titreFilmMilieu2);
-	var titreFilmBas2=document.createTextNode("");
-	titreFilmBas2.textContent=chercherTitre(data, "bas",data.genre_box_office.rank , "genre");
-	boiteFilmBas2.appendChild(titreFilmBas2);
-	
-	var boiteReviews=document.getElementById("reviews");
-	var boiteMoyenne=document.createElement("div");
-	boiteMoyenne.id="boiteMoyenne"
-	boiteMoyenne.style.cssText="width:80%; height:30%;border:1px solid Black;"
-	boiteReviews.appendChild(boiteMoyenne);
-	var conteneurNote=document.createElement("div");
-	boiteMoyenne.appendChild(conteneurNote);
-	var note=document.createTextNode((data.critics.average*5+" ").slice(0,3)+"/5");
-	conteneurNote.appendChild(note);
-	var cadreEtoile=document.createElement("canvas");
-	cadreEtoile.style.cssText=""
-	cadreEtoile.id="cadreEtoile";
-	cadreEtoile.setAttribute("width", 250);
-	cadreEtoile.setAttribute("height", 50);
-	boiteMoyenne.appendChild(cadreEtoile);
-	var etoile=new Image();
-	etoile.src="../pesto/static/img/explore/reviews.png"
-	etoile.onload=function(){
-		var width = etoile.width,height = etoile.height;
-        var context = $("#cadreEtoile")[0].getContext("2d");
-		function dessinerLigne(i,translation){
-			return function(){
-				context.setTransform(0.5, 0,0,0.5,0.5*translation, 0);
-            	context.drawImage(etoile,width-i,0,2,height,width-i,0,2,height);	
-			}
-		}
-		function dessinerLigne2(i,translation){
-			return function(){
-				context.setTransform(0.5, 0,0,0.5,0.5*translation, 0);
-            	context.drawImage(etoile,width-i,0,2,height,width-i,0,2,height);	
-			}
-		}
-		var nombreEtoile=Math.floor(data.critics.average*5);
-		var reste=data.critics.average*5-Math.floor(data.critics.average*5);
-		var vitesse=5;
-		var espaceEntreEtoiles=10;
-		for (var j=0;j<nombreEtoile;j++){
-			for (var i = 0; i<=width; ++i) {
-				setTimeout(dessinerLigne(i,j*width+espaceEntreEtoiles),(width-i)*vitesse+width*vitesse*j);
-			}
-		}
-        for (var i = width*(1-reste); i<=width; ++i) {
-            setTimeout(dessinerLigne2(i,nombreEtoile*width+espaceEntreEtoiles),(width-i)*vitesse+width*vitesse*nombreEtoile);
-		}
-	}
-	
-	//arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches");carrousel("cadreCoverflow");
-}
-
-
+//function fctCallbackPredict(data){
+//	//alert(JSON.stringify(data))
+//	var boiteBoxOffice=document.getElementById("boxoffice");
+//	var boiteGeneral=document.createElement("div");
+//	boiteGeneral.id="boiteGeneral"
+//	boiteGeneral.style.cssText="float : left; width:80%; height:30%;border:1px solid Black"
+//	boiteBoxOffice.appendChild(boiteGeneral);
+//	var titre1=document.createTextNode("Général");
+//	titre1.id="titre1"
+//	boiteGeneral.appendChild(titre1);
+//	var boiteClassement1=document.createElement("div");
+//	boiteClassement1.id="boiteClassement1"
+//	boiteClassement1.style.cssText="width:100%; height:70%;border:1px Black solid"
+//	boiteGeneral.appendChild(boiteClassement1);
+//	var boiteFilmHaut1=document.createElement("div");
+//	var boiteFilmMilieu1=document.createElement("div");
+//	var boiteFilmBas1=document.createElement("div");
+//	boiteFilmHaut1.id="boiteFilmHaut1";
+//	boiteFilmHaut1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+//	boiteClassement1.appendChild(boiteFilmHaut1);
+//	boiteFilmMilieu1.id="boiteFilmMilieu1";
+//	boiteFilmMilieu1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+//	boiteClassement1.appendChild(boiteFilmMilieu1);
+//	boiteFilmBas1.id="boiteFilmBas1";
+//	boiteFilmBas1.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+//	boiteClassement1.appendChild(boiteFilmBas1);
+//	var titreFilmHaut1=document.createTextNode("");
+//	titreFilmHaut1.textContent=chercherTitre(data, "haut",data.general_box_office.rank , "general");
+//	boiteFilmHaut1.appendChild(titreFilmHaut1);
+//	var titreFilmMilieu1=document.createTextNode("");
+//	titreFilmMilieu1.textContent=data.general_box_office.rank + " - $ " + data.general_box_office.value + " M";
+//	boiteFilmMilieu1.appendChild(titreFilmMilieu1);
+//	var titreFilmBas1=document.createTextNode("");
+//	titreFilmBas1.textContent=chercherTitre(data, "bas",data.general_box_office.rank , "general");
+//	boiteFilmBas1.appendChild(titreFilmBas1);
+//	
+//	var boiteGenre=document.createElement("div");
+//	boiteGenre.id="boiteGenre"
+//	boiteGenre.style.cssText="float : left; width:80%; height:30%;border:1px Black solid"
+//	boiteBoxOffice.appendChild(boiteGenre);
+//	var titre2=document.createTextNode("Genre");
+//	titre2.id="titre2"
+//	boiteGenre.appendChild(titre2);
+//	var boiteClassement2=document.createElement("div");
+//	boiteClassement2.id="boiteClassement2";
+//	boiteClassement2.style.cssText="width:100%; height:70%;border:1px Black solid"
+//	boiteGenre.appendChild(boiteClassement2);
+//	var boiteFilmHaut2=document.createElement("div");
+//	var boiteFilmMilieu2=document.createElement("div");
+//	var boiteFilmBas2=document.createElement("div");
+//	boiteFilmHaut2.id="boiteFilmHaut2";
+//	boiteFilmHaut2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+//	boiteClassement2.appendChild(boiteFilmHaut2);
+//	boiteFilmMilieu2.id="boiteFilmMilieu2";
+//	boiteFilmMilieu2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+//	boiteClassement2.appendChild(boiteFilmMilieu2);
+//	boiteFilmBas2.id="boiteFilmBas2";
+//	boiteFilmBas2.style.cssText="float : left; width:95%; height:30%;border:1px solid Black;border-radius : 5px;"
+//	boiteClassement2.appendChild(boiteFilmBas2);
+//	var titreFilmHaut2=document.createTextNode("");
+//	titreFilmHaut2.textContent=chercherTitre(data, "haut",data.genre_box_office.rank , "genre");
+//	boiteFilmHaut2.appendChild(titreFilmHaut2);
+//	var titreFilmMilieu2=document.createTextNode("");
+//	titreFilmMilieu2.textContent=data.genre_box_office.rank + " - $ " + data.genre_box_office.value + " M";
+//	boiteFilmMilieu2.appendChild(titreFilmMilieu2);
+//	var titreFilmBas2=document.createTextNode("");
+//	titreFilmBas2.textContent=chercherTitre(data, "bas",data.genre_box_office.rank , "genre");
+//	boiteFilmBas2.appendChild(titreFilmBas2);
+//	
+//	var boiteReviews=document.getElementById("reviews");
+//	var boiteMoyenne=document.createElement("div");
+//	boiteMoyenne.id="boiteMoyenne"
+//	boiteMoyenne.style.cssText="width:80%; height:30%;border:1px solid Black;"
+//	boiteReviews.appendChild(boiteMoyenne);
+//	var conteneurNote=document.createElement("div");
+//	boiteMoyenne.appendChild(conteneurNote);
+//	var note=document.createTextNode((data.critics.average*5+" ").slice(0,3)+"/5");
+//	conteneurNote.appendChild(note);
+//	var cadreEtoile=document.createElement("canvas");
+//	cadreEtoile.style.cssText=""
+//	cadreEtoile.id="cadreEtoile";
+//	cadreEtoile.setAttribute("width", 250);
+//	cadreEtoile.setAttribute("height", 50);
+//	boiteMoyenne.appendChild(cadreEtoile);
+//	var etoile=new Image();
+//	etoile.src="../pesto/static/img/explore/reviews.png"
+//	etoile.onload=function(){
+//		var width = etoile.width,height = etoile.height;
+//        var context = $("#cadreEtoile")[0].getContext("2d");
+//		function dessinerLigne(i,translation){
+//			return function(){
+//				context.setTransform(0.5, 0,0,0.5,0.5*translation, 0);
+//            	context.drawImage(etoile,width-i,0,2,height,width-i,0,2,height);	
+//			}
+//		}
+//		function dessinerLigne2(i,translation){
+//			return function(){
+//				context.setTransform(0.5, 0,0,0.5,0.5*translation, 0);
+//            	context.drawImage(etoile,width-i,0,2,height,width-i,0,2,height);	
+//			}
+//		}
+//		var nombreEtoile=Math.floor(data.critics.average*5);
+//		var reste=data.critics.average*5-Math.floor(data.critics.average*5);
+//		var vitesse=5;
+//		var espaceEntreEtoiles=10;
+//		for (var j=0;j<nombreEtoile;j++){
+//			for (var i = 0; i<=width; ++i) {
+//				setTimeout(dessinerLigne(i,j*width+espaceEntreEtoiles),(width-i)*vitesse+width*vitesse*j);
+//			}
+//		}
+//        for (var i = width*(1-reste); i<=width; ++i) {
+//            setTimeout(dessinerLigne2(i,nombreEtoile*width+espaceEntreEtoiles),(width-i)*vitesse+width*vitesse*nombreEtoile);
+//		}
+//	}
+//	
+//	//arreter=true;document.getElementById("loaderProvisoire").parentNode.removeChild(document.getElementById("loaderProvisoire"));montrerResultats("cadreProches");carrousel("cadreCoverflow");
+//}
+//
+//
