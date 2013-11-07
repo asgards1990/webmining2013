@@ -88,9 +88,9 @@ def IMDB_PersonExtractor(person_id):
 def IMDB_PersonExtractorPicture(person_id):
    logger.debug("Lancement de l'extraction de la page person pour {}".format(person_id))
    personPage = IMDBExtractor_Person(person_id)
-   if personPage.isExtractable:
-      personPage.extractPic()
-   
+   personPage.createExtractorEngine()
+   personPage.extractPic()
+      
 
 def IMDB_CompanyExtractor(company_id):
    logger.debug("Lancement de l'extraction de la page company pour {}".format(company_id))

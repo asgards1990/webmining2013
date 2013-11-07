@@ -1,0 +1,786 @@
+07/11 17:16:37 - SUPER LOGGER.INIT - INFO | Lancement du IMDB Person Picture Extractor
+07/11 17:16:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the Person IMDB IDs in the database with downloaded=1 and image=0
+07/11 17:16:38 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000173
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000173 exists in the database:
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000173 exists in the database
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000173 can be downloaded:
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000173 in the database:
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000173.html réussi 
+07/11 17:16:38 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:38 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTk1MjM5NDg4MF5BMl5BanBnXkFtZTcwNDg1OTQ4Nw@@._V1_SY317_CR10,0,214,317_.jpg']
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000173.jpg
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000173 to 1 in the database
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:38 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0005286
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0005286 exists in the database:
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0005286 exists in the database
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0005286 can be downloaded:
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0005286 in the database:
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0005286.html réussi 
+07/11 17:16:38 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:38 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNzI1NDQyMDQ4Ml5BMl5BanBnXkFtZTYwNDIxMjMz._V1_SY317_CR19,0,214,317_.jpg']
+07/11 17:16:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0005286.jpg
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0005286 to 1 in the database
+07/11 17:16:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:39 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0575216
+07/11 17:16:39 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:39 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:39 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0575216 exists in the database:
+07/11 17:16:39 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0575216 exists in the database
+07/11 17:16:39 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0575216 can be downloaded:
+07/11 17:16:39 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:39 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0575216 in the database:
+07/11 17:16:39 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:39 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0575216.html réussi 
+07/11 17:16:39 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:39 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:39 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMzE3MTY5ODIxN15BMl5BanBnXkFtZTcwODEwNTQxOQ@@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:16:39 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0575216.jpg
+07/11 17:16:39 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0575216 to 1 in the database
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:40 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm2017943
+07/11 17:16:40 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:40 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm2017943 exists in the database:
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm2017943 exists in the database
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm2017943 can be downloaded:
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm2017943 in the database:
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:40 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm2017943.html réussi 
+07/11 17:16:40 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:40 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:40 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTM5ODk5Mjc1Ml5BMl5BanBnXkFtZTYwNDI0Njk3._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:16:40 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm2017943.jpg
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm2017943 to 1 in the database
+07/11 17:16:40 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:41 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0491259
+07/11 17:16:41 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:41 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:41 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0491259 exists in the database:
+07/11 17:16:41 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0491259 exists in the database
+07/11 17:16:41 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0491259 can be downloaded:
+07/11 17:16:41 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:41 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0491259 in the database:
+07/11 17:16:41 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:41 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0491259.html réussi 
+07/11 17:16:41 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:41 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:41 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTU0NzQzNDc5M15BMl5BanBnXkFtZTcwNzMyOTYzNQ@@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:16:41 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0491259.jpg
+07/11 17:16:41 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0491259 to 1 in the database
+07/11 17:16:41 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:42 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000160
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000160 exists in the database:
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000160 exists in the database
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000160 can be downloaded:
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000160 in the database:
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000160.html réussi 
+07/11 17:16:42 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:42 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTk4NDMxMTI0MF5BMl5BanBnXkFtZTYwMjE3ODE0._V1_SY317_CR5,0,214,317_.jpg']
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000160.jpg
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000160 to 1 in the database
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:42 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0696059
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0696059 exists in the database:
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0696059 exists in the database
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0696059 can be downloaded:
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0696059 in the database:
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0696059.html réussi 
+07/11 17:16:42 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:42 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTk3NTUyNjA4Nl5BMl5BanBnXkFtZTcwNDAxODU4MQ@@._V1_SY317_CR6,0,214,317_.jpg']
+07/11 17:16:42 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0696059.jpg
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0696059 to 1 in the database
+07/11 17:16:42 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:43 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000553
+07/11 17:16:43 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:43 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:43 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000553 exists in the database:
+07/11 17:16:43 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000553 exists in the database
+07/11 17:16:43 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000553 can be downloaded:
+07/11 17:16:43 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:43 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000553 in the database:
+07/11 17:16:43 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:43 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000553.html réussi 
+07/11 17:16:43 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:43 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:43 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNjUzOTY2NDA3OV5BMl5BanBnXkFtZTYwODY2ODI4._V1_SY317_CR8,0,214,317_.jpg']
+07/11 17:16:43 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000553.jpg
+07/11 17:16:43 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000553 to 1 in the database
+07/11 17:16:43 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:44 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0005306
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0005306 exists in the database:
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0005306 exists in the database
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0005306 can be downloaded:
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0005306 in the database:
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0005306.html réussi 
+07/11 17:16:44 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:44 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTY3MjgzNzk1MV5BMl5BanBnXkFtZTcwMjg2MjQ4NA@@._V1_SY317_CR71,0,214,317_.jpg']
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0005306.jpg
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0005306 to 1 in the database
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:44 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000142
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000142 exists in the database:
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000142 exists in the database
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000142 can be downloaded:
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000142 in the database:
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000142.html réussi 
+07/11 17:16:44 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:44 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTg3MDc0MjY0OV5BMl5BanBnXkFtZTcwNzU1MDAxOA@@._V1_SY317_CR10,0,214,317_.jpg']
+07/11 17:16:44 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000142.jpg
+07/11 17:16:44 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000142 to 1 in the database
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:45 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0001337
+07/11 17:16:45 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:45 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0001337 exists in the database:
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0001337 exists in the database
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0001337 can be downloaded:
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0001337 in the database:
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:45 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0001337.html réussi 
+07/11 17:16:45 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:45 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:45 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNTM0NDEwMjA1MV5BMl5BanBnXkFtZTcwMzQxMDI3Mg@@._V1_SY317_CR0,0,214,317_.jpg']
+07/11 17:16:45 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0001337.jpg
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0001337 to 1 in the database
+07/11 17:16:45 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:46 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm1017334
+07/11 17:16:46 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:46 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:46 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1017334 exists in the database:
+07/11 17:16:46 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1017334 exists in the database
+07/11 17:16:46 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm1017334 can be downloaded:
+07/11 17:16:46 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:46 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm1017334 in the database:
+07/11 17:16:46 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:46 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm1017334.html réussi 
+07/11 17:16:46 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:46 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:46 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNDUwNjk1MDY5OV5BMl5BanBnXkFtZTgwMzA4MDEyMDE@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:16:46 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm1017334.jpg
+07/11 17:16:46 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm1017334 to 1 in the database
+07/11 17:16:46 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:47 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0001562
+07/11 17:16:47 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:47 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:47 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0001562 exists in the database:
+07/11 17:16:47 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0001562 exists in the database
+07/11 17:16:47 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0001562 can be downloaded:
+07/11 17:16:47 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:47 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0001562 in the database:
+07/11 17:16:47 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:47 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0001562.html réussi 
+07/11 17:16:47 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:47 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:47 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTY0MDg4MTEzNV5BMl5BanBnXkFtZTcwNDM5NDMwNA@@._V1_SY317_CR12,0,214,317_.jpg']
+07/11 17:16:47 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0001562.jpg
+07/11 17:16:47 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0001562 to 1 in the database
+07/11 17:16:47 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:48 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000217
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000217 exists in the database:
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000217 exists in the database
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000217 can be downloaded:
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000217 in the database:
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000217.html réussi 
+07/11 17:16:48 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:48 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTcyNDA4Nzk3N15BMl5BanBnXkFtZTcwNDYzMjMxMw@@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000217.jpg
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000217 to 1 in the database
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:48 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0540441
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0540441 exists in the database:
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0540441 exists in the database
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0540441 can be downloaded:
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0540441 in the database:
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0540441.html réussi 
+07/11 17:16:48 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:48 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTU0NDM5OTE0N15BMl5BanBnXkFtZTcwMzMzNjM0Nw@@._V1_SY317_CR21,0,214,317_.jpg']
+07/11 17:16:48 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0540441.jpg
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0540441 to 1 in the database
+07/11 17:16:48 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:49 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000117
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000117 exists in the database:
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000117 exists in the database
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000117 can be downloaded:
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000117 in the database:
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000117.html réussi 
+07/11 17:16:49 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:49 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTk3NjczODgxMV5BMl5BanBnXkFtZTcwMTMxNDE2NA@@._V1_SY317_CR13,0,214,317_.jpg']
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000117.jpg
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000117 to 1 in the database
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:49 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0319171
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0319171 exists in the database:
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0319171 exists in the database
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0319171 can be downloaded:
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0319171 in the database:
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0319171.html réussi 
+07/11 17:16:49 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:49 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNDczODExODcwOV5BMl5BanBnXkFyZXN1bWU@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:16:49 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0319171.jpg
+07/11 17:16:49 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0319171 to 1 in the database
+07/11 17:16:50 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:50 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0427964
+07/11 17:16:50 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:50 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:50 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0427964 exists in the database:
+07/11 17:16:50 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0427964 exists in the database
+07/11 17:16:50 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0427964 can be downloaded:
+07/11 17:16:50 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:50 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0427964 in the database:
+07/11 17:16:50 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0427964.html réussi 
+07/11 17:16:51 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:51 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTYzNDY4MDc0OF5BMl5BanBnXkFtZTYwODM4MDY0._V1_SY317_CR6,0,214,317_.jpg']
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0427964.jpg
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0427964 to 1 in the database
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:51 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0005327
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0005327 exists in the database:
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0005327 exists in the database
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0005327 can be downloaded:
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0005327 in the database:
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0005327.html réussi 
+07/11 17:16:51 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:51 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTM2MjI2NzI3OV5BMl5BanBnXkFtZTcwNzYzMTIxMw@@._V1_SY317_CR16,0,214,317_.jpg']
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0005327.jpg
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0005327 to 1 in the database
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:51 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000199
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000199 exists in the database:
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000199 exists in the database
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000199 can be downloaded:
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000199 in the database:
+07/11 17:16:51 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:51 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000199.html réussi 
+07/11 17:16:52 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTQzMzg1ODAyNl5BMl5BanBnXkFtZTYwMjAxODQ1._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:16:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000199.jpg
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000199 to 1 in the database
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:52 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm2018237
+07/11 17:16:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm2018237 exists in the database:
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm2018237 exists in the database
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm2018237 can be downloaded:
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm2018237 in the database:
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm2018237.html réussi 
+07/11 17:16:52 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTgxNTI3MjcyNV5BMl5BanBnXkFtZTcwNTYwMjAyMg@@._V1_SY317_CR12,0,214,317_.jpg']
+07/11 17:16:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm2018237.jpg
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm2018237 to 1 in the database
+07/11 17:16:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:53 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0004997
+07/11 17:16:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0004997 exists in the database:
+07/11 17:16:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0004997 exists in the database
+07/11 17:16:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0004997 can be downloaded:
+07/11 17:16:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0004997 in the database:
+07/11 17:16:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0004997.html réussi 
+07/11 17:16:54 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:54 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTYyNTU1MjU2Ml5BMl5BanBnXkFtZTcwODg2MzI2MQ@@._V1_SY317_CR1,0,214,317_.jpg']
+07/11 17:16:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0004997.jpg
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0004997 to 1 in the database
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:54 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0735442
+07/11 17:16:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0735442 exists in the database:
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0735442 exists in the database
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0735442 can be downloaded:
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0735442 in the database:
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0735442.html réussi 
+07/11 17:16:54 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:54 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNDEzODQ1OTA0Nl5BMl5BanBnXkFtZTcwNjU2MDc1Mw@@._V1_SY317_CR11,0,214,317_.jpg']
+07/11 17:16:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0735442.jpg
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0735442 to 1 in the database
+07/11 17:16:54 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:55 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0004918
+07/11 17:16:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:55 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0004918 exists in the database:
+07/11 17:16:55 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0004918 exists in the database
+07/11 17:16:55 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0004918 can be downloaded:
+07/11 17:16:55 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:55 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0004918 in the database:
+07/11 17:16:55 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0004918.html réussi 
+07/11 17:16:55 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:55 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTg3NzE5MDU4OF5BMl5BanBnXkFtZTgwMzY4MjgwMDE@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:16:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0004918.jpg
+07/11 17:16:55 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0004918 to 1 in the database
+07/11 17:16:55 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:56 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0811242
+07/11 17:16:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0811242 exists in the database:
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0811242 exists in the database
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0811242 can be downloaded:
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0811242 in the database:
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0811242.html réussi 
+07/11 17:16:56 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BODU2NDAxNzAwNF5BMl5BanBnXkFtZTcwMTAwNTQzNA@@._V1_SY317_CR1,0,214,317_.jpg']
+07/11 17:16:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0811242.jpg
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0811242 to 1 in the database
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:56 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000579
+07/11 17:16:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000579 exists in the database:
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000579 exists in the database
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000579 can be downloaded:
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000579 in the database:
+07/11 17:16:56 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000579.html réussi 
+07/11 17:16:57 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:57 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMjEyMDMzOTE0Ml5BMl5BanBnXkFtZTcwNDY5NjUzMw@@._V1_SY317_CR3,0,214,317_.jpg']
+07/11 17:16:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000579.jpg
+07/11 17:16:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000579 to 1 in the database
+07/11 17:16:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:57 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0159789
+07/11 17:16:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0159789 exists in the database:
+07/11 17:16:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0159789 exists in the database
+07/11 17:16:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0159789 can be downloaded:
+07/11 17:16:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0159789 in the database:
+07/11 17:16:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0159789.html réussi 
+07/11 17:16:58 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:58 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNTU2MzkxODM4NF5BMl5BanBnXkFtZTcwNzk0NzQ5MQ@@._V1_SY317_CR1,0,214,317_.jpg']
+07/11 17:16:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0159789.jpg
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0159789 to 1 in the database
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:58 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0001701
+07/11 17:16:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0001701 exists in the database:
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0001701 exists in the database
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0001701 can be downloaded:
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0001701 in the database:
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0001701.html réussi 
+07/11 17:16:58 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:58 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTY1MzI1MjIzN15BMl5BanBnXkFtZTcwMDIxODA1Nw@@._V1_SY317_CR91,0,214,317_.jpg']
+07/11 17:16:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0001701.jpg
+07/11 17:16:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0001701 to 1 in the database
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:59 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000630
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000630 exists in the database:
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000630 exists in the database
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000630 can be downloaded:
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000630 in the database:
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000630.html réussi 
+07/11 17:16:59 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:59 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMjExMjkwODU0NF5BMl5BanBnXkFtZTcwMDAzMjcyNw@@._V1_SY317_CR18,0,214,317_.jpg']
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000630.jpg
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000630 to 1 in the database
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:16:59 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0855039
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0855039 exists in the database:
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0855039 exists in the database
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0855039 can be downloaded:
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0855039 in the database:
+07/11 17:16:59 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0855039.html réussi 
+07/11 17:16:59 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:16:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:16:59 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNTIwMTI2MTQxMF5BMl5BanBnXkFtZTgwNjQwNTMxMDE@._V1_SY317_CR131,0,214,317_.jpg']
+07/11 17:17:00 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0855039.jpg
+07/11 17:17:00 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0855039 to 1 in the database
+07/11 17:17:00 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:00 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm1256532
+07/11 17:17:00 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:00 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:00 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1256532 exists in the database:
+07/11 17:17:00 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1256532 exists in the database
+07/11 17:17:00 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm1256532 can be downloaded:
+07/11 17:17:00 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:00 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm1256532 in the database:
+07/11 17:17:00 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:00 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm1256532.html réussi 
+07/11 17:17:00 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:00 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:00 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTcwNzA5MDg0OV5BMl5BanBnXkFtZTcwMTU2NjE0Nw@@._V1_SY317_CR9,0,214,317_.jpg']
+07/11 17:17:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm1256532.jpg
+07/11 17:17:01 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm1256532 to 1 in the database
+07/11 17:17:01 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:02 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0636426
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0636426 exists in the database:
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0636426 exists in the database
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0636426 can be downloaded:
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0636426 in the database:
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0636426.html réussi 
+07/11 17:17:02 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:02 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTc4NDk2NzQ0OV5BMl5BanBnXkFtZTcwNjU3NjAwNw@@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0636426.jpg
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0636426 to 1 in the database
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:02 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0190859
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0190859 exists in the database:
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0190859 exists in the database
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0190859 can be downloaded:
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0190859 in the database:
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0190859.html réussi 
+07/11 17:17:02 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:02 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMjA0ODY4OTk4Nl5BMl5BanBnXkFtZTcwNTkxMzYyMg@@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:17:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0190859.jpg
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0190859 to 1 in the database
+07/11 17:17:02 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:03 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0185819
+07/11 17:17:03 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:03 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:03 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0185819 exists in the database:
+07/11 17:17:03 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0185819 exists in the database
+07/11 17:17:03 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0185819 can be downloaded:
+07/11 17:17:03 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:03 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0185819 in the database:
+07/11 17:17:03 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:03 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0185819.html réussi 
+07/11 17:17:03 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:03 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:03 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMjEzMjk4NDU4MF5BMl5BanBnXkFtZTcwMDMyNjQzMg@@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:17:03 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0185819.jpg
+07/11 17:17:03 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0185819 to 1 in the database
+07/11 17:17:04 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:04 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0655585
+07/11 17:17:04 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:04 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:04 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0655585 exists in the database:
+07/11 17:17:04 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0655585 exists in the database
+07/11 17:17:04 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0655585 can be downloaded:
+07/11 17:17:04 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:04 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0655585 in the database:
+07/11 17:17:04 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:04 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0655585.html réussi 
+07/11 17:17:04 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:04 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:04 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMjA2ODMyMDgxMl5BMl5BanBnXkFtZTcwNjAwMjA3NA@@._V1_SY317_CR1,0,214,317_.jpg']
+07/11 17:17:04 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0655585.jpg
+07/11 17:17:04 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0655585 to 1 in the database
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:05 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm1782299
+07/11 17:17:05 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:05 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1782299 exists in the database:
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1782299 exists in the database
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm1782299 can be downloaded:
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm1782299 in the database:
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:05 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm1782299.html réussi 
+07/11 17:17:05 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:05 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:05 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTU3OTA3MzM2NV5BMl5BanBnXkFtZTcwMDczNjY0Mw@@._V1_SY317_CR20,0,214,317_.jpg']
+07/11 17:17:05 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm1782299.jpg
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm1782299 to 1 in the database
+07/11 17:17:05 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:06 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0001876
+07/11 17:17:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0001876 exists in the database:
+07/11 17:17:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0001876 exists in the database
+07/11 17:17:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0001876 can be downloaded:
+07/11 17:17:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0001876 in the database:
+07/11 17:17:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0001876.html réussi 
+07/11 17:17:06 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:06 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BOTA3MDQ0OTcwN15BMl5BanBnXkFtZTcwNDQxMjgyMg@@._V1_SY317_CR0,0,214,317_.jpg']
+07/11 17:17:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0001876.jpg
+07/11 17:17:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0001876 to 1 in the database
+07/11 17:17:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:07 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0136797
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0136797 exists in the database:
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0136797 exists in the database
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0136797 can be downloaded:
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0136797 in the database:
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0136797.html réussi 
+07/11 17:17:07 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:07 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMjAzMjkzNzA0M15BMl5BanBnXkFtZTcwNzMyNjU3MQ@@._V1_SY317_CR6,0,214,317_.jpg']
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0136797.jpg
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0136797 to 1 in the database
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:07 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000433
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000433 exists in the database:
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000433 exists in the database
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000433 can be downloaded:
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000433 in the database:
+07/11 17:17:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000433.html réussi 
+07/11 17:17:07 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:07 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTU4NTM1MTExOF5BMl5BanBnXkFtZTcwMTYwODMyMw@@._V1_SY317_CR2,0,214,317_.jpg']
+07/11 17:17:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000433.jpg
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000433 to 1 in the database
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:08 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000379
+07/11 17:17:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000379 exists in the database:
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000379 exists in the database
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000379 can be downloaded:
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000379 in the database:
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000379.html réussi 
+07/11 17:17:08 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:08 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNDQ3MzAxMDIxMF5BMl5BanBnXkFtZTcwNzg3MzY2OA@@._V1_SY317_CR91,0,214,317_.jpg']
+07/11 17:17:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000379.jpg
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000379 to 1 in the database
+07/11 17:17:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:09 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000651
+07/11 17:17:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000651 exists in the database:
+07/11 17:17:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000651 exists in the database
+07/11 17:17:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000651 can be downloaded:
+07/11 17:17:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000651 in the database:
+07/11 17:17:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000651.html réussi 
+07/11 17:17:09 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:09 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTMyOTg1NzAwNF5BMl5BanBnXkFtZTYwNzg0Mzk1._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:17:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000651.jpg
+07/11 17:17:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000651 to 1 in the database
+07/11 17:17:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:10 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000191
+07/11 17:17:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000191 exists in the database:
+07/11 17:17:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000191 exists in the database
+07/11 17:17:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000191 can be downloaded:
+07/11 17:17:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000191 in the database:
+07/11 17:17:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000191.html réussi 
+07/11 17:17:10 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:10 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTg1MjQ0MDg0Nl5BMl5BanBnXkFtZTcwNjYyNjI5Mg@@._V1_SX214_CR0,0,214,317_.jpg']
+07/11 17:17:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000191.jpg
+07/11 17:17:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000191 to 1 in the database
+07/11 17:17:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:11 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0597410
+07/11 17:17:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0597410 exists in the database:
+07/11 17:17:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0597410 exists in the database
+07/11 17:17:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0597410 can be downloaded:
+07/11 17:17:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0597410 in the database:
+07/11 17:17:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0597410.html réussi 
+07/11 17:17:11 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:11 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNjIzNzIxMjI0MF5BMl5BanBnXkFtZTcwODk3NDA5Mg@@._V1_SY317_CR4,0,214,317_.jpg']
+07/11 17:17:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0597410.jpg
+07/11 17:17:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0597410 to 1 in the database
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:12 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0001840
+07/11 17:17:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0001840 exists in the database:
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0001840 exists in the database
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0001840 can be downloaded:
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0001840 in the database:
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0001840.html réussi 
+07/11 17:17:12 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:12 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTIyNjUwNTk3OV5BMl5BanBnXkFtZTcwOTE4NTMzMQ@@._V1_SY317_CR19,0,214,317_.jpg']
+07/11 17:17:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0001840.jpg
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0001840 to 1 in the database
+07/11 17:17:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:13 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0704270
+07/11 17:17:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0704270 exists in the database:
+07/11 17:17:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0704270 exists in the database
+07/11 17:17:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0704270 can be downloaded:
+07/11 17:17:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0704270 in the database:
+07/11 17:17:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0704270.html réussi 
+07/11 17:17:13 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:13 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTQ3MjEzOTU4MV5BMl5BanBnXkFtZTcwMjMwMTY0Mg@@._V1_SY317_CR15,0,214,317_.jpg']
+07/11 17:17:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0704270.jpg
+07/11 17:17:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0704270 to 1 in the database
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:14 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0634240
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0634240 exists in the database:
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0634240 exists in the database
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0634240 can be downloaded:
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0634240 in the database:
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0634240.html réussi 
+07/11 17:17:14 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:14 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNjE3NDQyOTYyMV5BMl5BanBnXkFtZTcwODcyODU2Mw@@._V1_SY317_CR7,0,214,317_.jpg']
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0634240.jpg
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0634240 to 1 in the database
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:14 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0005377
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0005377 exists in the database:
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0005377 exists in the database
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0005377 can be downloaded:
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0005377 in the database:
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0005377.html réussi 
+07/11 17:17:14 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:14 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTc2NTM3MzE5NF5BMl5BanBnXkFtZTcwMjg4NDMwNA@@._V1_SY317_CR4,0,214,317_.jpg']
+07/11 17:17:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0005377.jpg
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0005377 to 1 in the database
+07/11 17:17:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:15 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000463
+07/11 17:17:15 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:15 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:15 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000463 exists in the database:
+07/11 17:17:15 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000463 exists in the database
+07/11 17:17:15 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000463 can be downloaded:
+07/11 17:17:15 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:15 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000463 in the database:
+07/11 17:17:15 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:15 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000463.html réussi 
+07/11 17:17:15 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:16 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:16 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BNDQ5MjU2NTQ0OV5BMl5BanBnXkFtZTcwNzAzODU1Mg@@._V1_SY317_CR12,0,214,317_.jpg']
+07/11 17:17:16 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000463.jpg
+07/11 17:17:16 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000463 to 1 in the database
+07/11 17:17:16 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
+07/11 17:17:16 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la page person pour nm0000932
+07/11 17:17:16 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 17:17:16 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 17:17:16 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0000932 exists in the database:
+07/11 17:17:16 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0000932 exists in the database
+07/11 17:17:16 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0000932 can be downloaded:
+07/11 17:17:16 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:16 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0000932 in the database:
+07/11 17:17:16 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 17:17:16 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/person/nm0000932.html réussi 
+07/11 17:17:16 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 17:17:17 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Person Pic
+07/11 17:17:17 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMjIxNzc5MDAzOV5BMl5BanBnXkFtZTcwMDUxMjMxMw@@._V1_SY317_CR10,0,214,317_.jpg']
+07/11 17:17:17 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/person_pic/nm0000932.jpg
+07/11 17:17:17 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Set the Image status for Person IMDB ID nm0000932 to 1 in the database
+07/11 17:17:17 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status modified
