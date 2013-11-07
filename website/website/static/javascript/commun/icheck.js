@@ -387,6 +387,14 @@
 
     // Remove regular state class
     parent[_remove](regular || option(node, callback) || '');
+    
+    // AJOUTE SALEMENT A LA MAIN 
+    
+    $('#actors > a > span').text($('#actors > ul > li > p > .checked').length);
+	$('#genres > a > span').text($('#genres > ul > li > p > .checked').length);
+	
+	// FIN
+
   };
 
   // Remove checked, disabled or indeterminate state
@@ -421,6 +429,14 @@
 
     // Add regular state class
     parent[_add](regular || option(node, callback));
+    
+    // AJOUTE SALEMENT A LA MAIN 
+    
+    $('#actors > a > span').text($('#actors > ul > li > p > .checked').length);
+	$('#genres > a > span').text($('#genres > ul > li > p > .checked').length);
+	
+	// FIN
+	
   };
 
   // Remove all traces
