@@ -33,7 +33,7 @@ function chargementBulleInfo(nomDuCadre,idDuFilm){
 		conteneurInfo.appendChild(conteneurSynopsis)
 		var texteTitre=document.createTextNode("Title : " + data.english_title);
 		conteneurTitre.appendChild(texteTitre)
-		var texteDateSortie=document.createTextNode("Release date : " + data.release_date);
+		var texteDateSortie=document.createTextNode("Release date : " + data.release_date.slice(-2)+"/"+data.release_date.slice(-5,-3)+"/"+data.release_date.slice(0,4));
 		conteneurDateSortie.appendChild(texteDateSortie)
 		/*var texteRealisateur=document.createTextNode("Director : " + data.release_date);
 		conteneurRealisateur.appendChild(texteRealisateur)*/
