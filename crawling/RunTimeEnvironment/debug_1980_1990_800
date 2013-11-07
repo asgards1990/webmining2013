@@ -17286,3 +17286,1164 @@
 07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0887838 exists in the database:
 07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0887838 exists in the database
 07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0887838 can be downloaded:
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:28:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:28:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0708092 exists in the database:
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0708092 does not exist in the database
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0708092 into the database (if not exists)
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0708092 exists in the database:
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0708092 does not exist in the database
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:28:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:28:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0209090 exists in the database:
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0209090 does not exist in the database
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0209090 into the database (if not exists)
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0209090 exists in the database:
+07/11 10:28:57 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0209090 does not exist in the database
+07/11 10:28:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:28:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:28:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:28:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0888931 exists in the database:
+07/11 10:28:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0888931 exists in the database
+07/11 10:28:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0888931 can be downloaded:
+07/11 10:28:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:28:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0888931 in the database:
+07/11 10:28:58 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:01 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0202556 dans la base de données
+07/11 10:29:01 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:02 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0202775 dans la base de données
+07/11 10:29:02 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:02 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0238846 dans la base de données
+07/11 10:29:03 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:03 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0255668 dans la base de données
+07/11 10:29:04 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:04 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0288868 dans la base de données
+07/11 10:29:05 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:05 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0335743 dans la base de données
+07/11 10:29:05 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:06 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0380332 dans la base de données
+07/11 10:29:06 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:07 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:07 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0483804 dans la base de données
+07/11 10:29:08 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:08 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0672491 dans la base de données
+07/11 10:29:08 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:09 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:10 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:10 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0518526 dans la base de données
+07/11 10:29:11 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:11 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0562213 dans la base de données
+07/11 10:29:12 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:12 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0595487 dans la base de données
+07/11 10:29:13 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:13 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0603049 dans la base de données
+07/11 10:29:13 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:14 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0705848 dans la base de données
+07/11 10:29:14 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:15 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0727310 dans la base de données
+07/11 10:29:15 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:16 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0889141 dans la base de données
+07/11 10:29:16 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:17 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:17 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0708092 dans la base de données
+07/11 10:29:18 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:19 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0209090 dans la base de données
+07/11 10:29:19 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:20 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:20 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0098157 : extraction des Directors / Writers / Actors
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Set the Extracted status for IMDB ID tt0098157 to 1 in the database
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film status modified
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la Page film pour le film tt0090903
+07/11 10:29:20 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type page de Film
+07/11 10:29:20 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0090903 exists in the database:
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0090903 exists in the database
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0090903 can be downloaded:
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0090903 in the database:
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:20 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/mainpage/tt0090903.html réussi 
+07/11 10:29:20 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:20 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Title : 
+07/11 10:29:20 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Plaisirs pervers']
+07/11 10:29:20 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Original Title : 
+07/11 10:29:20 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['"Il miele del diavolo"']
+07/11 10:29:20 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Poster : 
+07/11 10:29:20 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //td[@id="img_primary"]/*/a/img/@src est de taille nulle
+07/11 10:29:20 - SUPER LOGGER.EXTRACTOR IMDB - ERROR | Impossible de sauvegarder le poster, Error : list index out of range
+07/11 10:29:20 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Set the Poster status (Film Image) for IMDB ID tt0090903 to 1 in the database
+07/11 10:29:21 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film status modified
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Release Date : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1988-07-20']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Runtime : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['90 min']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Budget : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //h4[contains(text(),"Budget")]/parent::*/text() est de taille nulle
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract BoxOffice : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //h4[contains(text(),"Gross")]/parent::*/text() est de taille nulle
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract rating value : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['5.1']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract rating count : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['301']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract review count (user/critics) : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['9 user', '3 critic']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Synopsis : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['A young woman abducts and subjects a doctor to various sexual torture acts whom she holds responsible for the death of her boyfriend.']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract StoryLine  : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ["Dr. Wendell Simpson is troubled surgeon with a nagging wife, named Carol, and stressful hospital job, who botches a surgery on an injured young man, named Johnny, who then dies under his care. The man's dangerously disturbed girlfriend, Jessica, abducts the doctor and holds him captive at her apartment and subjects him to mind games and sexual torture because she holds the doctor responsible for the death of her boyfriend which triggers hidden repressed memories about Jessica and Johnny's times together, while Dr. Simpson finds himself pervasively drawn to this strange young woman holding him captive."]
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract metacritic score : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Metacritic Reviews']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - WARNING | Pas de score metacritic décelé pour le film tt0090903
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract country : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Spain', 'Italy']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Genre : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Thriller']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Stars) : 
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0357020/?ref_=tt_ov_st', '/name/nm0166452/?ref_=tt_ov_st', '/name/nm0551289/?ref_=tt_ov_st', 'fullcredits?ref_=tt_ov_st_sm']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0357020', 'nm0166452', 'nm0551289']
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0357020 exists in the database:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0357020 exists in the database
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0357020 can be downloaded:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0357020 in the database:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0166452 exists in the database:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0166452 exists in the database
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0166452 can be downloaded:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0166452 in the database:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0551289 exists in the database:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0551289 exists in the database
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0551289 can be downloaded:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0551289 in the database:
+07/11 10:29:21 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Language
+07/11 10:29:21 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['English', 'Spanish']
+07/11 10:29:21 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création du film avec l'id tt0090903 dans la base de données
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0090903 : extraction des données de base du film
+07/11 10:29:21 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Save
+07/11 10:29:22 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:22 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:23 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:24 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Save
+07/11 10:29:24 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des awards pour le film tt0090903
+07/11 10:29:24 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Awards
+07/11 10:29:24 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:24 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0090903 exists in the database:
+07/11 10:29:24 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0090903 exists in the database
+07/11 10:29:24 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0090903 can be downloaded:
+07/11 10:29:24 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:24 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0090903 in the database:
+07/11 10:29:24 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:24 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/awards/tt0090903.html réussi 
+07/11 10:29:24 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:25 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Awards (à remettre en forme) : 
+07/11 10:29:25 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //div[@id="main"]/div/div[@class="article listo"]/h3/text() est de taille nulle
+07/11 10:29:25 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/span[@class="award_category"]/text() est de taille nulle
+07/11 10:29:25 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/b/text() est de taille nulle
+07/11 10:29:25 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //a[@class="event_year"]/text() est de taille nulle
+07/11 10:29:25 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Mise en forme des Awards
+07/11 10:29:25 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des keywords pour le film tt0090903
+07/11 10:29:25 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Keyword
+07/11 10:29:25 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:25 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0090903 exists in the database:
+07/11 10:29:25 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0090903 exists in the database
+07/11 10:29:25 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0090903 can be downloaded:
+07/11 10:29:25 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:25 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0090903 in the database:
+07/11 10:29:25 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:25 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/keywords/tt0090903.html réussi 
+07/11 10:29:25 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:25 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['doctor', 'prostitution', 'controversy', 'masturbation', 'nylon stockings', 'sadomasochism', 'perversion', 'stocking run', 'trapped', 'erotica', 'accident', 'black pantyhose', 'nudity', 'female nudity', 'kidnapping', 'pantyhose', 'sadism', 'female stockinged legs', 'prostitute', 'sex', 'independent film']
+07/11 10:29:25 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0090903 : extraction des keywords
+07/11 10:29:27 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création du keyword stocking run dans la base de données
+07/11 10:29:31 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des reviews pour le film tt0090903
+07/11 10:29:31 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Reviews
+07/11 10:29:31 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:31 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0090903 exists in the database:
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0090903 exists in the database
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0090903 can be downloaded:
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0090903 in the database:
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/reviews/tt0090903.html réussi 
+07/11 10:29:32 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Grades : 
+07/11 10:29:32 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //span[@itemprop="ratingValue"]/text() est de taille nulle
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Summaries : 
+07/11 10:29:32 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //div[@class="summary"]/text() est de taille nulle
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Journals : 
+07/11 10:29:32 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //b[@itemprop="publisher"]/span[@itemprop="name"]/text() est de taille nulle
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Reviewers : 
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Full review URL : 
+07/11 10:29:32 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //span[@itemprop="author"]/../@href est de taille nulle
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des de la page Company Credits pour le film tt0090903
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type companyCredits
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0090903 exists in the database:
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0090903 exists in the database
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0090903 can be downloaded:
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0090903 in the database:
+07/11 10:29:32 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/companycredits/tt0090903.html réussi 
+07/11 10:29:32 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Producers : 
+07/11 10:29:32 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/register/login?why=edit&ref_=ttco_co_edt', '/title/tt0090903/?ref_=ttco_co_tt', '/company/co0001490?ref_=ttco_co_1', '/company/co0087676?ref_=ttco_co_2', '/company/co0062614?ref_=ttco_co_1', '/company/co0267411?ref_=ttco_co_2', '/company/co0077230?ref_=ttco_co_3']
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['co0001490', 'co0087676', 'co0062614', 'co0267411', 'co0077230']
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:32 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0001490 exists in the database:
+07/11 10:29:32 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0001490 exists in the database
+07/11 10:29:32 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0001490 can be downloaded:
+07/11 10:29:32 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:32 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Get the film Extracted status for Company IMDB ID co0001490 in the database:
+07/11 10:29:32 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:32 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/company/co0001490.html réussi 
+07/11 10:29:33 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0087676 exists in the database:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0087676 does not exist in the database
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Insert a company status for IMDB ID co0087676 into the database (if not exists)
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0087676 exists in the database:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0087676 does not exist in the database
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Company status inserted into the database
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0062614 exists in the database:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0062614 exists in the database
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0062614 can be downloaded:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Get the film Extracted status for Company IMDB ID co0062614 in the database:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0267411 exists in the database:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0267411 exists in the database
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0267411 can be downloaded:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Get the film Extracted status for Company IMDB ID co0267411 in the database:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0077230 exists in the database:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0077230 exists in the database
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0077230 can be downloaded:
+07/11 10:29:33 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:33 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0090903 : extraction des Producteurs
+07/11 10:29:33 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création du producteur co0001490 dans la base de données
+07/11 10:29:34 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création du producteur co0087676 dans la base de données
+07/11 10:29:35 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des de la page full credits pour le film tt0090903
+07/11 10:29:35 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Full credits
+07/11 10:29:35 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:35 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0090903 exists in the database:
+07/11 10:29:35 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0090903 exists in the database
+07/11 10:29:35 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0090903 can be downloaded:
+07/11 10:29:35 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:35 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0090903 in the database:
+07/11 10:29:35 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:35 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/fullcredits/tt0090903.html réussi 
+07/11 10:29:36 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Diretors : 
+07/11 10:29:36 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0002086/?ref_=ttfc_fc_dr1']
+07/11 10:29:36 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Lucio Fulci']
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0002086']
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0002086 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0002086 exists in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0002086 can be downloaded:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Writers: 
+07/11 10:29:36 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0049621/?ref_=ttfc_fc_wr1', '/name/nm0049621/?ref_=ttfc_fc_wr2', '/name/nm0002086/?ref_=ttfc_fc_wr3', '/name/nm0002086/?ref_=ttfc_fc_wr4', '/name/nm0547599/?ref_=ttfc_fc_wr5', '/name/nm0547599/?ref_=ttfc_fc_wr6', '/name/nm0664026/?ref_=ttfc_fc_wr7', '/name/nm0759456/?ref_=ttfc_fc_wr8', '/name/nm0759456/?ref_=ttfc_fc_wr9']
+07/11 10:29:36 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | [u'Jaime Jes\xfas Balc\xe1zar', u'Jaime Jes\xfas Balc\xe1zar', 'Lucio Fulci', 'Lucio Fulci', 'Ludovica Marineo', 'Ludovica Marineo', 'Sergio Partou', 'Vincenzo Salviani', 'Vincenzo Salviani']
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0049621', 'nm0049621', 'nm0002086', 'nm0002086', 'nm0547599', 'nm0547599', 'nm0664026', 'nm0759456', 'nm0759456']
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0049621 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0049621 exists in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0049621 can be downloaded:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0049621 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0049621 exists in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0049621 can be downloaded:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0002086 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0002086 exists in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0002086 can be downloaded:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0002086 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0002086 exists in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0002086 can be downloaded:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0547599 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0547599 does not exist in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0547599 into the database (if not exists)
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0547599 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0547599 does not exist in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0547599 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0547599 exists in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0547599 can be downloaded:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:36 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0664026 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0664026 does not exist in the database
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0664026 into the database (if not exists)
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0664026 exists in the database:
+07/11 10:29:36 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0664026 does not exist in the database
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0759456 exists in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0759456 does not exist in the database
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0759456 into the database (if not exists)
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0759456 exists in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0759456 does not exist in the database
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0759456 exists in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0759456 exists in the database
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0759456 can be downloaded:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Actors : 
+07/11 10:29:37 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0357020/?ref_=ttfc_fc_cl_t1', '/name/nm0166452/?ref_=ttfc_fc_cl_t2', '/name/nm0551289/?ref_=ttfc_fc_cl_t3', '/name/nm0534884/?ref_=ttfc_fc_cl_t4', '/name/nm0596765/?ref_=ttfc_fc_cl_t5', '/name/nm0784865/?ref_=ttfc_fc_cl_t6', '/name/nm0002086/?ref_=ttfc_fc_cl_t7', '/name/nm0709343/?ref_=ttfc_fc_cl_t8']
+07/11 10:29:37 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Brett Halsey', u'Corinne Cl\xe9ry', 'Blanca Marsillach', 'Stefano Madia', 'Paula Molina', 'Bernard Seray', 'Lucio Fulci', u'Eul\xe0lia Ramon']
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0357020', 'nm0166452', 'nm0551289', 'nm0534884', 'nm0596765', 'nm0784865', 'nm0002086', 'nm0709343']
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0357020 exists in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0357020 exists in the database
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0357020 can be downloaded:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0357020 in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0166452 exists in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0166452 exists in the database
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0166452 can be downloaded:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0166452 in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0551289 exists in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0551289 exists in the database
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0551289 can be downloaded:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0551289 in the database:
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:37 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:37 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0534884 exists in the database:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0534884 exists in the database
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0534884 can be downloaded:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0596765 exists in the database:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0596765 exists in the database
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0596765 can be downloaded:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0784865 exists in the database:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0784865 exists in the database
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0784865 can be downloaded:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0002086 exists in the database:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0002086 exists in the database
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0002086 can be downloaded:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:38 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0709343 exists in the database:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0709343 exists in the database
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0709343 can be downloaded:
+07/11 10:29:38 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:42 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0547599 dans la base de données
+07/11 10:29:43 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0664026 dans la base de données
+07/11 10:29:44 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0759456 dans la base de données
+07/11 10:29:48 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:49 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0596765 dans la base de données
+07/11 10:29:49 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:50 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:50 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:51 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:51 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0090903 : extraction des Directors / Writers / Actors
+07/11 10:29:51 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Set the Extracted status for IMDB ID tt0090903 to 1 in the database
+07/11 10:29:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film status modified
+07/11 10:29:52 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la Page film pour le film tt0082043
+07/11 10:29:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type page de Film
+07/11 10:29:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0082043 exists in the database:
+07/11 10:29:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0082043 exists in the database
+07/11 10:29:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0082043 can be downloaded:
+07/11 10:29:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0082043 in the database:
+07/11 10:29:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/mainpage/tt0082043.html réussi 
+07/11 10:29:52 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Title : 
+07/11 10:29:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Bad Blood']
+07/11 10:29:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Original Title : 
+07/11 10:29:52 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //td[@id="overview-top"]/h1[@class="header"]/span[@class="title-extra" and @itemprop="name"]/text() est de taille nulle
+07/11 10:29:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Poster : 
+07/11 10:29:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['http://ia.media-imdb.com/images/M/MV5BMTk1NzQ4OTg2Ml5BMl5BanBnXkFtZTcwMzE4OTk2Mw@@._V1_SY317_CR5,0,214,317_.jpg']
+07/11 10:29:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Sauvegarde de l'image jpg vers le chemin /home/pesto/imdb/poster/tt0082043.jpg
+07/11 10:29:53 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Set the Poster status (Film Image) for IMDB ID tt0082043 to 1 in the database
+07/11 10:29:53 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film status modified
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Release Date : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1983-04-14']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Runtime : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['105 min']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Budget : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //h4[contains(text(),"Budget")]/parent::*/text() est de taille nulle
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract BoxOffice : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //h4[contains(text(),"Gross")]/parent::*/text() est de taille nulle
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract rating value : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['6.6']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract rating count : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['163']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract review count (user/critics) : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['7 user', '3 critic']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Synopsis : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['During World War 2, a farmer in New Zealand murders seven people, and the police, along with local Maori trackers, hunt him in the bush country.']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract StoryLine  : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['During World War 2, a farmer in New Zealand murders seven people, and the police, along with local Maori trackers, hunt him in the bush country.']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract metacritic score : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Metacritic Reviews']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - WARNING | Pas de score metacritic décelé pour le film tt0082043
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract country : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['New Zealand', 'UK']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Genre : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Drama', 'Thriller']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Stars) : 
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0860233/?ref_=tt_ov_st', '/name/nm0122609/?ref_=tt_ov_st', '/name/nm0510317/?ref_=tt_ov_st', 'fullcredits?ref_=tt_ov_st_sm']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0860233', 'nm0122609', 'nm0510317']
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0860233 exists in the database:
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0860233 exists in the database
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0860233 can be downloaded:
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0860233 in the database:
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0122609 exists in the database:
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0122609 exists in the database
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0122609 can be downloaded:
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0510317 exists in the database:
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0510317 exists in the database
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0510317 can be downloaded:
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0510317 in the database:
+07/11 10:29:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Language
+07/11 10:29:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['English']
+07/11 10:29:54 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création du film avec l'id tt0082043 dans la base de données
+07/11 10:29:54 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0082043 : extraction des données de base du film
+07/11 10:29:54 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Save
+07/11 10:29:54 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:54 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:55 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:29:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Save
+07/11 10:29:57 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des awards pour le film tt0082043
+07/11 10:29:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Awards
+07/11 10:29:57 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:57 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0082043 exists in the database:
+07/11 10:29:58 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0082043 exists in the database
+07/11 10:29:58 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0082043 can be downloaded:
+07/11 10:29:58 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:58 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0082043 in the database:
+07/11 10:29:58 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:58 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/awards/tt0082043.html réussi 
+07/11 10:29:59 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Awards (à remettre en forme) : 
+07/11 10:29:59 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //div[@id="main"]/div/div[@class="article listo"]/h3/text() est de taille nulle
+07/11 10:29:59 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/span[@class="award_category"]/text() est de taille nulle
+07/11 10:29:59 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]/tr/td[@class="title_award_outcome"]/b/text() est de taille nulle
+07/11 10:29:59 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //a[@class="event_year"]/text() est de taille nulle
+07/11 10:29:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Mise en forme des Awards
+07/11 10:29:59 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des keywords pour le film tt0082043
+07/11 10:29:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Keyword
+07/11 10:29:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:29:59 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0082043 exists in the database:
+07/11 10:29:59 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0082043 exists in the database
+07/11 10:29:59 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0082043 can be downloaded:
+07/11 10:29:59 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:29:59 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0082043 in the database:
+07/11 10:29:59 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:29:59 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/keywords/tt0082043.html réussi 
+07/11 10:29:59 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:29:59 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['new zealand', 'independent film', 'based on true story']
+07/11 10:29:59 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0082043 : extraction des keywords
+07/11 10:30:00 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des reviews pour le film tt0082043
+07/11 10:30:00 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Reviews
+07/11 10:30:00 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:00 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0082043 exists in the database:
+07/11 10:30:00 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0082043 exists in the database
+07/11 10:30:00 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0082043 can be downloaded:
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0082043 in the database:
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/reviews/tt0082043.html réussi 
+07/11 10:30:01 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Grades : 
+07/11 10:30:01 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //span[@itemprop="ratingValue"]/text() est de taille nulle
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Summaries : 
+07/11 10:30:01 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //div[@class="summary"]/text() est de taille nulle
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Journals : 
+07/11 10:30:01 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //b[@itemprop="publisher"]/span[@itemprop="name"]/text() est de taille nulle
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Reviewers : 
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Full review URL : 
+07/11 10:30:01 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //span[@itemprop="author"]/../@href est de taille nulle
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des de la page Company Credits pour le film tt0082043
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type companyCredits
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0082043 exists in the database:
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0082043 exists in the database
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0082043 can be downloaded:
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0082043 in the database:
+07/11 10:30:01 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/companycredits/tt0082043.html réussi 
+07/11 10:30:01 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Producers : 
+07/11 10:30:01 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/register/login?why=edit&ref_=ttco_co_edt', '/title/tt0082043/?ref_=ttco_co_tt', '/title/tt0082043/?ref_=ttco_co_tt', '/company/co0110370?ref_=ttco_co_1', '/company/co0050640?ref_=ttco_co_1', '/company/co0057923?ref_=ttco_co_2', '/company/co0122766?ref_=ttco_co_3', '/company/co0122766?ref_=ttco_co_4', '/company/co0082542?ref_=ttco_co_5', '/company/co0077875?ref_=ttco_co_6']
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['co0110370', 'co0050640', 'co0057923', 'co0122766', 'co0122766', 'co0082542', 'co0077875']
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0110370 exists in the database:
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0110370 does not exist in the database
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Insert a company status for IMDB ID co0110370 into the database (if not exists)
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0110370 exists in the database:
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0110370 does not exist in the database
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Company status inserted into the database
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:30:01 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0050640 exists in the database:
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0050640 exists in the database
+07/11 10:30:01 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0050640 can be downloaded:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Get the film Extracted status for Company IMDB ID co0050640 in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0057923 exists in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0057923 exists in the database
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0057923 can be downloaded:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Get the film Extracted status for Company IMDB ID co0057923 in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0122766 exists in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0122766 exists in the database
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0122766 can be downloaded:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Get the film Extracted status for Company IMDB ID co0122766 in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0122766 exists in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0122766 exists in the database
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0122766 can be downloaded:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Get the film Extracted status for Company IMDB ID co0122766 in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0082542 exists in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0082542 exists in the database
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Determine if the film co0082542 can be downloaded:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Producer
+07/11 10:30:02 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0077875 exists in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0077875 does not exist in the database
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Insert a company status for IMDB ID co0077875 into the database (if not exists)
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | Find if the company with IMDB ID co0077875 exists in the database:
+07/11 10:30:02 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> The company with IMDB ID co0077875 does not exist in the database
+07/11 10:30:03 - SUPER LOGGER.IMDB COMPANY STATUS CONNECTOR - DEBUG | -> Company status inserted into the database
+07/11 10:30:03 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0082043 : extraction des Producteurs
+07/11 10:30:03 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création du producteur co0110370 dans la base de données
+07/11 10:30:04 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création du producteur co0077875 dans la base de données
+07/11 10:30:05 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des de la page full credits pour le film tt0082043
+07/11 10:30:05 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Full credits
+07/11 10:30:05 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:05 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0082043 exists in the database:
+07/11 10:30:05 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0082043 exists in the database
+07/11 10:30:05 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0082043 can be downloaded:
+07/11 10:30:05 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:05 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0082043 in the database:
+07/11 10:30:05 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:05 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/fullcredits/tt0082043.html réussi 
+07/11 10:30:06 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Diretors : 
+07/11 10:30:06 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0001565/?ref_=ttfc_fc_dr1']
+07/11 10:30:06 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Mike Newell']
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0001565']
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0001565 exists in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0001565 exists in the database
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0001565 can be downloaded:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0001565 in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Writers: 
+07/11 10:30:06 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0113020/?ref_=ttfc_fc_wr1', '/name/nm0932345/?ref_=ttfc_fc_wr2']
+07/11 10:30:06 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Andrew Brown', 'Howard Willis']
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0113020', 'nm0932345']
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0113020 exists in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0113020 does not exist in the database
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0113020 into the database (if not exists)
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0113020 exists in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0113020 does not exist in the database
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0932345 exists in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0932345 does not exist in the database
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0932345 into the database (if not exists)
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0932345 exists in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0932345 does not exist in the database
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Actors : 
+07/11 10:30:06 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0860233/?ref_=ttfc_fc_cl_t1', '/name/nm0122609/?ref_=ttfc_fc_cl_t2', '/name/nm0510317/?ref_=ttfc_fc_cl_t3', '/name/nm0015223/?ref_=ttfc_fc_cl_t4', '/name/nm0761809/?ref_=ttfc_fc_cl_t5', '/name/nm0621031/?ref_=ttfc_fc_cl_t6', '/name/nm0085612/?ref_=ttfc_fc_cl_t7', '/name/nm0045324/?ref_=ttfc_fc_cl_t8', '/name/nm0051555/?ref_=ttfc_fc_cl_t9', '/name/nm0085349/?ref_=ttfc_fc_cl_t10', '/name/nm0103301/?ref_=ttfc_fc_cl_t11', '/name/nm0622550/?ref_=ttfc_fc_cl_t12', '/name/nm0422099/?ref_=ttfc_fc_cl_t13', '/name/nm0249206/?ref_=ttfc_fc_cl_t14', '/name/nm0263775/?ref_=ttfc_fc_cl_t15', '/name/nm0806662/?ref_=ttfc_fc_cl_t16', '/name/nm0362005/?ref_=ttfc_fc_cl_t17', '/name/nm0571259/?ref_=ttfc_fc_cl_t18', '/name/nm1930177/?ref_=ttfc_fc_cl_t19', '/name/nm0021600/?ref_=ttfc_fc_cl_t20', '/name/nm1931421/?ref_=ttfc_fc_cl_t21', '/name/nm0141635/?ref_=ttfc_fc_cl_t22', '/name/nm1838366/?ref_=ttfc_fc_cl_t23', '/name/nm0323260/?ref_=ttfc_fc_cl_t24', '/name/nm1929103/?ref_=ttfc_fc_cl_t25', '/name/nm0354100/?ref_=ttfc_fc_cl_t26', '/name/nm0390324/?ref_=ttfc_fc_cl_t27', '/name/nm0425526/?ref_=ttfc_fc_cl_t28', '/name/nm0446333/?ref_=ttfc_fc_cl_t29', '/name/nm1936109/?ref_=ttfc_fc_cl_t30', '/name/nm1927769/?ref_=ttfc_fc_cl_t31', '/name/nm1932754/?ref_=ttfc_fc_cl_t32', '/name/nm1931389/?ref_=ttfc_fc_cl_t33', '/name/nm0811036/?ref_=ttfc_fc_cl_t34', '/name/nm1928897/?ref_=ttfc_fc_cl_t35', '/name/nm1928360/?ref_=ttfc_fc_cl_t36', '/name/nm0893947/?ref_=ttfc_fc_cl_t37', '/name/nm1926904/?ref_=ttfc_fc_cl_t38', '/name/nm0914240/?ref_=ttfc_fc_cl_t39', '/name/nm0914609/?ref_=ttfc_fc_cl_t40', '/name/nm1577307/?ref_=ttfc_fc_cl_t41', '/name/nm0942210/?ref_=ttfc_fc_cl_t42']
+07/11 10:30:06 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Jack Thompson', 'Carol Burns', 'Denis Lill', 'Donna Akersten', 'Martyn Sanderson', 'Marshall Napier', 'Ken Blackburn', 'John Bach', 'John Banas', 'John Black', 'Karl Bradley', 'Greg Naughton', 'Alan Jervis Wilks', 'Grant Edgar', 'Pat Evison', 'Dulcie Smart', 'Miranda Harcourt', 'Dorothy McKegg', 'Bryan Aitken', 'Bruce Allpress', 'Paul Breeze', 'George Carter', 'David Copeland', 'Mervyn Glue', 'Julie Gray', 'Michael Haigh', 'Philip Holder', 'Kelly Johnson', 'Desmond Kelly', 'Bob Kluts', 'Tony Pattison', 'Berwyn Smith', 'Dennis Smith', 'Geoff Snell', 'Michael Teen', 'Ray Tinsley', 'Peter Vere-Jones', 'Tony Warren', 'Ian Watkin', 'Elizabeth Watson', 'Cliff Wood', 'Arthur Wright']
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0860233', 'nm0122609', 'nm0510317', 'nm0015223', 'nm0761809', 'nm0621031', 'nm0085612', 'nm0045324', 'nm0051555', 'nm0085349', 'nm0103301', 'nm0622550', 'nm0422099', 'nm0249206', 'nm0263775', 'nm0806662', 'nm0362005', 'nm0571259', 'nm1930177', 'nm0021600', 'nm1931421', 'nm0141635', 'nm1838366', 'nm0323260', 'nm1929103', 'nm0354100', 'nm0390324', 'nm0425526', 'nm0446333', 'nm1936109', 'nm1927769', 'nm1932754', 'nm1931389', 'nm0811036', 'nm1928897', 'nm1928360', 'nm0893947', 'nm1926904', 'nm0914240', 'nm0914609', 'nm1577307', 'nm0942210']
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0860233 exists in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0860233 exists in the database
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0860233 can be downloaded:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0860233 in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0122609 exists in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0122609 exists in the database
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0122609 can be downloaded:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:06 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0510317 exists in the database:
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0510317 exists in the database
+07/11 10:30:06 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0510317 can be downloaded:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0510317 in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0015223 exists in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0015223 exists in the database
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0015223 can be downloaded:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0761809 exists in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0761809 exists in the database
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0761809 can be downloaded:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0761809 in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0621031 exists in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0621031 exists in the database
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0621031 can be downloaded:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0621031 in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0085612 exists in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0085612 exists in the database
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0085612 can be downloaded:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0045324 exists in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0045324 exists in the database
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0045324 can be downloaded:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0045324 in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0051555 exists in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0051555 exists in the database
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0051555 can be downloaded:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0051555 in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:07 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0085349 exists in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0085349 does not exist in the database
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0085349 into the database (if not exists)
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0085349 exists in the database:
+07/11 10:30:07 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0085349 does not exist in the database
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0103301 exists in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0103301 exists in the database
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0103301 can be downloaded:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0103301 in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0622550 exists in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0622550 exists in the database
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0622550 can be downloaded:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0422099 exists in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0422099 exists in the database
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0422099 can be downloaded:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0249206 exists in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0249206 does not exist in the database
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0249206 into the database (if not exists)
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0249206 exists in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0249206 does not exist in the database
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0263775 exists in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0263775 exists in the database
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0263775 can be downloaded:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0263775 in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:08 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0806662 exists in the database:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0806662 exists in the database
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0806662 can be downloaded:
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:08 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0806662 in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0362005 exists in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0362005 exists in the database
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0362005 can be downloaded:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0362005 in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0571259 exists in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0571259 does not exist in the database
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0571259 into the database (if not exists)
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0571259 exists in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0571259 does not exist in the database
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1930177 exists in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1930177 does not exist in the database
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1930177 into the database (if not exists)
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1930177 exists in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1930177 does not exist in the database
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0021600 exists in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0021600 exists in the database
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0021600 can be downloaded:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0021600 in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:09 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1931421 exists in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1931421 does not exist in the database
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1931421 into the database (if not exists)
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1931421 exists in the database:
+07/11 10:30:09 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1931421 does not exist in the database
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0141635 exists in the database:
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0141635 does not exist in the database
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0141635 into the database (if not exists)
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0141635 exists in the database:
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0141635 does not exist in the database
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1838366 exists in the database:
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1838366 does not exist in the database
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1838366 into the database (if not exists)
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1838366 exists in the database:
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1838366 does not exist in the database
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0323260 exists in the database:
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0323260 does not exist in the database
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0323260 into the database (if not exists)
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0323260 exists in the database:
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0323260 does not exist in the database
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:10 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1929103 exists in the database:
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1929103 does not exist in the database
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1929103 into the database (if not exists)
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1929103 exists in the database:
+07/11 10:30:10 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1929103 does not exist in the database
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0354100 exists in the database:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0354100 does not exist in the database
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0354100 into the database (if not exists)
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0354100 exists in the database:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0354100 does not exist in the database
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0390324 exists in the database:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0390324 exists in the database
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0390324 can be downloaded:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0425526 exists in the database:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0425526 exists in the database
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0425526 can be downloaded:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0446333 exists in the database:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0446333 exists in the database
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0446333 can be downloaded:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0446333 in the database:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:11 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1936109 exists in the database:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1936109 does not exist in the database
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1936109 into the database (if not exists)
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1936109 exists in the database:
+07/11 10:30:11 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1936109 does not exist in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1927769 exists in the database:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1927769 does not exist in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1927769 into the database (if not exists)
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1927769 exists in the database:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1927769 does not exist in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1932754 exists in the database:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1932754 does not exist in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1932754 into the database (if not exists)
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1932754 exists in the database:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1932754 does not exist in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1931389 exists in the database:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1931389 does not exist in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1931389 into the database (if not exists)
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1931389 exists in the database:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1931389 does not exist in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0811036 exists in the database:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0811036 exists in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0811036 can be downloaded:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:12 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1928897 exists in the database:
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1928897 does not exist in the database
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1928897 into the database (if not exists)
+07/11 10:30:12 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1928897 exists in the database:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1928897 does not exist in the database
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1928360 exists in the database:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1928360 does not exist in the database
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1928360 into the database (if not exists)
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1928360 exists in the database:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1928360 does not exist in the database
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0893947 exists in the database:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0893947 exists in the database
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0893947 can be downloaded:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1926904 exists in the database:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1926904 does not exist in the database
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1926904 into the database (if not exists)
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1926904 exists in the database:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1926904 does not exist in the database
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0914240 exists in the database:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0914240 exists in the database
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0914240 can be downloaded:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0914240 in the database:
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:13 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:13 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0914609 exists in the database:
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0914609 does not exist in the database
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm0914609 into the database (if not exists)
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0914609 exists in the database:
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0914609 does not exist in the database
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1577307 exists in the database:
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1577307 does not exist in the database
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Insert a person status for IMDB ID nm1577307 into the database (if not exists)
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm1577307 exists in the database:
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm1577307 does not exist in the database
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Person status inserted into the database
+07/11 10:30:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:14 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0942210 exists in the database:
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0942210 exists in the database
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0942210 can be downloaded:
+07/11 10:30:14 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:15 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0113020 dans la base de données
+07/11 10:30:17 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0932345 dans la base de données
+07/11 10:30:19 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:20 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:21 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:21 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:22 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:23 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:23 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0085349 dans la base de données
+07/11 10:30:24 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:25 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:25 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0622550 dans la base de données
+07/11 10:30:26 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:27 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:27 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0249206 dans la base de données
+07/11 10:30:28 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:29 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:29 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:30 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:30 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0571259 dans la base de données
+07/11 10:30:31 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:31 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1930177 dans la base de données
+07/11 10:30:32 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:32 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:33 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1931421 dans la base de données
+07/11 10:30:33 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:34 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0141635 dans la base de données
+07/11 10:30:34 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:35 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1838366 dans la base de données
+07/11 10:30:35 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:36 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0323260 dans la base de données
+07/11 10:30:36 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:37 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1929103 dans la base de données
+07/11 10:30:37 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:38 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0354100 dans la base de données
+07/11 10:30:38 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:39 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:39 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:40 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:40 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1936109 dans la base de données
+07/11 10:30:41 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:41 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1927769 dans la base de données
+07/11 10:30:42 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:42 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1932754 dans la base de données
+07/11 10:30:42 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:43 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1931389 dans la base de données
+07/11 10:30:43 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:44 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:45 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1928897 dans la base de données
+07/11 10:30:45 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:45 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1928360 dans la base de données
+07/11 10:30:46 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:47 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:47 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1926904 dans la base de données
+07/11 10:30:48 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:48 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:49 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm0914609 dans la base de données
+07/11 10:30:49 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:49 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de la personne nm1577307 dans la base de données
+07/11 10:30:50 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:50 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:51 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0082043 : extraction des Directors / Writers / Actors
+07/11 10:30:51 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Set the Extracted status for IMDB ID tt0082043 to 1 in the database
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film status modified
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction de la Page film pour le film tt0088466
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type page de Film
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0088466 exists in the database:
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0088466 exists in the database
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0088466 can be downloaded:
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0088466 in the database:
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/mainpage/tt0088466.html réussi 
+07/11 10:30:52 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Title : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | [u'\xc5ke och hans v\xe4rld']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Original Title : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //td[@id="overview-top"]/h1[@class="header"]/span[@class="title-extra" and @itemprop="name"]/text() est de taille nulle
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Poster : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //td[@id="img_primary"]/*/a/img/@src est de taille nulle
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - ERROR | Impossible de sauvegarder le poster, Error : list index out of range
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Set the Poster status (Film Image) for IMDB ID tt0088466 to 1 in the database
+07/11 10:30:52 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film status modified
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Release Date : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1984-10-26']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Runtime : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['99 min']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Budget : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - WARNING | L'extraction de l'élément //h4[contains(text(),"Budget")]/parent::*/text() est de taille nulle
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract BoxOffice : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | [u'SEK\xa04,159,783']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Devise du budget non reconnue
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract rating value : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['6.6']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract rating count : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['212']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract review count (user/critics) : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1 user', '1 critic']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Synopsis : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | [u'In 1929, the film follows the six-year old son of a Swedish country doctor. \xc5ke lives with his parents and his sister Aja in a small provincial town. His best friend is Kalle Nubb. \xc5ke is ...', u'\xbb']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract StoryLine  : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | [u'In 1929, the film follows the six-year old son of a Swedish country doctor. \xc5ke lives with his parents and his sister Aja in a small provincial town. His best friend is Kalle Nubb. \xc5ke is very frightened of the janitor Bergstr\xf6m as well as the lunatic Anne-Marie, his cousin who lives in the attic. There is also the strict principal Godeman as well as the religious cobbler Ebenholtz.']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract metacritic score : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Metacritic Reviews']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - WARNING | Pas de score metacritic décelé pour le film tt0088466
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract country : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Sweden']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Genre : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Drama']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Stars) : 
+07/11 10:30:52 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['/name/nm0512516/?ref_=tt_ov_st', '/name/nm0266266/?ref_=tt_ov_st', '/name/nm0292708/?ref_=tt_ov_st', 'fullcredits?ref_=tt_ov_st_sm']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ['nm0512516', 'nm0266266', 'nm0292708']
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0512516 exists in the database:
+07/11 10:30:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0512516 exists in the database
+07/11 10:30:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0512516 can be downloaded:
+07/11 10:30:52 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:52 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0266266 exists in the database:
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0266266 exists in the database
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0266266 can be downloaded:
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Get the film Extracted status for Person IMDB ID nm0266266 in the database:
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Person
+07/11 10:30:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Find if the person with IMDB ID nm0292708 exists in the database:
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> The person with IMDB ID nm0292708 exists in the database
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | Determine if the film nm0292708 can be downloaded:
+07/11 10:30:53 - SUPER LOGGER.IMDB PERSON STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Language
+07/11 10:30:53 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Swedish']
+07/11 10:30:53 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création du film avec l'id tt0088466 dans la base de données
+07/11 10:30:53 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour de la DB pour le film tt0088466 : extraction des données de base du film
+07/11 10:30:53 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Save
+07/11 10:30:53 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:54 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:54 - SUPER LOGGER.FILM EXTRACTOR UTILS - INFO | Création de l'Actor weight dans la base de données
+07/11 10:30:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Save
+07/11 10:30:55 - SUPER LOGGER.IMDB FILM EXTRACTOR - DEBUG | Lancement de l'extraction des awards pour le film tt0088466
+07/11 10:30:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création d'un Extracteur pour un type Awards
+07/11 10:30:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Création de IMDB Extracteur
+07/11 10:30:55 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Find if the Film IMDB ID tt0088466 exists in the database:
+07/11 10:30:55 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Film IMDB ID tt0088466 exists in the database
+07/11 10:30:55 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Determine if the film tt0088466 can be downloaded:
+07/11 10:30:55 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 1
+07/11 10:30:55 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | Get the film Extracted status for FILM IMDB ID tt0088466 in the database:
+07/11 10:30:55 - SUPER LOGGER.IMDB FILM STATUS CONNECTOR - DEBUG | -> Status: 0
+07/11 10:30:55 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG |  Ouverture du fichier /home/pesto/imdb/film/awards/tt0088466.html réussi 
+07/11 10:30:56 - SUPER LOGGER.CLEANER - DEBUG | Cleaner créé
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Extract Awards (à remettre en forme) : 
+07/11 10:30:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Chicago International Film Festival', 'Lucas - International Festival of Films for Children and Young People', 'Moscow International Film Festival', 'Valladolid International Film Festival']
+07/11 10:30:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Gold Hugo', 'Lucas', 'Golden Prize', 'Golden Spike']
+07/11 10:30:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['Nominated', 'Won', 'Nominated', 'Won']
+07/11 10:30:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1985', '1985', '1985', '1985']
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Mise en forme des Awards
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ########### Chicago International Film Festival  ##############
+07/11 10:30:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1']
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Nominated
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Gold Hugo
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | 1985
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | 1
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ########### Lucas - International Festival of Films for Children and Young People  ##############
+07/11 10:30:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1']
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Won
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Lucas
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | 1985
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | 1
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ########### Moscow International Film Festival  ##############
+07/11 10:30:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1']
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Nominated
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Golden Prize
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | 1985
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | 1
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | ########### Valladolid International Film Festival  ##############
+07/11 10:30:56 - SUPER LOGGER.ExTRACTOR HTML - DEBUG | ['1']
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Won
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | Golden Spike
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | 1985
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - DEBUG | 1
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour du film tt0088466, lien avec un nouvel award pour l'institution Chicago International Film Festival
+07/11 10:30:56 - SUPER LOGGER.EXTRACTOR IMDB - INFO | Mise à jour du film tt0088466, lien avec un nouvel award pour l'institution Lucas - International Festival of Films for Children and Young People
