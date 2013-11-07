@@ -261,9 +261,9 @@ class CinemaService(LearningService):
             self.proj_keywords_KM=normalize(self.proj_keywords_KM.astype(np.double),axis=0, norm='l1')
             self.keywords_reduced_KM = self.keyword_matrix * self.proj_keywords_KM
             # Save object in cache
-            self.create_cobject('keywords_reduced', self.keywords_reduced_KM)
+            self.create_cobject('keywords_reduced', (self.keywords_reduced_KM, self.proj_keywords_KM))
         else:
-            self.keywords_reduced_KM = self.get_cobject('keywords_reduced').get_content()
+            self.keywords_reduced_KM, self.proj_keywords_KM = self.get_cobject('keywords_reduced').get_content()
     
     def loadRanks(self):
         if not self.is_loaded('ranks'):
@@ -331,9 +331,9 @@ class CinemaService(LearningService):
             self.actor_reduced_KM = self.actor_matrix * self.proj_actors_KM
 
             # Save object in cache
-            self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM))
+            self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM, self.proj_actors_KM))
         else:
-            self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM = self.get_cobject('actors_reduced').get_content()
+            self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM, self.proj_actors_KM = self.get_cobject('actors_reduced').get_content()
   
     def loadWriters(self):
         keywords_reduced = self.keywords_reduced_KM
@@ -418,9 +418,9 @@ class CinemaService(LearningService):
             self.proj_directors_KM=normalize(self.proj_directors_KM.astype(np.double),axis=0, norm='l1')
             self.director_reduced_KM = self.director_matrix * self.proj_directors_KM
             # Save object in cache
-            self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM))
+            self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM))
         else:
-            self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM = self.get_cobject('directors_reduced').get_content()
+            self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM = self.get_cobject('directors_reduced').get_content()
 
     def loadSearchClustering(self):
         if not self.is_loaded('search_clustering'):
@@ -521,11 +521,11 @@ class CinemaService(LearningService):
         self.n_neighbors_SC_writers = 8 # soectral clustering parameter
         self.n_neighbors_SC_directors = 8 # soectral clustering parameter
         self.actor_reduction_rank_threshold = 10
-        self.reduction_actors_in_predictfeatures = 'KM'
+        self.reduction_actors_in_predictfeatures = 'SC'
         #self.reduction_keywords_in_predictfeatures = 'KM'
-        self.reduction_directors_in_predictfeatures = 'KM'
+        self.reduction_directors_in_predictfeatures = 'SC'
         self.reduction_actors_in_directoractormatrix = 'SC'
-        self.reduction_actors_in_searchclustering = 'KM'
+        self.reduction_actors_in_searchclustering = 'SC'
         self.reduction_directors_in_searchclustering = 'SC'
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
@@ -562,8 +562,8 @@ class CinemaService(LearningService):
         # Load search clusterings
         self.loadSearchClustering()
         # Load predict features
-        self.loadPredictFeatures()
-        self.loadPredictLabels()
+        #self.loadPredictFeatures()
+        #self.loadPredictLabels()
         # Init predict classifier
         #self.init_predict()
         print('Loadings finished. Server now running.')
@@ -791,77 +791,7 @@ class CinemaService(LearningService):
         
         return filt_out
     
-    def predict_request(self, args):
-        # Get results
-        lang = None
-        if args.has_key('language'):
-            try:
-                lang = Language.objects.get(identifier = str(args['language']))
-            except Language.DoesNotExist, exceptions.KeyError :
-                pass
-        results = self.compute_predict(self.vectorize_predict_user_input(args), language = lang)
-        
-        # Build query_results
-        query_results = {}
-        
-        # Fill query_results['prizes']
-        query_results['prizes'] = []
-        for prize in results['prizes']:
-            query_results['prizes'].append({'institution' : prize['institution'].name,
-                                            'win' : prize['win'],
-                                            'value' : prize['value']})
-        
-        # Fill query_results['general_box_office']
-        neighbors = []
-        for neighbor in results['general_box_office']['neighbors']:
-            neighbors.append({'rank':neighbor['rank'],
-                              'original_title':neighbor['film'].original_title,
-                              'value':neighbor['film'].box_office})
-        
-        general_box_office = {'rank':results['general_box_office']['rank'],
-                              'value':results['general_box_office']['value'],
-                              'neighbors':neighbors
-                              }
-        
-        query_results['general_box_office'] = general_box_office
-        
-        # Fill query_results['genre_box_office']
-        neighbors_genre = []
-        for neighbor in results['genre_box_office']['neighbors']:
-            neighbors_genre.append({'rank':neighbor['rank'],
-                                    'original_title':neighbor['film'].original_title,
-                                    'value':neighbor['film'].box_office})
-            genre_box_office = {'rank':results['genre_box_office']['rank'],
-                                'value':results['genre_box_office']['value'],
-                                'neighbors':neighbors_genre
-                                }
-            query_results['genre_box_office'] = genre_box_office
-        
-        # Fill query_results['critics']
-        critics = {}
-        
-        reviews = []
-        grades = []
-        for item in results['reviews']:
-            reviews.append({'journal' : item['journal'].name,
-                            'grade' : item['grade']
-                            })
-            grades.append(item['grade'])
-        
-        critics['reviews'] = reviews
-        critics['average'] = np.mean(grades)
-        query_results['critics'] = critics
-        
-        # Fill query_results['bag_of_words']
-        bag_of_words = []
-        for item in results['bag_of_words']:
-            bag_of_words.append({'word' : item['keyword'].word,
-                                 'value' : item['value']
-                                 })
-        query_results['bag_of_words'] = bag_of_words
-        
-        # Return data
-        return query_results
+
    
     def init_predict(self):
         X = self.predict_features
@@ -966,17 +896,85 @@ class CinemaService(LearningService):
 
         return results
 
+    def predict_request(self, args):
+        # Get results
+        lang = None
+        if args.has_key('language'):
+            try:
+                lang = Language.objects.get(identifier = str(args['language']))
+            except Language.DoesNotExist, exceptions.KeyError :
+                pass
+        results = self.compute_predict(self.vectorize_predict_user_input(args), language = lang)
+        
+        # Build query_results
+        query_results = {}
+        
+        # Fill query_results['prizes']
+        query_results['prizes'] = []
+        for prize in results['prizes']:
+            query_results['prizes'].append({'institution' : prize['institution'].name,
+                                            'win' : prize['win'],
+                                            'value' : prize['value']})
+        
+        # Fill query_results['general_box_office']
+        neighbors = []
+        for neighbor in results['general_box_office']['neighbors']:
+            neighbors.append({'rank':neighbor['rank'],
+                              'original_title':neighbor['film'].original_title,
+                              'value':neighbor['film'].box_office})
+        
+        general_box_office = {'rank':results['general_box_office']['rank'],
+                              'value':results['general_box_office']['value'],
+                              'neighbors':neighbors
+                              }
+        
+        query_results['general_box_office'] = general_box_office
+        
+        # Fill query_results['genre_box_office']
+        neighbors_genre = []
+        for neighbor in results['genre_box_office']['neighbors']:
+            neighbors_genre.append({'rank':neighbor['rank'],
+                                    'original_title':neighbor['film'].original_title,
+                                    'value':neighbor['film'].box_office})
+            genre_box_office = {'rank':results['genre_box_office']['rank'],
+                                'value':results['genre_box_office']['value'],
+                                'neighbors':neighbors_genre
+                                }
+            query_results['genre_box_office'] = genre_box_office
+        
+        # Fill query_results['critics']
+        critics = {}
+        
+        reviews = []
+        grades = []
+        for item in results['reviews']:
+            reviews.append({'journal' : item['journal'].name,
+                            'grade' : item['grade']
+                            })
+            grades.append(item['grade'])
+        
+        critics['reviews'] = reviews
+        critics['average'] = np.mean(grades)
+        query_results['critics'] = critics
+        
+        # Fill query_results['bag_of_words']
+        bag_of_words = []
+        for item in results['bag_of_words']:
+            bag_of_words.append({'word' : item['keyword'].word,
+                                 'value' : item['value']
+                                 })
+        query_results['bag_of_words'] = bag_of_words
+        
+        # Return data
+        return query_results
+
     def vectorize_predict_user_input(self, user_input):
 
         x_actor_vector = np.zeros([1,len(self.actor_names)])
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
-                i = 0
-                for feat in self.actor_names: #TODO : optimize this huge time-consuming loop
-                    for actor in user_input['actors']: 
-                        if re.findall(actor, feat):
-                            x_actor_vector[0,i] = 1 # ALL STARS?
-                i += 1
+                for actor_id in user_input['actors']:
+                    x_actor_vector[0,self.actor_names.index(actor_id)]=1
 
         if self.reduction_actors_in_predictfeatures == 'KM':
             x_actor_reduced = x_actor_vector * self.proj_actors_KM
@@ -986,22 +984,14 @@ class CinemaService(LearningService):
         x_genres_vector = np.zeros([1, len(self.genres_names)])
         if user_input.has_key('genres'):
             if user_input['genres'].__class__ == list:
-                i = 0 
-                for feat in self.genres_names: #TODO : optimize this loop
-                    for genres in user_input['genres']:
-                        if re.findall(genres, feat):
-                            x_genres_vector[0,i] = 1
-                i += 1
+                for genre in user_input['genres']:
+                    x_genres_vector[0,self.genres_names.index(genre)]=1
 
         x_director_vector = np.zeros([1, len(self.director_names)])
         if user_input.has_key('directors'):
             if user_input['directors'].__class__ == list:
-                i = 0 
-                for feat in self.director_names: #TODO : optimize this huge time-consuming loop
-                    for director in user_input['directors']:
-                        if re.findall(director, feat):
-                            x_director_vector[0,i] = 1
-                i += 1
+                for director_id in user_input['directors']:
+                    x_director_vector[0,self.director_names.index(director_id)]=1
 
         if self.reduction_directors_in_predictfeatures == 'KM':
             x_director_reduced = x_director_vector * self.proj_directors_KM
@@ -1011,12 +1001,8 @@ class CinemaService(LearningService):
         x_keyword_vector = np.zeros([1, len(self.keyword_names)])
         if user_input.has_key('keywords'):
             if user_input['keywords'].__class__ == list:
-                i = 0
-                for feat in self.keyword_names: #TODO : optimize this huge time-consuming loop
-                    for keyword in user_input['keywords']:
-                        if re.findall(keyword, feat):
-                            x_keyword_vector[0,i] = 1 
-                i += 1
+                for keyword in user_input['keywords']:
+                    x_keyword_vector[0,self.keyword_names.index(keyword)]=1
 
         x_keyword_reduced = x_keyword_vector * self.proj_keywords_KM
         
