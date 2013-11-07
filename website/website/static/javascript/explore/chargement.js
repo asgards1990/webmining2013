@@ -44,5 +44,7 @@ function unloadChargement(nomDuCadre){
 	document.getElementById(nomDuCadre).style.zIndex=-1;
 	document.getElementById(nomDuCadre).style.display="none";
 	arreter=true;
-	document.getElementById(nomDuCadre).removeChild(document.getElementById("loaderProvisoire"));
+	if(typeof(document.getElementById("loaderProvisoire"))!="undefined" && document.getElementById("loaderProvisoire") != null){
+		document.getElementById(nomDuCadre).removeChild(document.getElementById("loaderProvisoire"));
+	}
 }
