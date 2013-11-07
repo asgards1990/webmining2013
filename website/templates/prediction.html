@@ -10,7 +10,8 @@
     <!-- Appels de scripts--> 
     <script src="{% static 'javascript/prediction/icheck.js' %}"></script>
     <script src="{% static 'javascript/prediction/numbers.js' %}"></script>
-	<script src="{% static 'javascript/prediction/requeteJsonPredict.js' %}"></script>
+    <script src="{% static 'javascript/prediction/requeteJsonPredict.js' %}"></script>
+    <script src="{% static 'javascript/prediction/bouton_milieu.js' %}"></script>
 
     <!-- Appels css -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/prediction_menu.css' %}" />
@@ -19,6 +20,8 @@
 
     {% block prediction_extrahead %}
     {% endblock %}
+
+
 {% endblock %}
 
 {% block content %}
@@ -56,7 +59,7 @@
 
         <div href="" class="circle">  
             <div class="wrapper">
-                <img src="{% static 'img/home/bouton_2_contenu.png' %}">
+                <img src="{% static 'img/home/bouton_2_contenu_.png' %}">
                 <div class="cssdeck" id="cssdeck"></div>
             </div> 
          </div>

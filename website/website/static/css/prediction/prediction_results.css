@@ -1,7 +1,7 @@
 /* Page de résultats de prediction */
 
 #results {
-    float:right;
+    margin:0 auto;
     position: relative;
     overflow:auto;
     text-align:center;
@@ -9,7 +9,7 @@
 }
 .prizes, .boxoffice, .reviews, .bagofwords{
     position : relative;
-    width:43%;
+    width:430px;
     min-height : 20em;
     float:left;
     padding: 1%;
