@@ -462,6 +462,7 @@ class CinemaService(LearningService):
             director_reduced=self.director_reduced_SC
         if self.reduction_directors_in_searchclustering == 'KM':
             director_reduced=self.director_reduced_KM
+        #print actor_reduced.toarray()[0:10,:]
         X_people = scipy.sparse.hstack([normalize(actor_reduced.astype(np.double),norm='l1',axis=1),normalize(director_reduced.astype(np.double),norm='l1',axis=1)])
         #TODO:play on clustering types
         X_budget = self.budget_matrix
@@ -477,7 +478,8 @@ class CinemaService(LearningService):
         budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight
         genre_weight = self.high_weight if (k>>3)%2 else self.low_weight
-        return scipy.sparse.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
+        res = scipy.sparse.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
+        return res
         
     def __init__(self):
         super(CinemaService, self).__init__()
@@ -485,8 +487,8 @@ class CinemaService(LearningService):
         # TODO manage projectors of each clustering
         # Define parameters # TODO : optimize all these parameters
         self.dim_writers = 20
-        self.dim_directors = 10
-        self.dim_actors = 20
+        self.dim_directors = 3
+        self.dim_actors = 5
         self.dim_keywords = 30
         self.n_clusters_search = 20
         self.p_norm = 2 # p-norm used for distances
@@ -500,7 +502,7 @@ class CinemaService(LearningService):
         self.reduction_keywords_in_predictfeatures = 'KM'
         self.reduction_directors_in_predictfeatures = 'KM'
         self.reduction_actors_in_directoractormatrix = 'SC'
-        self.reduction_actors_in_searchclustering = 'SC'
+        self.reduction_actors_in_searchclustering = 'KM'
         self.reduction_directors_in_searchclustering = 'SC'
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
