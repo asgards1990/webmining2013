@@ -1,7 +1,7 @@
 from objects import *
 from vectorizers import *
 from status.models import TableUpdateTime
-from cinema.models import Film, Person, Genre, Keyword, Journal
+from cinema.models import Film, Person, Genre, Keyword, Journal, Institution
 import filmsfilter as flt
 from dimreduce import *
 
@@ -17,6 +17,7 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.cross_validation import cross_val_score
 from sklearn.neighbors.kde import KernelDensity
 
@@ -453,10 +454,14 @@ class CinemaService(LearningService):
     def loadPredictLabels(self):
         self.predict_labels = scipy.sparse.hstack([
             np.log(self.box_office_matrix.toarray()),
-            self.reviews_matrix,]).toarray()
+            self.reviews_matrix,
+            self.prizes_matrix,
+            ]).toarray()
         self.predict_labels_names = np.concatenate([
             ['log_box_office'],
-            ['review_' + s for s in self.reviews_names]])
+            ['review_' + s for s in self.reviews_names],
+            ['prize_' + s for s in self.prizes_names],
+            ])
 
     def getWeightedSearchFeatures(self,k):
         if self.reduction_actors_in_searchclustering == 'SC':
@@ -853,6 +858,14 @@ class CinemaService(LearningService):
             y_review.append(y[:, 1 + i])
             self.review_random_forest_reg[i].fit(X, y_review[i])
 
+        # PRIZES
+        self.prize_random_forest_reg = []
+        y_prize = []
+        for i in range(len(self.prizes_names)):
+            self.prize_random_forest_reg.append(RandomForestRegressor())
+            y_prize.append(y[:, 1 + len(self.reviews_names) + i])
+            self.prize_random_forest_reg[i].fit(X, y_prize[i])
+
     def compute_predict(self, x_vector, language=None):
         '''
         Return {'prizes' : list of {'institution' : Institution Object,
@@ -891,19 +904,41 @@ class CinemaService(LearningService):
             except:
                 pass
 
-        results = {'prizes' : [],
+        institutions = []
+        wins = []
+        predicted_probabilities = []
+        for i in range(len(self.prizes_names)):
+            try:
+                institutions.append(Institution.objects.get(name=self.prizes_names[i].split('_')[0]))
+                if self.prizes_names[i].split('_')[1] == 'True':
+                    wins.append(True)
+                else:
+                    wins.append(False)
+                predicted_probabilities.append(
+                    self.prize_random_forest_reg[i].predict(x_vector)
+                )
+            except:
+                pass
+
+        results = {'prizes' : [{'institution' : institutions[i],
+                                'win' : wins[i],
+                                'value' : predicted_probabilities[i]} 
+                               for i in range(len(institutions))],
                    'general_box_office' :
                         {'rank' : 0, # TODO
                          'value' : predicted_box_office,
-                         'neighbors' : []},
+                         'neighbors' : [] # TODO
+                         },
                     'genre_box_office' :
                         {'rank' : 0, # TODO
                          'value' : predicted_box_office,
-                         'neighbors' : []},
+                         'neighbors' : [] # TODO
+                         },
                     'reviews': [{'journal' : journals[i],
                                  'grade' : predicted_grades[i]} 
                                 for i in range(len(journals))],
-                    'bag_of_words': []}                   
+                    'bag_of_words': [] # TODO
+                    }                   
 
         return results
 

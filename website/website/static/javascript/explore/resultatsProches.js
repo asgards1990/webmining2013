@@ -268,7 +268,7 @@ function montrerResultats(nomDuCadre,data){
 	var contenu=document.createTextNode("");
 	contenu.id="nomFilmChoisi";
 
-	contenu.textContent="Blue Jasmine"
+	contenu.textContent=text
 	document.getElementById("carreCentral").appendChild(conteneurTexteCentral);
 	document.getElementById("conteneurTexteCentral").appendChild(contenu);
 
