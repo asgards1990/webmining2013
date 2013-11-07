@@ -216,7 +216,6 @@ function ajoutBudget (budget) {
    $(slider).slider( "option", "values", [budgetInM,budgetInM] );
    var amount = document.getElementById('amount');
    $(slider).val( "$" + budgetInM + "M - $" + budgetInM +"M" );
-      }
  
    
    };
