@@ -635,40 +635,47 @@ class CinemaService(LearningService):
    
     def applyFilter(self,filters): #returns indexes of films that respect our filters 
         # Filter budget
-        indexes_fitting_filters = self.budget_matrix.toarray() >= filters['budget']['min']
-        indexes_fitting_filters = indexes_fitting_filters * (self.budget_matrix.toarray() <= filters['budget']['max'])
+        if filters.has_key('budget'):
+            indexes_fitting_filters = self.budget_matrix.toarray() >= filters['budget']['min']
+            indexes_fitting_filters = indexes_fitting_filters * (self.budget_matrix.toarray() <= filters['budget']['max'])
         # Filter release_date
-        years=self.release_date_matrix[:,self.release_date_names.index('year')].toarray()
-        aux_max_release_date = years <= filters['release_period']['end']
-        aux_min_release_date = years >= filters['release_period']['begin']
-        indexes_fitting_filters = indexes_fitting_filters * aux_max_release_date 
-        indexes_fitting_filters = indexes_fitting_filters * aux_min_release_date
+        if filters.has_key('release_period'):
+            years=self.release_date_matrix[:,self.release_date_names.index('year')].toarray()
+            aux_max_release_date = years <= filters['release_period']['end']
+            aux_min_release_date = years >= filters['release_period']['begin']
+            indexes_fitting_filters = indexes_fitting_filters * aux_max_release_date 
+            indexes_fitting_filters = indexes_fitting_filters * aux_min_release_date
         # Filter reviews
-        indexes_fitting_filters = indexes_fitting_filters * (self.metacritic_score_matrix.toarray() >= filters['reviews']['min'])
+        if filters.has_key('reviews'):
+            indexes_fitting_filters = indexes_fitting_filters * (self.metacritic_score_matrix.toarray() >= filters['reviews']['min'])
         # Filter genres
-        if filters['genres']!=[]:
-            aux_genres = np.zeros(indexes_fitting_filters.shape)
-            for genre in filters['genres']:
-                aux_genres = aux_genres + (self.genres_matrix[:,self.genres_names.index(genre.name)].toarray())
-            indexes_fitting_filters = indexes_fitting_filters * (aux_genres != 0)
+        if filters.has_key('genres'):
+            if filters['genres']!=[]:
+                aux_genres = np.zeros(indexes_fitting_filters.shape)
+                for genre in filters['genres']:
+                    aux_genres = aux_genres + (self.genres_matrix[:,self.genres_names.index(genre.name)].toarray())
+                indexes_fitting_filters = indexes_fitting_filters * (aux_genres != 0)
         # Filter directors
-        if filters['directors']!=[]:
-            aux_directors = np.zeros(indexes_fitting_filters.shape)
-            for director in filters['directors']:
-                aux_directors = aux_directors + (self.director_matrix[:,self.director_names.index(director.imdb_id)].toarray())
-            indexes_fitting_filters = indexes_fitting_filters * (aux_directors != 0)
+        if filters.has_key('directors'):
+            if filters['directors']!=[]:
+                aux_directors = np.zeros(indexes_fitting_filters.shape)
+                for director in filters['directors']:
+                    aux_directors = aux_directors + (self.director_matrix[:,self.director_names.index(director.imdb_id)].toarray())
+                indexes_fitting_filters = indexes_fitting_filters * (aux_directors != 0)
         # Filter actors
-        if filters['actors']!=[]:
-            aux_actors = np.zeros(indexes_fitting_filters.shape)
-            for actor in filters['actors']:
-                aux_actors = aux_actors + (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray())
-            indexes_fitting_filters = indexes_fitting_filters * (aux_actors != 0)
+        if filters.has_key('actors'):
+            if filters['actors']!=[]:
+                aux_actors = np.zeros(indexes_fitting_filters.shape)
+                for actor in filters['actors']:
+                    aux_actors = aux_actors + (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray())
+                indexes_fitting_filters = indexes_fitting_filters * (aux_actors != 0)
         # Return results
         indexes_fitting_filters = indexes_fitting_filters.reshape(1,indexes_fitting_filters.shape[0])[0]
         indexes_fitting_filters = np.where(indexes_fitting_filters==1)[0]
         return list(indexes_fitting_filters)
 
     def compute_search(self, film, nb_results, criteria, filters=None):
+        print filters
         try:
             film_index = self.fromPktoIndex[film.pk]
         except KeyError:
@@ -758,14 +765,17 @@ class CinemaService(LearningService):
                     except Person.DoesNotExist:
                         pass
         try:
-            if (filt_in['budget']['min'].__class__==float) and (filt_in['budget']['max'].__class__ == float):
-                filt_out['budget'] = filt_in['budget']
+            if (filt_in['budget']['min'].__class__==int) and (filt_in['budget']['max'].__class__ == int):
+                filt_out['budget'] = {}
+                filt_out['budget']['min'] = 1000000.*filt_in['budget']['min']
+                filt_out['budget']['max'] = 1000000.*filt_in['budget']['max']
         except exceptions.KeyError:
             pass
         
         try:
-            if (filt_in['reviews']['min'].__class__ == float):
-                filt_out['reviews'] = filt_in['reviews']
+            if (filt_in['reviews']['min'].__class__ == float or filt_in['reviews']['min'].__class__ == int):
+                filt_out['reviews'] =  {}
+                filt_out['reviews']['min'] = float(filt_in['reviews']['min'])
         except exceptions.KeyError:
             pass
         
