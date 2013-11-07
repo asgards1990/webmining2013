@@ -1,34 +1,40 @@
 $(document).ready(function(){
 //envoiDeLaRequete()
-//alert("hello")
-setTimeout(function(){envoiDeLaRequetePredict()},1000)
+alert("hello")
+alert(JSON.stringify(genererRequetePredict()))
+$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
+//setTimeout(function(){envoiDeLaRequetePredict()},1000)
 //$("#title").click(function(){envoiDeLaRequetePredict()})
 })
 
 function genererRequetePredict(){
 	var requestInter=new Object();
-	/*requestInter.actors=new Array();
-	for(var i=0;i<document.getElementById("actorsdesc").getElementsByClassName("actor").length;i++){
-		requestInter.actors[i]=document.getElementById("actorsdesc").getElementsByClassName("actor")[i].id;
-	}
+	requestInter.actors=new Array();
+	requestInter.actors[0]="nm0000138";
+	requestInter.actors[1]="nm0004851";
+
+	//for(var i=0;i<document.getElementById("actorsdesc").getElementsByClassName("actor").length;i++){
+	//	requestInter.actors[i]=document.getElementById("actorsdesc").getElementsByClassName("actor")[i].id;
+	//}
 	requestInter.genres=new Array();
-	for(var i=0;i<document.getElementById("genre").getElementsByClassName("genre").length;i++){
-		requestInter.genres[i]=document.getElementById("genre").getElementsByClassName("genre")[i].value;
-	}
-	requestInter.keywords=new Array();
-	for(var i=0;i<document.getElementById("keywordsdesc").getElementsByClassName("name").length;i++){
-		requestInter.keywords[i]=document.getElementById("keywordsdesc").getElementsByClassName("name")[i].textContent;
-	}
-	requestInter.directors=new Array();
-	for(var i=0;i<document.getElementById("directors").getElementsByClassName("director").length;i++){
-		requestInter.directors[i]=document.getElementById("directors").getElementsByClassName("director")[i].id;
-	}*/
+	requestInter.genres[0]="Action";
+	//for(var i=0;i<document.getElementById("genre").getElementsByClassName("genre").length;i++){
+	//	requestInter.genres[i]=document.getElementById("genre").getElementsByClassName("genre")[i].value;
+	//}
+	//requestInter.keywords=new Array();
+	//for(var i=0;i<document.getElementById("keywordsdesc").getElementsByClassName("name").length;i++){
+	//	requestInter.keywords[i]=document.getElementById("keywordsdesc").getElementsByClassName("name")[i].textContent;
+	//}
+	//requestInter.directors=new Array();
+	//for(var i=0;i<document.getElementById("directors").getElementsByClassName("director").length;i++){
+	//	requestInter.directors[i]=document.getElementById("directors").getElementsByClassName("director")[i].id;
+	//}
 	//requestInter.budget=10.2;
 	//
 	//requestInter.release_period=new Object();
 	//requestInter.release_period.season="summer";
 	//requestInter.language="fr";
-	
+
 	return requestInter;
 }
 
@@ -36,7 +42,7 @@ function envoiDeLaRequetePredict(){
 	//alert("hello")
 	//alert(JSON.stringify(genererRequetePredict()))
 	//$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
-	var data=new Object;
+	/*var data=new Object;
 	data.success=true;
 	data.error="";
 	data.prizes=new Array;
@@ -123,7 +129,7 @@ function envoiDeLaRequetePredict(){
 	data.bag_of_words[8].value=0.45;
 	data.bag_of_words[9]=new Object;
 	data.bag_of_words[9].word="Waste of time";
-	data.bag_of_words[9].value=0.5;
+	data.bag_of_words[9].value=0.5;*/
 	
 	fctCallbackPredict(data);
 		
