@@ -431,9 +431,9 @@ class CinemaService(LearningService):
         if self.reduction_keywords_in_predictfeatures == 'SC':
             keyword_reduced = self.keywords_reduced_SC
         if self.reduction_directors_in_predictfeatures == 'KM':
-            director_reduced = self.directors_reduced_KM
+            director_reduced = self.director_reduced_KM
         if self.reduction_directors_in_predictfeatures == 'SC':
-            director_reduced = self.directors_reduced_SC
+            director_reduced = self.director_reduced_SC
         self.predict_features = scipy.sparse.hstack([
             actor_reduced,
             director_reduced,
@@ -834,7 +834,7 @@ class CinemaService(LearningService):
         y = self.predict_labels.toarray()
         
         # BOX OFFICE
-        self.box_office_clf = RandomForestRegressor()
+        self.box_office_clf_1 = RandomForestRegressor()
         
         y = y[:,0]
         y_log = np.log(y)
@@ -861,7 +861,6 @@ class CinemaService(LearningService):
                                      },
                 'reviews' : list of {'journal': Journal Object,
                                      'grade' : float,
-                                     'keywords' : list of Keyword Object
                                     },
                 'bag_of_words' : list of {'keyword' : Keyword Object,
                                           'value' : float dans [0,1]
