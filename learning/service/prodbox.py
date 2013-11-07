@@ -487,8 +487,8 @@ class CinemaService(LearningService):
         # TODO manage projectors of each clustering
         # Define parameters # TODO : optimize all these parameters
         self.dim_writers = 20
-        self.dim_directors = 3
-        self.dim_actors = 5
+        self.dim_directors = 10
+        self.dim_actors = 20
         self.dim_keywords = 30
         self.n_clusters_search = 20
         self.p_norm = 2 # p-norm used for distances
