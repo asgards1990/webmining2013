@@ -48,10 +48,12 @@
 #results h1 {
     display: table-cell;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 25px;
+    word-wrap:break-word;
     width: 25px;
     height: 100%;
     color: white;
+    vertical-align:top;
 }
 
 #boxofficeborder h1, #bagofwordsborder h1{
