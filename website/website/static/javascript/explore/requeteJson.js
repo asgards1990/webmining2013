@@ -10,23 +10,32 @@ function verifAuMoinsUnCrit(){
 }
 
 function changement(){
-	if(verifAuMoinsUnCrit()==true){
-		$.post("http://localhost:8000/cinema/getId/","film_name="+"Avatar",function(data){envoiDeLaRequeteSearch(data);});
-		//envoiDeLaRequeteSearch(nomfilm);
+	if(document.getElementById("id_title_original-deck").children.length >0){
+		//console.log("hello")
+		if(verifAuMoinsUnCrit()==true){
+			var text;
+			for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
+				if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
+					text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
+				}
+			}
+			console.log(text)
+			$.post("http://localhost:8000/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data);});
+			//envoiDeLaRequeteSearch(nomfilm);
+		}
+		else{
+			alert("Please select at least one criterion.")
+		}
 	}
 	else{
-		alert("Please select at least one criterion.")
+		alert("Please select a film.")
 	}
-	//$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0499549",function(data){alert($.parseJSON(data).etitle)}); //$.parseJSON(data).plot
-        //alert('hello');
-       //$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",function(data){console.log(data.actors[0].imdb_id)}); 
-	   $.post("http://localhost:8000/cinema/getId/","film_name="+"Avatar",function(data){console.log(data)}); 
 }
 
 $(document).ready(function(){
 
 $(".checkbox").change(function(){changement();})
-$(".iCheck-helper").click(function(){changement();})
+//$(".iCheck-helper").click(function(){changement();})
 $("#rateit").click(function(){changement();})
 $( "#slider-range" ).on( "slidechange", function( event, ui ) {changement();} );
 $( "#slider-rangeyear" ).on( "slidechange", function( event, ui ) {changement();} );
