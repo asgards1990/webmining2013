@@ -24,7 +24,7 @@ function loadChargement(nomDuCadre){
 	for(var i =0; i<14;i++){	
 		cache[i]=document.createElement("div");
 		cache[i].id="cache"+i;
-		cache[i].style.cssText='position:absolute;top:43.6%;left:'+position[i]+'%;width:'+largeur[i]+'%;height:13.3%;z-index:12;background-color:#b0c4de;opacity:1;'//'+(i+1+i*6)+'
+		cache[i].style.cssText='position:absolute;top:43.4%;left:'+position[i]+'%;width:'+largeur[i]+'%;height:13.3%;z-index:12;background-color:#b0c4de;opacity:1;'//'+(i+1+i*6)+'
 		document.getElementById("loaderProvisoire").appendChild(cache[i]);
 	}
 	document.getElementById(nomDuCadre).style.zIndex=10;
