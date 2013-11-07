@@ -834,7 +834,7 @@ class CinemaService(LearningService):
         y = self.predict_labels.toarray()
         
         # BOX OFFICE
-        self.box_office_clf_1 = RandomForestRegressor()
+        self.box_office_clf = RandomForestRegressor()
         
         y = y[:,0]
         y_log = np.log(y)
