@@ -1,5 +1,5 @@
 
-$(document).ready(function(){
+/*$(document).ready(function(){
 
 critereEnable = false;
 	function createClick(nom) {
@@ -87,10 +87,10 @@ createClick("movieinput");
 	
 	
 
-});
+});*/
 
 function ajoutActors (actor) {
-
+    
     var superior = document.getElementById("actors").getElementsByTagName("ul")[0];
 
     var father = document.createElement('li');
@@ -107,17 +107,6 @@ function ajoutActors (actor) {
     check.type="checkbox";
     check.name="actor";
     check.value="???";
-    /*check.style.cssText="position: absolute; opacity: 0;";
-
-    var environnement = document.createElement('div');
-    environnement.className="icheckbox_line-red";
-
-
-    var icheck = document.createElement('div');
-    icheck.className="icheck_line-icon";
-
-    var helper = document.createElement('ins');
-    helper.className="iCheck-helper";*/
 
     var name = document.createElement('span');
     name.className="name";
@@ -135,11 +124,66 @@ function ajoutActors (actor) {
     superior.appendChild(father);
 
 
-                $(check).each(function () {
-                var self = $(this),
-                label = self.next(),
-                label_text = label.text();
+        $(check).each(function () {
+        var self = $(this),
+        label = self.next(),
+        label_text = label.text();
+        label.remove();
+        self.iCheck({
+            checkboxClass: 'icheckbox_line-red',
+            radioClass: 'iradio_line-red',
+            insert: '<div class="icheck_line-icon"></div>' + label_text
+        })
+    });
 
+    element = document.getElementById(actor.imdb_id).getElementsByClassName('iCheck-helper')[0];
+    element.onclick=function(){changement();};
+};
+
+
+function ajoutTabActors (actors) {
+    for (k=0;k<actors.length;k++) {
+        ajoutActors(actors[k]);
+    };
+};
+
+function ajoutGenres (genre) {
+    var superior = document.getElementById("genres").getElementsByTagName("ul")[0];
+
+    var father = document.createElement('li');
+    father.className="listgenre";
+
+    
+    var paragraph = document.createElement('p');
+    paragraph.className="genre";
+    paragraph.id = genre.id;
+  
+
+    
+    var check = document.createElement('input');
+    check.type="checkbox";
+    check.name="genre";
+    check.value="???";
+
+    var name = document.createElement('span');
+    name.className="name";
+
+    var text = genre;
+    name.appendChild(document.createTextNode(text));
+    
+
+    paragraph.appendChild(check);
+    paragraph.appendChild(name);
+
+    
+    father.appendChild(paragraph);
+    superior.appendChild(father);
+
+
+        $(check).each(function () {
+        var self = $(this),
+        label = self.next(),
+        label_text = label.text();
         label.remove();
         self.iCheck({
             checkboxClass: 'icheckbox_line-red',
@@ -148,81 +192,17 @@ function ajoutActors (actor) {
         });
     });
 
+    element = document.getElementById(genre.id).getElementsByClassName('iCheck-helper')[0];
+    element.onclick=function(){changement();};
+};
 
-    };
-
-
-function ajoutTabActors (actors) {
-    for (k=0;k<actors.length;k++) {
-        ajoutActors(actors[k]);
+function ajoutTabGenres (genres) {
+    for (k=0;k<genres.length;k++) {
+        ajoutGenres(genres[k]);
     };
 };
-    
-$(document).ready(function(){
 
-    $("#acteurs").click(function(){
-
-      
-             var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
-           if (ul.hasChildNodes())
-           {
-               while (ul.childNodes.length>=1)
-               {ul.removeChild(ul.firstChild);
-                }
-               };
-
-             var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
-             chiffre.removeChild(chiffre.firstChild);
-             chiffre.appendChild(document.createTextNode(2));
-
-          $.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",
-                 function(data){ajoutTabActors(data.actors);});
-  
-        });
-    });
-                        
-$(document).ready(function(){
-    $("#budgets").click(function(){
-      
-           var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
-           if (ul.hasChildNodes())
-           {
-               while (ul.childNodes.length>=1)
-               {ul.removeChild(ul.firstChild);
-                }
-               };
-
-           var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
-           chiffre.removeChild(chiffre.firstChild);
-           chiffre.appendChild(document.createTextNode(3));
-
-           
-            
-            var actor1 = new Object;
-            actor1.imdb_id="1";
-            actor1.first_name= "test1";
-            actor1.last_name = "test1";
-
-
-
-            
-            var actor2 = new Object;
-            actor2.imdb_id="2";
-            actor2.first_name= "test2";
-            actor2.last_name = "test2";
-
-            var actor3 = new Object;
-            actor3.imdb_id="3";
-            actor3.first_name= "test3";
-            actor3.last_name = "test3";
-            
-            ajoutActors(actor1);
-            ajoutActors(actor2);
-            ajoutActors(actor3);
-
-    });
-    });
-
+              
                 /*<li class="listactor">
                     <p class="actor">
                     <input type="checkbox" name="actor" value="actor1">
@@ -230,6 +210,73 @@ $(document).ready(function(){
                     </p>                       
                 </li>*/
 	
+/*function ajoutBudget (budget) {
+   var slider = document.getElementById('slider-range');
+   $(slider).slider({$( "#amount" ).val( "$" + budget );
+      }
+    });});
+   alert(budget);
+   };*/
 
 
+
+$(document).ready(function() {
+    var isSubmitted = false;
+    
+    $('body').on('change', '.autocomplete-light-widget select[name$=title_original]', function() {
+        
+        if (!isSubmitted) {
+            isSubmitted = true;
+            var film = $('#id_title_original');
+            var film_name = $('#id_title_original-deck').clone().children().children().remove().end().text();
+
+            var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
+            ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
+            
+            if (ul.hasChildNodes())
+           {
+               while (ul.childNodes.length>=1)
+               {ul.removeChild(ul.firstChild);
+                }
+               };
+             if (ul2.hasChildNodes())
+           {
+               while (ul2.childNodes.length>=1)
+               {ul2.removeChild(ul2.firstChild);
+                }
+               };
+
+        function affichage(film_id) {           
+              $.post("/cinema/filmInfo/","film_id="+film_id,function(data){ajoutTabActors(data.actors);ajoutTabGenres(data.genres);});
+              };
+
+              
+        $.post("/cinema/getId/","film_name="+film_name,function(data){affichage(data);});
+            }
+        
+        else {
+            isSubmitted = false;
+            
+           var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
+            ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
+            
+            if (ul.hasChildNodes())
+           {
+               while (ul.childNodes.length>=1)
+               {ul.removeChild(ul.firstChild);
+                }
+               };
+             if (ul2.hasChildNodes())
+           {
+               while (ul2.childNodes.length>=1)
+               {ul2.removeChild(ul2.firstChild);
+                }
+               };
+            
+            };
+        });
+    });
+            
+            
+            
 

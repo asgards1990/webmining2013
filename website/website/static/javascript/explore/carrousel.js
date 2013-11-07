@@ -13,6 +13,7 @@ function carrousel(nomDuCadre,data){
 		ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=0;
 	}
 	var milieuRep=0;
+	//alert("hello")
 	function encap(i,data,nombre){
 			return function(data){
 				if(i==nombre){
@@ -20,7 +21,7 @@ function carrousel(nomDuCadre,data){
 					milieuRep=1;
 				}
 				else{
-					repLien[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=eval("(" + data + ")").Poster;
+					repLien[5+((1-2*(i%2))*(Math.floor(i/2)+1))]="http://prodbox.co/media/"+data.poster;
 					ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=1;
 				}
 				var mult=milieuRep;;
@@ -36,16 +37,26 @@ function carrousel(nomDuCadre,data){
 			}
 		}
 	
-	for (var i=0;i <= nombre;i++){
+	/*for (var i=0;i <= nombre;i++){
 		if (i==nombre){
 			$.get("http://www.omdbapi.com/?i=tt2334873", encap(i,data,nombre))
 		}
 		else{
 			tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=data.results[i].id;		//remplacer 0 par i
 			//Bloc à changer quand on peut récupérer les infos sur notre propre serv
-			$.get("http://www.omdbapi.com/?i=" + tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))], encap(i,data,nombre))
+			$.post("http://localhost:8000/cinema/filmInfo/","film_id="+tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))],encap(i,data,nombre)); 
+			//$.get("http://www.omdbapi.com/?i=" + tableauId[5+((1-2*(i%2))*(Math.floor(i/2)+1))], encap(i,data,nombre))
 		}
+	}*/
+	for(var j=0;j<nombre;j++){
+		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="http://prodbox.co/media/poster/"+data.results[j].id+".jpg";
 	}
+	repLien[5]="http://prodbox.co/media/poster/"+"tt2334873"+".jpg"
+	for(var j=nombre;j<10;j++){
+		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../pesto/static/img/explore/filmVide.jpg";
+	}
+	//alert(repLien)
+	carrousel2(nomDuCadre,repLien)
 }
 
 function carrousel2(nomDuCadre,lienImage){
@@ -63,6 +74,10 @@ function carrousel2(nomDuCadre,lienImage){
 		imageinter[l].src = lienImage[l];//"film"+(l+1)+".jpg";
 		//coeffLargeur[l]=75/imageinter[l].width;
 		//coeffHauteur[l]=100/imageinter[l].height;
+		function encap2(l){
+			return function(){imageinter[l].src = "http://prodbox.co/media/poster/empty_photo.jpg"}
+		}
+		imageinter[l].onerror=encap2(l);
 		imageinter[l].onload = scopeChargement(l);
 	}
 	function scopeChargement(l){return function(){coeffLargeur[l]=75/imageinter[l].width;coeffHauteur[l]=100/imageinter[l].height;imageLoaded[l]=true; toutEstCharge()}}
