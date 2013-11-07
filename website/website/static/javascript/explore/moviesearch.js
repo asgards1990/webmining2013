@@ -210,13 +210,16 @@ function ajoutTabGenres (genres) {
                     </p>                       
                 </li>*/
 	
-/*function ajoutBudget (budget) {
+function ajoutBudget (budget) {
    var slider = document.getElementById('slider-range');
-   $(slider).slider({$( "#amount" ).val( "$" + budget );
+   var budgetInM = budget/100000
+   $(slider).slider( "option", "values", [budgetInM,budgetInM] );
+   var amount = document.getElementById('amount');
+   $(slider).val( "$" + budgetInM + "M - $" + budgetInM +"M" );
       }
-    });});
-   alert(budget);
-   };*/
+ 
+   
+   };
 
 
 
@@ -247,11 +250,12 @@ $(document).ready(function() {
                };
 
         function affichage(film_id) {           
-              $.post("/cinema/filmInfo/","film_id="+film_id,function(data){ajoutTabActors(data.actors);ajoutTabGenres(data.genres);});
+              $.post("/cinema/filmInfo/","film_id="+film_id,function(data){ajoutTabActors(data.actors);ajoutTabGenres(data.genres);ajoutBudget(data.budget);});
               };
 
               
         $.post("/cinema/getId/","film_name="+film_name,function(data){affichage(data);});
+        changement2();
             }
         
         else {

@@ -6,8 +6,8 @@ $(function() {
     $( "#slider-range" ).slider({
       range: true,
       min: 0,
-      max: 300000000,
-      values: [ 0, 300000000 ],
+      max: 300,
+      values: [ 0, 300 ],
       slide: function( event, ui ) {
         $( "#amount" ).val( "$" + ui.values[ 0 ] + "M - $" + ui.values[ 1 ]+"M" );
       }
