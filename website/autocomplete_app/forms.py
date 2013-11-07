@@ -35,7 +35,7 @@ class PredictionForm(FixedModelForm):
     directors = forms.ModelChoiceField(Person.objects.all(),widget=autocomplete_light.ChoiceWidget('Director'))
     genre1 = forms.ModelChoiceField(Person.objects.all(),widget=autocomplete_light.ChoiceWidget('genre1'))
     genre2 = forms.ModelChoiceField(Person.objects.all(),widget=autocomplete_light.ChoiceWidget('genre2'))
-    keyword = forms.ModelMultipleChoiceField(Person.objects.all(),widget=autocomplete_light.MultipleChoiceWidget('keyword_complex'))
+    keyword = forms.ModelMultipleChoiceField(Person.objects.all(),widget=autocomplete_light.MultipleChoiceWidget('keyword_simple'))
     class Media :
         js = ('javascript/prediction/dependant_autocomplete.js',)
     class Meta :
