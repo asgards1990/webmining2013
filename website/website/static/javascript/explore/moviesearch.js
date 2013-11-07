@@ -157,8 +157,6 @@ function ajoutGenres (genre) {
     var paragraph = document.createElement('p');
     paragraph.className="genre";
     paragraph.id = genre.id;
-  
-
     
     var check = document.createElement('input');
     check.type="checkbox";
@@ -264,7 +262,7 @@ $(document).ready(function() {
         else {
             isSubmitted = false;
             
-           var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
+            var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
             ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
             
             if (ul.hasChildNodes())
