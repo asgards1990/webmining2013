@@ -42,7 +42,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms()
+        self.films = flt.getFilms(50)
         if not self.is_loaded('films'):
             self.fromPktoIndex, self.fromIndextoPk = hashIndexes(self.films.iterator())
             self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk))
@@ -454,7 +454,15 @@ class CinemaService(LearningService):
         self.predict_labels_names = ['box_office']
 
     def getWeightedSearchFeatures(self,k):
-        X_people = scipy.sparse.hstack([normalize(self.actor_reduced_SC.astype(np.double),norm='l1',axis=1),normalize(self.director_reduced_SC.astype(np.double),norm='l1',axis=1)])
+        if self.reduction_actors_in_searchclustering == 'SC':
+            actor_reduced=self.actor_reduced_SC
+        if self.reduction_actors_in_searchclustering == 'KM':
+            actor_reduced=self.actor_reduced_KM
+        if self.reduction_directors_in_searchclustering == 'SC':
+            director_reduced=self.director_reduced_SC
+        if self.reduction_directors_in_searchclustering == 'KM':
+            director_reduced=self.director_reduced_KM
+        X_people = scipy.sparse.hstack([normalize(actor_reduced.astype(np.double),norm='l1',axis=1),normalize(director_reduced.astype(np.double),norm='l1',axis=1)])
         #TODO:play on clustering types
         X_budget = self.budget_matrix
         X_review = self.reviews_matrix
@@ -492,6 +500,8 @@ class CinemaService(LearningService):
         self.reduction_keywords_in_predictfeatures = 'KM'
         self.reduction_directors_in_predictfeatures = 'KM'
         self.reduction_actors_in_directoractormatrix = 'SC'
+        self.reduction_actors_in_searchclustering = 'SC'
+        self.reduction_directors_in_searchclustering = 'SC'
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
@@ -527,10 +537,10 @@ class CinemaService(LearningService):
         # Load search clusterings
         self.loadSearchClustering()
         # Load predict features
-        #self.loadPredictFeatures()
-        #self.loadPredictLabels()
+        self.loadPredictFeatures()
+        self.loadPredictLabels()
         # Init predict classifier
-        #self.init_predict()
+        self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -626,7 +636,7 @@ class CinemaService(LearningService):
         if filters['actors']!=[]:
             aux_actors = np.zeros(indexes_fitting_filters.shape)
             for actor in filters['actors']:
-                aux_actors = aux_actors + (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray()) #TODO WARNING, CORRECT ONLY WITH NON-TUPLES ACTORS
+                aux_actors = aux_actors + (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray())
             indexes_fitting_filters = indexes_fitting_filters * (aux_actors != 0)
         # Return results
         indexes_fitting_filters = indexes_fitting_filters.reshape(1,indexes_fitting_filters.shape[0])[0]
@@ -646,7 +656,7 @@ class CinemaService(LearningService):
         # Apply filters
         #print('--> Applying filters...')
         if filters!=None:
-            indexes_fitting_filters = self.applyFilter(filters) #TODO : test applyFilter
+            indexes_fitting_filters = self.applyFilter(filters)
         else:
             indexes_fitting_filters = range(self.nb_films)
         indexes_fitting_filters = np.array(indexes_fitting_filters)
@@ -830,8 +840,6 @@ class CinemaService(LearningService):
         y_log = np.log(y)
 
         self.box_office_clf.fit(X, y_log)
-
-        return
 
     def compute_predict(self, x_vector, language=None):
         '''
