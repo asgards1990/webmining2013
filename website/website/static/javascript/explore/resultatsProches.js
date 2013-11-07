@@ -197,6 +197,26 @@ function longueurEtAngle(coeffDist,largeurBox,hauteurBox,coeffEmToPx){
 
 function sign(x) { if (x>=0){return 1} else{return -1}}
 
+function maxTab(tableau){
+	var max=0;
+	for (var i=0;i<tableau.length;i++){
+		if(tableau[i].value>max){
+			max=tableau[i].value;
+		}
+	}
+	return max;
+}
+
+function minTab(tableau){
+	var min=1;
+	for (var i=0;i<tableau.length;i++){
+		if(tableau[i].value<min){
+			min=tableau[i].value;
+		}
+	}
+	return min;
+}
+
 function montrerResultats(nomDuCadre,data){
 	//alert("hello2")
 	var nbrResultats=data.results.length;
@@ -209,10 +229,15 @@ function montrerResultats(nomDuCadre,data){
 	}
 	for (var i = 0;i<nbrResultats;i++){
 		Afficher[i]=true;
-		coeffDist[i]=1-data.results[i].value;  // CHANGER 0 par i
+		if(minTab(data.results)!=1 && (maxTab(data.results)-minTab(data.results))>0){
+			coeffDist[i]=(data.results[i].value-minTab(data.results))/(maxTab(data.results)-minTab(data.results))
+		}
+		else{
+			coeffDist[i]=data.results[i].value;
+		}
 		nomFilm[i]=data.results[i].title; // CHANGER 0 par i
 	}
-	
+	//alert(coeffDist)
 	var cadreInter1 = document.createElement('div');
 	cadreInter1.id="cadreInter1";
 	cadreInter1.style.cssText ='width:100%;height:18em;top:0em;position:absolute;'//border: 1px solid Black;'
