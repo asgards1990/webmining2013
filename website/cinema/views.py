@@ -187,3 +187,21 @@ def getId(request):
     response['Access-Control-Allow-Headers'] = 'Content-Type'
     
     return response
+
+def getIdActor(request):
+    if request.method == 'POST':
+        actor_name = request.POST.get('actor_name')
+    else:
+        return HttpResponse("Erreur")
+    
+    try:
+        actor = Person.objects.get(name=actor_name)
+    except Person.DoesNotExist:
+        return HttpReponse("actor not found",)
+  
+    response = HttpResponse(actor.imdb_id)
+    response['Access-Control-Allow-Origin']  = 'null'
+    response['Access-Control-Allow-Methods'] = 'GET,POST'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    
+    return response

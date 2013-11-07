@@ -22,3 +22,4 @@ urlpatterns += staticfiles_urlpatterns()
 
 urlpatterns += patterns('', url(r'^cinema/filmInfo/','cinema.views.filmInfo'))
 urlpatterns += patterns('', url(r'^cinema/getId/','cinema.views.getId'))
+urlpatterns += patterns('', url(r'^cinema/getIdActor/','cinema.views.getIdActor'))
