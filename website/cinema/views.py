@@ -154,8 +154,7 @@ def filmInfo(request):
 		# inter.budget=film.budget
 		# inter.box_office=film.box_office
 	
-	inter = "{budget : test}"
-    response = HttpResponse('{"poster" : "'+ film.image_url + '", "actors" : "'+ film.imdb_summary + '", "plot" : "'+ film.imdb_summary +'"}')#, mimetype='application/json') #json.dumps(film.budget) , mimetype='application/json'
+    #response = HttpResponse('{"poster" : "'+ film.image_url + '", "actors" : "'+ film.imdb_summary + '", "plot" : "'+ film.imdb_summary +'"}')
                 
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
@@ -172,6 +171,6 @@ def filmInfo(request):
 	
     output = {'budget' : film.budget, 'plot': film.imdb_summary, 'poster':film.image_url, 'imbd_id': film.imbd_id,'release_date':film.release_date, 'english_title ': film.english_title,
 	'original_title':film.original_title,'actors':outputActors}
-	#response = HttpResponse(simplejson.dumps(output), mimetype='application/json')
+	response = HttpResponse(simplejson.dumps(output), mimetype='application/json')
 
     return response
