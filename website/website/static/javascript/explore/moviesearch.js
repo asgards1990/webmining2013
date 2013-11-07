@@ -196,46 +196,7 @@ function ajoutTabGenres (genres) {
     };
 };
 
-    
-$(document).ready(function(){
-
-    $("#acteurs").click(function(){
-
-      
-             var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
-           if (ul.hasChildNodes())
-           {
-               while (ul.childNodes.length>=1)
-               {ul.removeChild(ul.firstChild);
-                }
-               };
-
-             var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
-             chiffre.removeChild(chiffre.firstChild);
-             chiffre.appendChild(document.createTextNode(2));
-
-          $.post("/cinema/filmInfo/","film_id=tt0899128",function(data){ajoutTabActors(data.actors);});
-        });
-    });
-                        
-$(document).ready(function(){
-    $("#budgets").click(function(){
-      
-           var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
-           if (ul.hasChildNodes())
-           {
-               while (ul.childNodes.length>=1)
-               {ul.removeChild(ul.firstChild);
-                }
-               };
-
-           var chiffre = document.getElementById("actors").getElementsByTagName("a")[0].getElementsByTagName("span")[0];
-           chiffre.removeChild(chiffre.firstChild);
-           chiffre.appendChild(document.createTextNode(3));
-
-    });
-    });
-
+              
                 /*<li class="listactor">
                     <p class="actor">
                     <input type="checkbox" name="actor" value="actor1">
