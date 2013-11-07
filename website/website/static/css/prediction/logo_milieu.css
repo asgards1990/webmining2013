@@ -11,7 +11,7 @@
 }
 
 /* Element tournant avec marge rouge */
-.cssdeck {
+#cssdeck {
     	position:absolute;
 	left:-15px;
 	top:-15px;
@@ -24,17 +24,16 @@
 }
 
 /* Petit bloc blanc qui va tourner */
-.cssdeck:after {
-	position:absolute;
-	right:-50px;
-	top:-50px;
-	z-index:+3;
-	content:'';
-	height:100px;
-	width:100px;
-	/*border-top-left-radius:15px 80px;
-	border-bottom-right-radius:80px 10px;*/
-      background-color:white;
+#cssdeck:after {
+    position:absolute;
+    right: -28px;
+    top: -28px;
+    z-index:+3;
+    content:'';
+    height: 78px;
+    width: 78px;
+    border-top-right-radius: 65px 65px;
+    background-color:white;
 }
 
 
@@ -48,7 +47,7 @@
 /* DEFINITION DES ANIMATIONS */
 
 
-#bagofwords:hover ~ .circle > .wrapper > .cssdeck {
+.bagofwordsclass{
 	animation: bagofwords 1s linear forwards;
       -webkit-animation-name: bagofwords;
       -webkit-animation-duration: 1s;
@@ -63,9 +62,9 @@
   20% {box-shadow:none;}
   40% {
     box-shadow:
-			0 0 30px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6)
+			0 0 10px rgba(213, 28, 33, .6),
+			0 0 20px rgba(213, 28, 33, .6),
+			0 0 30px rgba(213, 28, 33, .6)
 	  ;
 }
   50% {
@@ -84,9 +83,9 @@
   20% {box-shadow:none;}
   40% {
     box-shadow:
-			0 0 30px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6)
+			0 0 10px rgba(213, 28, 33, .6),
+			0 0 20px rgba(213, 28, 33, .6),
+			0 0 30px rgba(213, 28, 33, .6)
 	  ;
 }
   50% {
@@ -98,7 +97,7 @@
 	}
 }
 
-#prizes:hover ~ .circle > .wrapper > .cssdeck {
+.prizesclass {
 	animation: prizes 1s linear forwards;
       -webkit-animation-name: prizes;
       -webkit-animation-duration: 1s;
@@ -113,9 +112,9 @@
   20% {box-shadow:none;}
   40% {
     box-shadow:
-			0 0 30px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6)
+			0 0 10px rgba(213, 28, 33, .6),
+			0 0 20px rgba(213, 28, 33, .6),
+			0 0 30px rgba(213, 28, 33, .6)
 	  ;
 }
   50% {
@@ -134,9 +133,9 @@
   20% {box-shadow:none;}
   40% {
     box-shadow:
-			0 0 30px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6)
+			0 0 10px rgba(213, 28, 33, .6),
+			0 0 20px rgba(213, 28, 33, .6),
+			0 0 30px rgba(213, 28, 33, .6)
 	  ;
 }
   50% {
@@ -148,7 +147,7 @@
 	}
 }
 
-#boxoffice:hover ~ .circle > .wrapper > .cssdeck {
+.boxofficeclass {
 	animation: boxoffice 1s linear forwards;
       -webkit-animation-name: boxoffice;
       -webkit-animation-duration: 1s;
@@ -162,9 +161,9 @@
   20% {box-shadow:none;}
   40% {
     box-shadow:
-			0 0 30px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6)
+			0 0 10px rgba(213, 28, 33, .6),
+			0 0 20px rgba(213, 28, 33, .6),
+			0 0 30px rgba(213, 28, 33, .6)
 	  ;
 }
   50% {
@@ -183,9 +182,9 @@
   20% {box-shadow:none;}
   40% {
     box-shadow:
-			0 0 30px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6)
+			0 0 10px rgba(213, 28, 33, .6),
+			0 0 20px rgba(213, 28, 33, .6),
+			0 0 30px rgba(213, 28, 33, .6)
 	  ;
 }
   50% {
@@ -197,7 +196,7 @@
 	}
 }
 
-#reviews:hover ~ .circle > .wrapper > .cssdeck {
+.reviewsclass {
 	animation: reviews 1s linear forwards;
       -webkit-animation-name: reviews;
       -webkit-animation-duration: 1s;
@@ -211,9 +210,9 @@
   20% {box-shadow:none;}
   40% {
     box-shadow:
-			0 0 30px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6)
+			0 0 10px rgba(213, 28, 33, .6),
+			0 0 20px rgba(213, 28, 33, .6),
+			0 0 30px rgba(213, 28, 33, .6)
 	  ;
 }
   50% {
@@ -232,9 +231,9 @@
   20% {box-shadow:none;}
   40% {
     box-shadow:
-			0 0 30px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6),
-			0 0 50px rgba(213, 28, 33, .6)
+			0 0 10px rgba(213, 28, 33, .6),
+			0 0 20px rgba(213, 28, 33, .6),
+			0 0 30px rgba(213, 28, 33, .6)
 	  ;
 }
   50% {

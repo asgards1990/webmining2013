@@ -19,3 +19,4 @@ AWARDS_URL=LOCAL_PATH+"film/awards/{}.html"
 COMPANY_URL=LOCAL_PATH+"company/{}.html"
 
 POSTER_PATH="/home/pesto/imdb/poster/"
+POSTER_PATH="/home/pesto/imdb/person_pic/"

@@ -16,10 +16,10 @@ class PersonAutocomplete(autocomplete_light.AutocompleteModelTemplate):
     choice_template = 'autocomplete/person_autocomplete.html'
     
 autocomplete_light.register(Person, PersonAutocomplete, name='Actor',
-                            choices = (Person.objects.filter(actorweight__rank__isnull=False)), autocomplete_js_attributes={'placeholder': 'Add an actor by name',})
+                            choices = (Person.objects.filter(actorweight__rank__isnull=False).distinct()), autocomplete_js_attributes={'placeholder': 'Add an actor by name',})
                             
 autocomplete_light.register(Person, PersonAutocomplete, name='Director',
-                           choices = (Person.objects.filter(films_from_director__imdb_id__isnull=False)).distinct()
+                           choices = (Person.objects.filter(films_from_director__imdb_id__isnull=False).distinct()).distinct()
                            , autocomplete_js_attributes={'placeholder': 'Add a director by name',})
                            
 # Autocompletion simple genre-keywords
@@ -107,5 +107,11 @@ class KeywordAutocomplete(autocomplete_light.AutocompleteModelBase):
         return self.order_choices(choices)[0:self.limit_choices]
 
 autocomplete_light.register(Keyword, KeywordAutocomplete,name='keyword_complex')
+
+class KeywordAutocomplete(autocomplete_light.AutocompleteModelBase):
+    search_fields=['word']
+    autocomplete_js_attributes={'placeholder': 'Add a keyword','minimum_characters': 1,}
+
+autocomplete_light.register(Keyword, KeywordAutocomplete,name='keyword_simple')
 
 

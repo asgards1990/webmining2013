@@ -260,10 +260,30 @@ class CinemaService(LearningService):
         else:
             self.keywords_reduced_KM = self.get_cobject('keywords_reduced').get_content()
     
+    def loadRanks(self):
+        if not self.is_loaded('ranks'):
+            v = DictVectorizer(dtype=int)
+            self.rank_matrix = v.fit_transform(genRanks(self.films.iterator())) 
+            self.rank_names = v.get_feature_names()
+            # Save object in cache
+            self.create_cobject('ranks', (self.rank_matrix,self.rank_names))
+        else:
+            self.rank_matrix, self.rank_names = self.get_cobject('ranks').get_content()
+
+    def loadStars(self):
+        if not self.is_loaded('stars'):
+            v = DictVectorizer(dtype=int)
+            self.star_matrix = v.fit_transform(genStars(self.films.iterator())) 
+            self.star_names = v.get_feature_names()
+            # Save object in cache
+            self.create_cobject('stars', (self.star_matrix,self.star_names))
+        else:
+            self.star_matrix, self.star_names = self.get_cobject('stars').get_content()
+
     def loadActors(self):
         if not self.is_loaded('actors'):
             v = DictVectorizer(dtype=int)
-            self.actor_matrix = v.fit_transform(genActorsTuples3(self.films.iterator())) #TODO : later, maybe normalize actor_matrix (mais je pense pas)
+            self.actor_matrix = v.fit_transform(genActors(self.films.iterator()))
             self.actor_names = v.get_feature_names()
             # Save object in cache
             self.create_cobject('actors', (self.actor_matrix,self.actor_names))
@@ -274,14 +294,16 @@ class CinemaService(LearningService):
     def loadActorsReduced(self):
         if not self.is_loaded('actors_reduced'):
             # First clustering method: Spectral Clustering
+            # First we filter the actor_matrix IOT keep only high rank relationships 
+            actor_matrix = scipy.sparse.csr_matrix(self.actor_matrix.toarray() * (self.rank_matrix.toarray()>=self.actor_reduction_rank_threshold))
             try:
                 actors_SC = SpectralClustering(n_clusters=self.dim_actors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_actors)
-                actor_labels_SC = actors_SC.fit_predict(self.actor_matrix.transpose())
+                actor_labels_SC = actors_SC.fit_predict(actor_matrix.transpose())
                 self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_actors):
                     self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels_SC==i, dtype=int).transpose()])
                 self.proj_actors_SC=normalize(self.proj_actors_SC.astype(np.double), norm='l1', axis=0)
-                self.actor_reduced_SC = self.actor_matrix * self.proj_actors_SC
+                self.actor_reduced_SC = actor_matrix * self.proj_actors_SC
             except MemoryError:
                 self.actor_reduced_SC = None
                 print('Spectral clustering failed for actors due to memory error')
@@ -341,9 +363,9 @@ class CinemaService(LearningService):
             self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM = self.get_cobject('writers_reduced').get_content()
 
     def loadDirectors(self):
-        if self.actor_reduced_SC == None:
+        if self.reduction_actors_in_directoractormatrix == 'KM':
             actor_reduced = self.actor_reduced_KM
-        else:
+        if self.reduction_actors_in_directoractormatrix == 'SC':
             actor_reduced = self.actor_reduced_SC
         if not self.is_loaded('directors'):
             v=DictVectorizer(dtype=int)
@@ -400,9 +422,18 @@ class CinemaService(LearningService):
             self.search_clustering = self.get_cobject('search_clustering').get_content()
 
     def loadPredictFeatures(self):
-        actor_reduced = self.actor_reduced_KM #TODO : play
-        keyword_reduced = self.keywords_reduced_KM #TODO : play
-        director_reduced = self.director_reduced_KM #TODO : play
+        if self.reduction_actors_in_predictfeatures == 'KM':
+            actor_reduced = self.actor_reduced_KM
+        if self.reduction_actors_in_predictfeatures == 'SC':
+            actor_reduced = self.actor_reduced_SC
+        if self.reduction_keywords_in_predictfeatures == 'KM':
+            keyword_reduced = self.keywords_reduced_KM
+        if self.reduction_keywords_in_predictfeatures == 'SC':
+            keyword_reduced = self.keywords_reduced_SC
+        if self.reduction_directors_in_predictfeatures == 'KM':
+            director_reduced = self.director_reduced_KM
+        if self.reduction_directors_in_predictfeatures == 'SC':
+            director_reduced = self.director_reduced_SC
         self.predict_features = scipy.sparse.hstack([
             actor_reduced,
             director_reduced,
@@ -423,7 +454,15 @@ class CinemaService(LearningService):
         self.predict_labels_names = ['box_office']
 
     def getWeightedSearchFeatures(self,k):
-        X_people = scipy.sparse.hstack([normalize(self.actor_reduced_SC.astype(np.double),norm='l1',axis=1),normalize(self.director_reduced_SC.astype(np.double),norm='l1',axis=1)])
+        if self.reduction_actors_in_searchclustering == 'SC':
+            actor_reduced=self.actor_reduced_SC
+        if self.reduction_actors_in_searchclustering == 'KM':
+            actor_reduced=self.actor_reduced_KM
+        if self.reduction_directors_in_searchclustering == 'SC':
+            director_reduced=self.director_reduced_SC
+        if self.reduction_directors_in_searchclustering == 'KM':
+            director_reduced=self.director_reduced_KM
+        X_people = scipy.sparse.hstack([normalize(actor_reduced.astype(np.double),norm='l1',axis=1),normalize(director_reduced.astype(np.double),norm='l1',axis=1)])
         #TODO:play on clustering types
         X_budget = self.budget_matrix
         X_review = self.reviews_matrix
@@ -456,12 +495,21 @@ class CinemaService(LearningService):
         self.n_neighbors_SC_actors = 8 # soectral clustering parameter
         self.n_neighbors_SC_writers = 8 # soectral clustering parameter
         self.n_neighbors_SC_directors = 8 # soectral clustering parameter
+        self.actor_reduction_rank_threshold = 10
+        self.reduction_actors_in_predictfeatures = 'KM'
+        self.reduction_keywords_in_predictfeatures = 'KM'
+        self.reduction_directors_in_predictfeatures = 'KM'
+        self.reduction_actors_in_directoractormatrix = 'SC'
+        self.reduction_actors_in_searchclustering = 'SC'
+        self.reduction_directors_in_searchclustering = 'SC'
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
         self.loadFilms()
         # Load prediction features
         self.loadActors()
+        self.loadStars()
+        self.loadRanks()
         self.loadActorsReduced()
         self.loadDirectors()
         self.loadDirectorsReduced()
@@ -489,10 +537,10 @@ class CinemaService(LearningService):
         # Load search clusterings
         self.loadSearchClustering()
         # Load predict features
-        #self.loadPredictFeatures()
-        #self.loadPredictLabels()
+        self.loadPredictFeatures()
+        self.loadPredictLabels()
         # Init predict classifier
-        #self.init_predict()
+        self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -588,7 +636,7 @@ class CinemaService(LearningService):
         if filters['actors']!=[]:
             aux_actors = np.zeros(indexes_fitting_filters.shape)
             for actor in filters['actors']:
-                aux_actors = aux_actors + (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray()) #TODO WARNING, CORRECT ONLY WITH NON-TUPLES ACTORS
+                aux_actors = aux_actors + (self.actor_matrix[:,self.actor_names.index(actor.imdb_id)].toarray())
             indexes_fitting_filters = indexes_fitting_filters * (aux_actors != 0)
         # Return results
         indexes_fitting_filters = indexes_fitting_filters.reshape(1,indexes_fitting_filters.shape[0])[0]
@@ -608,7 +656,7 @@ class CinemaService(LearningService):
         # Apply filters
         #print('--> Applying filters...')
         if filters!=None:
-            indexes_fitting_filters = self.applyFilter(filters) #TODO : test applyFilter
+            indexes_fitting_filters = self.applyFilter(filters)
         else:
             indexes_fitting_filters = range(self.nb_films)
         indexes_fitting_filters = np.array(indexes_fitting_filters)
@@ -793,8 +841,6 @@ class CinemaService(LearningService):
 
         self.box_office_clf.fit(X, y_log)
 
-        return
-
     def compute_predict(self, x_vector, language=None):
         '''
         Return {'prizes' : list of {'institution' : Institution Object,
@@ -815,7 +861,6 @@ class CinemaService(LearningService):
                                      },
                 'reviews' : list of {'journal': Journal Object,
                                      'grade' : float,
-                                     'keywords' : list of Keyword Object
                                     },
                 'bag_of_words' : list of {'keyword' : Keyword Object,
                                           'value' : float dans [0,1]

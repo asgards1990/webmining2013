@@ -732,6 +732,7 @@ class IMDBExtractor_Person(IMDBPersonExtractor):
       self.birthDate = (lambda x : x[0] if len(x)>0 else None)(self.extractBirthDate())
       self.birthCountry = (lambda x : x[-1].split(',')[-1].strip() if len(x)>0 else None)(self.extractBirthCountry())
       self.name = (lambda x : x[0] if len(x)>0 else None)(self.extractName())
+      self.extractPic()
 
    def extractPerson_DB(self):
 
@@ -754,6 +755,26 @@ class IMDBExtractor_Person(IMDBPersonExtractor):
    def extractName(self):
       logger.debug("Extract Person name")
       return self.extractor.extractXpathText('//h1/span[@itemprop="name"]')
+
+   def extractPic(self):
+      logger.debug("Extract Person Pic")
+      try:
+         url = self.extractor.extractXpathElement('//img[@id="name-poster"]/src')[0]
+         u = urllib.urlopen(url) 
+         content=u.read()
+         path="{}{}.{}".format(IMDBExtractorConfig.PERSON_PIC_PATH,self.id_,url.split(".")[-1])
+         logger.debug("Sauvegarde de l'image {} vers le chemin {}".format(url.split(".")[-1],path))
+         f=open(path,'wb')
+         f.write(content)
+         f.close()
+      except Exception as e:
+         logger.error("Impossible de sauvegarder l'image de la personne, Error : {}".format(e))
+      try:
+        IMDBPersonStatusConnector().setPersonPicStatus(self.id_,1)
+      except Exception as e:
+         logger.error('Erreur lors du changement de statut "PersonPic" dans la base : {}'.format(e))
+
+
 
 
    def extractBirthDate(self):
