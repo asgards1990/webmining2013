@@ -148,35 +148,52 @@ function ajoutKeywordSuggest(keyword) {
 
 function keywordClick (icone) {
     $(icone).click(function(){
-        if((this.className=="suppress1")&&(this.id=="suggest")){            
-            var element = this.parentNode.parentNode;
+        if((this.className=="remove div")&&(this.id=="suggest")){            
+            var element = this.parentNode;
+            var remove = document.createElement('span');
+            var newImg1 = document.createElement('img');
+            newImg1.className="add1";
+            newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+   
+
+    var newImg2 = document.createElement('img');
+    newImg2.className="add2"; 
+    newImg2.src="../pesto/static/img/prediction/AddBlue.png";
             suggestion = document.getElementById("keywordSuggest");
 
-            this.parentNode.parentNode.parentNode.removeChild(element);
+            this.parentNode.parentNode.removeChild(element);
 
             element.getElementsByClassName("suppress1")[0].src="../pesto/static/img/prediction/AddGrey.png";
             element.getElementsByClassName("suppress2")[0].src="../pesto/static/img/prediction/AddBlue.png";
-            element.getElementsByClassName("suppress1")[0].className="add1";
-
+            element.className="newKeyword";
             suggestion.appendChild(element);
             }
 
         else {
-            if (this.className=="suppress1") {
+            if (this.className=="remove div") {
             this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
                }
             else {
                 var element = this.parentNode.parentNode;
+                var remove = document.createElement('span');
+                var text = document.createTextNode(element.getElementsByClassName("name")[0].text);
                 keywords = document.getElementById("id_keyword-deck");
 
                 this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
-                
-                element.getElementsByClassName("add1")[0].src="../pesto/static/img/prediction/DeleteGrey.jpg";
-                element.getElementsByClassName("add2")[0].src="../pesto/static/img/prediction/DeleteRed.png";
-                element.getElementsByClassName("add1")[0].id="suggest";
-                element.getElementsByClassName("add1")[0].className="suppress1";
-                element.getElementsByClassName("add2")[0].className="suppress2";
-               
+
+                 if (element.hasChildNodes()){
+                     while (element.childNodes.length>=1)
+                         {element.removeChild(element.firstChild);
+                    }
+               };
+
+                remove.className="remove div";
+                remove.id="suggest";
+                remove.style="display: inline;";
+
+                element.className="div hilight";
+
+                remove.appendChild(text);
                 keywords.appendChild(element);
                 };
             };
