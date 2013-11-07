@@ -260,10 +260,30 @@ class CinemaService(LearningService):
         else:
             self.keywords_reduced_KM = self.get_cobject('keywords_reduced').get_content()
     
+    def loadRanks(self):
+        if not self.is_loaded('ranks'):
+            v = DictVectorizer(dtype=int)
+            self.rank_matrix = v.fit_transform(genRanks(self.films.iterator())) 
+            self.rank_names = v.get_feature_names()
+            # Save object in cache
+            self.create_cobject('ranks', (self.rank_matrix,self.rank_names))
+        else:
+            self.rank_matrix, self.rank_names = self.get_cobject('ranks').get_content()
+
+    def loadStars(self):
+        if not self.is_loaded('stars'):
+            v = DictVectorizer(dtype=int)
+            self.star_matrix = v.fit_transform(genStars(self.films.iterator())) 
+            self.star_names = v.get_feature_names()
+            # Save object in cache
+            self.create_cobject('stars', (self.star_matrix,self.star_names))
+        else:
+            self.star_matrix, self.star_names = self.get_cobject('stars').get_content()
+
     def loadActors(self):
         if not self.is_loaded('actors'):
             v = DictVectorizer(dtype=int)
-            self.actor_matrix = v.fit_transform(genActorsTuples3(self.films.iterator())) #TODO : later, maybe normalize actor_matrix (mais je pense pas)
+            self.actor_matrix = v.fit_transform(genActors(self.films.iterator()))
             self.actor_names = v.get_feature_names()
             # Save object in cache
             self.create_cobject('actors', (self.actor_matrix,self.actor_names))
@@ -274,14 +294,16 @@ class CinemaService(LearningService):
     def loadActorsReduced(self):
         if not self.is_loaded('actors_reduced'):
             # First clustering method: Spectral Clustering
+            # First we filter the actor_matrix IOT keep only high rank relationships 
+            actor_matrix = scipy.sparse.csr_matrix(self.actor_matrix.toarray() * (self.rank_matrix.toarray()>=self.actor_reduction_rank_threshold))
             try:
                 actors_SC = SpectralClustering(n_clusters=self.dim_actors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_actors)
-                actor_labels_SC = actors_SC.fit_predict(self.actor_matrix.transpose())
+                actor_labels_SC = actors_SC.fit_predict(actor_matrix.transpose())
                 self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels_SC==0, dtype=int).transpose()
                 for i in range(1, self.dim_actors):
                     self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels_SC==i, dtype=int).transpose()])
                 self.proj_actors_SC=normalize(self.proj_actors_SC.astype(np.double), norm='l1', axis=0)
-                self.actor_reduced_SC = self.actor_matrix * self.proj_actors_SC
+                self.actor_reduced_SC = actor_matrix * self.proj_actors_SC
             except MemoryError:
                 self.actor_reduced_SC = None
                 print('Spectral clustering failed for actors due to memory error')
@@ -456,12 +478,15 @@ class CinemaService(LearningService):
         self.n_neighbors_SC_actors = 8 # soectral clustering parameter
         self.n_neighbors_SC_writers = 8 # soectral clustering parameter
         self.n_neighbors_SC_directors = 8 # soectral clustering parameter
+        self.actor_reduction_rank_threshold = 10
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
         self.loadFilms()
         # Load prediction features
         self.loadActors()
+        self.loadStars()
+        self.loadRanks()
         self.loadActorsReduced()
         self.loadDirectors()
         self.loadDirectorsReduced()
