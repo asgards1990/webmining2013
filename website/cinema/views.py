@@ -130,16 +130,16 @@ def searchresults(request, nomFilm):
         return render(request, 'prediction.html',locals())
 
 def filmInfo(request):
-##    if request.method == 'POST':
-##        film_id = request.POST.get('film_id')
-##    else:
-##        return HttpResponse("Erreur")
-##
-##
-##    try:
-##        film = Film.objects.get(imdb_id = film_id)
-##    except Film.DoesNotExist:
-##        return HttpReponse("movie not found",)
+    if request.method == 'POST':
+        film_id = request.POST.get('film_id')
+    else:
+        return HttpResponse("Erreur")
+
+
+    try:
+        film = Film.objects.get(imdb_id = film_id)
+    except Film.DoesNotExist:
+        return HttpReponse("movie not found",)
 
 		# inter.imdb_id=film.imdb_id
 		# inter.actors=film.actors
@@ -157,21 +157,23 @@ def filmInfo(request):
     #response = HttpResponse('{"poster" : "'+ film.image_url + '", "actors" : "'+ film.imdb_summary + '", "plot" : "'+ film.imdb_summary +'"}')
                 
 
-    film = Film.objects.get(imdb_id = "tt0899128")
+    film = Film.objects.get(imdb_id = film_id)
     actors=film.actors.all()
     l = len(actors)
     outputActors =[]
     for k in range(l-1):
 		actor=actors[k]
 		actorDico = {'imdb_id':actor.imdb_id,'first_name':actor.first_name,'last_name':actor.last_name}  
-		outputActors.append(actor)
+		outputActors.append(actorDico)
 	
 	
     output = {'budget' : film.budget, 'plot': film.imdb_summary, 'poster':film.image_url, 'imbd_id': film.imdb_id,
-              'release_date':film.release_date, 'english_title ': film.english_title,
-              'original_title':film.original_title,'actors':outputActors}
+              'english_title ': film.english_title,
+              'original_title':film.original_title,'release_date':film.release_date.isoformat(),'actors':outputActors}
+    print 'hello'
     response = HttpResponse(simplejson.dumps(output), mimetype='application/json')
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
+    
     return response
