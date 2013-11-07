@@ -252,7 +252,7 @@ function montrerResultats(nomDuCadre,data){
 
 	longueurEtAngle(coeffDist,largeurBox,hauteurBox,coeffEmToPx);
 
-	carreCentral.style.cssText ='border-radius:0.5em;display: table; position:absolute;width: 6em;height: 6em;background-color: #5697DB;border: 1px solid Black;z-index:10; text-align : center ;';//white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';//display: table;';
+	//carreCentral.style.cssText ='border-radius:0.5em;display: table; position:absolute;width: 6em;height: 6em;background-color: #5697DB;border: 1px solid Black;z-index:10; text-align : center ;';//white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';//display: table;';
 	document.getElementById("cadreInter1").appendChild(carreCentral);
 	var largeurCarre=$("#carreCentral").width();
 	var hauteurCarre=$("#carreCentral").height();
@@ -263,7 +263,7 @@ function montrerResultats(nomDuCadre,data){
 	var conteneurTexteCentral=document.createElement('p');
 
 	conteneurTexteCentral.id="conteneurTexteCentral";
-	conteneurTexteCentral.style.cssText='display:table-cell; text-align: center;vertical-align: middle;';//text-overflow:ellipsis;overflow:hidden; white-space:nowrap;'//vertical-align: middle;'
+	//conteneurTexteCentral.style.cssText='display:table-cell; text-align: center;vertical-align: middle;';//text-overflow:ellipsis;overflow:hidden; white-space:nowrap;'//vertical-align: middle;'
 
 	var contenu=document.createTextNode("");
 	contenu.id="nomFilmChoisi";
@@ -287,21 +287,24 @@ function montrerResultats(nomDuCadre,data){
 
 		barre[i] = document.createElement('div');
 		barre[i].id="barre"+i;
+		barre[i].setAttribute('class', 'barre_lien');
 
-		barre[i].style.cssText ='position:absolute;width: '+lBarre[i]+'em;height: 1px;background-color: #5697DB;border: 1px solid #5697DB;left :'+(largeurBox/2-coeffEmToPx*lBarre[i]/2)+'px;z-index:1;display:none;top:'+(hauteurBox/2-1)+'px;transform:rotate('+angleBarre[i]+'rad) translate('+(lBarre[i]/2)+'em);-webkit-transform:rotate('+angleBarre[i]+'rad) translate('+(lBarre[i]/2)+'em)';
+		barre[i].style.cssText ='width: '+lBarre[i]+'em;left :'+(largeurBox/2-coeffEmToPx*lBarre[i]/2)+'px;top:'+(hauteurBox/2-1)+'px;transform:rotate('+angleBarre[i]+'rad) translate('+(lBarre[i]/2)+'em);-webkit-transform:rotate('+angleBarre[i]+'rad) translate('+(lBarre[i]/2)+'em)';
 
 		document.getElementById(nomDuCadre).appendChild(barre[i]);
 
 		cadre[i] = document.createElement('div');
 		cadre[i].id="cadre"+i;
-		cadre[i].style.cssText ='position:absolute;width: '+coeffTailleCadreTitre*largeurBox+'px;height: 1.6em;background-color: Red;border: 1px solid Black;left :'+(largeurBox/2+coeffEmToPx*lBarre[i]*Math.cos(angleBarre[i]))+'px;z-index:2;display:none;top:'+(hauteurBox/2+coeffEmToPx*lBarre[i]*Math.sin(angleBarre[i]))+'px;transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em);-webkit-transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em)';
+		cadre[i].setAttribute('class', 'cadre_film');
+		cadre[i].style.cssText ='width: '+coeffTailleCadreTitre*largeurBox+'px;left :'+(largeurBox/2+coeffEmToPx*lBarre[i]*Math.cos(angleBarre[i]))+'px;top:'+(hauteurBox/2+coeffEmToPx*lBarre[i]*Math.sin(angleBarre[i]))+'px;transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em);-webkit-transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em)';
 
 		document.getElementById(nomDuCadre).appendChild(cadre[i]);
 		
 		conteneur[i]=document.createElement('p');
 
 		conteneur[i].id="conteneur"+i;
-		conteneur[i].style.cssText='position:relative;text-align: center;text-overflow:ellipsis;overflow:hidden; white-space:nowrap;transform:translate(0px,-0.8em);-webkit-transform:translate(0px,-0.8em)'
+		conteneur[i].setAttribute('class', 'conteneur');
+		//conteneur[i].style.cssText='position:relative;text-align: center;text-overflow:ellipsis;overflow:hidden; white-space:nowrap;transform:translate(0px,-0.8em);-webkit-transform:translate(0px,-0.8em)'
 		//display:table-cell; text-align: center;vertical-align: middle;'
 
 		contenuTitre[i]=document.createTextNode(nomFilm[i]);
