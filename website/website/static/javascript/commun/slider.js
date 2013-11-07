@@ -7,7 +7,7 @@ $(function() {
       range: true,
       min: 0,
       max: 300,
-      values: [ 30, 250 ],
+      values: [ 0, 300 ],
       slide: function( event, ui ) {
         $( "#amount" ).val( "$" + ui.values[ 0 ] + "M - $" + ui.values[ 1 ]+"M" );
       }
