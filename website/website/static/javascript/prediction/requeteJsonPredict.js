@@ -1,44 +1,137 @@
+var nbactors_min=1;
+var nbactors_max=100;
+var nbgenres_min=1;
+var nbgenres_max=2;
+var nbkeywords_min=0;
+var nbkeywords_ok=5;
+var nbdirector_min=1;
+var nbactors=0;
+var nbgenres=0;
+var nbkeywords=0;
+var nbdirector=0;
+
+function verifSiRequete(){
+	nbactors=document.getElementById("id_actors-deck").getElementsByClassName("hilight").length;
+	nbgenres=0;
+	if(document.getElementById("id_genre1-deck").getElementsByClassName("div hilight").length>0){
+		nbgenres=nbgenres+1;
+	}
+	if(document.getElementById("id_genre2-deck").getElementsByClassName("div hilight").length>0){
+		nbgenres=nbgenres+1;
+	}
+	nbkeywords=document.getElementById("id_keyword-deck").getElementsByClassName("div hilight").length;
+	nbdirector=document.getElementById("id_directors-deck").getElementsByClassName("hilight").length;
+	if(nbactors>=nbactors_min && nbactors<=nbactors_max && nbgenres>=nbgenres_min && nbgenres<=nbgenres_max && nbkeywords>=nbkeywords_min && nbdirector>=nbdirector_min){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+function changementPredict(){
+	if(verifSiRequete()){
+		$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
+	}
+}
+
+
 $(document).ready(function(){
+//loadChargement("results");
+//setTimeout(function(){unloadChargement("results");},2000)
+//$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()))})
+
+$("#results").click(function(){changementPredict()})
 //envoiDeLaRequete()
 //alert("hello")
 //alert(JSON.stringify(genererRequetePredict()))
 //$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
 //setTimeout(function(){envoiDeLaRequetePredict()},1000)
 //$("#title").click(function(){envoiDeLaRequetePredict()})
+//document.getElementById("hor-minimalist-a").children[1].children[0].children[1].textContent="blabla"
 })
+
 
 function genererRequetePredict(){
 	var requestInter=new Object();
-	requestInter.actors=new Array();
-	requestInter.actors[0]="nm0000138";
-	requestInter.actors[1]="nm0004851";
+	if(nbactors!=0){
+		requestInter.actors=new Array();
+		for(var i=0;i<document.getElementById("id_actors-deck").getElementsByClassName("hilight").length;i++){
+			requestInter.actors[i]=document.getElementById("id_actors-deck").getElementsByClassName("hilight")[i].id;
+		}
+	}
 
-	//for(var i=0;i<document.getElementById("actorsdesc").getElementsByClassName("actor").length;i++){
-	//	requestInter.actors[i]=document.getElementById("actorsdesc").getElementsByClassName("actor")[i].id;
-	//}
-	requestInter.genres=new Array();
-	requestInter.genres[0]="Action";
-	//for(var i=0;i<document.getElementById("genre").getElementsByClassName("genre").length;i++){
-	//	requestInter.genres[i]=document.getElementById("genre").getElementsByClassName("genre")[i].value;
-	//}
-	//requestInter.keywords=new Array();
-	//for(var i=0;i<document.getElementById("keywordsdesc").getElementsByClassName("name").length;i++){
-	//	requestInter.keywords[i]=document.getElementById("keywordsdesc").getElementsByClassName("name")[i].textContent;
-	//}
-	//requestInter.directors=new Array();
-	//for(var i=0;i<document.getElementById("directors").getElementsByClassName("director").length;i++){
-	//	requestInter.directors[i]=document.getElementById("directors").getElementsByClassName("director")[i].id;
-	//}
-	//requestInter.budget=10.2;
-	//
-	//requestInter.release_period=new Object();
-	//requestInter.release_period.season="summer";
-	//requestInter.language="fr";
+	if (true || nbgenres!=0){
+		requestInter.genres=new Array();
+		var texte1="";
+		var texte2="";
+		if(document.getElementById("id_genre1-deck").getElementsByClassName("div hilight").length>0){
+			for (var i = 0; i < document.getElementById("id_genre1-deck").getElementsByClassName("div hilight")[0].childNodes.length; i++){
+				if (document.getElementById("id_genre1-deck").getElementsByClassName("div hilight")[0].childNodes[i].nodeType == 3){
+					texte1 = document.getElementById("id_genre1-deck").getElementsByClassName("div hilight")[0].childNodes[i].textContent.trim();
+				}
+			}
+		}
+		if(document.getElementById("id_genre2-deck").getElementsByClassName("div hilight").length>0){
+			for (var i = 0; i < document.getElementById("id_genre2-deck").getElementsByClassName("div hilight")[0].childNodes.length; i++){
+				if (document.getElementById("id_genre2-deck").getElementsByClassName("div hilight")[0].childNodes[i].nodeType == 3){
+					texte2 = document.getElementById("id_genre2-deck").getElementsByClassName("div hilight")[0].childNodes[i].textContent.trim();
+				}
+			}
+		}
+		//alert(texte1 + texte2)
+		compteur=0;
+		if (texte1!=""){
+			requestInter.genres[compteur]=texte1;
+			compteur=compteur+1;
+		}
+		if (texte2!=""){
+			requestInter.genres[compteur]=texte2;
+			compteur=compteur+1;
+		}
+
+		/*for(var i=0;i<document.getElementById("genre").getElementsByClassName("genre").length;i++){
+			requestInter.genres[i]=document.getElementById("genre").getElementsByClassName("genre")[i].value;
+		}*/
+	}
+
+	if (true || nbkeywords!=0){
+		requestInter.keywords=new Array();
+		for(var i=0;i<document.getElementById("id_keyword-deck").getElementsByClassName("div hilight").length;i++){
+			requestInter.keywords[i]=document.getElementById("id_keyword-deck").getElementsByClassName("hilight")[i].textContent.trim();
+		}
+	}
+
+	if (nbdirector!=0){
+		requestInter.directors=new Array();
+		for(var i=0;i<document.getElementById("id_directors-deck").getElementsByClassName("hilight").length;i++){
+			requestInter.directors[i]=document.getElementById("id_directors-deck").getElementsByClassName("hilight")[i].id;
+		}
+	}
+
+	requestInter.budget=new Object();
+	requestInter.budget.min=parseInt(document.getElementById("amount").value.slice(1,document.getElementById("amount").value.slice(1,-1).indexOf("-")-1));
+	requestInter.budget.max=parseInt(document.getElementById("amount").value.slice(document.getElementById("amount").value.slice(1,-1).indexOf("-")+4,-1));
+	requestInter.release_period=new Object();
+	if(document.getElementById("release").getElementsByClassName("checked").length>0){
+		requestInter.release_period.season=document.getElementById("release").getElementsByClassName("checked")[0].parentNode.textContent.trim().toLowerCase();
+	}
+	else{
+		requestInter.release_period.season="no-season";
+	}
 
 	return requestInter;
 }
 
 function envoiDeLaRequetePredict(){
+	arreter=false;
+	console.log(JSON.stringify(genererRequetePredict()))
+	if (requete!=undefined){
+		requete.abort();
+		unloadChargement("results");
+	}
+	loadChargement("results");
+	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
 	//alert("hello")
 	//alert(JSON.stringify(genererRequetePredict()))
 	//$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
