@@ -90,7 +90,7 @@ createClick("movieinput");
 });*/
 
 function ajoutActors (actor) {
-
+    
     var superior = document.getElementById("actors").getElementsByTagName("ul")[0];
 
     var father = document.createElement('li');
@@ -133,8 +133,11 @@ function ajoutActors (actor) {
             checkboxClass: 'icheckbox_line-red',
             radioClass: 'iradio_line-red',
             insert: '<div class="icheck_line-icon"></div>' + label_text
-        });
+        })
     });
+
+    element = document.getElementById(actor.imdb_id).getElementsByClassName('iCheck-helper')[0];
+    element.onclick=function(){changement();};
 };
 
 
@@ -188,6 +191,9 @@ function ajoutGenres (genre) {
             insert: '<div class="icheck_line-icon"></div>' + label_text
         });
     });
+
+    element = document.getElementById(genre.id).getElementsByClassName('iCheck-helper')[0];
+    element.onclick=function(){changement();};
 };
 
 function ajoutTabGenres (genres) {
@@ -204,6 +210,15 @@ function ajoutTabGenres (genres) {
                     </p>                       
                 </li>*/
 	
+/*function ajoutBudget (budget) {
+   var slider = document.getElementById('slider-range');
+   $(slider).slider({$( "#amount" ).val( "$" + budget );
+      }
+    });});
+   alert(budget);
+   };*/
+
+
 
 $(document).ready(function() {
     var isSubmitted = false;
