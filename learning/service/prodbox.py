@@ -39,7 +39,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms()
+        self.films = flt.getFilms(50)
         if not self.is_loaded('films'):
             self.indexes = hashIndexes(self.films.iterator())
             self.create_cobject('films', self.indexes)
@@ -758,8 +758,6 @@ class CinemaService(LearningService):
         y_log = np.log(y)
 
         self.box_office_clf.fit(X, y_log)
-
-        return
 
     def compute_predict(self, x_vector, language=None):
         '''
