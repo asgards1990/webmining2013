@@ -97,12 +97,13 @@ def genProductionCompanies(iter_films):
     return genFeature(iter_films,'production_companies', 'imdb_id')
 
 def hashIndexes(iter_films):
-    d = {}
+    d1, d2 = {}, {}
     k = 0
     for film in iter_films:
-        d[film.imdb_id] = k
+        d1[film.pk] = k
+        d2[k] = film.pk
         k += 1
-    return d
+    return d1, d2
 
 def genPrizes(iter_films):
     while True:
@@ -128,33 +129,14 @@ def genReviews(iter_films):
                 d[review.journal.name] = review.grade
             yield d
 
-def genActorsTuples(iter_films):
+def genReviewsContent(iter_films):
     while True:
         film = next(iter_films)
-        aws = ActorWeight.objects.filter(film=film)
-        if aws.count() == 0:
-            yield {'_nothing' : 1}
-        else:
-            d = {}
-            for aw in aws.all():
-                d[aw.actor.imdb_id+'_'+str(aw.rank)+'_'+str(aw.star)] = 1
-            yield d
-
-def genActorsTuples2(iter_films):
-    while True:
-        film = next(iter_films)
-        aws = ActorWeight.objects.filter(film = film)
-        if aws.count() == 0:
-            yield {'_nothing' : 1}
-        else:
-            d = {}
-            for aw in aws.all():
-                if aw.star:
-                    d[aw.actor.imdb_id + '_star'] = 1
-                else:
-                    d[aw.actor.imdb_id + '_' + str( (aw.rank-1)/5 + 1 )] = 1
-            yield d
-
+        reviews = Review.objects.filter(film=film)
+        d = {}
+        for review in reviews.all():
+            d[review.journal.name] = review.summary
+        yield d
 
 def genActors(iter_films):
     while True:
@@ -167,3 +149,32 @@ def genActors(iter_films):
             for aw in aws.all():
                 d[aw.actor.imdb_id] = 1
             yield d
+
+def genRanks(iter_films):
+    while True:
+        film = next(iter_films)
+        aws = ActorWeight.objects.filter(film=film)
+        if aws.count() == 0:
+            yield {'_nothing' : 1}
+        else:
+            d = {}
+            for aw in aws.all():
+                if aw.rank == None: # in Benjamin's database, stars have a None rank
+                    d[aw.actor.imdb_id] = 1
+                else:
+                    d[aw.actor.imdb_id] = aw.rank
+            yield d
+
+def genStars(iter_films):
+    while True:
+        film = next(iter_films)
+        aws = ActorWeight.objects.filter(film=film)
+        if aws.count() == 0:
+            yield {'_nothing' : 1}
+        else:
+            d = {}
+            for aw in aws.all():
+                d[aw.actor.imdb_id] = aw.star
+            yield d
+
+

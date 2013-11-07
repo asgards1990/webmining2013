@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 import autocomplete_app.forms as forms
 from django.http import HttpResponse
@@ -5,6 +6,9 @@ from cinema.forms import HomeForm, ResultsForm, PredictionForm
 from cinema.models import *
 from django.db.models import Q
 from django.utils import simplejson
+from django.core.serializers import serialize
+from json import *
+
 
 
 # Choix du formulaire
@@ -126,19 +130,52 @@ def searchresults(request, nomFilm):
         return render(request, 'prediction.html',locals())
 
 def filmInfo(request):
-##    if request.method == 'POST':
-##        film_id= request.POST.get('film_id')
-##    else:
-##        return HttpResponse("Erreur")
-##
-##    try:
-##        film = Film.objects.get(imdb_id = film_id)
-##    except:
-##        return HttpReponse("movie not found",)
+    if request.method == 'POST':
+        film_id = request.POST.get('film_id')
+    else:
+        return HttpResponse("Erreur")
 
-    response = HttpResponse('hello')
+    try:
+        film = Film.objects.get(imdb_id = film_id)
+    except Film.DoesNotExist:
+        return HttpReponse("movie not found",)                
+
+    film = Film.objects.get(imdb_id = film_id)
+    actors=film.actors.all()
+    l = len(actors)
+    outputActors =[]
+    for k in range(l-1):
+		actor=actors[k]
+		actorDico = {'imdb_id':actor.imdb_id,'name':actor.name,'image_url':actor.image_url}  
+		outputActors.append(actorDico)
+	
+	
+    output = {'budget' : film.budget, 'plot': film.imdb_summary, 'poster':film.image_url, 'imbd_id': film.imdb_id,
+              'english_title ': film.english_title,
+              'original_title':film.original_title,'release_date':film.release_date.isoformat(),'actors':outputActors}
+  
+    response = HttpResponse(simplejson.dumps(output), mimetype='application/json')
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
-    print "ok"
+    
+    return response
+
+
+def getId(request):
+    if request.method == 'POST':
+        film_name = request.POST.get('film_name')
+    else:
+        return HttpResponse("Erreur")
+
+    try:
+        film = Film.objects.get(Q(english_title = film_name) || Q(original_title = film_name))
+    except Film.DoesNotExist:
+        return HttpReponse("movie not found",)
+  
+    response = HttpResponse(simplejson.dumps(film.imdb_id), mimetype='application/json')
+    response['Access-Control-Allow-Origin']  = 'null'
+    response['Access-Control-Allow-Methods'] = 'GET,POST'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    
     return response

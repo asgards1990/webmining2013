@@ -53,9 +53,9 @@ ul, ul ul {
 }
 .menu ul li {
 background-color: white;
-border-radius:3px;
--webkit-border-radius: 3px;
--moz-border-radius: 3px;
+border-radius:0px;
+-webkit-border-radius: 0px;
+-moz-border-radius: 0px;
 overflow:auto;
 }
 .menu ul form li {
@@ -64,9 +64,6 @@ border-radius:3px;
 -webkit-border-radius: 3px;
 -moz-border-radius: 3px;
 
-}
-.menu ul li:last-child a {
-	border-bottom: 1px solid #d51c21;
 }
 
 .menu > li > a:hover {

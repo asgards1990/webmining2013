@@ -33,6 +33,7 @@ parser.add_argument('-imdb_psp', '--imdb-person-spider', dest = 'imdb_person_spi
 parser.add_argument('-imdb_fdw', '--imdb-film-downloader', dest = 'imdb_film_downloader', help = "Si présent, lance le downloader des films IMDB", action='store_true')
 parser.add_argument('-imdb_pdw', '--imdb-person-downloader', dest = 'imdb_person_downloader', help = "Si présent, lance le downloader des personnes IMDB", action='store_true')
 parser.add_argument('-imdb_cdw', '--imdb-company-downloader', dest = 'imdb_company_downloader', help = "Si présent, lance le downloader des entreprises IMDB", action='store_true')
+parser.add_argument('-pic', '--imdb-person-picture', dest = 'imdb_person_picture', help = "Si présent, lance l'extraction d'image des personnes", action='store_true')
 #Crée le tableau global qui donne accès aux arguments passés en paramètres sur la ligne de commande
 initConfig.args = parser.parse_args()
 
@@ -72,6 +73,9 @@ if initConfig.args.imdb_company_downloader:
     logger.info ('Lancement du IMDB Company Downloader')
     import Downloader.IMDBCompanyDownloader
 
+if initConfig.args.imdb_person_picture:
+    logger.info ('Lancement du IMDB Person Picture Extractor')
+    import IMDBExtractor.person_pic
 ###############
 if initConfig.args.imdb_extractor:
    logger.info("Lancement de l'extracteur IMDB")
