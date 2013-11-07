@@ -3,6 +3,8 @@ var requete;
 function changement(){
 	envoiDeLaRequeteSearch();
 	//$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0499549",function(data){alert($.parseJSON(data).etitle)}); //$.parseJSON(data).plot
+        alert('hello');
+        $.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",function(data){alert('not happy');alert($.parseJSON(data).budget)}); 
 }
 
 
