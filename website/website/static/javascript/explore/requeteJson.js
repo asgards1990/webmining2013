@@ -127,7 +127,7 @@ function genererRequeteSearch(nomfilm,init){
 		requestInter.filter.release_period.begin=parseInt(document.getElementById("amountyear").value.slice(0,document.getElementById("amountyear").value.slice(1,-1).indexOf("-")+1));
 		requestInter.filter.release_period.end=parseInt(document.getElementById("amountyear").value.slice(document.getElementById("amountyear").value.slice(1,-1).indexOf("-")+2));
 		requestInter.filter.reviews=new Object();
-		requestInter.filter.reviews.min=parseFloat(document.getElementById("rateit-range-2").getAttribute("aria-valuenow"));
+		requestInter.filter.reviews.min=parseFloat(document.getElementById("rateit-range-2").getAttribute("aria-valuenow"))/5;
 	}
 	else{
 		requestInter.criteria=new Object();
