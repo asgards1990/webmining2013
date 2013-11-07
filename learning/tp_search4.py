@@ -4,20 +4,25 @@ import datetime
 serv = CinemaService()
 
 criteria = {'actor_director':True,
-          'budget':True,
+          'budget':False,
           'review':True,
           'genre':True}
 filters = {'actors':[],
 	'directors':[],
-	'genres':[Genre.objects.get(name='Action')],
-	'budget':{'min':0.,'max':10000000000000000000000.}, #TODO : warning, always use floats!
+	'genres':[],#[Genre.objects.get(name='Action'), Genre.objects.get(name='Romance')],
+	'budget':{'min':5000000.,'max':10000000000000000000000.}, #TODO : warning, always use floats!
 	'reviews':{'min':0.}, #TODO : warning, always use floats!
-	'release_period':{'begin':'1901-01-01','end':'2020-01-01'}
+	'release_period':{'begin':'2010','end':'2020'}
 	}
 #filters=None
-args={'id':'', # Avatar 'tt0499549' # Argo tt1024648' # 2012 'tt1190080' # Intouchables 'tt1675434'
+args={'id':'tt1024648', # Avatar 'tt0499549' # Argo tt1024648' # 2012 'tt1190080' # Intouchables 'tt1675434'
 	'criteria':criteria,
 	'nbresults':10,
     'filter':filters}
 
-serv.search_request(args)
+res = serv.search_request(args)
+
+for item in res['results']:
+    print item
+
+serv.quit()

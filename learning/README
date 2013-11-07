@@ -6,3 +6,8 @@ export PYTHONPATH=/home/pesto/lib/scikit-learn:$PYTHONPATH
 
 Installation locale de Gensim:
 export PYTHONPATH=/home/pesto/lib/gensim-0.8.7:$PYTHONPATH
+
+Analyse des performances :
+pip install --user line_profiler
+Rajouter un decorator @profile au dessus de la fonction etudiee.
+kernprof.py -l -v monfichier.py

@@ -53,10 +53,10 @@ img.steps {
     font-weight:bold;
     color: #D51C21;
     margin:0;
-    padding:0;
-    background-color: rgba(255,255,255,0.8);
-    border-radius:5px;
-    border:1px solid grey;
+    padding:5px 0;
+    background-color: rgba(255,255,255,0.7);
+    border-radius:0px;
+    border:1px solid #ededed;
 }
 
 /* Case 2 + titre */
@@ -170,10 +170,34 @@ padding:0.6em;
 .listbudget input{
 text-align:center;
 }
+
+/* Slider Année*/
+
+#slider-rangeyear {
+    margin: 15px;
+}
+
+.listyear{
+text-align: center;
+font-size: 1em;
+background-color: white;
+overflow:auto;
+padding:0.6em;
+}
+
+.listyear input{
+text-align:center;
+}
 /* Reviews */
 
 .rateit{
-margin-top:0.5em;
+margin-top:0.8em;
+    margin-bottom:0.8em;
+}
+
+#value5 {
+   display:none;
+
 }
 
 #reviews ul.nostyle {
@@ -195,5 +219,6 @@ background-color: white;
 text-align:center;
 vertical-align:center;
 overflow:auto;
+border-bottom: 1px solid rgb(80,88,100);
 }
 
