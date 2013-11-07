@@ -20,6 +20,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.cross_validation import cross_val_score
 from sklearn.neighbors.kde import KernelDensity
 
+import datetime
 from time import time
 import dateutil.parser
 import re
@@ -749,13 +750,13 @@ class CinemaService(LearningService):
         except exceptions.KeyError:
             pass
         
-        filt_out['release_period'] = {'begin' :datetime.date.min, 'end': datetime.date.max}
+        filt_out['release_period'] = {'begin' :1901, 'end': 2020}
         try:
-            filt_out['release_period']['begin'] = dateutil.parser.parse( filt_in['release_period']['begin'] ).date()
+            filt_out['release_period']['begin'] = filt_in['release_period']['begin']
         except exceptions.ValueError, exceptions.KeyError:
             pass
         try:
-            filt_out['release_period']['end'] = dateutil.parser.parse( filt_in['release_period']['end'] ).date()
+            filt_out['release_period']['end'] = filt_in['release_period']['end']
         except exceptons.ValueError, exceptions.KeyError:
             pass
         
