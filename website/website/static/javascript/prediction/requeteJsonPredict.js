@@ -1,8 +1,8 @@
 $(document).ready(function(){
 //envoiDeLaRequete()
-alert("hello")
-alert(JSON.stringify(genererRequetePredict()))
-$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
+//alert("hello")
+//alert(JSON.stringify(genererRequetePredict()))
+//$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
 //setTimeout(function(){envoiDeLaRequetePredict()},1000)
 //$("#title").click(function(){envoiDeLaRequetePredict()})
 })
