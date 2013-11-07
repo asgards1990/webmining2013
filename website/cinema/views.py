@@ -135,27 +135,10 @@ def filmInfo(request):
     else:
         return HttpResponse("Erreur")
 
-
     try:
         film = Film.objects.get(imdb_id = film_id)
     except Film.DoesNotExist:
-        return HttpReponse("movie not found",)
-
-		# inter.imdb_id=film.imdb_id
-		# inter.actors=film.actors
-		# inter.genres=film.genres
-		# inter.keywords=film.keywords
-		# inter.writers=film.writers
-		# inter.image_url=film.image_url
-		# inter.ratings=film.imdb_nb_user_ratings
-		# inter.reviews=film.imdb_nb_user_reviews
-		# inter.pitch=film.imdb_summary
-		# inter.resume=film.imdb_storyline
-		# inter.budget=film.budget
-		# inter.box_office=film.box_office
-	
-    #response = HttpResponse('{"poster" : "'+ film.image_url + '", "actors" : "'+ film.imdb_summary + '", "plot" : "'+ film.imdb_summary +'"}')
-                
+        return HttpReponse("movie not found",)                
 
     film = Film.objects.get(imdb_id = film_id)
     actors=film.actors.all()
@@ -163,15 +146,34 @@ def filmInfo(request):
     outputActors =[]
     for k in range(l-1):
 		actor=actors[k]
-		actorDico = {'imdb_id':actor.imdb_id,'first_name':actor.first_name,'last_name':actor.last_name}  
+		actorDico = {'imdb_id':actor.imdb_id,'name':actor.name,'image_url':actor.image_url}  
 		outputActors.append(actorDico)
 	
 	
     output = {'budget' : film.budget, 'plot': film.imdb_summary, 'poster':film.image_url, 'imbd_id': film.imdb_id,
               'english_title ': film.english_title,
               'original_title':film.original_title,'release_date':film.release_date.isoformat(),'actors':outputActors}
-    print 'hello'
+  
     response = HttpResponse(simplejson.dumps(output), mimetype='application/json')
+    response['Access-Control-Allow-Origin']  = 'null'
+    response['Access-Control-Allow-Methods'] = 'GET,POST'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    
+    return response
+
+
+def getId(request):
+    if request.method == 'POST':
+        film_name = request.POST.get('film_name')
+    else:
+        return HttpResponse("Erreur")
+
+    try:
+        film = Film.objects.get(Q(english_title = film_name) || Q(original_title = film_name))
+    except Film.DoesNotExist:
+        return HttpReponse("movie not found",)
+  
+    response = HttpResponse(simplejson.dumps(film.imdb_id), mimetype='application/json')
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'

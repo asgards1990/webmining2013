@@ -122,7 +122,7 @@ function ajoutActors (actor) {
     var name = document.createElement('span');
     name.className="name";
 
-    var text = actor.first_name + " " + actor.last_name;
+    var text = actor.name;
     name.appendChild(document.createTextNode(text));
     
 
@@ -150,9 +150,18 @@ function ajoutActors (actor) {
 
 
     };
+
+
+function ajoutTabActors (actors) {
+    for (k=0;k<actors.length;k++) {
+        ajoutActors(actors[k]);
+    };
+};
     
 $(document).ready(function(){
+
     $("#acteurs").click(function(){
+
       
              var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
            if (ul.hasChildNodes())
@@ -166,24 +175,9 @@ $(document).ready(function(){
              chiffre.removeChild(chiffre.firstChild);
              chiffre.appendChild(document.createTextNode(2));
 
-        
-            
-            var actor1 = new Object;
-            actor1.imdb_id="1";
-            actor1.first_name= "Cate";
-            actor1.last_name = "Blanchett";
-
-
-
-            
-            var actor2 = new Object;
-            actor2.imdb_id="2";
-            actor2.first_name= "Brad";
-            actor2.last_name = "Pitt";
-            
-            ajoutActors(actor1);
-            ajoutActors(actor2);
-            //$.post("http://localhost:8000/cinema/filmInfo/","tt0443649", function (data) {alert(data.budget);})
+          $.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",
+                 function(data){ajoutTabActors(data.actors);});
+  
         });
     });
                         

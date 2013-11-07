@@ -1,9 +1,9 @@
 var requete;
 
 function changement(){
-	envoiDeLaRequeteSearch();
+	//DeLaRequeteSearch();
 	//$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0499549",function(data){alert($.parseJSON(data).etitle)}); //$.parseJSON(data).plot
-        //alert('hello');
+
         //$.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",function(data){alert('not happy');alert($.parseJSON(data).budget)}); 
 }
 
@@ -14,7 +14,6 @@ $(".checkbox").change(function(){changement();})
 $(".iCheck-helper").click(function(){changement();})
 $("#rateit").click(function(){changement();})
 $( "#slider-range" ).on( "slidechange", function( event, ui ) {changement();} );
-$( "#slider-rangeyear" ).on( "slidechange", function( event, ui ) {changement();} );
 
 })
 

@@ -732,6 +732,7 @@ class IMDBExtractor_Person(IMDBPersonExtractor):
       self.birthDate = (lambda x : x[0] if len(x)>0 else None)(self.extractBirthDate())
       self.birthCountry = (lambda x : x[-1].split(',')[-1].strip() if len(x)>0 else None)(self.extractBirthCountry())
       self.name = (lambda x : x[0] if len(x)>0 else None)(self.extractName())
+      self.extractPic()
 
    def extractPerson_DB(self):
 
