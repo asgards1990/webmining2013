@@ -552,7 +552,7 @@ class CinemaService(LearningService):
         self.loadPredictFeatures()
         self.loadPredictLabels()
         # Init predict classifier
-        self.init_predict()
+        #self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -626,8 +626,8 @@ class CinemaService(LearningService):
         indexes_fitting_filters = indexes_fitting_filters * (self.budget_matrix.toarray() <= filters['budget']['max'])
         # Filter release_date
         years=self.release_date_matrix[:,self.release_date_names.index('year')].toarray()
-        aux_max_release_date = years <= filters['release_period']['end'].year
-        aux_min_release_date = years >= filters['release_period']['begin'].year
+        aux_max_release_date = years <= filters['release_period']['end']
+        aux_min_release_date = years >= filters['release_period']['begin']
         indexes_fitting_filters = indexes_fitting_filters * aux_max_release_date 
         indexes_fitting_filters = indexes_fitting_filters * aux_min_release_date
         # Filter reviews
@@ -687,7 +687,7 @@ class CinemaService(LearningService):
                 #print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
                 indexes_of_cluster = np.where(labels == cluster)[0]
                 indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
-                if indexes != []:
+                if len(indexes)>0:
                     samples = X[list(indexes),:]
                     neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
                     neigh.fit(samples)
@@ -697,17 +697,18 @@ class CinemaService(LearningService):
                     nb_results_found = nb_results_found + local_nb_results_found
                     distances.append(loc_distances[0])
                     neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
-        neighbors_indexes = np.concatenate(neighbors_indexes)
-        distances = np.concatenate(distances)
-        distances = distances[1:] # because the film being studied is the closest neighbor...
-        neighbors_indexes = neighbors_indexes[1:]
-        #Now we reorder items because they may be unordered if there are filters
-        new_order = distances.argsort()
-        distances = distances[new_order]
-        neighbors_indexes = neighbors_indexes[new_order]
+        if len(neighbors_indexes)>0:
+            neighbors_indexes = np.concatenate(neighbors_indexes)
+            distances = np.concatenate(distances)
+            distances = distances[1:] # because the film being studied is the closest neighbor...
+            neighbors_indexes = neighbors_indexes[1:]
+            #Now we reorder items because they may be unordered if there are filters
+            new_order = distances.argsort()
+            distances = distances[new_order]
+            neighbors_indexes = neighbors_indexes[new_order]
         #Return results
         res = []
-        for i in range(nb_results):
+        for i in range(len(distances)):
             res.append( (distances[i], Film.objects.get(pk = self.fromIndextoPk[ neighbors_indexes[i]])) ) 
         return res
 
