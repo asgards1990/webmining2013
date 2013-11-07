@@ -28,6 +28,8 @@ import re
 
 import exceptions
 
+from scipy.stats import poisson
+
 class TableDependentCachedObject(CachedObject):
     def __init__(self, name, table_name, content = None):
         __init__(self, name, content = content)
@@ -87,11 +89,12 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=np.float32)
             self.budget_matrix = v.fit_transform(gkey)
 
-            self.budget_bandwidth = 100.0 # TODO : optimize this parameter
+            self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
             budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
             budget_data = budget_data.reshape( [budget_data.shape[0], 1])
             kde = KernelDensity(kernel='gaussian', bandwidth=self.budget_bandwidth).fit(budget_data)
-            
+            # 
+
             for i in range(self.budget_matrix.shape[0]):
                 if np.isnan(self.budget_matrix[i,0]):
                     self.budget_matrix[i,0]= kde.sample(1)
@@ -293,6 +296,15 @@ class CinemaService(LearningService):
             self.actor_matrix, self.actor_names = self.get_cobject('actors').get_content()
         self.nb_actors = self.actor_matrix.shape[1]
 
+    def loadActorsReduced2(self):
+        # Third method : heuristic
+        theta = 0.5
+        actor_weight_matrix = self.rank_matrix
+        rv = poisson(theta)
+        actor_weight_matrix.data = rv.pmf(actor_weight_matrix.data).astype(np.float32)
+        self.actors_share_bo = normalize(actor_weight_matrix.todense(), axis=1, norm='l1').T * self.box_office_matrix
+        
+
     def loadActorsReduced(self):
         if not self.is_loaded('actors_reduced'):
             # First clustering method: Spectral Clustering
@@ -317,6 +329,7 @@ class CinemaService(LearningService):
                 self.proj_actors_KM = scipy.sparse.hstack([self.proj_actors_KM, scipy.sparse.csc_matrix(actor_labels_KM==i, dtype=int).transpose()])
             self.proj_actors_KM=normalize(self.proj_actors_KM.astype(np.double),axis=0, norm='l1')
             self.actor_reduced_KM = self.actor_matrix * self.proj_actors_KM
+
             # Save object in cache
             self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM))
         else:
@@ -557,7 +570,7 @@ class CinemaService(LearningService):
     
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
-            if args['nbresults'].__class__ == int and args['nbresults'] >= 0 and args['str'].__class__==str:
+            if args['nbresults'].__class__ == int and args['nbresults'] >= 0:
                 tot = np.zeros(self.nb_keywords)
                 rex = re.compile(args['str'].lower())
                 found = [(rex.search(m)!=None) for m in self.keyword_names]
@@ -577,7 +590,7 @@ class CinemaService(LearningService):
                         results.append( (tot[i], self.keyword_names[i] ) )
                 return {'results' : results}
             else:
-                raise ParsingError('Wrong format for nbresults or string input.')
+                raise ParsingError('Wrong format for nbresults.')
         else:
             raise ParsingError('Please define a string and the expected number of results.')
     

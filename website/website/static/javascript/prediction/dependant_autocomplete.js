@@ -148,25 +148,46 @@ function ajoutKeywordSuggest(keyword) {
 
 function keywordClick (icone) {
     $(icone).click(function(){
-        if((this.className=="remove div")&&(this.id=="suggest")){            
+        if((this.className=="remove div")&&(this.id=="suggest")){
+            alert('je suis ici');
             var element = this.parentNode;
             var remove = document.createElement('span');
             var newImg1 = document.createElement('img');
+            var newDelete = document.createElement('span');                               
+            newDelete.className="delete";
             newImg1.className="add1";
             newImg1.src="../pesto/static/img/prediction/AddGrey.png";
-   
+            var newImg2 = document.createElement('img');
+            newImg2.className="add2"; 
+            newImg2.src="../pesto/static/img/prediction/AddBlue.png";
+            var newName = document.createElement('span');
+            var suggestion = document.getElementById("keywordSuggest");
+            alert(suggestion.id);
+            
+            newName.className="name";
 
-    var newImg2 = document.createElement('img');
-    newImg2.className="add2"; 
-    newImg2.src="../pesto/static/img/prediction/AddBlue.png";
-            suggestion = document.getElementById("keywordSuggest");
-
+            newName.appendChild(document.createTextNode(element.textContent));
+            
             this.parentNode.parentNode.removeChild(element);
 
-            element.getElementsByClassName("suppress1")[0].src="../pesto/static/img/prediction/AddGrey.png";
-            element.getElementsByClassName("suppress2")[0].src="../pesto/static/img/prediction/AddBlue.png";
+            if (element.hasChildNodes()){
+                     while (element.childNodes.length>=1)
+                         {element.removeChild(element.firstChild);
+                    }
+               };
+           
+
             element.className="newKeyword";
+            newDelete.appendChild(newImg1);
+            newDelete.appendChild(newImg2);
+             alert('wsd');
+            element.appendChild(newDelete);
+            element.appendChild(newName);
+            
             suggestion.appendChild(element);
+            alert('alert');
+
+            keywordClick(newImg1);
             }
 
         else {
@@ -174,12 +195,12 @@ function keywordClick (icone) {
             this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
                }
             else {
+                alert("123");
                 var element = this.parentNode.parentNode;
                 var remove = document.createElement('span');
                 var text = document.createTextNode(element.getElementsByClassName("name")[0].textContent);
-                var xxx = document.createTextNode("X");
-                alert(element.getElementsByClassName("name")[0].textContent);
-                keywords = document.getElementById("id_keyword-deck");
+                //var xxx = document.createTextNode("X");
+                var keywords = document.getElementById("id_keyword-deck");
 
                 this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 
@@ -191,12 +212,15 @@ function keywordClick (icone) {
 
                 remove.className="remove div";
                 remove.id="suggest";
-                remove.style.display="inline";
                 element.className="div hilight";
-
+              
+                //remove.appendChild(xxx);
                 element.appendChild(remove);
                 element.appendChild(text);
                 keywords.appendChild(element);
+
+                keywordClick(remove);
+
                 };
             };
 
@@ -225,7 +249,7 @@ $(document).ready(function() {
         var id1 = genre1.val();
         var id2 = genre2.val();
         urlSubmit = 'http://senellart.com:8080/suggest/';
-		var bloc = document.getElementById("keywordSuggest");
+	var bloc = document.getElementById("keywordSuggest");
 
         if (id1) {
             var value1 = $('#id_genre1-deck').clone().children().children().remove().end().text();
@@ -235,9 +259,9 @@ $(document).ready(function() {
             if (id2) {
                 var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
 				
-				 if (bloc.hasChildNodes()) {
-				 while (bloc.childNodes.length>=1)
-                 {bloc.removeChild(bloc.firstChild);
+                if (bloc.hasChildNodes()) {
+                    while (bloc.childNodes.length>=1)
+                    {bloc.removeChild(bloc.firstChild);
                 }
                };				
 				

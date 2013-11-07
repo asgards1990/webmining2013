@@ -9,7 +9,6 @@
 }
 
 #prizesborder, #boxofficeborder, #reviewsborder, #bagofwordsborder {
-    display: table;
     position : relative;
     float:left;
     margin-left:20px;
@@ -22,7 +21,6 @@
     background-image: -o-linear-gradient(top, #EA5255, #d51c21);
     background-image: -ms-linear-gradient(top, #EA5255, #d51c21);
     background-image: linear-gradient(top, #EA5255, #d51c21);
-    height:360px;
 }
 
 #prizesborder, #boxofficeborder  {
@@ -62,6 +60,7 @@
 
 #prizesborder h1, #reviewsborder h1{
     padding-right:5px;
+    height:360px;
 }
 
 
@@ -74,7 +73,9 @@
     background: white;
     width: 420px;
     border-radius: 5px;
-    height:100%;
+}
+.boxoffice, .bagofwords{
+    height:360px;
 }
 
 .circle{
