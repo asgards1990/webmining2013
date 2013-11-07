@@ -162,31 +162,30 @@ function keywordClick (icone) {
             newImg2.src="../pesto/static/img/prediction/AddBlue.png";
             var newName = document.createElement('span');
             var suggestion = document.getElementById("keywordSuggest");
-            alert(suggestion.Id);
+            alert(suggestion.id);
             
             newName.className="name";
 
             newName.appendChild(document.createTextNode(element.textContent));
             
-            
-
             this.parentNode.parentNode.removeChild(element);
 
-             if (element.hasChildNodes()){
+            if (element.hasChildNodes()){
                      while (element.childNodes.length>=1)
                          {element.removeChild(element.firstChild);
                     }
                };
+           
 
-            element.getElementsByClassName("suppress1")[0].src="../pesto/static/img/prediction/AddGrey.png";
-            element.getElementsByClassName("suppress2")[0].src="../pesto/static/img/prediction/AddBlue.png";
             element.className="newKeyword";
-            newImg1.id="suggestNo";
             newDelete.appendChild(newImg1);
             newDelete.appendChild(newImg2);
+             alert('wsd');
             element.appendChild(newDelete);
-            element.appendCHild(newName)
+            element.appendChild(newName);
+            
             suggestion.appendChild(element);
+            alert('alert');
 
             keywordClick(newImg1);
             }
@@ -213,10 +212,8 @@ function keywordClick (icone) {
 
                 remove.className="remove div";
                 remove.id="suggest";
-                remove.style.display="inline";
                 element.className="div hilight";
-
-                
+              
                 //remove.appendChild(xxx);
                 element.appendChild(remove);
                 element.appendChild(text);
@@ -374,7 +371,19 @@ $(document).ready(function() {
 	});
 				
 				
-            
+
+$(document).ready(function() {
+	
+    $('body').on('change', '.autocomplete-light-widget select[name$=actors]', function() {
+        var actor = $('#id_actors');
+        var pourId = document.getElementById('id_actors-deck').lastChild;
+        pourId.removeChild(pourId.firstChild);
+        var name = pourId.textContent;
+        alert(name);
+        
+        $.post("/cinema/getIdActor/","actor_name="+name,function(data){pourId.id=data});
+        });
+    });
                           
                         
                     

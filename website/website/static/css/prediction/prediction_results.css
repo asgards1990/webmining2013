@@ -15,15 +15,9 @@
     margin-right:20px;
     border-radius:10px;
     padding:5px;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#EA5255),to(#d51c21));
-    background-image: -webkit-linear-gradient(bottom, #EA5255, #d51c21);
-    background-image: -moz-linear-gradient(top, #EA5255, #d51c21);
-    background-image: -o-linear-gradient(top, #EA5255, #d51c21);
-    background-image: -ms-linear-gradient(top, #EA5255, #d51c21);
-    background-image: linear-gradient(top, #EA5255, #d51c21);
 }
 
-#prizesborder, #boxofficeborder  {
+.topborder {
     background-image: -webkit-gradient(linear, left bottom, left top, from(#EA5255),to(#d51c21));
     background-image: -webkit-linear-gradient(top, #EA5255, #d51c21);
     background-image: -moz-linear-gradient(bottom, #EA5255, #d51c21);
@@ -32,7 +26,7 @@
     background-image: linear-gradient(bottom, #EA5255, #d51c21);
 }
 
-#reviewsborder, #bagofwordsborder {
+.bottomborder {
     background-image: -webkit-gradient(linear, left top, left bottom, from(#EA5255),to(#d51c21));
     background-image: -webkit-linear-gradient(bottom, #EA5255, #d51c21);
     background-image: -moz-linear-gradient(top, #EA5255, #d51c21);
@@ -41,9 +35,19 @@
     background-image: linear-gradient(top, #EA5255, #d51c21);
 }
 
+.greyborder{
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(114, 122, 134)),to(rgb(80, 88, 100)));
+	background-image: -webkit-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+	background-image: -moz-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+	background-image: -o-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+	background-image: -ms-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+	background-image: linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+}
+
 #prizesborder, #boxofficeborder {
     margin-bottom:40px;
 }
+
 
 #results h1 {
     display: table-cell;
@@ -51,18 +55,26 @@
     font-size: 25px;
     word-wrap:break-word;
     width: 25px;
-    height: 100%;
     color: white;
+<<<<<<< HEAD
     vertical-align:top;
+=======
+    margin:0;
+>>>>>>> e1e0b5d9e5ddf379df84b23ac21acf5ce69544aa
 }
 
 #boxofficeborder h1, #bagofwordsborder h1{
     padding-left:5px;
 }
 
-#prizesborder h1, #reviewsborder h1{
+#reviewsborder h1{
     padding-right:5px;
     height:360px;
+}
+
+#prizesborder h1{
+    height:345px;
+    padding-right:5px;
 }
 
 
