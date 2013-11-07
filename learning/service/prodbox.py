@@ -42,7 +42,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms()
+        self.films = flt.getFilms(100)
         if not self.is_loaded('films'):
             self.fromPktoIndex, self.fromIndextoPk = hashIndexes(self.films.iterator())
             self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk))
