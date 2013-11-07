@@ -219,7 +219,7 @@ function callback_suggest (resp) {
 $(document).ready(function() {
     ajoutKeywordSuggest("test");
 	
-   /* $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
+    $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
         var genre1 = $('#id_genre1');
         var genre2 = $('#id_genre2');
         var id1 = genre1.val();
@@ -343,7 +343,7 @@ $(document).ready(function() {
 
                 };
 			};
-		});*/
+		});
 	});
 				
 				
