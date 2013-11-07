@@ -1,8 +1,18 @@
+{% load static %}
+
 <div data-value="{{ choice.pk }}">
     <!-- <div class="actor"> -->
     <div class="photo">
-    <img src={{ choice.image_url }} alt={{choice.name}}/>
+    {% ifequal choice.image_url "" %}
+        <img src="{% static 'img/prediction/avatar_default.png' %}"  alt={{choice.name}}/>
+    {% else %}
+        <img src="http://prodbox.co/media/{{ choice.image_url }}" alt={{choice.name}}/>
+    {% endifequal %}
     </div>
-    <p>{{ choice.name}}<br>{{ choice.birth_country}}</p>
+    <p>{{ choice.name}}
+    <br>
+    {% if choice.birth_country%}
+    {% endif %}
+</p>
     <!-- </div> -->	
 </div>

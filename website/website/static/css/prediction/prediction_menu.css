@@ -39,11 +39,12 @@
 }
 
 #id_actors-deck .photo, #id_directors-deck .photo {
-    width:50px;
+    width:50px; 
 }
 
 #id_actors-deck .photo img, #id_directors-deck .photo img{
     width:50px;
+    padding-top: 5px;
 }
 
 /* menubox acteur : rendu en cours de selection */
@@ -70,14 +71,15 @@
 
 #id_actors-wrapper .yourlabs-autocomplete p, #id_directors-wrapper .yourlabs-autocomplete p  {
     padding-left:5px;
+    width: 100%;
 }
 
 #id_actors-wrapper .yourlabs-autocomplete .photo, #id_directors-wrapper .yourlabs-autocomplete .photo {
-    width:3em;
+    width:28px;
 }
 
 #id_actors-wrapper .yourlabs-autocomplete .photo img, #id_directors-wrapper .yourlabs-autocomplete .photo img{
-    width:3em;
+    width:28px;
 }
 
 /* menubox genre */
@@ -99,6 +101,15 @@
 #genresearch input {
     width:90%;
 }
+
+#id_genre1-deck > * >* {
+margin-top: 1px;
+}
+
+#id_genre2-deck > * >* {
+margin-top: 1px;
+}
+
 
 /* menubox keywords */
 
@@ -128,6 +139,10 @@
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
+}
+
+#id_keyword-deck > * >* {
+margin-top: 1px;
 }
 
 .newKeyword {
