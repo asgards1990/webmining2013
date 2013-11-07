@@ -363,9 +363,9 @@ class CinemaService(LearningService):
             self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM = self.get_cobject('writers_reduced').get_content()
 
     def loadDirectors(self):
-        if self.actor_reduced_SC == None:
+        if self.reduction_actors_in_directoractormatrix == 'KM':
             actor_reduced = self.actor_reduced_KM
-        else:
+        if self.reduction_actors_in_directoractormatrix == 'SC':
             actor_reduced = self.actor_reduced_SC
         if not self.is_loaded('directors'):
             v=DictVectorizer(dtype=int)
@@ -422,9 +422,18 @@ class CinemaService(LearningService):
             self.search_clustering = self.get_cobject('search_clustering').get_content()
 
     def loadPredictFeatures(self):
-        actor_reduced = self.actor_reduced_KM #TODO : play
-        keyword_reduced = self.keywords_reduced_KM #TODO : play
-        director_reduced = self.director_reduced_KM #TODO : play
+        if self.reduction_actors_in_predictfeatures == 'KM':
+            actor_reduced = self.actor_reduced_KM
+        if self.reduction_actors_in_predictfeatures == 'SC':
+            actor_reduced = self.actor_reduced_SC
+        if self.reduction_keywords_in_predictfeatures == 'KM':
+            keyword_reduced = self.keywords_reduced_KM
+        if self.reduction_keywords_in_predictfeatures == 'SC':
+            keyword_reduced = self.keywords_reduced_SC
+        if self.reduction_directors_in_predictfeatures == 'KM':
+            director_reduced = self.directors_reduced_KM
+        if self.reduction_directors_in_predictfeatures == 'SC':
+            director_reduced = self.directors_reduced_SC
         self.predict_features = scipy.sparse.hstack([
             actor_reduced,
             director_reduced,
@@ -479,6 +488,10 @@ class CinemaService(LearningService):
         self.n_neighbors_SC_writers = 8 # soectral clustering parameter
         self.n_neighbors_SC_directors = 8 # soectral clustering parameter
         self.actor_reduction_rank_threshold = 10
+        self.reduction_actors_in_predictfeatures = 'KM'
+        self.reduction_keywords_in_predictfeatures = 'KM'
+        self.reduction_directors_in_predictfeatures = 'KM'
+        self.reduction_actors_in_directoractormatrix = 'SC'
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
