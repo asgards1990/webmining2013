@@ -759,7 +759,7 @@ class IMDBExtractor_Person(IMDBPersonExtractor):
    def extractPic(self):
       logger.debug("Extract Person Pic")
       try:
-         url = self.extractor.extractXpathElement('//img[@id="name-poster"]/src')[0]
+         url = self.extractor.extractXpathElement('//img[@id="name-poster"]/@src')[0]
          u = urllib.urlopen(url) 
          content=u.read()
          path="{}{}.{}".format(IMDBExtractorConfig.PERSON_PIC_PATH,self.id_,url.split(".")[-1])
@@ -770,7 +770,7 @@ class IMDBExtractor_Person(IMDBPersonExtractor):
       except Exception as e:
          logger.error("Impossible de sauvegarder l'image de la personne, Error : {}".format(e))
       try:
-        IMDBPersonStatusConnector().setPersonPicStatus(self.id_,1)
+        IMDBPersonStatusConnector().setImageStatus(self.id_,1)
       except Exception as e:
          logger.error('Erreur lors du changement de statut "PersonPic" dans la base : {}'.format(e))
 

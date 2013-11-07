@@ -90,7 +90,7 @@ createClick("movieinput");
 });*/
 
 function ajoutActors (actor) {
-
+    
     var superior = document.getElementById("actors").getElementsByTagName("ul")[0];
 
     var father = document.createElement('li');
@@ -133,8 +133,11 @@ function ajoutActors (actor) {
             checkboxClass: 'icheckbox_line-red',
             radioClass: 'iradio_line-red',
             insert: '<div class="icheck_line-icon"></div>' + label_text
-        });
+        })
     });
+
+    element = document.getElementById(actor.imdb_id).getElementsByClassName('iCheck-helper')[0];
+    element.onclick=function(){changement();};
 };
 
 
@@ -188,6 +191,9 @@ function ajoutGenres (genre) {
             insert: '<div class="icheck_line-icon"></div>' + label_text
         });
     });
+
+    element = document.getElementById(genre.id).getElementsByClassName('iCheck-helper')[0];
+    element.onclick=function(){changement();};
 };
 
 function ajoutTabGenres (genres) {
@@ -204,6 +210,21 @@ function ajoutTabGenres (genres) {
                     </p>                       
                 </li>*/
 	
+function ajoutBudget (budget) {
+   var slider = document.getElementById('slider-range');
+   var budgetInM = budget/100000
+   $(slider).slider( "option", "values", [budgetInM,budgetInM] );
+   var amount = document.getElementById('amount');
+   $(amount).val( "$" + budgetInM + "M - $" + budgetInM +"M" );
+
+   };
+
+function ajoutDate (date) {
+    var amountyear = document.getElementById('amountyear');
+    $(amountyear).val( date );
+    };
+    
+
 
 $(document).ready(function() {
     var isSubmitted = false;
@@ -237,6 +258,7 @@ $(document).ready(function() {
 
               
         $.post("/cinema/getId/","film_name="+film_name,function(data){affichage(data);});
+        changement2();
             }
         
         else {

@@ -14,11 +14,15 @@
     <script src="{% static 'javascript/prediction/bouton_milieu.js' %}"></script>
     <script src="{% static 'javascript/prediction/d3.js' %}"></script>
     <script src="{% static 'javascript/prediction/d3.layout.cloud.js' %}"></script>
+    <script src="{% static 'javascript/prediction/chargement.js' %}"></script>
+    <!-- <script src="{% static 'javascript/prediction/bagofwords.js' %}"></script> -->
+
 
     <!-- Appels css -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/prediction_menu.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/logo_milieu.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/prediction_results.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/prediction/tables.css' %}" />
 
     {% block prediction_extrahead %}
     {% endblock %}
@@ -38,70 +42,152 @@
 <!-- Page de résultat -->
 
     <div id="results">  
-        <div id="prizes" class="prizes">
-            <h1 >Prizes </h1>
-        </div>
-    
-        <div id="boxoffice" class="boxoffice">
-            <h1>Box Office</h1>
-        </div>
-    
-        <div id="reviews" class="reviews">
-            <h1>Reviews</h1>
-            <!-- 
-            <div class="moreinfo">
-            <a href="img/01.jpg" data-lightbox="image-1" title="My caption">More Info</a>
+        <div id="prizesborder">
+            <h1>  
+               <span> P </span>  
+               <span> R </span>  
+               <span> I </span>  
+               <span> Z </span>  
+               <span> E </span>  
+               <span> S </span>  
+            </h1>  
+            <div id="prizes" class="prizes">
+            <!-- Table en constrution-->
             </div>
-            -->
+        </div>
+        
+       <div id="boxofficeborder">
+            <div id="boxoffice" class="boxoffice">
+                <!-- Table boxoffice general -->
+                <table id="hor-minimalist-a" summary="Box offices">
+                    <thead>
+                    	<tr>
+                        	<th scope="col">Rank</th>
+                            <th scope="col">Movie</th>
+                            <th scope="col">General Box-Office Rank</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr>
+                        	<td>23</td>
+                            <td>Iron Man 3</td>
+                            <td>$325.5 M</td>
+                        </tr>
+                        <tr>
+                        	<td>24</td>
+                            <td>Batman Begins</td>
+                            <td>$320 M</td>
+                        </tr>
+                        <tr>
+                        	<td>25</td>
+                            <td>Le Guerrier Silencieux</td>
+                            <td>$0.01 M</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Table boxoffice by genre -->
+                <table id="hor-minimalist-a" summary="Box offices">
+                    <thead>
+                    	<tr>
+                        	<th scope="col">Rank</th>
+                            <th scope="col">Movie</th>
+                            <th scope="col">Genre Box-Office Rank</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr>
+                        	<td>23</td>
+                            <td>Iron Man 3</td>
+                            <td>$325.5 M</td>
+                        </tr>
+                        <tr>
+                        	<td>24</td>
+                            <td>Batman Begins</td>
+                            <td>$320 M</td>
+                        </tr>
+                        <tr>
+                        	<td>25</td>
+                            <td>Le Guerrier Silencieux</td>
+                            <td>$0.01 M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h1>  
+               <span> B </span>  
+               <span> O </span>  
+               <span> X </span>  
+               <span> O </span>  
+               <span> F </span>  
+               <span> F </span>
+               <span> I </span>  
+               <span> C </span>  
+               <span> E </span>   
+            </h1>
         </div>
 
-        <div id="bagofwords" class="bagofwords">
-            <h1>Bag of Words</h1>
-            <script>
-                var fill = d3.scale.category20();
+        <div id="reviewsborder">
+            <h1>  
+               <span> R </span>  
+               <span> E </span>  
+               <span> V </span>  
+               <span> I </span>  
+               <span> E </span>  
+               <span> W </span>
+               <span> S </span>     
+            </h1>
+            <div id="reviews" class="reviews">
+                <!-- 
+                <div class="moreinfo">
+                <a href="img/01.jpg" data-lightbox="image-1" title="My caption">More Info</a>
+                </div>
+                -->
+<!--
+                <table id="hor-minimalist-a" summary="Box offices">
+                    <thead>
+                    	<tr>
+                        	<th scope="col">Rank</th>
+                            <th scope="col">Movie</th>
+                            <th scope="col">General Box-Office Rank</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr>
+                        	<td>23</td>
+                            <td>Iron Man 3</td>
+                            <td>$325.5 M</td>
+                        </tr>
+                        <tr>
+                        	<td>24</td>
+                            <td>Batman Begins</td>
+                            <td>$320 M</td>
+                        </tr>
+                        <tr>
+                        	<td>25</td>
+                            <td>Le Guerrier Silencieux</td>
+                            <td>$0.01 M</td>
+                        </tr>
+                    </tbody>
+                </table>
+-->
+            </div>
+        </div>
 
-                d3.layout.cloud().size([430,250])
-                        .words([
-                            "Hello", "world", "normallyvrgtrbtnthn", "your", "want", "more", "words",
-                            "than", "this"].map(function (d) {
-                                    return {text: d, size: 10 + Math.random() * 40};
-                                }))
-                        .padding(5)
-                        .rotate(function () {
-                            return ~~(Math.random() * 2) * 90;
-                        })
-                        .font("Impact")
-                        .fontSize(function (d) {
-                            return d.size;
-                        })
-                        .on("end", draw)
-                        .start();
-
-                function draw(words) {
-                    d3.select("#bagofwords").append("svg")
-                            .attr("width", 400)
-                            .attr("height", 220)
-                            .append("g")
-                            .attr("transform", "translate(180,120)")
-                            .selectAll("text")
-                            .data(words)
-                            .enter().append("text")
-                            .style("font-size", function (d) {
-                                return d.size + "px";
-                            })
-                            .style("font-family", "Impact")
-                            .style("fill", function (d, i) {
-                                return fill(i);
-                            })
-                            .attr("text-anchor", "middle")
-                            .attr("transform", function (d) {
-                                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                            })
-                            .text(function (d) {
-                                return d.text;
-                            });
-                }
-            </script>
+        <div id="bagofwordsborder">
+            <div id="bagofwords" class="bagofwords">
+            </div>
+            <h1>  
+               <span> B </span>  
+               <span> A </span>  
+               <span> G </span>  
+               <span> O </span>  
+               <span> F </span>  
+               <span> W </span>
+               <span> O </span>  
+               <span> R </span>  
+               <span> D </span>   
+               <span> S </span>   
+            </h1>
         </div>
 
         <div href="" class="circle">  

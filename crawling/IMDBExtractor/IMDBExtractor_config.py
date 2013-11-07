@@ -6,6 +6,7 @@
 #Logger
 IMDB_EXTRACTOR_LOGGER_NAME = "EXTRACTOR IMDB"
 EXTRACTOR_LOGGER_NAME = "EXTRACTOR IMDB -- Extract script"
+EXTRACTOR_PERSON_PIC_LOGGER_NAME = "EXTRACTOR PERSON PIC"
 
 LOCAL_PATH="/home/pesto/imdb/"
 
@@ -19,4 +20,4 @@ AWARDS_URL=LOCAL_PATH+"film/awards/{}.html"
 COMPANY_URL=LOCAL_PATH+"company/{}.html"
 
 POSTER_PATH="/home/pesto/imdb/poster/"
-POSTER_PATH="/home/pesto/imdb/person_pic/"
+PERSON_PIC_PATH="/home/pesto/imdb/person_pic/"

@@ -1,4 +1,4 @@
-/* Titres cases */
+﻿/* Titres cases */
 
 h1.steps {
     font-variant: small-caps;
@@ -55,8 +55,12 @@ img.steps {
     margin:0;
     padding:5px 0;
     background-color: rgba(255,255,255,0.7);
-    border-radius:0px;
+    border-radius:10px;
     border:1px solid #ededed;
+}
+
+#id_title_original-deck > * > *{
+margin-top: 3px;
 }
 
 /* Case 2 + titre */
@@ -90,7 +94,7 @@ img.steps {
     vertical-align: middle;
 }
 
-#filters .filter input.img {
+#filters .filter .img {
     max-width: 4em;
     max-height: 4em;
 }

@@ -114,76 +114,120 @@ $(document).ready(function() {
 
 
 function ajoutKeywordSuggest(keyword) {
-
-var newKeyword = document.createElement('span');
-newKeyword.className="newKeyword";
-
-
-var newName = document.createElement('span');
-newName.className="name";
+    var newKeyword = document.createElement('span');
+    newKeyword.className="newKeyword";
 
 
-newName.appendChild(document.createTextNode(keyword));
+    var newName = document.createElement('span');
+    newName.className="name";
 
+    newName.appendChild(document.createTextNode(keyword));
 
+    var newDelete = document.createElement('span');                               
+    newDelete.className="delete";
 
-var newDelete = document.createElement('span');                               
-newDelete.className="delete";
+    var newImg1 = document.createElement('img');
+    newImg1.className="add1";
+    newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+   
 
+    var newImg2 = document.createElement('img');
+    newImg2.className="add2"; 
+    newImg2.src="../pesto/static/img/prediction/AddBlue.png";
 
-var newImg1 = document.createElement('img');
-newImg1.className="add1";
-newImg1.src="../pesto/static/img/prediction/AddGrey.png";
-//keywordClick(newImg1);
+    keywordClick(newImg1);
+    newKeyword.appendChild(newDelete);
+    newKeyword.appendChild(newName);
 
+    newDelete.appendChild(newImg1);
+    newDelete.appendChild(newImg2);
 
-var newImg2 = document.createElement('img');
-newImg2.className="add2"; 
-newImg2.src="../pesto/static/img/prediction/AddBlue.png";
-
-
-newKeyword.appendChild(newDelete);
-newKeyword.appendChild(newName);
-
-newDelete.appendChild(newImg1);
-newDelete.appendChild(newImg2);
-
-document.getElementById("keywordSuggest").appendChild(newKeyword);
+    document.getElementById("keywordSuggest").appendChild(newKeyword);
 
 };
 
 function keywordClick (icone) {
-$(check).click(function(){
-alert('hello1');
-if((this.className=="suppress1")&&(this.id=="suggest")){
-var element = this.parentNode.parentNode;
+    $(icone).click(function(){
+        if((this.className=="remove div")&&(this.id=="suggest")){
+            alert('je suis ici');
+            var element = this.parentNode;
+            var remove = document.createElement('span');
+            var newImg1 = document.createElement('img');
+            var newDelete = document.createElement('span');                               
+            newDelete.className="delete";
+            newImg1.className="add1";
+            newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+            var newImg2 = document.createElement('img');
+            newImg2.className="add2"; 
+            newImg2.src="../pesto/static/img/prediction/AddBlue.png";
+            var newName = document.createElement('span');
+            var suggestion = document.getElementById("keywordSuggest");
+            alert(suggestion.Id);
+            
+            newName.className="name";
 
-this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+            newName.appendChild(document.createTextNode(element.textContent));
+            
+            
 
-suggestion = document.getElementById("keywordsugg");
+            this.parentNode.parentNode.removeChild(element);
 
+             if (element.hasChildNodes()){
+                     while (element.childNodes.length>=1)
+                         {element.removeChild(element.firstChild);
+                    }
+               };
 
-element.getElementsByClassName("suppress1")[0].className="add1";
+            element.getElementsByClassName("suppress1")[0].src="../pesto/static/img/prediction/AddGrey.png";
+            element.getElementsByClassName("suppress2")[0].src="../pesto/static/img/prediction/AddBlue.png";
+            element.className="newKeyword";
+            newImg1.id="suggestNo";
+            newDelete.appendChild(newImg1);
+            newDelete.appendChild(newImg2);
+            element.appendChild(newDelete);
+            element.appendCHild(newName)
+            suggestion.appendChild(element);
 
-suggestion.appendChild(element);
-}
+            keywordClick(newImg1);
+            }
 
-else {if (this.className=="suppress1") {
-this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
-}
-else {
-var element = this.parentNode.parentNode;
+        else {
+            if (this.className=="remove div") {
+            this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+               }
+            else {
+                alert("123");
+                var element = this.parentNode.parentNode;
+                var remove = document.createElement('span');
+                var text = document.createTextNode(element.getElementsByClassName("name")[0].textContent);
+                //var xxx = document.createTextNode("X");
+                var keywords = document.getElementById("id_keyword-deck");
 
-this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+                this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 
-keywords = document.getElementById("id_keyword-deck");
-element.getElementsByClassName("add1")[0].id="suggest";
-element.getElementsByClassName("add1")[0].className="suppress1";
-keywords.appendChild(element);
-};
-};
+                if (element.hasChildNodes()){
+                     while (element.childNodes.length>=1)
+                         {element.removeChild(element.firstChild);
+                    }
+               };
 
-});
+                remove.className="remove div";
+                remove.id="suggest";
+                remove.style.display="inline";
+                element.className="div hilight";
+
+                
+                //remove.appendChild(xxx);
+                element.appendChild(remove);
+                element.appendChild(text);
+                keywords.appendChild(element);
+
+                keywordClick(remove);
+
+                };
+            };
+
+    });
 };
 
 
@@ -200,6 +244,7 @@ function callback_suggest (resp) {
 
 
 $(document).ready(function() {
+    ajoutKeywordSuggest("test");
 	
     $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
         var genre1 = $('#id_genre1');
@@ -207,7 +252,7 @@ $(document).ready(function() {
         var id1 = genre1.val();
         var id2 = genre2.val();
         urlSubmit = 'http://senellart.com:8080/suggest/';
-		var bloc = document.getElementById("keywordSuggest");
+	var bloc = document.getElementById("keywordSuggest");
 
         if (id1) {
             var value1 = $('#id_genre1-deck').clone().children().children().remove().end().text();
@@ -217,9 +262,9 @@ $(document).ready(function() {
             if (id2) {
                 var value2 = $('#id_genre2-deck').clone().children().children().remove().end().text();
 				
-				 if (bloc.hasChildNodes()) {
-				 while (bloc.childNodes.length>=1)
-                 {bloc.removeChild(bloc.firstChild);
+                if (bloc.hasChildNodes()) {
+                    while (bloc.childNodes.length>=1)
+                    {bloc.removeChild(bloc.firstChild);
                 }
                };				
 				

@@ -37,3 +37,4 @@ print('--------------------')
 print('Predict request')
 results = app.predict_request(args)
 print(results)
+
