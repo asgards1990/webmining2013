@@ -158,7 +158,7 @@ def filmInfo(request):
         outputGenres.append(genre.name)
 	
     output = {'budget' : film.budget, 'plot': film.imdb_summary, 'poster':film.image_url, 'imbd_id': film.imdb_id,
-              'english_title ': film.english_title,'original_title':film.original_title, 'genres': outputGenres,
+              'english_title': film.english_title,'original_title':film.original_title, 'genres': outputGenres,
               'release_date':film.release_date.isoformat(),'actors':outputActors}
     
     response = HttpResponse(simplejson.dumps(output), mimetype='application/json')

@@ -51,15 +51,15 @@ function carrousel(nomDuCadre,data){
 	for(var j=0;j<nombre;j++){
 		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="http://prodbox.co/media/poster/"+data.results[j].id+".jpg";
 	}
-	repLien[5]="http://prodbox.co/media/poster/"+"tt2334873"+".jpg"
+	repLien[5]="http://prodbox.co/media/poster/"+idFilm+".jpg"
 	for(var j=nombre;j<10;j++){
 		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../pesto/static/img/explore/filmVide.jpg";
 	}
 	//alert(repLien)
-	carrousel2(nomDuCadre,repLien)
+	carrousel2(data,nomDuCadre,repLien)
 }
 
-function carrousel2(nomDuCadre,lienImage){
+function carrousel2(data,nomDuCadre,lienImage){
 	//alert(lienImage)
 	var largeur=75;//1*contenu.width;
 	var hauteur=100;//1*contenu.height;
@@ -162,7 +162,7 @@ function carrousel2(nomDuCadre,lienImage){
 	setTimeout(function(){$("#canv3").fadeIn(fadeTime),$("#canv9").fadeIn(fadeTime)},3*fadeIntervalle)
 	setTimeout(function(){$("#canv2").fadeIn(fadeTime),$("#canv10").fadeIn(fadeTime)},4*fadeIntervalle)
 	setTimeout(function(){$("#canv1").fadeIn(fadeTime),$("#canv11").fadeIn(fadeTime,function(){carrouselDispo=true;})},5*fadeIntervalle)
-
+	chargementBulleInfo("cadreInfo",idFilm)
 
 	var positioninv = new Array;
 	for (var j = 1; j <= 11; j++) {
@@ -430,37 +430,37 @@ function carrousel2(nomDuCadre,lienImage){
 
 	$("#canv1").click(function(){if(carrouselDispo==true && imageinter[0].src.slice(-12) != "filmVide.jpg"){
 		//alert(imageinter[0].src.slice(-12))
-		defClic(1);chargementBulleInfo("cadreInfo","Film 1");}
+		defClic(1);chargementBulleInfo("cadreInfo",data.results[9].id);}
 	});
 	$("#canv2").click(function(){if(carrouselDispo==true && imageinter[1].src.slice(-12) != "filmVide.jpg"){
-		defClic(2);chargementBulleInfo("cadreInfo","Film 2");}
+		defClic(2);chargementBulleInfo("cadreInfo",data.results[7].id);}
 	});
 	$("#canv3").click(function(){if(carrouselDispo==true && imageinter[2].src.slice(-12) != "filmVide.jpg"){
-		defClic(3);chargementBulleInfo("cadreInfo","Film 3");}
+		defClic(3);chargementBulleInfo("cadreInfo",data.results[5].id);}
 	});
 	$("#canv4").click(function(){if(carrouselDispo==true && imageinter[3].src.slice(-12) != "filmVide.jpg"){
-		defClic(4);chargementBulleInfo("cadreInfo","Film 4");}
+		defClic(4);chargementBulleInfo("cadreInfo",data.results[3].id);}
 	});
 	$("#canv5").click(function(){if(carrouselDispo==true && imageinter[4].src.slice(-12) != "filmVide.jpg"){
-		defClic(5);chargementBulleInfo("cadreInfo","Film 5");}
+		defClic(5);chargementBulleInfo("cadreInfo",data.results[1].id);}
 	});
 	$("#canv6").click(function(){if(carrouselDispo==true && imageinter[5].src.slice(-12) != "filmVide.jpg"){
-		defClic(6);chargementBulleInfo("cadreInfo","Film 6");}
+		defClic(6);chargementBulleInfo("cadreInfo",idFilm);}
 	});
 	$("#canv7").click(function(){if(carrouselDispo==true && imageinter[6].src.slice(-12) != "filmVide.jpg"){
-		defClic(7);chargementBulleInfo("cadreInfo","Film 7");}
+		defClic(7);chargementBulleInfo("cadreInfo",data.results[0].id);}
 	});
 	$("#canv8").click(function(){if(carrouselDispo==true && imageinter[7].src.slice(-12) != "filmVide.jpg"){
-		defClic(8);chargementBulleInfo("cadreInfo","Film 8");}
+		defClic(8);chargementBulleInfo("cadreInfo",data.results[2].id);}
 	});
 	$("#canv9").click(function(){if(carrouselDispo==true && imageinter[8].src.slice(-12) != "filmVide.jpg"){
-		defClic(9);chargementBulleInfo("cadreInfo","Film 9");}
+		defClic(9);chargementBulleInfo("cadreInfo",data.results[4].id);}
 	});
 	$("#canv10").click(function(){if(carrouselDispo==true && imageinter[9].src.slice(-12) != "filmVide.jpg"){
-		defClic(10);chargementBulleInfo("cadreInfo","Film 10");}
+		defClic(10);chargementBulleInfo("cadreInfo",data.results[6].id);}
 	});
 	$("#canv11").click(function(){if(carrouselDispo==true && imageinter[10].src.slice(-12) != "filmVide.jpg"){
-		defClic(11);chargementBulleInfo("cadreInfo","Film 11");}
+		defClic(11);chargementBulleInfo("cadreInfo",data.results[8].id);}
 	});
 	
 	}

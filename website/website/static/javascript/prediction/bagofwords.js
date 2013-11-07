@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var fill = d3.scale.category20();
 	
-	d3.layout.cloud().size([430,250])
+	d3.layout.cloud().size([300,300])
 	        .words([
 	            "Hello", "world", "normallyvrgtrbtnthn", "your", "want", "more", "words",
 	            "than", "this"].map(function (d) {
@@ -23,7 +23,7 @@ $(document).ready(function() {
 	            .attr("width", 400)
 	            .attr("height", 220)
 	            .append("g")
-	            .attr("transform", "translate(180,120)")
+	            .attr("transform", "translate(200,110)")
 	            .selectAll("text")
 	            .data(words)
 	            .enter().append("text")
