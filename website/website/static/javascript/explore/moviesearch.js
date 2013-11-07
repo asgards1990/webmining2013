@@ -215,11 +215,15 @@ function ajoutBudget (budget) {
    var budgetInM = budget/100000
    $(slider).slider( "option", "values", [budgetInM,budgetInM] );
    var amount = document.getElementById('amount');
-   $(slider).val( "$" + budgetInM + "M - $" + budgetInM +"M" );
- 
-   
+   $(amount).val( "$" + budgetInM + "M - $" + budgetInM +"M" );
+
    };
 
+function ajoutDate (date) {
+    var amountyear = document.getElementById('amountyear');
+    $(amountyear).val( date );
+    };
+    
 
 
 $(document).ready(function() {
@@ -249,7 +253,7 @@ $(document).ready(function() {
                };
 
         function affichage(film_id) {           
-              $.post("/cinema/filmInfo/","film_id="+film_id,function(data){ajoutTabActors(data.actors);ajoutTabGenres(data.genres);ajoutBudget(data.budget);});
+              $.post("/cinema/filmInfo/","film_id="+film_id,function(data){ajoutTabActors(data.actors);ajoutTabGenres(data.genres);});
               };
 
               
