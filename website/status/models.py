@@ -43,6 +43,7 @@ class IMDBPersonStatus(models.Model):
     extracted = models.IntegerField()
     priority = models.IntegerField()
     name = models.IntegerField()
+    image = models.IntegerField()
     
     def __unicode__(self):
         return u'%s status' % (self.imdb_id)
