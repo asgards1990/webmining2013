@@ -158,13 +158,14 @@ def filmInfo(request):
         outputGenres.append(genre.name)
 	
     output = {'budget' : film.budget, 'plot': film.imdb_summary, 'poster':film.image_url, 'imbd_id': film.imdb_id,
-              'english_title ': film.english_title,
-              'original_title':film.original_title,'release_date':film.release_date.isoformat(),'actors':outputActors}
+              'english_title ': film.english_title,'original_title':film.original_title, 'genres': outputGenres,
+              'release_date':film.release_date.isoformat(),'actors':outputActors}
   
     response = HttpResponse(simplejson.dumps(output), mimetype='application/json')
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
+    print response
     
     return response
 
@@ -182,7 +183,6 @@ def getId(request):
   
     #response = HttpResponse(simplejson.dumps(film.imdb_id), mimetype='application/json')
     response = HttpResponse(film.imdb_id)
-    print response
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
