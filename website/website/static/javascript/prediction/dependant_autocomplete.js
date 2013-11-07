@@ -114,76 +114,91 @@ $(document).ready(function() {
 
 
 function ajoutKeywordSuggest(keyword) {
-
-var newKeyword = document.createElement('span');
-newKeyword.className="newKeyword";
-
-
-var newName = document.createElement('span');
-newName.className="name";
+    var newKeyword = document.createElement('span');
+    newKeyword.className="newKeyword";
 
 
-newName.appendChild(document.createTextNode(keyword));
+    var newName = document.createElement('span');
+    newName.className="name";
 
+    newName.appendChild(document.createTextNode(keyword));
 
+    var newDelete = document.createElement('span');                               
+    newDelete.className="delete";
 
-var newDelete = document.createElement('span');                               
-newDelete.className="delete";
+    var newImg1 = document.createElement('img');
+    newImg1.className="add1";
+    newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+   
 
+    var newImg2 = document.createElement('img');
+    newImg2.className="add2"; 
+    newImg2.src="../pesto/static/img/prediction/AddBlue.png";
 
-var newImg1 = document.createElement('img');
-newImg1.className="add1";
-newImg1.src="../pesto/static/img/prediction/AddGrey.png";
-//keywordClick(newImg1);
+    keywordClick(newImg1);
+    newKeyword.appendChild(newDelete);
+    newKeyword.appendChild(newName);
 
+    newDelete.appendChild(newImg1);
+    newDelete.appendChild(newImg2);
 
-var newImg2 = document.createElement('img');
-newImg2.className="add2"; 
-newImg2.src="../pesto/static/img/prediction/AddBlue.png";
-
-
-newKeyword.appendChild(newDelete);
-newKeyword.appendChild(newName);
-
-newDelete.appendChild(newImg1);
-newDelete.appendChild(newImg2);
-
-document.getElementById("keywordSuggest").appendChild(newKeyword);
+    document.getElementById("keywordSuggest").appendChild(newKeyword);
 
 };
 
 function keywordClick (icone) {
-$(check).click(function(){
-alert('hello1');
-if((this.className=="suppress1")&&(this.id=="suggest")){
-var element = this.parentNode.parentNode;
+    $(icone).click(function(){
+        if((this.className=="remove div")&&(this.id=="suggest")){            
+            var element = this.parentNode;
+            var remove = document.createElement('span');
+            var newImg1 = document.createElement('img');
+            newImg1.className="add1";
+            newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+   
 
-this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+    var newImg2 = document.createElement('img');
+    newImg2.className="add2"; 
+    newImg2.src="../pesto/static/img/prediction/AddBlue.png";
+            suggestion = document.getElementById("keywordSuggest");
 
-suggestion = document.getElementById("keywordsugg");
+            this.parentNode.parentNode.removeChild(element);
 
+            element.getElementsByClassName("suppress1")[0].src="../pesto/static/img/prediction/AddGrey.png";
+            element.getElementsByClassName("suppress2")[0].src="../pesto/static/img/prediction/AddBlue.png";
+            element.className="newKeyword";
+            suggestion.appendChild(element);
+            }
 
-element.getElementsByClassName("suppress1")[0].className="add1";
+        else {
+            if (this.className=="remove div") {
+            this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+               }
+            else {
+                var element = this.parentNode.parentNode;
+                var remove = document.createElement('span');
+                var text = document.createTextNode(element.getElementsByClassName("name")[0].text);
+                keywords = document.getElementById("id_keyword-deck");
 
-suggestion.appendChild(element);
-}
+                this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 
-else {if (this.className=="suppress1") {
-this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
-}
-else {
-var element = this.parentNode.parentNode;
+                 if (element.hasChildNodes()){
+                     while (element.childNodes.length>=1)
+                         {element.removeChild(element.firstChild);
+                    }
+               };
 
-this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+                remove.className="remove div";
+                remove.id="suggest";
+                remove.style="display: inline;";
 
-keywords = document.getElementById("id_keyword-deck");
-element.getElementsByClassName("add1")[0].id="suggest";
-element.getElementsByClassName("add1")[0].className="suppress1";
-keywords.appendChild(element);
-};
-};
+                element.className="div hilight";
 
-});
+                remove.appendChild(text);
+                keywords.appendChild(element);
+                };
+            };
+
+    });
 };
 
 
@@ -200,8 +215,9 @@ function callback_suggest (resp) {
 
 
 $(document).ready(function() {
+    ajoutKeywordSuggest("test");
 	
-    $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
+   /* $('body').on('change', '.autocomplete-light-widget select[name$=genre1]', function() {
         var genre1 = $('#id_genre1');
         var genre2 = $('#id_genre2');
         var id1 = genre1.val();
@@ -325,7 +341,7 @@ $(document).ready(function() {
 
                 };
 			};
-		});
+		});*/
 	});
 				
 				
