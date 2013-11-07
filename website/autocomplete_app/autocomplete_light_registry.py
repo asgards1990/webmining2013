@@ -5,8 +5,10 @@ from django.db.models import Q
 
 # Autocompletion pour un film
 class FilmAutocomplete(autocomplete_light.AutocompleteModelBase):
-	search_fields=['original_title','english_title']
-	autocomplete_js_attributes={'placeholder': 'Title ?'}
+        search_fields=['original_title','english_title']
+        autocomplete_js_attributes={'placeholder': 'Title ?'}
+        def choice_value(self, film):
+                return film.imdb_id
     
 autocomplete_light.register(Film, FilmAutocomplete)
 

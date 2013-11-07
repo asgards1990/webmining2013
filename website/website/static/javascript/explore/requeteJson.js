@@ -17,13 +17,16 @@ function changement2(){
 	$("#genre").prop("checked",true);
 	$("#budgets").prop("checked",true);
 	$("#review").prop("checked",true);
+	//useless ?
 	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
 		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
 			text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
 		}
 	}
-	console.log(text)
-	$.post("/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,true);});
+	//console.log(text);
+	var film_imdb_id = $('#id_title_original-deck span.div').attr('data-value');
+	//$.post("/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,true);});
+	envoiDeLaRequeteSearch(film_imdb_id,true);
 	//envoiDeLaRequeteSearch(nomfilm,true);
 }
 
@@ -32,13 +35,16 @@ function changement(){
 		//console.log("hello")
 		if(verifAuMoinsUnCrit()==true){
 			var text;
+			//useless ?
 			for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
 				if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
 					text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
 				}
 			}
-			console.log(text)
-			$.post("/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,false);});
+			//console.log(text)
+			//$.post("/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,false);});
+			var film_imdb_id = $('#id_title_original-deck span.div').attr('data-value');
+			envoiDeLaRequeteSearch(film_imdb_id,false);
 			//envoiDeLaRequeteSearch(nomfilm,false);
 		}
 		else{

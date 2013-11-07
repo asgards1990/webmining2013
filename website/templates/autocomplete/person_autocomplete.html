@@ -1,6 +1,6 @@
 {% load static %}
 
-<div data-value="{{ choice.pk }}">
+<div data-value="{{ choice.pk }}" id="{{ choice.imdb_id }}">
     <!-- <div class="actor"> -->
     <div class="photo">
     {% ifequal choice.image_url "" %}

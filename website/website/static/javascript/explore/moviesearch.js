@@ -233,6 +233,7 @@ $(document).ready(function() {
             isSubmitted = true;
             var film = $('#id_title_original');
             var film_name = $('#id_title_original-deck').clone().children().children().remove().end().text();
+			var film_imdb_id = $('#id_title_original-deck span.div').attr('data-value');
 
             var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
             ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
@@ -255,7 +256,8 @@ $(document).ready(function() {
               };
 
               
-        $.post("/cinema/getId/","film_name="+film_name,function(data){affichage(data);});
+        //$.post("/cinema/getId/","film_name="+film_name,function(data){affichage(data);});
+		affichage(film_imdb_id);
         changement2();
             }
         

@@ -168,7 +168,7 @@ def filmInfo(request):
     
     return response
 
-
+#getId may now be useless
 def getId(request):
     if request.method == 'POST':
         film_name = request.POST.get('film_name')
@@ -188,6 +188,7 @@ def getId(request):
     
     return response
 
+#getIdActor may now be useless
 def getIdActor(request):
     if request.method == 'POST':
         actor_name = request.POST.get('actor_name')

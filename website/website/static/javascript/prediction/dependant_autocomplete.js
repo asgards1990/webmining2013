@@ -371,7 +371,7 @@ $(document).ready(function() {
 	});
 				
 				
-
+	/*
 $(document).ready(function() {
 	
     $('body').on('change', '.autocomplete-light-widget select[name$=actors]', function() {
@@ -379,12 +379,9 @@ $(document).ready(function() {
         var pourId = document.getElementById('id_actors-deck').lastChild;
         pourId.removeChild(pourId.firstChild);
         var name = pourId.textContent;
-        alert(name);
-        
+        alert(name + " " + pourId.getAttribute("imdb-id"));
+
         $.post("/cinema/getIdActor/","actor_name="+name,function(data){pourId.id=data});
         });
     });
-                          
-                        
-                    
-            
+   */
