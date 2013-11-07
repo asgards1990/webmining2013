@@ -11,6 +11,10 @@ function verifAuMoinsUnCrit(){
 
 function changement2(){
 	//alert("hello")
+	$("#acteurs").prop("checked",true);
+	$("#genre").prop("checked",true);
+	$("#budgets").prop("checked",true);
+	$("#review").prop("checked",true);
 	var text;
 	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
 		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
@@ -50,8 +54,8 @@ $(document).ready(function(){
 $(".checkbox").change(function(){changement();})
 //$(".iCheck-helper").click(function(){changement();})
 $("#rateit").click(function(){changement();})
-//$( "#slider-range" ).on( "slidechange", function( event, ui ) {changement();} );
-//$( "#slider-rangeyear" ).on( "slidechange", function( event, ui ) {changement();} );
+$( "#slider-range" ).on( "slidechange", function( event, ui ) {changement();} );
+$( "#slider-rangeyear" ).on( "slidechange", function( event, ui ) {changement();} );
 })
 
 
