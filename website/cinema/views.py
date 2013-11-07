@@ -162,20 +162,20 @@ def filmInfo(request):
     return response
 
 
-##def getId(request):
-##    if request.method == 'POST':
-##        film_name = request.POST.get('film_name')
-##    else:
-##        return HttpResponse("Erreur")
-##
-##    try:
-##        film = Film.objects.get(Q(english_title = film_name) || Q(original_title = film_name))
-##    except Film.DoesNotExist:
-##        return HttpReponse("movie not found",)
-##  
-##    response = HttpResponse(simplejson.dumps(film.imdb_id), mimetype='application/json')
-##    response['Access-Control-Allow-Origin']  = 'null'
-##    response['Access-Control-Allow-Methods'] = 'GET,POST'
-##    response['Access-Control-Allow-Headers'] = 'Content-Type'
-##    
-##    return response
+def getId(request):
+    if request.method == 'POST':
+        film_name = request.POST.get('film_name')
+    else:
+        return HttpResponse("Erreur")
+
+    try:
+        film = Film.objects.get(Q(english_title = film_name) || Q(original_title = film_name))
+    except Film.DoesNotExist:
+        return HttpReponse("movie not found",)
+  
+    response = HttpResponse(simplejson.dumps(film.imdb_id), mimetype='application/json')
+    response['Access-Control-Allow-Origin']  = 'null'
+    response['Access-Control-Allow-Methods'] = 'GET,POST'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    
+    return response

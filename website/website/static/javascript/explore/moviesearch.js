@@ -153,9 +153,7 @@ function ajoutActors (actor) {
 
 
 function ajoutTabActors (actors) {
-    alert(actors.length);
     for (k=0;k<actors.length;k++) {
-        alert(actors[k].first_name);
         ajoutActors(actors[k]);
     };
 };
@@ -178,7 +176,7 @@ $(document).ready(function(){
              chiffre.appendChild(document.createTextNode(2));
 
           $.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",
-                 function(data){alert(data.actors[3].first_name+data.actors[3].last_name+data.actors[3].imdb_id);ajoutTabActors(data.actors);});
+                 function(data){ajoutTabActors(data.actors);});
   
         });
     });
