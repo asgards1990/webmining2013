@@ -179,19 +179,21 @@ margin-top: 4px;
  cursor: pointer;
 }
 
-.remove div
+#suggest
 {
-    background-image: url('../admin/img/inline-delete.png');
+    display: inline;
+    background-image: url('../../img/prediction/inline-delete.png');
     color: #fff;
     cursor: pointer;
     float: left;
     height: 15px;
     margin-right: 10px;
+    margin-top: 1px;
     text-indent: -999px;
     width: 15px;
 }
 
-.remove:hover
+#suggest:hover
 {
     background-position: -15px 0;
 }
