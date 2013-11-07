@@ -175,9 +175,8 @@ $(document).ready(function(){
              chiffre.removeChild(chiffre.firstChild);
              chiffre.appendChild(document.createTextNode(2));
 
-          $.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",
-                 function(data){ajoutTabActors(data.actors);});
-  
+          $.post("http://localhost:8000/cinema/filmInfo/","film_id=tt0899128",function(data){ajoutTabActors(data.actors);});
+          $.post("http://localhost:8000/cinema/getId/","film_name=$5 a Day",function(data){alert(data);});
         });
     });
                         

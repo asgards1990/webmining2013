@@ -145,10 +145,17 @@ def filmInfo(request):
     l = len(actors)
     outputActors =[]
     for k in range(l-1):
-		actor=actors[k]
-		actorDico = {'imdb_id':actor.imdb_id,'name':actor.name,'image_url':actor.image_url}  
-		outputActors.append(actorDico)
+	actor=actors[k]
+	actorDico = {'imdb_id':actor.imdb_id,'name':actor.name,'image_url':actor.image_url}  
+	outputActors.append(actorDico)
 	
+
+    genres = film.genres.all()
+    z = len(genres)
+    outputGenres =[]
+    for k in range(z-1):
+        genre = genres[k]
+        outputGenres.append(genre.name)
 	
     output = {'budget' : film.budget, 'plot': film.imdb_summary, 'poster':film.image_url, 'imbd_id': film.imdb_id,
               'english_title ': film.english_title,
@@ -169,11 +176,13 @@ def getId(request):
         return HttpResponse("Erreur")
 
     try:
-        film = Film.objects.get(Q(english_title = film_name) || Q(original_title = film_name))
+        film = Film.objects.get(Q(english_title = film_name) | Q(original_title = film_name))
     except Film.DoesNotExist:
         return HttpReponse("movie not found",)
   
-    response = HttpResponse(simplejson.dumps(film.imdb_id), mimetype='application/json')
+    #response = HttpResponse(simplejson.dumps(film.imdb_id), mimetype='application/json')
+    response = HttpResponse(film.imdb_id)
+    print response
     response['Access-Control-Allow-Origin']  = 'null'
     response['Access-Control-Allow-Methods'] = 'GET,POST'
     response['Access-Control-Allow-Headers'] = 'Content-Type'
