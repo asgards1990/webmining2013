@@ -24,7 +24,7 @@ logger = initLogger.getLogger(FilmExtractorConfig.EXTRACTOR_IMDB_INIT_LOGGER_NAM
 
 year_min=1980
 year_max=1990
-priority_max=400
+priority_max=800
 
 def extractOneMovie(imdb_id):
    FilmExtractor.IMDB_Extractor.IMDB_SuperExtractor(imdb_id) 
@@ -142,7 +142,7 @@ class getIMDBPerson(threading.Thread):
              time_to_sleep = 0
 
              for person_id in person_id_tab:
-                PersonExtractor.IMDB_Extractor.IMDB_PersonExtractor(person_id)
+                FilmExtractor.IMDB_Extractor.IMDB_PersonExtractor(person_id)
 
 class getIMDBCompany(threading.Thread):
     def __init__(self, nom = 'getIMDBCompany'):
@@ -159,14 +159,14 @@ class getIMDBCompany(threading.Thread):
           else:
              time_to_sleep = 0
              for company_id in company_id_tab:
-                CompanyExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
+                FilmExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
 
 
 IMDB_FILM_EXTRACTOR = getIMDBFilm(year_min,year_max,priority_max)
 IMDB_PERSON_EXTRACTOR = getIMDBPerson()
 IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 
-IMDB_FILM_EXTRACTOR.start()
+#IMDB_FILM_EXTRACTOR.start()
 #IMDB_PERSON_EXTRACTOR.start()
 #IMDB_COMPANY_EXTRACTOR.start()
 
