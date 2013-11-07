@@ -22,7 +22,7 @@ function changement2(){
 		}
 	}
 	console.log(text)
-	$.post("http://localhost:8000/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,true);});
+	$.post("/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,true);});
 	//envoiDeLaRequeteSearch(nomfilm,true);
 }
 
@@ -37,7 +37,7 @@ function changement(){
 				}
 			}
 			console.log(text)
-			$.post("http://localhost:8000/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,false);});
+			$.post("/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,false);});
 			//envoiDeLaRequeteSearch(nomfilm,false);
 		}
 		else{
@@ -50,7 +50,7 @@ function changement(){
 }
 
 $(document).ready(function(){
-
+chargementBulleInfo("cadreInfo","test")
 $(".checkbox").change(function(){changement();})
 //$(".iCheck-helper").click(function(){changement();})
 $("#rateit").click(function(){changement();})
