@@ -576,7 +576,7 @@ class CinemaService(LearningService):
         self.loadPredictFeatures()
         self.loadPredictLabels()
         # Init predict classifier
-        #self.init_predict()
+        self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -877,14 +877,14 @@ class CinemaService(LearningService):
                }
         '''
         
-        predicted_box_office = np.exp(self.log_box_office_random_forest_reg.predict(x_vector))
+        predicted_box_office = np.exp(self.log_box_office_random_forest_reg.predict(x_vector)[0])
 
         journals = []
         predicted_grades = []
         for i in range(len(self.reviews_names)):
             try:
                 journals.append(Journal.objects.get(name=self.reviews_names[i]))
-                predicted_grades.append(self.review_random_forest_reg[i].predict(x_vector))
+                predicted_grades.append(self.review_random_forest_reg[i].predict(x_vector)[0])
             except:
                 pass
 
@@ -899,7 +899,7 @@ class CinemaService(LearningService):
                 else:
                     wins.append(False)
                 predicted_probabilities.append(
-                    self.prize_random_forest_reg[i].predict(x_vector)
+                    self.prize_random_forest_reg[i].predict(x_vector)[0]
                 )
             except:
                 pass
@@ -928,18 +928,26 @@ class CinemaService(LearningService):
 
     def predict_request(self, args):
         # Get results
-        results = self.compute_predict(self.vectorize_predict_user_input(args), language = lang)
-
+        results = self.compute_predict(self.vectorize_predict_user_input(args))
         # Build query_results
         query_results = {}
         
         # Fill query_results['prizes']
-        query_results['prizes'] = []
+        query_results['prizes_win'] = []
+        query_results['prizes_nomination'] = []
         for prize in results['prizes']:
-            query_results['prizes'].append({'institution' : prize['institution'].name,
-                                            'win' : prize['win'],
-                                            'value' : prize['value']})
-        
+            if prize['win']:
+                query_results['prizes_win'].append({'institution' : prize['institution'].name,
+                                                'value' : prize['value']})
+            else:
+                query_results['prizes_nomination'].append({'institution' : prize['institution'].name,
+                                                         'value' : prize['value']})
+
+        query_results['prizes_win'] = sorted(query_results['prizes_win'], key=lambda k: -k['value'])
+        query_results['prizes_win'] = query_results['prizes_win'][:10]
+        query_results['prizes_nomination'] = sorted(query_results['prizes_nomination'], key=lambda k: -k['value'])
+        query_results['prizes_nomination'] = query_results['prizes_nomination'][:10]
+
         # Fill query_results['general_box_office']
         neighbors = []
         for neighbor in results['general_box_office']['neighbors']:
@@ -973,11 +981,18 @@ class CinemaService(LearningService):
         grades = []
         for item in results['reviews']:
             reviews.append({'journal' : item['journal'].name,
-                            'grade' : item['grade']
-                            })
+                            'grade' : item['grade']})
             grades.append(item['grade'])
-        
-        critics['reviews'] = reviews
+        reviews = sorted(reviews, key=lambda k: -k['grade'])
+        n_reviews = len(reviews)
+        selected_reviews = []
+        selected_reviews.append(reviews[0])
+        selected_reviews.append(reviews[1*n_reviews/4])
+        selected_reviews.append(reviews[2*n_reviews/4])
+        selected_reviews.append(reviews[3*n_reviews/4])
+        selected_reviews.append(reviews[-1])
+
+        critics['reviews'] = selected_reviews
         critics['average'] = np.mean(grades)
         query_results['critics'] = critics
         
@@ -990,6 +1005,7 @@ class CinemaService(LearningService):
         query_results['bag_of_words'] = bag_of_words
         
         # Return data
+        print query_results
         return query_results
 
     def vectorize_predict_user_input(self, user_input):
@@ -1003,14 +1019,14 @@ class CinemaService(LearningService):
                         x_actor_vector[0,self.actor_names.index(actor_id)]=1
                     except ValueError:
                         pass
-        print 'hello1'
+
         if self.reduction_actors_in_predictfeatures == 'KM':
             x_actor_reduced = x_actor_vector * self.proj_actors_KM
         if self.reduction_actors_in_predictfeatures == 'SC':
             x_actor_reduced = x_actor_vector * self.proj_actors_SC
         if self.reduction_actors_in_predictfeatures == 'BOC':
             x_actor_reduced = x_actor_vector * self.proj_actors_BOC
-        print 'hello2'
+
         x_genres_vector = np.zeros([1, len(self.genres_names)])
         if user_input.has_key('genres'):
             if user_input['genres'].__class__ == list:
@@ -1019,7 +1035,7 @@ class CinemaService(LearningService):
                         x_genres_vector[0,self.genres_names.index(genre)]=1
                     except ValueError:
                         pass
-        print 'hello3'
+ 
         x_director_vector = np.zeros([1, len(self.director_names)])
         if user_input.has_key('directors'):
             if user_input['directors'].__class__ == list:
@@ -1033,7 +1049,7 @@ class CinemaService(LearningService):
             x_director_reduced = x_director_vector * self.proj_directors_KM
         if self.reduction_directors_in_predictfeatures == 'SC':
             x_director_reduced = x_director_vector * self.proj_directors_SC
-        print 'hello4'
+
         x_keyword_vector = np.zeros([1, len(self.keyword_names)])
         if user_input.has_key('keywords'):
             if user_input['keywords'].__class__ == list:
@@ -1042,14 +1058,14 @@ class CinemaService(LearningService):
                         x_keyword_vector[0,self.keyword_names.index(keyword)]=1
                     except ValueError:
                         pass
-        print 'hello5'
+
         x_keyword_reduced = x_keyword_vector * self.proj_keywords_KM
-        print 'hello6'
+
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
             if user_input['budget'].__class__ == int:
-                x_budget_vector[1,1] = float(user_input['budget'])
-        print 'hello7'
+                x_budget_vector[0,0] = float(user_input['budget'])
+
         x_season_vector = np.zeros([1, len(self.season_names)]) # Default Season?
         try:
             for feat in self.season_names:
@@ -1059,7 +1075,7 @@ class CinemaService(LearningService):
                 i += 1
         except exceptions.KeyError:
             pass
-        print 'hello8'
+
         x_vector = np.hstack([
             x_actor_reduced,
             x_director_reduced,
