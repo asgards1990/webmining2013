@@ -542,6 +542,7 @@ class CinemaService(LearningService):
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
         self.loadFilms()
+        self.loadBoxOffice()
         # Load prediction features
         self.loadActors()
         self.loadStars()
@@ -555,7 +556,6 @@ class CinemaService(LearningService):
         self.loadKeywordsReduced()
         self.loadGenres()
         # Load prediction labels
-        self.loadBoxOffice()
         self.loadPrizes()
         self.loadReviews()
         #self.loadReviewsContent() # TODO : finish implementation
@@ -928,12 +928,6 @@ class CinemaService(LearningService):
 
     def predict_request(self, args):
         # Get results
-        lang = None
-        if args.has_key('language'):
-            try:
-                lang = Language.objects.get(identifier = str(args['language']))
-            except Language.DoesNotExist, exceptions.KeyError :
-                pass
         results = self.compute_predict(self.vectorize_predict_user_input(args), language = lang)
 
         # Build query_results
@@ -1005,55 +999,67 @@ class CinemaService(LearningService):
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
                 for actor_id in user_input['actors']:
-                    x_actor_vector[0,self.actor_names.index(actor_id)]=1
-
+                    try:
+                        x_actor_vector[0,self.actor_names.index(actor_id)]=1
+                    except ValueError:
+                        pass
+        print 'hello1'
         if self.reduction_actors_in_predictfeatures == 'KM':
             x_actor_reduced = x_actor_vector * self.proj_actors_KM
         if self.reduction_actors_in_predictfeatures == 'SC':
             x_actor_reduced = x_actor_vector * self.proj_actors_SC
         if self.reduction_actors_in_predictfeatures == 'BOC':
             x_actor_reduced = x_actor_vector * self.proj_actors_BOC
-
+        print 'hello2'
         x_genres_vector = np.zeros([1, len(self.genres_names)])
         if user_input.has_key('genres'):
             if user_input['genres'].__class__ == list:
                 for genre in user_input['genres']:
-                    x_genres_vector[0,self.genres_names.index(genre)]=1
-
+                    try:
+                        x_genres_vector[0,self.genres_names.index(genre)]=1
+                    except ValueError:
+                        pass
+        print 'hello3'
         x_director_vector = np.zeros([1, len(self.director_names)])
         if user_input.has_key('directors'):
             if user_input['directors'].__class__ == list:
                 for director_id in user_input['directors']:
-                    x_director_vector[0,self.director_names.index(director_id)]=1
+                    try:
+                        x_director_vector[0,self.director_names.index(director_id)]=1
+                    except ValueError:
+                        pass
 
         if self.reduction_directors_in_predictfeatures == 'KM':
             x_director_reduced = x_director_vector * self.proj_directors_KM
         if self.reduction_directors_in_predictfeatures == 'SC':
             x_director_reduced = x_director_vector * self.proj_directors_SC
-
+        print 'hello4'
         x_keyword_vector = np.zeros([1, len(self.keyword_names)])
         if user_input.has_key('keywords'):
             if user_input['keywords'].__class__ == list:
                 for keyword in user_input['keywords']:
-                    x_keyword_vector[0,self.keyword_names.index(keyword)]=1
-
+                    try:
+                        x_keyword_vector[0,self.keyword_names.index(keyword)]=1
+                    except ValueError:
+                        pass
+        print 'hello5'
         x_keyword_reduced = x_keyword_vector * self.proj_keywords_KM
-        
+        print 'hello6'
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
             if user_input['budget'].__class__ == int:
                 x_budget_vector[1,1] = float(user_input['budget'])
-
+        print 'hello7'
         x_season_vector = np.zeros([1, len(self.season_names)]) # Default Season?
         try:
-            for feat in self.genres_names:
+            for feat in self.season_names:
                 i = 0
                 if re.findall(user_input['release_period']['season'], feat):
                     x_season_vector[0,i] = 1
                 i += 1
         except exceptions.KeyError:
             pass
-
+        print 'hello8'
         x_vector = np.hstack([
             x_actor_reduced,
             x_director_reduced,
