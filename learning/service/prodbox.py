@@ -444,13 +444,14 @@ class CinemaService(LearningService):
                 KM.fit_predict(X)
                 self.search_clustering_KM[k] = {'labels' : KM.labels_, 'cluster_centers' : KM.cluster_centers_}
                 # Second method
-                SC = SpectralClustering(n_clusters=self.n_clusters_search)
-                SC.fit_predict(X)
-                cluster_centers = []
-                for i in range(self.n_clusters_search):
-                    cluster_center = np.mean(X[SC.labels_ == i,:], axis=0)
-                    cluster_centers.append(cluster_center)
-                self.search_clustering_SC[k] = {'labels' : SC.labels_, 'cluster_centers' : cluster_centers}
+                #SC = SpectralClustering(n_clusters=self.n_clusters_search)
+                #SC.fit_predict(X)
+                #cluster_centers = []
+                #for i in range(self.n_clusters_search):
+                #    cluster_center = np.mean(X.toarray()[SC.labels_ == i,:], axis=0)
+                #    cluster_centers.append(cluster_center)
+                #self.search_clustering_SC[k] = {'labels' : SC.labels_, 'cluster_centers' : cluster_centers}
+                self.search_clustering_SC = None #TODO : remove this and uncomment
             # Save object in cache
             self.create_cobject('search_clustering',(self.search_clustering_SC, self.search_clustering_KM))
         else:
@@ -551,7 +552,7 @@ class CinemaService(LearningService):
         self.reduction_actors_in_searchclustering = 'KM'
         self.reduction_directors_in_searchclustering = 'KM'
 
-        self.clustering_type_in_searchclustering = 'SC'
+        self.clustering_type_in_searchclustering = 'KM'
 
         self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
@@ -708,9 +709,9 @@ class CinemaService(LearningService):
             raise ParsingError("Film not found.")
         # Select cluster information according to criteria
         if self.clustering_type_in_searchclustering == 'SC':
-            search_clustering = self.search_clustering_SC
+            self.search_clustering = self.search_clustering_SC
         if self.clustering_type_in_searchclustering == 'KM':
-            search_clustering = self.search_clustering_KM
+            self.search_clustering = self.search_clustering_KM
         criteria_binary = criteria['actor_director'] + 2*criteria['budget'] + 4*criteria['review'] + 8*criteria['genre']
         search_clustering = self.search_clustering[criteria_binary]
         labels = search_clustering['labels']
@@ -1028,8 +1029,56 @@ class CinemaService(LearningService):
         query_results['general_box_office'] = general_box_office
         
         # Fill query_results['genre_box_office']
+       
+        if user_input.has_key('genres'):
+            if user_input['genres'].__class__ == list:
+                bo_genre = []
+                pk_genre = []
+                for i in range(films.count()):
+                    add = False
+                    for genre in args['genres']:
+                        if self.genres_matrix[i, self.genres_names.index(genre)] == 1:
+                            add = True
+                    if add:
+                        bo_genre.append(bo[i])
+                        pk_genre.append(self.fromIndextoPk[i])
+                
+                sorted_bo_genre = np.sort(bo_genre)
+                sorted_bo_indices_genre = np.argsort(bo_genre)
+                invrank_genre = np.searchsorted(sorted_bo_genre, results['box_office'])
+                rank_genre = self.films.count() - invrank_genre
+
+                neighbors_genre = []
         
+                try:
+                    film = Film.objects.get(
+                        pk = pk_genre[sorted_bo_indices_genre[invrank_genre - 1]])
+                    neighbors_genre.append({
+                        'original_title': film.original_title,
+                        'rank' : rank_genre + 1,
+                        'value' : film.box_office})
+                except:
+                    pass
         
+                try:
+                    film = Film.objects.get(
+                        pk = pk_genre[sorted_bo_indices_genre[invrank_genre]])
+                    neighbors_genre.append({
+                        'original_title': film.original_title,
+                        'rank' : rank_genre - 1,
+                        'value' : film.box_office})
+                except:
+                    pass
+        
+                genre_box_office = {'rank': rank_genre,
+                                    'value': results['box_office'],
+                                    'neighbors': neighbors_genre
+                                   }
+        
+                query_results['genre_box_office'] = genre_box_office
+               
+           
+
         #neighbors_genre = []
         #for neighbor in results['genre_box_office']['neighbors']:
         #    neighbors_genre.append({'rank':neighbor['rank'],

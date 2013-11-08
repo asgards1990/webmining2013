@@ -48,7 +48,7 @@ function changement(){
 			//envoiDeLaRequeteSearch(nomfilm,false);
 		}
 		else{
-			alert("Please select at least one criterion.")
+			alert("Please select at least one criteria.")
 		}
 	}
 	else{
@@ -169,7 +169,7 @@ function envoiDeLaRequeteSearch(nomfilm,init){
 	data.results[1].value=0.8;
 	data.results[2]=new Object;
 	data.results[2].id="tt1981115";
-	data.results[2].title="Thor: Le Monde des Ténèbres";
+	data.results[2].title="Thor: Le Monde des Tï¿½nï¿½bres";
 	data.results[2].value=0.5;
 	data.results[3]=new Object;
 	data.results[3].id="tt0816442";
