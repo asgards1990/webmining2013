@@ -671,7 +671,6 @@ class CinemaService(LearningService):
         return list(indexes_fitting_filters)
 
     def compute_search(self, film, nb_results, criteria, filters=None):
-        print filters
         try:
             film_index = self.fromPktoIndex[film.pk]
         except KeyError:
