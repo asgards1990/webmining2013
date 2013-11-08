@@ -66,14 +66,23 @@ response = {
     'error': '',
     'prizes_win': [
         {
-            'institution': 'FestivaldufilmdeBerlin',
+            'institution': 'test1',
             'value': 0.3
+        },
+        {
+            'institution': 'test2',
+            'value': 0.2
         }
     ],
     'prizes_nomination': [
         {
-            'institution': 'FestivaldufilmdeBerlin',
-            'value': 0.3
+            'institution': 'test1',
+            'value': 0.4
+        }
+        ,
+        {
+            'institution': 'test2',
+            'value': 0.5
         }
     ],
     'general_box_office': {
@@ -113,21 +122,24 @@ response = {
     ]
 };
 
-var nomination0value = response.prizes_nomination[0].value*100+"%";
-alert(nomination0value);
-document.getElementById("prizestable").children[1].children[0].children[0].textContent=response.prizes_nomination[0].institution;
-document.getElementById("prizestable").children[1].children[0].children[1].textContent=nomination0value;
-
-// affichage des nominations dans le tableau des Prizes
-document.getElementById("prizestable").children[1].children[0].children[0].textContent=response.prizes_win[0].institution;
-document.getElementById("prizestable").children[1].children[0].children[1].textContent=response.prizes_win[0].value;
-
-// affichage des victoires dans le tableau des Prizes
-document.getElementById("prizestable").children[1].children[0].children[2].textContent="% Festival de Cannes %";
-document.getElementById("prizestable").children[1].children[0].children[3].textContent="% 10 %";
-
+var nominationValue = 0;
 
 //affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 à 9)
+for (k=0;k<2;k++) {
+    var nominationValue = response.prizes_nomination[k].value*100+"%";
+    document.getElementById("prizestable").children[1].children[k].children[0].textContent=response.prizes_nomination[k].institution;
+    document.getElementById("prizestable").children[1].children[k].children[1].textContent=nominationValue;
+   };
+
+// affichage des victoires dans le tableau des Prizes
+for (k=0;k<2;k++) {
+   
+    var nominationValue = response.prizes_win[k].value*100+"%";
+    document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
+    document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
+   };
+
+
 // document.getElementById("prizestable").children[1].children[i].children[0].textContent="% Festival de Cannes %";
 // document.getElementById("prizestable").children[1].children[i].children[1].textContent="% 30 %";
 
