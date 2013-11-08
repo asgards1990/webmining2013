@@ -86,7 +86,7 @@ response = {
         }
     ],
     'general_box_office': {
-        'rank': 25,
+        'rank': 24,
         'value': 320,
         'neighbors': [
             {
@@ -132,8 +132,7 @@ for (k=0;k<2;k++) {
    };
 
 // affichage des victoires dans le tableau des Prizes
-for (k=0;k<2;k++) {
-   
+for (k=0;k<2;k++) {  
     var nominationValue = response.prizes_win[k].value*100+"%";
     document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
     document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
@@ -141,16 +140,19 @@ for (k=0;k<2;k++) {
 
 var lengthOfReviews = response.reviews.length;
 for (k=0;k<lengthOfReviews;k++) {   
-
 	document.getElementById("reviewstable").children[1].children[k].children[0].textContent=response.reviews[k].journal;
 	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=response.reviews[k].grade;
 	};
 	
 
 //affichage des résultats dans le tableau des Box-Office General
-document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent="% 23 %";
-document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent="% Iron Man 3 %";
-document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="% $325.5 M %";
+
+//for (k=0;k<lengthOfReviews;k++) { 
+	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.rank;
+	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent="Your movie!";
+	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+response.general_box_office.value+"M";
+
+	//};
 
 //affichage des résultats dans le tableau des Box-Office General (boucle JSON)
 //document.getElementById("bogeneraltable").children[1].children[i].children[0].textContent="% 23 %";
