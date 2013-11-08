@@ -514,8 +514,7 @@ class CinemaService(LearningService):
         X_genre =  self.genres_matrix
         X_budget = scipy.sparse.csr_matrix(np.log(X_budget.toarray()))
         X_budget = X_budget/max(X_budget.data)
-        X_review = X_review/100 # because grades should be in [0,1] #TODO WARNING BDD DAVID OU BENJAMIN
-        X_review = normalize(X_review.astype(np.double),norm='l1',axis=1) #normalize
+        X_review = X_review # because grades should be in [0,1]
         X_genre = normalize(X_genre.astype(np.double),norm='l1',axis=1) #normalize
         X_people = X_people/2 #normalize
         people_weight = self.high_weight if (k>>0)%2 else self.low_weight
