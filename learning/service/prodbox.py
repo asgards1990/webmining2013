@@ -213,11 +213,14 @@ class CinemaService(LearningService):
             self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
     
     def loadReviewsContent(self):
-        # TODO : finish implementation
-        gkey = genReviewsContent(self.films.iterator())
-        self.reviews_content = []
-        for d in gkey:
-            self.reviews_content.append(d.values())
+        if not self.is_loaded('reviews_content'):
+            gkey = genReviewsContent(self.films.iterator())
+            self.reviews_content = []
+            for d in gkey:
+                self.reviews_content.append(d.values())
+            self.create_cobject('reviews_content', self.reviews_content)
+        else:
+            self.reviews_content = self.get_cobject('reviews_content').get_content()
 
     def loadSeason(self):
         if not self.is_loaded('season'):
@@ -558,7 +561,7 @@ class CinemaService(LearningService):
         # Load prediction labels
         self.loadPrizes()
         self.loadReviews()
-        #self.loadReviewsContent() # TODO : finish implementation
+        self.loadReviewsContent()
         # Load other features
         self.loadStats()
         self.loadWriters()

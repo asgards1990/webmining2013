@@ -1,5 +1,5 @@
 def get_vocabulary():
-    return ['unable',
+    voc = ['unable',
 'direct',
 'assimilatory','assimilative','assimilating',
 'rare',
@@ -1127,7 +1127,6 @@ def get_vocabulary():
 'unsafe','insecure',
 'sheltered',
 'unwelcome',
-'well',
 'sick','ill',
 'autistic',
 'livery','liverish','bilious',
@@ -1163,3 +1162,5 @@ def get_vocabulary():
 'tetanic',
 'tetanic',
 'unposed']
+    
+    return dict(zip(set(voc),xrange(len(voc)))) 
