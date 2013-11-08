@@ -15,7 +15,7 @@
     <script src="{% static 'javascript/prediction/d3.js' %}"></script>
     <script src="{% static 'javascript/prediction/d3.layout.cloud.js' %}"></script>
     <script src="{% static 'javascript/prediction/chargement.js' %}"></script>
-    <script src="{% static 'javascript/prediction/bagofwords.js' %}"></script>
+    <script src="{% static 'javascript/prediction/bagofwords.js' %}"></script> 
 
 
     <!-- Appels css -->
@@ -52,8 +52,74 @@
                <span> S </span>  
             </h1>  
             <div id="prizes" class="prizes">
-                <table id="hor-minimalist-a" summary="Box offices">
+                <table class="hor-minimalist-a" id="prizestable" summary="Box offices">
                     <thead>
+                    	<tr>
+                            <th scope="col" colspan="2">Nomination</th>
+                            <th scope="col" colspan="2">Victoire</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    	<tr>
+                            <td class="institution"></td>
+                            <td class="proban"></td>
+
+                            <td class="institution"></td>
+                            <td class="probav"></td>
+                        </tr>
+                        <tr>
+                            <td class="institution"></td>
+                            <td class="proban"></td>
+
+                            <td class="institution"></td>
+                            <td class="probav"></td>
+                        </tr>
+                        <tr>
+                            <td class="institution"></td>
+                            <td class="proban"></td>
+
+                            <td class="institution"></td>
+                            <td class="probav"></td>
+                        </tr>
+                    <tr>
+                            <td class="institution"></td>
+                            <td class="proban"></td>
+
+                            <td class="institution"></td>
+                            <td class="probav"></td>
+                        </tr>
+                        <tr>
+                            <td class="institution"></td>
+                            <td class="proban"></td>
+
+                            <td class="institution"></td>
+                            <td class="probav"></td>
+                        </tr>
+                        <tr>
+                            <td class="institution"></td>
+                            <td class="proban"></td>
+
+                            <td class="institution"></td>
+                            <td class="probav"></td>
+                        </tr>
+                    <tr>
+                            <td class="institution"></td>
+                            <td class="proban"></td>
+
+                            <td class="institution"></td>
+                            <td class="probav"></td>
+                        </tr>
+                        <tr>
+                            <td class="institution"></td>
+                            <td class="proban"></td>
+
+                            <td class="institution"></td>
+                            <td class="probav"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                    <!--<thead>
                     	<tr>
                             <th scope="col">Institution</th>
                             <th scope="col">Nomination/victoire</th>
@@ -87,14 +153,14 @@
                             <td>80%</td>
                         </tr>
                     </tbody>
-                </table>
+                </table>-->
             </div>
         </div>
-        
-       <div id="boxofficeborder" class="topborder">
+
+        <div id="boxofficeborder" class="topborder">
             <div id="boxoffice" class="boxoffice">
                 <!-- Table boxoffice general -->
-                <table id="hor-minimalist-a" summary="Box offices">
+                <table class="hor-minimalist-a" id="bogeneraltable" summary="Box offices">
                     <thead>
                     	<tr>
                         	<th scope="col">Rank</th>
@@ -109,9 +175,9 @@
                             <td>$325.5 M</td>
                         </tr>
                         <tr>
-                        	<td>24</td>
-                            <td>Batman Begins</td>
-                            <td>$320 M</td>
+                        	<td style="font-weight:bold"></td>
+                            <td style="font-weight:bold"></td>
+                            <td style="font-weight:bold"></td>
                         </tr>
                         <tr>
                         	<td>25</td>
@@ -121,7 +187,7 @@
                     </tbody>
                 </table>
                 <!-- Table boxoffice by genre -->
-                <table id="hor-minimalist-a" summary="Box offices">
+                <table class="hor-minimalist-a" id="bogenretable" summary="Box offices">
                     <thead>
                     	<tr>
                         	<th scope="col">Rank</th>
@@ -136,9 +202,9 @@
                             <td>$325.5 M</td>
                         </tr>
                         <tr>
-                        	<td>24</td>
-                            <td>Batman Begins</td>
-                            <td>$320 M</td>
+                        	<td style="font-weight:bold"></td>
+                            <td style="font-weight:bold"></td>
+                            <td style="font-weight:bold"></td>
                         </tr>
                         <tr>
                         	<td>25</td>
@@ -172,39 +238,37 @@
                <span> S </span>     
             </h1>
             <div id="reviews" class="reviews">
-                <!-- 
+<!--            
                 <div class="moreinfo">
                 <a href="img/01.jpg" data-lightbox="image-1" title="My caption">More Info</a>
                 </div>
-                -->
-<!--
-                <table id="hor-minimalist-a" summary="Box offices">
+-->
+                <table class="hor-minimalist-a" id="reviewstable" summary="Paper Marks" style="z-index:0">
                     <thead>
                     	<tr>
-                        	<th scope="col">Rank</th>
-                            <th scope="col">Movie</th>
-                            <th scope="col">General Box-Office Rank</th>
+                            <th scope="col">Paper</th>
+                            <th scope="col">Mark</th>
                         </tr>
                     </thead>
                     <tbody>
                     	<tr>
-                        	<td>23</td>
-                            <td>Iron Man 3</td>
-                            <td>$325.5 M</td>
+                            <td style="font-weight:bold"></td>
+                            <td></td>
+                        </tr>
+                    	<tr>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
-                        	<td>24</td>
-                            <td>Batman Begins</td>
-                            <td>$320 M</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
-                        	<td>25</td>
-                            <td>Le Guerrier Silencieux</td>
-                            <td>$0.01 M</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
--->
             </div>
         </div>
 
@@ -224,7 +288,6 @@
                <span> S </span>   
             </h1>
         </div>
-
         <div href="" class="circle">  
             <div class="wrapper">
                 <img src="{% static 'img/home/bouton_2_contenu_.png' %}">
@@ -232,7 +295,6 @@
             </div> 
          </div>
     </div>
-
 </div>
 {% endblock %}
         

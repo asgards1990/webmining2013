@@ -1,3 +1,5 @@
+// -*- coding: utf-8 -*-
+
 var nbactors_min=1;
 var nbactors_max=100;
 var nbgenres_min=1;
@@ -9,6 +11,14 @@ var nbactors=0;
 var nbgenres=0;
 var nbkeywords=0;
 var nbdirector=0;
+
+$(document).ready(function() {
+	$('.item6').click(function() {
+	alert(verifSiRequete());
+		changementPredict();
+		});
+	});
+
 
 function verifSiRequete(){
 	nbactors=document.getElementById("id_actors-deck").getElementsByClassName("hilight").length;
@@ -31,7 +41,7 @@ function verifSiRequete(){
 
 function changementPredict(){
 	if(verifSiRequete()){
-		$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
+		$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data));},"json")
 	}
 }
 
@@ -41,14 +51,132 @@ $(document).ready(function(){
 //setTimeout(function(){unloadChargement("results");},2000)
 //$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()))})
 
-$("#results").click(function(){changementPredict()})
+//$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));changementPredict()})
 //envoiDeLaRequete()
 //alert("hello")
 //alert(JSON.stringify(genererRequetePredict()))
 //$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
 //setTimeout(function(){envoiDeLaRequetePredict()},1000)
 //$("#title").click(function(){envoiDeLaRequetePredict()})
-//document.getElementById("hor-minimalist-a").children[1].children[0].children[1].textContent="blabla"
+
+//response= JSON.stringify(data)
+var response = new Object();
+response = {
+    'success': true,
+    'error': '',
+    'prizes_win': [
+        {
+            'institution': 'test1',
+            'value': 0.3
+        },
+        {
+            'institution': 'test2',
+            'value': 0.2
+        }
+    ],
+    'prizes_nomination': [
+        {
+            'institution': 'test1',
+            'value': 0.4
+        }
+        ,
+        {
+            'institution': 'test2',
+            'value': 0.5
+        }
+    ],
+    'general_box_office': {
+        'rank': 24,
+        'value': 320,
+        'neighbors': [
+            {
+                'rank': 23,
+                'original_title': 'IronMan4',
+                'value': 325.5
+            },
+			{
+                'rank': 25,
+                'original_title': 'test4',
+                'value': 305.5
+            }
+        ]
+    },
+    'genre_box_office': {
+        'rank': 45,
+        'value': 51,
+        'neighbors': [
+            {
+                'rank': 44,
+                'original_title': 'IronMan4',
+                'value': 325.5
+            },
+			{
+                'rank': 46,
+                'original_title': '???',
+                'value': 0.5
+            }
+        ]
+    },
+    'critics': {
+        'average': 0.4
+    },
+    'reviews': [
+        {
+            'journal': 'T√©l√©rama',
+            'grade': 0.60
+        },
+        {
+            'journal': 'T√©l√©7-Jours',
+            'grade': 0.18
+        }
+    ]
+};
+
+var nominationValue = 0;
+
+//affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 √† 9)
+for (k=0;k<2;k++) {
+    var nominationValue = response.prizes_nomination[k].value*100+"%";
+    document.getElementById("prizestable").children[1].children[k].children[0].textContent=response.prizes_nomination[k].institution;
+    document.getElementById("prizestable").children[1].children[k].children[1].textContent=nominationValue;
+   };
+
+// affichage des victoires dans le tableau des Prizes
+for (k=0;k<2;k++) {  
+    var nominationValue = response.prizes_win[k].value*100+"%";
+    document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
+    document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
+   };
+
+var lengthOfReviews = response.reviews.length;
+for (k=0;k<lengthOfReviews;k++) {   
+	document.getElementById("reviewstable").children[1].children[k].children[0].textContent=response.reviews[k].journal;
+	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=response.reviews[k].grade;
+	};
+	
+
+//affichage des r√©sultats dans le tableau des Box-Office General
+	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.rank;
+	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent="Your movie!";
+	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+response.general_box_office.value+"M";
+	document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.neighbors[0].rank;
+	document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent=response.general_box_office.neighbors[0].original_title;
+	document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+response.general_box_office.neighbors[0].value+"M";
+	document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
+	document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].original_title;
+	document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+response.general_box_office.neighbors[1].value+"M";
+	
+//affichage des r√©sultats dans le tableau des Box-Office Genre
+	document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.rank;
+	document.getElementById("bogenretable").children[1].children[1].children[1].textContent="Your movie!";
+	document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+response.genre_box_office.value+"M";
+	document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.neighbors[0].rank;
+	document.getElementById("bogenretable").children[1].children[0].children[1].textContent=response.genre_box_office.neighbors[0].original_title;
+	document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+response.genre_box_office.neighbors[0].value+"M";
+	document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
+	document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].original_title;
+	document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+response.genre_box_office.neighbors[1].value+"M";
+
 })
 
 
@@ -175,19 +303,19 @@ function envoiDeLaRequetePredict(){
 	data.critics.average=0.65147;
 	data.critics.reviews=new Array;
 	data.critics.reviews[0]=new Object;
-	data.critics.reviews[0].journal="TÈlÈrama";
+	data.critics.reviews[0].journal="TÔøΩlÔøΩrama";
 	data.critics.reviews[0].grade=0.6;
 	data.critics.reviews[0].keywords=new Array;
 	data.critics.reviews[0].keywords[0]="Insignifiant";
-	data.critics.reviews[0].keywords[1]="PathÈtique";
+	data.critics.reviews[0].keywords[1]="PathÔøΩtique";
 	data.critics.reviews[1]=new Object;
 	data.critics.reviews[1].journal="Le Monde";
 	data.critics.reviews[1].grade=0.4;
 	data.critics.reviews[1].keywords=new Array;
-	data.critics.reviews[1].keywords[0]="SÈrieux";
-	data.critics.reviews[1].keywords[1]="AppliquÈ";
+	data.critics.reviews[1].keywords[0]="SÔøΩrieux";
+	data.critics.reviews[1].keywords[1]="AppliquÔøΩ";
 	data.critics.reviews[2]=new Object;
-	data.critics.reviews[2].journal="TÈlÈ 7-Jours";
+	data.critics.reviews[2].journal="TÔøΩlÔøΩ 7-Jours";
 	data.critics.reviews[2].grade=0.18;
 	data.critics.reviews[2].keywords=new Array;
 	data.critics.reviews[2].keywords[0]="Eblouissant";
@@ -299,7 +427,7 @@ function chercherTitre(data, position, rang, type){
 //	boiteGeneral.id="boiteGeneral"
 //	boiteGeneral.style.cssText="float : left; width:80%; height:30%;border:1px solid Black"
 //	boiteBoxOffice.appendChild(boiteGeneral);
-//	var titre1=document.createTextNode("GÈnÈral");
+//	var titre1=document.createTextNode("GÔøΩnÔøΩral");
 //	titre1.id="titre1"
 //	boiteGeneral.appendChild(titre1);
 //	var boiteClassement1=document.createElement("div");
