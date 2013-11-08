@@ -16,8 +16,7 @@ from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
 from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
-from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
 from sklearn.cross_validation import cross_val_score
 from sklearn.neighbors.kde import KernelDensity
 
@@ -46,7 +45,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms(20)
+        self.films = flt.getFilms()
         if not self.is_loaded('films'):
             self.fromPktoIndex, self.fromIndextoPk = hashIndexes(self.films.iterator())
             self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk))
@@ -296,27 +295,6 @@ class CinemaService(LearningService):
             self.actor_matrix, self.actor_names = self.get_cobject('actors').get_content()
         self.nb_actors = self.actor_matrix.shape[1]
 
-    def loadActorsReduced2(self):
-        # Third method : heuristic
-        theta = 0.5
-        actor_weight_matrix = self.rank_matrix
-        rv = poisson(theta)
-        actor_weight_matrix.data = rv.pmf(actor_weight_matrix.data).astype(np.float32)
-        self.actor_share_bo = normalize(actor_weight_matrix.todense(), axis=1, norm='l1').T * self.box_office_matrix
-        sorted_actors = np.argsort(self.actor_share_bo[:,0])
-        index = 0
-        for k in range(self.dim_actors):
-            r = 1 if k < self.nb_actors % self.dim_actors else 0
-            row = sorted_actors[index: (index + r + self.nb_actors/self.dim_actors-1)]
-            index += r + self.nb_actors/self.dim_actors
-            col, data = np.zeros(row.shape[0]), np.ones(row.shape[0])
-            if k>0:
-                self.proj_actors_BOC = scipy.sparse.hstack([self.proj_actors_BOC,  scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1) )])
-            else:
-                self.proj_actors_BOC = scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1))
-        self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_SC
-        self.actor_reduced_BOC = normalize(self.actor_reduced_BOC.astype(np.double), norm='l1', axis=1)
-
     def loadActorsReduced(self):
         if not self.is_loaded('actors_reduced'):
             # First clustering method: Spectral Clustering
@@ -341,11 +319,28 @@ class CinemaService(LearningService):
                 self.proj_actors_KM = scipy.sparse.hstack([self.proj_actors_KM, scipy.sparse.csc_matrix(actor_labels_KM==i, dtype=int).transpose()])
             self.proj_actors_KM=normalize(self.proj_actors_KM.astype(np.double),axis=0, norm='l1')
             self.actor_reduced_KM = self.actor_matrix * self.proj_actors_KM
-
+            # Third method : box office clustering
+            actor_weight_matrix = self.rank_matrix
+            rv = poisson(self.actors_theta_BOC)
+            actor_weight_matrix.data = rv.pmf(actor_weight_matrix.data).astype(np.float32)
+            self.actor_share_bo = normalize(actor_weight_matrix.todense(), axis=1, norm='l1').T * self.box_office_matrix
+            sorted_actors = np.argsort(self.actor_share_bo[:,0])
+            index = 0
+            for k in range(self.dim_actors):
+                r = 1 if k < self.nb_actors % self.dim_actors else 0
+                row = sorted_actors[index: (index + r + self.nb_actors/self.dim_actors-1)]
+                index += r + self.nb_actors/self.dim_actors
+                col, data = np.zeros(row.shape[0]), np.ones(row.shape[0])
+                if k>0:
+                    self.proj_actors_BOC = scipy.sparse.hstack([self.proj_actors_BOC,  scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1) )])
+                else:
+                    self.proj_actors_BOC = scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1))
+            self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_SC
+            self.actor_reduced_BOC = normalize(self.actor_reduced_BOC.astype(np.double), norm='l1', axis=1)
             # Save object in cache
-            self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM, self.proj_actors_KM))
+            self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC))
         else:
-            self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM, self.proj_actors_KM = self.get_cobject('actors_reduced').get_content()
+            self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC = self.get_cobject('actors_reduced').get_content()
   
     def loadWriters(self):
         keywords_reduced = self.keywords_reduced_KM
@@ -394,6 +389,8 @@ class CinemaService(LearningService):
             actor_reduced = self.actor_reduced_KM
         if self.reduction_actors_in_directoractormatrix == 'SC':
             actor_reduced = self.actor_reduced_SC
+        if self.reduction_actors_in_directoractormatrix == 'BOC':
+            actor_reduced = self.actor_reduced_BOC
         if not self.is_loaded('directors'):
             v=DictVectorizer(dtype=int)
             self.director_matrix = v.fit_transform(genDirectors(self.films.iterator()))
@@ -453,12 +450,14 @@ class CinemaService(LearningService):
             actor_reduced = self.actor_reduced_KM
         if self.reduction_actors_in_predictfeatures == 'SC':
             actor_reduced = self.actor_reduced_SC
+        if self.reduction_actors_in_predictfeatures == 'BOC':
+            actor_reduced = self.actor_reduced_BOC
         
         if self.reduction_directors_in_predictfeatures == 'KM':
             director_reduced = self.director_reduced_KM
         if self.reduction_directors_in_predictfeatures == 'SC':
             director_reduced = self.director_reduced_SC
-        
+
         keyword_reduced = self.keywords_reduced_KM
         
         self.predict_features = scipy.sparse.hstack([
@@ -489,6 +488,8 @@ class CinemaService(LearningService):
             actor_reduced=self.actor_reduced_SC
         if self.reduction_actors_in_searchclustering == 'KM':
             actor_reduced=self.actor_reduced_KM
+        if self.reduction_actors_in_searchclustering == 'BOC':
+            actor_reduced=self.actor_reduced_BOC
         if self.reduction_directors_in_searchclustering == 'SC':
             director_reduced=self.director_reduced_SC
         if self.reduction_directors_in_searchclustering == 'KM':
@@ -525,6 +526,7 @@ class CinemaService(LearningService):
         self.p_norm = 2 # p-norm used for distances
         self.high_weight = 1 # for the distance definition
         self.low_weight = 0 # for the distance definition
+        self.actors_theta_BOC = 0.5
         self.n_neighbors_SC_actors = 8 # soectral clustering parameter
         self.n_neighbors_SC_writers = 8 # soectral clustering parameter
         self.n_neighbors_SC_directors = 8 # soectral clustering parameter
@@ -816,19 +818,8 @@ class CinemaService(LearningService):
             print "Error {}".format(e)
             print s+' object not found. Creating it...'
             self.log_box_office_random_forest_reg = RandomForestRegressor()
-            self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office.ravel())
+            self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office)
             self.dumpJoblibObject(self.log_box_office_random_forest_reg, s)
-
-    def loadLogBoxOfficeGradientBoostingRegressor(self):
-        s = 'log_box_office_gradient_boosting_reg'
-        try:
-            self.log_box_office_gradient_boosting_reg = self.loadJoblibObject(s)
-        except IOError:
-            print s+' object not found. Creating it...'
-            self.log_box_office_gradient_boosting_reg = GradientBoostingRegressor()
-            self.log_box_office_gradient_boosting_reg.fit(self.predict_features, self.predict_labels_log_box_office.ravel())
-            print self.log_box_office_gradient_boosting_reg == None
-            self.dumpJoblibObject(self.log_box_office_gradient_boosting_reg, s)
 
     def loadReviewRandomForestRegressors(self):
         s = 'review_random_forest_reg'
@@ -842,36 +833,22 @@ class CinemaService(LearningService):
                 self.review_random_forest_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
             self.dumpJoblibObject(self.review_random_forest_reg, s)
 
-    def loadReviewGradientBoostingRegressors(self):
-        s = 'review_gradient_boosting_reg'
+    def loadPrizeRandomForestRegressors(self):
+        s = 'prize_random_forest_reg'
         try:
-            self.review_gradient_boosting_reg = self.loadJoblibObject(s)
+            self.prize_random_forest_reg = self.loadJoblibObject(s)
         except IOError:
             print s+' object not found. Creating it...'
-            self.review_gradient_boosting_reg = []
-            for i in range(len(self.reviews_names)): #TODO : stocker un self.nb_journals pour eviter le len()
-                self.review_gradient_boosting_reg.append(GradientBoostingRegressor())
-                self.review_gradient_boosting_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
-            self.dumpJoblibObject(self.review_gradient_boosting_reg, s)
-
-    def loadPrizeLogisticRegression(self):
-        s = 'prize_logistic_reg'
-        try:
-            self.prize_logistic_reg = self.loadJoblibObject(s)
-        except IOError:
-            print s+' object not found. Creating it...'
-            self.prize_logistic_reg = []
+            self.prize_random_forest_reg = []
             for i in range(len(self.prizes_names)): #TODO : stocker un self.nb_institutions pour eviter le len()
-                self.prize_logistic_reg.append(LogisticRegression())
-                self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
-            self.dumpJoblibObject(self.prize_logistic_reg, s)
+                self.prize_random_forest_reg.append(RandomForestRegressor())
+                self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
+            self.dumpJoblibObject(self.prize_random_forest_reg, s)
 
     def init_predict(self):
         self.loadLogBoxOfficeRandomForestRegressor()
-        self.loadLogBoxOfficeGradientBoostingRegressor()
         self.loadReviewRandomForestRegressors()
-        self.loadReviewGradientBoostingRegressors()
-        self.loadPrizeLogisticRegression()
+        self.loadPrizeRandomForestRegressors()
 
     def compute_predict(self, x_vector, language=None):
         '''
@@ -914,18 +891,18 @@ class CinemaService(LearningService):
         institutions = []
         wins = []
         predicted_probabilities = []
-        #for i in range(len(self.prizes_names)):
-        #    try:
-        #        institutions.append(Institution.objects.get(name=self.prizes_names[i].split('_')[0]))
-        #        if self.prizes_names[i].split('_')[1] == 'True':
-        #            wins.append(True)
-        #        else:
-        #            wins.append(False)
-        #        predicted_probabilities.append(
-        #            self.prize_random_logistic_reg[i].predict(x_vector)
-        #        )
-        #    except:
-        #        pass
+        for i in range(len(self.prizes_names)):
+            try:
+                institutions.append(Institution.objects.get(name=self.prizes_names[i].split('_')[0]))
+                if self.prizes_names[i].split('_')[1] == 'True':
+                    wins.append(True)
+                else:
+                    wins.append(False)
+                predicted_probabilities.append(
+                    self.prize_random_forest_reg[i].predict(x_vector)
+                )
+            except:
+                pass
 
         results = {'prizes' : [{'institution' : institutions[i],
                                 'win' : wins[i],
@@ -962,18 +939,12 @@ class CinemaService(LearningService):
         # Build query_results
         query_results = {}
         
-        # Fill query_results['prizes_win'] et query_results['prizes_nomination']
-        query_results['prizes_nomination'] = []
-        query_results['prizes_win'] = []
+        # Fill query_results['prizes']
+        query_results['prizes'] = []
         for prize in results['prizes']:
-            if prize['win']:
-                query_results['prizes_win'].append({'institution' : prize['institution'].name,
-                                                    'value' : prize['value']})
-            else:
-                query_results['prizes_nomination'].append({'institution' : prize['institution'].name,
-                                                            'value' : prize['value']})
-        query_results['prizes_win'] = sorted(query_results['prizes_win'], key=lambda k: -k['value'])
-        query_results['prizes_nomination'] = sorted(query_results['prizes_nomination'], key=lambda k: -k['value'])
+            query_results['prizes'].append({'institution' : prize['institution'].name,
+                                            'win' : prize['win'],
+                                            'value' : prize['value']})
         
         # Fill query_results['general_box_office']
         neighbors = []
@@ -1039,6 +1010,8 @@ class CinemaService(LearningService):
             x_actor_reduced = x_actor_vector * self.proj_actors_KM
         if self.reduction_actors_in_predictfeatures == 'SC':
             x_actor_reduced = x_actor_vector * self.proj_actors_SC
+        if self.reduction_actors_in_predictfeatures == 'BOC':
+            x_actor_reduced = x_actor_vector * self.proj_actors_BOC
 
         x_genres_vector = np.zeros([1, len(self.genres_names)])
         if user_input.has_key('genres'):
