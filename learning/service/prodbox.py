@@ -914,18 +914,7 @@ class CinemaService(LearningService):
                                     'win' : boolean,
                                     'value' : probability
                                    },
-                'general_box_office' : {'rank' : int,
-                                        'value' : float (M$),
-                                        'neighbors': list of {'film' : Film Object,
-                                                              'rank' : int
-                                                             }
-                                       },
-                'genre_box_office' : {'rank' : int,
-                                      'value' : float (M$),
-                                      'neighbors': list of {'film' : Film Object,
-                                                            'rank' : int
-                                                           }
-                                     },
+                'box_office' : int,
                 'reviews' : list of {'journal': Journal Object,
                                      'grade' : float,
                                     },
@@ -935,32 +924,10 @@ class CinemaService(LearningService):
                }
         '''
         
+        # Box office
         predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
 
-        general_bo = self.box_office_matrix.toarray().ravel()
-        sorted_general_bo = np.sort(general_bo)
-        sorted_general_bo_indices = np.argsort(general_bo)
-        general_invrank = np.searchsorted(sorted_general_bo, predicted_box_office)
-        general_rank = self.films.count() - general_invrank
-
-        general_neighbors = []
-        
-        try:
-            general_neighbors.append({
-                'film' : Film.objects.get(
-                    pk = self.fromIndextoPk[sorted_general_bo_indices[general_invrank - 1]]),
-                'rank' : general_rank + 1})
-        except:
-            pass
-        
-        try:
-            general_neighbors.append({
-                'film' : Film.objects.get(
-                    pk = self.fromIndextoPk[sorted_general_bo_indices[general_invrank]]),
-                'rank' : general_rank - 1})
-        except:
-            pass
-        
+        # Reviews
         journals = []
         predicted_grades = []
         for i in range(len(self.reviews_names)):
@@ -970,6 +937,7 @@ class CinemaService(LearningService):
             except:
                 pass
 
+        # Prizes
         institutions = []
         wins = []
         predicted_probabilities = []
@@ -990,20 +958,11 @@ class CinemaService(LearningService):
                                 'win' : wins[i],
                                 'value' : predicted_probabilities[i]} 
                                for i in range(len(institutions))],
-                   'general_box_office' :
-                        {'rank' : general_rank,
-                         'value' : predicted_box_office,
-                         'neighbors' : general_neighbors
-                         },
-                    'genre_box_office' :
-                        {'rank' : 0, # TODO
-                         'value' : predicted_box_office,
-                         'neighbors' : [] # TODO
-                         },
-                    'reviews': [{'journal' : journals[i],
+                   'box_office' : predicted_box_office,
+                   'reviews' : [{'journal' : journals[i],
                                  'grade' : predicted_grades[i]} 
                                 for i in range(len(journals))],
-                    'bag_of_words': [] # TODO
+                   'bag_of_words' : [] # TODO
                     }                   
 
         return results
@@ -1030,31 +989,57 @@ class CinemaService(LearningService):
         query_results['prizes_nomination'] = sorted(query_results['prizes_nomination'], key=lambda k: -k['value'])
         query_results['prizes_nomination'] = query_results['prizes_nomination'][:10]
 
+
         # Fill query_results['general_box_office']
-        neighbors = []
-        for neighbor in results['general_box_office']['neighbors']:
-            neighbors.append({'rank':neighbor['rank'],
-                              'original_title':neighbor['film'].original_title,
-                              'value':neighbor['film'].box_office})
         
-        general_box_office = {'rank':results['general_box_office']['rank'],
-                              'value':results['general_box_office']['value'],
-                              'neighbors':neighbors
+        bo = self.box_office_matrix.toarray().ravel()
+        sorted_bo = np.sort(bo)
+        sorted_bo_indices = np.argsort(bo)
+        invrank = np.searchsorted(sorted_bo, results['box_office'])
+        rank = self.films.count() - invrank
+
+        neighbors = []
+        
+        try:
+            film = Film.objects.get(
+                pk = self.fromIndextoPk[sorted_bo_indices[invrank - 1]])
+            neighbors.append({
+                'original_title': film.original_title,
+                'rank' : rank + 1,
+                'value' : film.box_office})
+        except:
+            pass
+        
+        try:
+            film = Film.objects.get(
+                pk = self.fromIndextoPk[sorted_bo_indices[invrank]])
+            neighbors.append({
+                'original_title': film.original_title,
+                'rank' : rank - 1,
+                'value' : film.box_office})
+        except:
+            pass
+        
+        general_box_office = {'rank': rank,
+                              'value': results['box_office'],
+                              'neighbors': neighbors
                               }
         
         query_results['general_box_office'] = general_box_office
         
         # Fill query_results['genre_box_office']
-        neighbors_genre = []
-        for neighbor in results['genre_box_office']['neighbors']:
-            neighbors_genre.append({'rank':neighbor['rank'],
-                                    'original_title':neighbor['film'].original_title,
-                                    'value':neighbor['film'].box_office})
-            genre_box_office = {'rank':results['genre_box_office']['rank'],
-                                'value':results['genre_box_office']['value'],
-                                'neighbors':neighbors_genre
-                                }
-            query_results['genre_box_office'] = genre_box_office
+        
+        
+        #neighbors_genre = []
+        #for neighbor in results['genre_box_office']['neighbors']:
+        #    neighbors_genre.append({'rank':neighbor['rank'],
+        #                            'original_title':neighbor['film'].original_title,
+        #                            'value':neighbor['film'].box_office})
+        #    genre_box_office = {'rank':results['genre_box_office']['rank'],
+        #                        'value':results['genre_box_office']['value'],
+        #                        'neighbors':neighbors_genre
+        #                        }
+        #    query_results['genre_box_office'] = genre_box_office
         
         # Fill query_results['critics']
         critics = {}
