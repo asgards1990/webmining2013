@@ -88,6 +88,7 @@
     display:table;
     width:100%;
     table-layout: fixed;
+    font-family:'Fenix',serif;
 }
 
 
@@ -113,7 +114,9 @@ margin-top: 1px;
 
 /* menubox keywords */
 
-
+#keywordssearch {
+    font-family:'Fenix',serif;
+}
 
 #keywordSuggest {
 	display: block;
@@ -131,9 +134,9 @@ margin-top: 1px;
 
 #id_keyword-deck >*  {
     float:left;
-    padding:0 0 5px 0;
-    margin:0;
-    width: 50%;
+    padding:0 6px 5px 0;
+    margin:0 5px 0 0;
+    width: 45%;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
@@ -216,7 +219,7 @@ transition-duration: 0.5s;
 
 /* menubox range*/
 
-#slider-range {
+#slider-range-min {
     margin: 15px;
 }
 
@@ -249,6 +252,7 @@ text-align:center;
     margin:4% 1%;
     display:inline-block;
     text-align:center;
+    font-family:'Fenix',serif;
 }
 #release {
 overflow: auto;
