@@ -1,4 +1,4 @@
-//# -*- coding: utf-8 -*-
+// -*- coding: utf-8 -*-
 
 var nbactors_min=1;
 var nbactors_max=100;
@@ -139,9 +139,13 @@ for (k=0;k<2;k++) {
     document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
    };
 
+var lengthOfReviews = response.reviews.length;
+for (k=0;k<lengthOfReviews;k++) {   
 
-// document.getElementById("prizestable").children[1].children[i].children[0].textContent="% Festival de Cannes %";
-// document.getElementById("prizestable").children[1].children[i].children[1].textContent="% 30 %";
+	document.getElementById("reviewstable").children[1].children[k].children[0].textContent=response.reviews[k].journal;
+	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=response.reviews[k].grade;
+	};
+	
 
 //affichage des résultats dans le tableau des Box-Office General
 document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent="% 23 %";
