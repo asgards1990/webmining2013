@@ -48,7 +48,40 @@ $("#results").click(function(){changementPredict()})
 //$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
 //setTimeout(function(){envoiDeLaRequetePredict()},1000)
 //$("#title").click(function(){envoiDeLaRequetePredict()})
-//document.getElementById("hor-minimalist-a").children[1].children[0].children[1].textContent="blabla"
+
+// affichage des nominations dans le tableau des Prizes
+document.getElementById("prizestable").children[1].children[0].children[0].textContent="% Festival de Cannes %";
+document.getElementById("prizestable").children[1].children[0].children[1].textContent="% 30 %";
+
+// affichage des victoires dans le tableau des Prizes
+document.getElementById("prizestable").children[1].children[0].children[2].textContent="% Festival de Cannes %";
+document.getElementById("prizestable").children[1].children[0].children[3].textContent="% 10 %";
+
+
+//affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 Ã  9)
+// document.getElementById("prizestable").children[1].children[i].children[0].textContent="% Festival de Cannes %";
+// document.getElementById("prizestable").children[1].children[i].children[1].textContent="% 30 %";
+
+//affichage des rÃ©sultats dans le tableau des Box-Office General
+document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent="% 23 %";
+document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent="% Iron Man 3 %";
+document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="% $325.5 M %";
+
+//affichage des rÃ©sultats dans le tableau des Box-Office General (boucle JSON)
+//document.getElementById("bogeneraltable").children[1].children[i].children[0].textContent="% 23 %";
+//document.getElementById("bogeneraltable").children[1].children[i].children[1].textContent="% Iron Man 3 %";
+//document.getElementById("bogeneraltable").children[1].children[i].children[2].textContent="% $325.5 M %";
+
+//affichage des rÃ©sultats dans le tableau des Box-Office Genre
+document.getElementById("bogenretable").children[1].children[0].children[0].textContent="% 23bis %";
+document.getElementById("bogenretable").children[1].children[0].children[1].textContent="% Iron Man 4 %";
+document.getElementById("bogenretable").children[1].children[0].children[2].textContent="% $325.6 M %";
+
+//affichage des rÃ©sultats dans le tableau des Box-Office Genre (boucle JSON)
+document.getElementById("bogenretable").children[1].children[0].children[0].textContent="% 23bis %";
+document.getElementById("bogenretable").children[1].children[0].children[1].textContent="% Iron Man 4 %";
+document.getElementById("bogenretable").children[1].children[0].children[2].textContent="% $325.6 M %";
+
 })
 
 
@@ -175,19 +208,19 @@ function envoiDeLaRequetePredict(){
 	data.critics.average=0.65147;
 	data.critics.reviews=new Array;
 	data.critics.reviews[0]=new Object;
-	data.critics.reviews[0].journal="Télérama";
+	data.critics.reviews[0].journal="Tï¿½lï¿½rama";
 	data.critics.reviews[0].grade=0.6;
 	data.critics.reviews[0].keywords=new Array;
 	data.critics.reviews[0].keywords[0]="Insignifiant";
-	data.critics.reviews[0].keywords[1]="Pathétique";
+	data.critics.reviews[0].keywords[1]="Pathï¿½tique";
 	data.critics.reviews[1]=new Object;
 	data.critics.reviews[1].journal="Le Monde";
 	data.critics.reviews[1].grade=0.4;
 	data.critics.reviews[1].keywords=new Array;
-	data.critics.reviews[1].keywords[0]="Sérieux";
-	data.critics.reviews[1].keywords[1]="Appliqué";
+	data.critics.reviews[1].keywords[0]="Sï¿½rieux";
+	data.critics.reviews[1].keywords[1]="Appliquï¿½";
 	data.critics.reviews[2]=new Object;
-	data.critics.reviews[2].journal="Télé 7-Jours";
+	data.critics.reviews[2].journal="Tï¿½lï¿½ 7-Jours";
 	data.critics.reviews[2].grade=0.18;
 	data.critics.reviews[2].keywords=new Array;
 	data.critics.reviews[2].keywords[0]="Eblouissant";
@@ -299,7 +332,7 @@ function chercherTitre(data, position, rang, type){
 //	boiteGeneral.id="boiteGeneral"
 //	boiteGeneral.style.cssText="float : left; width:80%; height:30%;border:1px solid Black"
 //	boiteBoxOffice.appendChild(boiteGeneral);
-//	var titre1=document.createTextNode("Général");
+//	var titre1=document.createTextNode("Gï¿½nï¿½ral");
 //	titre1.id="titre1"
 //	boiteGeneral.appendChild(titre1);
 //	var boiteClassement1=document.createElement("div");

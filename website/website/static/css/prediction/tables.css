@@ -8,7 +8,7 @@ body
 	line-height: 1.6em;
 }
 
-#hor-minimalist-a
+.hor-minimalist-a
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
@@ -19,7 +19,7 @@ body
       z-index:10;
       position:relative;
 }
-#hor-minimalist-a th
+.hor-minimalist-a th
 {
 	font-size: 14px;
 	font-weight: normal;
@@ -27,12 +27,42 @@ body
 	padding: 10px 8px;
 	border-bottom: 2px solid #6678b1;
 }
-#hor-minimalist-a td
+
+#prizes .hor-minimalist-a th
+{
+    text-align:center;
+    width:50%;
+}
+
+
+.hor-minimalist-a td
 {
 	color: #669;
 	padding: 9px 8px 0px 8px;
 }
-#hor-minimalist-a tbody tr:hover td
+
+.hor-minimalist-a td.institution
+{
+	width:100px;
+    max-width:100px;
+    text-align:left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.hor-minimalist-a td.proban, .hor-minimalist-a td.probav {
+	text-align:center;
+    font-weight: bold;
+}
+
+.hor-minimalist-a td.proban {
+    border-right: 2px solid #6678b1;
+}
+
+
+.hor-minimalist-a tbody tr:hover td
 {
 	color: #009;
 }
