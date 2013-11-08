@@ -301,8 +301,20 @@ class CinemaService(LearningService):
         actor_weight_matrix = self.rank_matrix
         rv = poisson(theta)
         actor_weight_matrix.data = rv.pmf(actor_weight_matrix.data).astype(np.float32)
-        self.actors_share_bo = normalize(actor_weight_matrix.todense(), axis=1, norm='l1').T * self.box_office_matrix
-        
+        self.actor_share_bo = normalize(actor_weight_matrix.todense(), axis=1, norm='l1').T * self.box_office_matrix
+        sorted_actors = np.argsort(self.actor_share_bo[:,0])
+        index = 0
+        for k in range(self.dim_actors):
+            r = 1 if k < self.nb_actors % self.dim_actors else 0
+            row = sorted_actors[index: (index + r + self.nb_actors/self.dim_actors-1)]
+            index += r + self.nb_actors/self.dim_actors
+            col, data = np.zeros(row.shape[0]), np.ones(row.shape[0])
+            if k>0:
+                self.proj_actors_BOC = scipy.sparse.hstack([self.proj_actors_BOC,  scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1) )])
+            else:
+                self.proj_actors_BOC = scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1))
+        self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_SC
+        self.actor_reduced_BOC = normalize(self.actor_reduced_BOC.astype(np.double), norm='l1', axis=1)
 
     def loadActorsReduced(self):
         if not self.is_loaded('actors_reduced'):
@@ -561,7 +573,7 @@ class CinemaService(LearningService):
         self.loadPredictFeatures()
         self.loadPredictLabels()
         # Init predict classifier
-        self.init_predict()
+        #self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -799,7 +811,8 @@ class CinemaService(LearningService):
         s = 'log_box_office_random_forest_reg'
         try:
             self.log_box_office_random_forest_reg = self.loadJoblibObject(s)
-        except IOError:
+        except IOError as e:
+            print "Error {}".format(e)
             print s+' object not found. Creating it...'
             self.log_box_office_random_forest_reg = RandomForestRegressor()
             self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office)
