@@ -15,8 +15,7 @@ from sklearn.preprocessing import normalize, Imputer
 from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.cross_validation import cross_val_score
 from sklearn.neighbors.kde import KernelDensity
@@ -465,16 +464,12 @@ class CinemaService(LearningService):
             self.genres_names])
 
     def loadPredictLabels(self):
-        self.predict_labels = scipy.sparse.hstack([
-            np.log(self.box_office_matrix.toarray()),
-            self.reviews_matrix,
-            self.prizes_matrix,
-            ]).toarray()
-        self.predict_labels_names = np.concatenate([
-            ['log_box_office'],
-            ['review_' + s for s in self.reviews_names],
-            ['prize_' + s for s in self.prizes_names],
-            ])
+        self.predict_labels_log_box_office = np.log(self.box_office_matrix.toarray())
+        self.predict_labels_log_box_office_names = ['log_box_office'] # a priori inutile
+        self.predict_labels_reviews = self.reviews_matrix.toarray()
+        self.predict_labels_reviews_names = ['review_' + s for s in self.reviews_names] # a priori inutile
+        self.predict_labels_prizes = self.prizes_matrix.toarray()
+        self.predict_labels_prizes_names = ['prize_' + s for s in self.prizes_names] # a priori inutile
 
     def getWeightedSearchFeatures(self,k):
         if self.reduction_actors_in_searchclustering == 'SC':
@@ -562,10 +557,10 @@ class CinemaService(LearningService):
         # Load search clusterings
         self.loadSearchClustering()
         # Load predict features
-        #self.loadPredictFeatures()
-        #self.loadPredictLabels()
+        self.loadPredictFeatures()
+        self.loadPredictLabels()
         # Init predict classifier
-        #self.init_predict()
+        self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -790,35 +785,45 @@ class CinemaService(LearningService):
             pass
         
         return filt_out
-    
 
-   
+    def loadLogBoxOfficeRandomForestRegressor(self):
+        s = 'log_box_office_random_forest_reg'
+        try:
+            self.log_box_office_random_forest_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.log_box_office_random_forest_reg = RandomForestRegressor()
+            self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office)
+            self.dumpJoblibObject(self.log_box_office_random_forest_reg, s)
+
+    def loadReviewRandomForestRegressors(self):
+        s = 'review_random_forest_reg'
+        try:
+            self.review_random_forest_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.review_random_forest_reg = []
+            for i in range(len(self.reviews_names)): #TODO : stocker un self.nb_journals pour eviter le len()
+                self.review_random_forest_reg.append(RandomForestRegressor())
+                self.review_random_forest_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
+            self.dumpJoblibObject(self.review_random_forest_reg, s)
+
+    def loadPrizeRandomForestRegressors(self):
+        s = 'prize_random_forest_reg'
+        try:
+            self.prize_random_forest_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.prize_random_forest_reg = []
+            for i in range(len(self.prizes_names)): #TODO : stocker un self.nb_institutions pour eviter le len()
+                self.prize_random_forest_reg.append(RandomForestRegressor())
+                self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
+            self.dumpJoblibObject(self.prize_random_forest_reg, s)
+
     def init_predict(self):
-        X = self.predict_features
-        feature_names = self.predict_features_names
-        
-        y = self.predict_labels
-        
-        # BOX OFFICE
-        self.log_box_office_random_forest_reg = RandomForestRegressor()
-        y_log_bo = y[:,0]
-        self.log_box_office_random_forest_reg.fit(X, y_log_bo)
-
-        # REVIEWS
-        self.review_random_forest_reg = []
-        y_review = []
-        for i in range(len(self.reviews_names)):
-            self.review_random_forest_reg.append(RandomForestRegressor())
-            y_review.append(y[:, 1 + i])
-            self.review_random_forest_reg[i].fit(X, y_review[i])
-
-        # PRIZES
-        self.prize_random_forest_reg = []
-        y_prize = []
-        for i in range(len(self.prizes_names)):
-            self.prize_random_forest_reg.append(RandomForestRegressor())
-            y_prize.append(y[:, 1 + len(self.reviews_names) + i])
-            self.prize_random_forest_reg[i].fit(X, y_prize[i])
+        self.loadLogBoxOfficeRandomForestRegressor()
+        self.loadReviewRandomForestRegressors()
+        self.loadPrizeRandomForestRegressors()
 
     def compute_predict(self, x_vector, language=None):
         '''

@@ -1,8 +1,10 @@
 import datetime
 import pickle
 from django.utils.timezone import utc
+from sklearn.externals import joblib
 
 CACHE_DIRECTORY = './cache/'
+JOBLIB_DIRECTORY = './joblib/'
 
 class ParsingError(Exception):
     def __init__(self, value):
@@ -116,7 +118,13 @@ class LearningService(object):
         for co in self.cobjects:
             if co.modified and not co.saved:
                 co.save()
-    
+
+    def dumpJoblibObject(self,obj,filename):
+        joblib.dump(obj,JOBLIB_DIRECTORY + filename + '.pkl')
+
+    def loadJoblibObject(self,filename):
+        joblib.load(JOBLIB_DIRECTORY + filename + '.pkl')
+
     def quit(self):
         print("Learning service initialized at "+ self.init_time.isoformat()  +" is closing : objects are being cached.")
         self.save_cache()
