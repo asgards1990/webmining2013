@@ -919,7 +919,7 @@ class CinemaService(LearningService):
             except Language.DoesNotExist, exceptions.KeyError :
                 pass
         results = self.compute_predict(self.vectorize_predict_user_input(args), language = lang)
-        
+
         # Build query_results
         query_results = {}
         
@@ -990,6 +990,7 @@ class CinemaService(LearningService):
 
     def vectorize_predict_user_input(self, user_input):
 
+        print user_input
         x_actor_vector = np.zeros([1,len(self.actor_names)])
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
@@ -1028,8 +1029,8 @@ class CinemaService(LearningService):
         
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
-            if user_input['budget'].__class__ == float:
-                x_budget_vector[1,1] = user_input['budget']
+            if user_input['budget'].__class__ == int:
+                x_budget_vector[1,1] = float(user_input['budget'])
 
         x_season_vector = np.zeros([1, len(self.season_names)]) # Default Season?
         try:
@@ -1048,5 +1049,5 @@ class CinemaService(LearningService):
             x_budget_vector,
             x_season_vector,
             x_genres_vector,])
-
+        print x_vector
         return x_vector
