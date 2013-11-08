@@ -15,8 +15,7 @@ from sklearn.preprocessing import normalize, Imputer
 from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.cross_validation import cross_val_score
 from sklearn.neighbors.kde import KernelDensity
@@ -465,16 +464,12 @@ class CinemaService(LearningService):
             self.genres_names])
 
     def loadPredictLabels(self):
-        self.predict_labels = scipy.sparse.hstack([
-            np.log(self.box_office_matrix.toarray()),
-            self.reviews_matrix,
-            self.prizes_matrix,
-            ]).toarray()
-        self.predict_labels_names = np.concatenate([
-            ['log_box_office'],
-            ['review_' + s for s in self.reviews_names],
-            ['prize_' + s for s in self.prizes_names],
-            ])
+        self.predict_labels_log_box_office = np.log(self.box_office_matrix.toarray())
+        self.predict_labels_log_box_office_names = ['log_box_office'] # a priori inutile
+        self.predict_labels_reviews = self.reviews_matrix.toarray()
+        self.predict_labels_reviews_names = ['review_' + s for s in self.reviews_names] # a priori inutile
+        self.predict_labels_prizes = self.prizes_matrix.toarray()
+        self.predict_labels_prizes_names = ['prize_' + s for s in self.prizes_names] # a priori inutile
 
     def getWeightedSearchFeatures(self,k):
         if self.reduction_actors_in_searchclustering == 'SC':
@@ -527,6 +522,7 @@ class CinemaService(LearningService):
         self.reduction_actors_in_directoractormatrix = 'SC'
         self.reduction_actors_in_searchclustering = 'SC'
         self.reduction_directors_in_searchclustering = 'SC'
+        self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
@@ -562,10 +558,10 @@ class CinemaService(LearningService):
         # Load search clusterings
         self.loadSearchClustering()
         # Load predict features
-        #self.loadPredictFeatures()
-        #self.loadPredictLabels()
+        self.loadPredictFeatures()
+        self.loadPredictLabels()
         # Init predict classifier
-        #self.init_predict()
+        self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -675,7 +671,6 @@ class CinemaService(LearningService):
         return list(indexes_fitting_filters)
 
     def compute_search(self, film, nb_results, criteria, filters=None):
-        print filters
         try:
             film_index = self.fromPktoIndex[film.pk]
         except KeyError:
@@ -696,27 +691,36 @@ class CinemaService(LearningService):
         # Find neighbors
         # 30 % time can be saved here with cache
         X = self.getWeightedSearchFeatures(criteria_binary).toarray()
-        distance_to_each_cluster = []
-        distance_to_each_cluster = np.array([np.linalg.norm(X[film_index]-cluster_center,self.p_norm) for cluster_center in cluster_centers])
-        clusters_by_distance = distance_to_each_cluster.argsort()
         nb_results_found=0
         distances=[]
         neighbors_indexes=[]
-        for cluster in clusters_by_distance:
-            if nb_results_found < nb_results +1:
-                #print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
-                indexes_of_cluster = np.where(labels == cluster)[0]
-                indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
-                if len(indexes)>0:
-                    samples = X[list(indexes),:]
-                    neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
-                    neigh.fit(samples)
-                    (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
-                    local_nb_results_found = loc_distances[0].shape[0]
-                    #print('--> Found '+str(local_nb_results_found)+' results in this cluster')
-                    nb_results_found = nb_results_found + local_nb_results_found
-                    distances.append(loc_distances[0])
-                    neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
+        if len(indexes_fitting_filters) >= self.min_nb_of_films_to_use_clusters_in_search:
+            distance_to_each_cluster = []
+            distance_to_each_cluster = np.array([np.linalg.norm(X[film_index]-cluster_center,self.p_norm) for cluster_center in cluster_centers])
+            clusters_by_distance = distance_to_each_cluster.argsort()
+            for cluster in clusters_by_distance:
+                if nb_results_found < nb_results +1:
+                    #print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
+                    indexes_of_cluster = np.where(labels == cluster)[0]
+                    indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
+                    if len(indexes)>0:
+                        samples = X[list(indexes),:]
+                        neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
+                        neigh.fit(samples)
+                        (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
+                        local_nb_results_found = loc_distances[0].shape[0]
+                        #print('--> Found '+str(local_nb_results_found)+' results in this cluster')
+                        nb_results_found = nb_results_found + local_nb_results_found
+                        distances.append(loc_distances[0])
+                        neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
+        else: # no need to use clusters
+            indexes = indexes_fitting_filters
+            samples = X[list(indexes),:]
+            neigh = NearestNeighbors(n_neighbors=nb_results+1, p=self.p_norm)
+            neigh.fit(samples)
+            (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
+            distances.append(loc_distances[0])
+            neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
         if len(neighbors_indexes)>0:
             neighbors_indexes = np.concatenate(neighbors_indexes)
             distances = np.concatenate(distances)
@@ -790,35 +794,45 @@ class CinemaService(LearningService):
             pass
         
         return filt_out
-    
 
-   
+    def loadLogBoxOfficeRandomForestRegressor(self):
+        s = 'log_box_office_random_forest_reg'
+        try:
+            self.log_box_office_random_forest_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.log_box_office_random_forest_reg = RandomForestRegressor()
+            self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office)
+            self.dumpJoblibObject(self.log_box_office_random_forest_reg, s)
+
+    def loadReviewRandomForestRegressors(self):
+        s = 'review_random_forest_reg'
+        try:
+            self.review_random_forest_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.review_random_forest_reg = []
+            for i in range(len(self.reviews_names)): #TODO : stocker un self.nb_journals pour eviter le len()
+                self.review_random_forest_reg.append(RandomForestRegressor())
+                self.review_random_forest_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
+            self.dumpJoblibObject(self.review_random_forest_reg, s)
+
+    def loadPrizeRandomForestRegressors(self):
+        s = 'prize_random_forest_reg'
+        try:
+            self.prize_random_forest_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.prize_random_forest_reg = []
+            for i in range(len(self.prizes_names)): #TODO : stocker un self.nb_institutions pour eviter le len()
+                self.prize_random_forest_reg.append(RandomForestRegressor())
+                self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
+            self.dumpJoblibObject(self.prize_random_forest_reg, s)
+
     def init_predict(self):
-        X = self.predict_features
-        feature_names = self.predict_features_names
-        
-        y = self.predict_labels
-        
-        # BOX OFFICE
-        self.log_box_office_random_forest_reg = RandomForestRegressor()
-        y_log_bo = y[:,0]
-        self.log_box_office_random_forest_reg.fit(X, y_log_bo)
-
-        # REVIEWS
-        self.review_random_forest_reg = []
-        y_review = []
-        for i in range(len(self.reviews_names)):
-            self.review_random_forest_reg.append(RandomForestRegressor())
-            y_review.append(y[:, 1 + i])
-            self.review_random_forest_reg[i].fit(X, y_review[i])
-
-        # PRIZES
-        self.prize_random_forest_reg = []
-        y_prize = []
-        for i in range(len(self.prizes_names)):
-            self.prize_random_forest_reg.append(RandomForestRegressor())
-            y_prize.append(y[:, 1 + len(self.reviews_names) + i])
-            self.prize_random_forest_reg[i].fit(X, y_prize[i])
+        self.loadLogBoxOfficeRandomForestRegressor()
+        self.loadReviewRandomForestRegressors()
+        self.loadPrizeRandomForestRegressors()
 
     def compute_predict(self, x_vector, language=None):
         '''
@@ -909,12 +923,18 @@ class CinemaService(LearningService):
         # Build query_results
         query_results = {}
         
-        # Fill query_results['prizes']
-        query_results['prizes'] = []
+        # Fill query_results['prizes_win'] et query_results['prizes_nomination']
+        query_results['prizes_nomination'] = []
+        query_results['prizes_win'] = []
         for prize in results['prizes']:
-            query_results['prizes'].append({'institution' : prize['institution'].name,
-                                            'win' : prize['win'],
-                                            'value' : prize['value']})
+            if prize['win']:
+                query_results['prizes_win'].append({'institution' : prize['institution'].name,
+                                                    'value' : prize['value']})
+            else:
+                query_results['prizes_nomination'].append({'institution' : prize['institution'].name,
+                                                            'value' : prize['value']})
+        query_results['prizes_win'] = sorted(query_results['prizes_win'], key=lambda k: -k['value'])
+        query_results['prizes_nomination'] = sorted(query_results['prizes_nomination'], key=lambda k: -k['value'])
         
         # Fill query_results['general_box_office']
         neighbors = []
@@ -1030,36 +1050,3 @@ class CinemaService(LearningService):
             x_genres_vector,])
 
         return x_vector
-
-
-# VIEUX CODE BENJAMIN
-#        self.dim_actors = 20
-#        s = raw_input('Start Spectral Clustering on actors ?')
-#        if s=='y':
-#            self.firstKM = MiniBatchKMeans(n_clusters=500, init='k-means++', n_init=1, init_size=2000, batch_size=3000, verbose=1)
-#            first_reduction = self.firstKM.fit_transform(self.actor_matrix)
-#            #first_reduction = np.exp( - first_reduction ** 2 ) # go from distance to similarity matrix
-#
-#            #self.firstSVD = TruncatedSVD(n_components = 500, n_iterations = 100)
-#            #first_reduction = self.firstSVD.fit_transform(self.actor_matrix)
-#
-#            self.actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=10)
-#            self.actor_labels = self.actors_SC.fit_predict(first_reduction.transpose())
-#            self.proj_actors = scipy.sparse.csc_matrix(self.actor_labels==0, dtype=int).transpose()
-#            for i in range(1, self.dim_actors):
-#                self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(self.actor_labels==i, dtype=int).transpose()])
-#            self.actor_reduced = first_reduction * self.proj_actors
-#            self.actor_reduced = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
-#            self.topic_actors = []
-#            tot0 = np.asarray( np.sum(self.actor_matrix.todense(), axis=0) )[0, :]
-#            for i in range(self.dim_actors):
-#                tot = np.sum(self.firstKM.cluster_centers_[self.firstKM.labels_[self.actor_labels == i]], axis=0)
-#                 tot = tot0 * (self.actor_labels == i)
-#                #tot = self.firstSVD.inverse_transform(self.actor_labels == i)[0,:]
-#                persons = []
-#                for person in (np.array(self.actor_names)[np.argsort(-tot)[:10]]).tolist():
-#                    try:
-#                        persons.append( Person.objects.get(imdb_id = person[:9]) )
-#                    except:
-#                        continue
-#                self.topic_actors.append((persons))
