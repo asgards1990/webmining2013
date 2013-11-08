@@ -239,6 +239,14 @@ overflow:auto;
 /*border-bottom: 1px solid rgb(80,88,100);*/
 }
 
+/* Coverflow */
+
+canvas.cover {
+	cursor:pointer;
+	-webkit-box-reflect: below 20px;
+	-webkit-box-reflect: above -40px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(50%, transparent), to(white));
+}
+
 /* Zone de resultat */
 
 div#carreCentral {

@@ -14,8 +14,11 @@ if __name__ == "__main__":
          (r'/suggest/', ajax_server.handlers.Handler, dict(app_learn = app_learn, method="suggest_keywords"))]
         )
     app.listen(8080)
-    
-    try:
-        tornado.ioloop.IOLoop.instance().start()
-    except KeyboardInterrupt, SystemExit:
-        app_learn.quit()
+    s = raw_input("Should we start the server ?")
+    if s!="y":
+        app.quit()
+    else:
+        try:
+            tornado.ioloop.IOLoop.instance().start()
+        except KeyboardInterrupt, SystemExit:
+            app_learn.quit()

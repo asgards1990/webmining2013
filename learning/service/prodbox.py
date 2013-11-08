@@ -16,7 +16,8 @@ from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
 from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingClassifier,GradientBoostingRegressor
+from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import cross_val_score
 from sklearn.neighbors.kde import KernelDensity
 
@@ -299,18 +300,18 @@ class CinemaService(LearningService):
         if not self.is_loaded('actors_reduced'):
             # First clustering method: Spectral Clustering
             # First we filter the actor_matrix IOT keep only high rank relationships 
-            actor_matrix = scipy.sparse.csr_matrix(self.actor_matrix.toarray() * (self.rank_matrix.toarray()>=self.actor_reduction_rank_threshold))
-            try:
-                actors_SC = SpectralClustering(n_clusters=self.dim_actors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_actors)
-                actor_labels_SC = actors_SC.fit_predict(actor_matrix.transpose())
-                self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels_SC==0, dtype=int).transpose()
-                for i in range(1, self.dim_actors):
-                    self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels_SC==i, dtype=int).transpose()])
-                self.proj_actors_SC=normalize(self.proj_actors_SC.astype(np.double), norm='l1', axis=0)
-                self.actor_reduced_SC = actor_matrix * self.proj_actors_SC
-            except MemoryError:
-                self.actor_reduced_SC = None
-                print('Spectral clustering failed for actors due to memory error')
+            #actor_matrix = scipy.sparse.csr_matrix(self.actor_matrix.toarray() * (self.rank_matrix.toarray()>=self.actor_reduction_rank_threshold))
+            #try:
+            #    actors_SC = SpectralClustering(n_clusters=self.dim_actors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_actors)
+            #    actor_labels_SC = actors_SC.fit_predict(actor_matrix.transpose())
+            #    self.proj_actors_SC = scipy.sparse.csc_matrix(actor_labels_SC==0, dtype=int).transpose()
+            #    for i in range(1, self.dim_actors):
+            #        self.proj_actors_SC = scipy.sparse.hstack([self.proj_actors_SC, scipy.sparse.csc_matrix(actor_labels_SC==i, dtype=int).transpose()])
+            #    self.proj_actors_SC=normalize(self.proj_actors_SC.astype(np.double), norm='l1', axis=0)
+            #    self.actor_reduced_SC = actor_matrix * self.proj_actors_SC
+            #except MemoryError:
+            #    self.actor_reduced_SC = None
+            #    print('Spectral clustering failed for actors due to memory error')
             # Second clustering method: KMeans clustering with tf-idf
             actors_KM = KMeans(n_clusters = self.dim_actors, init='k-means++')
             actor_labels_KM = actors_KM.fit_predict(TfidfTransformer().fit_transform(self.actor_matrix).transpose())
@@ -335,12 +336,12 @@ class CinemaService(LearningService):
                     self.proj_actors_BOC = scipy.sparse.hstack([self.proj_actors_BOC,  scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1) )])
                 else:
                     self.proj_actors_BOC = scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1))
-            self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_SC
+            self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_BOC
             self.actor_reduced_BOC = normalize(self.actor_reduced_BOC.astype(np.double), norm='l1', axis=1)
             # Save object in cache
-            self.create_cobject('actors_reduced', (self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC))
+            self.create_cobject('actors_reduced', (self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC))
         else:
-            self.actor_reduced_SC, self.proj_actors_SC, self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC = self.get_cobject('actors_reduced').get_content()
+            self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC = self.get_cobject('actors_reduced').get_content()
   
     def loadWriters(self):
         keywords_reduced = self.keywords_reduced_KM
@@ -358,17 +359,17 @@ class CinemaService(LearningService):
     def loadWritersReduced(self):
         if not self.is_loaded('writers_reduced'):
             # First clustering method: Spectral Clustering
-            try:
-                writer_SC = SpectralClustering(n_clusters=self.dim_writers,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_writers)
-                writer_labels_SC = writer_SC.fit_predict(self.writer_keyword_matrix)
-                self.proj_writers_SC = scipy.sparse.csc_matrix(writer_labels_SC==0, dtype=int).transpose()
-                for i in range(1, self.dim_writers):
-                    self.proj_writers_SC = scipy.sparse.hstack([self.proj_writers_SC, scipy.sparse.csc_matrix(writer_labels_SC==i, dtype=int).transpose()])
-                self.proj_writers_SC=normalize(self.proj_writers_SC.astype(np.double),axis=0, norm='l1')
-                self.writer_reduced_SC = self.writer_matrix * self.proj_writers_SC
-            except MemoryError:
-                self.writer_reduced_SC = None
-                print('Spectral clustering failed for writers due to memory error')
+            #try:
+            #    writer_SC = SpectralClustering(n_clusters=self.dim_writers,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_writers)
+            #    writer_labels_SC = writer_SC.fit_predict(self.writer_keyword_matrix)
+            #    self.proj_writers_SC = scipy.sparse.csc_matrix(writer_labels_SC==0, dtype=int).transpose()
+            #    for i in range(1, self.dim_writers):
+            #        self.proj_writers_SC = scipy.sparse.hstack([self.proj_writers_SC, scipy.sparse.csc_matrix(writer_labels_SC==i, dtype=int).transpose()])
+            #    self.proj_writers_SC=normalize(self.proj_writers_SC.astype(np.double),axis=0, norm='l1')
+            #    self.writer_reduced_SC = self.writer_matrix * self.proj_writers_SC
+            #except MemoryError:
+            #    self.writer_reduced_SC = None
+            #    print('Spectral clustering failed for writers due to memory error')
             # Second clustering method: Average of keywords features
             self.writer_reduced_avg =  normalize(self.writer_matrix.astype(np.double), norm='l1', axis=1) * self.writer_keyword_matrix
             # Third clustering method: KMeans clustering with tf-idf
@@ -380,9 +381,9 @@ class CinemaService(LearningService):
             self.proj_writers_KM=normalize(self.proj_writers_KM.astype(np.double),axis=0, norm='l1')
             self.writer_reduced_KM = self.writer_matrix * self.proj_writers_KM
             # Save object in cache
-            self.create_cobject('writers_reduced', (self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM))
+            self.create_cobject('writers_reduced', (self.writer_reduced_avg, self.writer_reduced_KM))
         else:
-            self.writer_reduced_SC, self.proj_writers_SC, self.writer_reduced_avg, self.writer_reduced_KM = self.get_cobject('writers_reduced').get_content()
+            self.writer_reduced_avg, self.writer_reduced_KM = self.get_cobject('writers_reduced').get_content()
 
     def loadDirectors(self):
         if self.reduction_actors_in_directoractormatrix == 'KM':
@@ -405,17 +406,17 @@ class CinemaService(LearningService):
     def loadDirectorsReduced(self):
         if not self.is_loaded('directors_reduced'):
             # First clustering method: Spectral Clustering
-            try:
-                director_SC = SpectralClustering(n_clusters=self.dim_directors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_directors)
-                director_labels_SC = director_SC.fit_predict(self.director_actor_matrix)
-                self.proj_directors_SC = scipy.sparse.csc_matrix(director_labels_SC==0, dtype=int).transpose()
-                for i in range(1, self.dim_directors):
-                    self.proj_directors_SC = scipy.sparse.hstack([self.proj_directors_SC, scipy.sparse.csc_matrix(director_labels_SC==i, dtype=int).transpose()])
-                self.proj_directors_SC=normalize(self.proj_directors_SC.astype(np.double),axis=0, norm='l1')
-                self.director_reduced_SC = self.director_matrix * self.proj_directors_SC
-            except MemoryError:
-                self.director_reduced_SC = None
-                print('Spectral clustering failed for directors due to memory error')
+            #try:
+            #    director_SC = SpectralClustering(n_clusters=self.dim_directors,eigen_solver='arpack',affinity="nearest_neighbors",n_neighbors=self.n_neighbors_SC_directors)
+            #    director_labels_SC = director_SC.fit_predict(self.director_actor_matrix)
+            #    self.proj_directors_SC = scipy.sparse.csc_matrix(director_labels_SC==0, dtype=int).transpose()
+            #    for i in range(1, self.dim_directors):
+            #        self.proj_directors_SC = scipy.sparse.hstack([self.proj_directors_SC, scipy.sparse.csc_matrix(director_labels_SC==i, dtype=int).transpose()])
+            #    self.proj_directors_SC=normalize(self.proj_directors_SC.astype(np.double),axis=0, norm='l1')
+            #    self.director_reduced_SC = self.director_matrix * self.proj_directors_SC
+            #except MemoryError:
+            #    self.director_reduced_SC = None
+            #    print('Spectral clustering failed for directors due to memory error')
             # Second clustering method: Average of actors features
             self.director_reduced_avg =  normalize(self.director_matrix.astype(np.double), norm='l1', axis=1) * self.director_actor_matrix
             # Third clustering method: KMeans clustering with tf-idf
@@ -427,23 +428,33 @@ class CinemaService(LearningService):
             self.proj_directors_KM=normalize(self.proj_directors_KM.astype(np.double),axis=0, norm='l1')
             self.director_reduced_KM = self.director_matrix * self.proj_directors_KM
             # Save object in cache
-            self.create_cobject('directors_reduced', (self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM))
+            self.create_cobject('directors_reduced', (self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM))
         else:
-            self.director_reduced_SC, self.proj_directors_SC, self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM = self.get_cobject('directors_reduced').get_content()
+            self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM = self.get_cobject('directors_reduced').get_content()
 
     def loadSearchClustering(self):
         if not self.is_loaded('search_clustering'):
-            self.search_clustering = {}
+            self.search_clustering_KM = {}
+            self.search_clustering_SC = {}
             for k in range(16):
                 print('Doing search clustering number '+str(k+1)+'/16')
                 X = self.getWeightedSearchFeatures(k)
+                # First method
                 KM = KMeans(n_clusters=self.n_clusters_search)
                 KM.fit_predict(X)
-                self.search_clustering[k] = {'labels' : KM.labels_, 'cluster_centers' : KM.cluster_centers_}
+                self.search_clustering_KM[k] = {'labels' : KM.labels_, 'cluster_centers' : KM.cluster_centers_}
+                # Second method
+                SC = SpectralClustering(n_clusters=self.n_clusters_search)
+                SC.fit_predict(X)
+                cluster_centers = []
+                for i in range(self.n_clusters_search):
+                    cluster_center = np.mean(X[SC.labels_ == i,:], axis=0)
+                    cluster_centers.append(cluster_center)
+                self.search_clustering_SC[k] = {'labels' : SC.labels_, 'cluster_centers' : cluster_centers}
             # Save object in cache
-            self.create_cobject('search_clustering',self.search_clustering)
+            self.create_cobject('search_clustering',(self.search_clustering_SC, self.search_clustering_KM))
         else:
-            self.search_clustering = self.get_cobject('search_clustering').get_content()
+            self.search_clustering_SC, self.search_clustering_KM = self.get_cobject('search_clustering').get_content()
 
     def loadPredictFeatures(self):
         if self.reduction_actors_in_predictfeatures == 'KM':
@@ -531,17 +542,23 @@ class CinemaService(LearningService):
         self.n_neighbors_SC_writers = 8 # soectral clustering parameter
         self.n_neighbors_SC_directors = 8 # soectral clustering parameter
         self.actor_reduction_rank_threshold = 10
-        self.reduction_actors_in_predictfeatures = 'SC'
-        #self.reduction_keywords_in_predictfeatures = 'KM'
-        self.reduction_directors_in_predictfeatures = 'SC'
-        self.reduction_actors_in_directoractormatrix = 'SC'
-        self.reduction_actors_in_searchclustering = 'SC'
-        self.reduction_directors_in_searchclustering = 'SC'
+
+        self.reduction_actors_in_predictfeatures = 'KM' 
+        self.reduction_directors_in_predictfeatures = 'KM' 
+
+        self.reduction_actors_in_directoractormatrix = 'KM' # useful only for spectral clustering
+
+        self.reduction_actors_in_searchclustering = 'KM'
+        self.reduction_directors_in_searchclustering = 'KM'
+
+        self.clustering_type_in_searchclustering = 'SC'
+
         self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
         self.loadFilms()
+        self.loadBoxOffice()
         # Load prediction features
         self.loadActors()
         self.loadStars()
@@ -555,7 +572,6 @@ class CinemaService(LearningService):
         self.loadKeywordsReduced()
         self.loadGenres()
         # Load prediction labels
-        self.loadBoxOffice()
         self.loadPrizes()
         self.loadReviews()
         #self.loadReviewsContent() # TODO : finish implementation
@@ -576,7 +592,7 @@ class CinemaService(LearningService):
         self.loadPredictFeatures()
         self.loadPredictLabels()
         # Init predict classifier
-        #self.init_predict()
+        self.init_predict()
         print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
@@ -691,6 +707,10 @@ class CinemaService(LearningService):
         except KeyError:
             raise ParsingError("Film not found.")
         # Select cluster information according to criteria
+        if self.clustering_type_in_searchclustering == 'SC':
+            search_clustering = self.search_clustering_SC
+        if self.clustering_type_in_searchclustering == 'KM':
+            search_clustering = self.search_clustering_KM
         criteria_binary = criteria['actor_director'] + 2*criteria['budget'] + 4*criteria['review'] + 8*criteria['genre']
         search_clustering = self.search_clustering[criteria_binary]
         labels = search_clustering['labels']
@@ -818,8 +838,19 @@ class CinemaService(LearningService):
             print "Error {}".format(e)
             print s+' object not found. Creating it...'
             self.log_box_office_random_forest_reg = RandomForestRegressor()
-            self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office)
+            self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office.ravel())
             self.dumpJoblibObject(self.log_box_office_random_forest_reg, s)
+
+    def loadLogBoxOfficeGradientBoostingRegressor(self):
+        s = 'log_box_office_gradient_boosting_reg'
+        try:
+            self.log_box_office_gradient_boosting_reg = self.loadJoblibObject(s)
+        except IOError as e:
+            print "Error {}".format(e)
+            print s+' object not found. Creating it...'
+            self.log_box_office_gradient_boosting_reg = GradientBoostingRegressor()
+            self.log_box_office_gradient_boosting_reg.fit(self.predict_features, self.predict_labels_log_box_office.ravel())
+            self.dumpJoblibObject(self.log_box_office_gradient_boosting_reg, s)
 
     def loadReviewRandomForestRegressors(self):
         s = 'review_random_forest_reg'
@@ -833,6 +864,18 @@ class CinemaService(LearningService):
                 self.review_random_forest_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
             self.dumpJoblibObject(self.review_random_forest_reg, s)
 
+    def loadReviewGradientBoostingRegressors(self):
+        s = 'review_gradient_boosting_reg'
+        try:
+            self.review_gradient_boosting_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.review_gradient_boosting_reg = []
+            for i in range(len(self.reviews_names)): #TODO : stocker un self.nb_journals pour eviter le len()
+                self.review_gradient_boosting_reg.append(GradientBoostingRegressor())
+                self.review_gradient_boosting_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
+            self.dumpJoblibObject(self.review_gradient_boosting_reg, s)
+
     def loadPrizeRandomForestRegressors(self):
         s = 'prize_random_forest_reg'
         try:
@@ -845,10 +888,25 @@ class CinemaService(LearningService):
                 self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_random_forest_reg, s)
 
+    def loadPrizeLogisticRegression(self):
+        s = 'prize_logistic_reg'
+        try:
+            self.prize_logistic_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.prize_logistic_reg = []
+            for i in range(len(self.prizes_names)): #TODO : stocker un self.nb_institutions pour eviter le len()
+                self.prize_logistic_reg.append(LogisticRegression())
+                self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
+            self.dumpJoblibObject(self.prize_logistic_reg, s)
+
     def init_predict(self):
         self.loadLogBoxOfficeRandomForestRegressor()
+        self.loadLogBoxOfficeGradientBoostingRegressor()
         self.loadReviewRandomForestRegressors()
+        self.loadReviewGradientBoostingRegressors()
         self.loadPrizeRandomForestRegressors()
+        self.loadPrizeLogisticRegression()
 
     def compute_predict(self, x_vector, language=None):
         '''
@@ -856,18 +914,7 @@ class CinemaService(LearningService):
                                     'win' : boolean,
                                     'value' : probability
                                    },
-                'general_box_office' : {'rank' : int,
-                                        'value' : float (M$),
-                                        'neighbors': list of {'film' : Film Object,
-                                                              'rank' : int
-                                                             }
-                                       },
-                'genre_box_office' : {'rank' : int,
-                                      'value' : float (M$),
-                                      'neighbors': list of {'film' : Film Object,
-                                                            'rank' : int
-                                                           }
-                                     },
+                'box_office' : int,
                 'reviews' : list of {'journal': Journal Object,
                                      'grade' : float,
                                     },
@@ -877,17 +924,20 @@ class CinemaService(LearningService):
                }
         '''
         
-        predicted_box_office = np.exp(self.log_box_office_random_forest_reg.predict(x_vector))
+        # Box office
+        predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
 
+        # Reviews
         journals = []
         predicted_grades = []
         for i in range(len(self.reviews_names)):
             try:
                 journals.append(Journal.objects.get(name=self.reviews_names[i]))
-                predicted_grades.append(self.review_random_forest_reg[i].predict(x_vector))
+                predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
             except:
                 pass
 
+        # Prizes
         institutions = []
         wins = []
         predicted_probabilities = []
@@ -899,7 +949,7 @@ class CinemaService(LearningService):
                 else:
                     wins.append(False)
                 predicted_probabilities.append(
-                    self.prize_random_forest_reg[i].predict(x_vector)
+                    self.prize_logistic_reg[i].predict_proba(x_vector)[0,1]
                 )
             except:
                 pass
@@ -908,69 +958,88 @@ class CinemaService(LearningService):
                                 'win' : wins[i],
                                 'value' : predicted_probabilities[i]} 
                                for i in range(len(institutions))],
-                   'general_box_office' :
-                        {'rank' : 0, # TODO
-                         'value' : predicted_box_office,
-                         'neighbors' : [] # TODO
-                         },
-                    'genre_box_office' :
-                        {'rank' : 0, # TODO
-                         'value' : predicted_box_office,
-                         'neighbors' : [] # TODO
-                         },
-                    'reviews': [{'journal' : journals[i],
+                   'box_office' : predicted_box_office,
+                   'reviews' : [{'journal' : journals[i],
                                  'grade' : predicted_grades[i]} 
                                 for i in range(len(journals))],
-                    'bag_of_words': [] # TODO
+                   'bag_of_words' : [] # TODO
                     }                   
 
         return results
 
     def predict_request(self, args):
         # Get results
-        lang = None
-        if args.has_key('language'):
-            try:
-                lang = Language.objects.get(identifier = str(args['language']))
-            except Language.DoesNotExist, exceptions.KeyError :
-                pass
-        results = self.compute_predict(self.vectorize_predict_user_input(args), language = lang)
-
+        results = self.compute_predict(self.vectorize_predict_user_input(args))
         # Build query_results
         query_results = {}
         
         # Fill query_results['prizes']
-        query_results['prizes'] = []
+        query_results['prizes_win'] = []
+        query_results['prizes_nomination'] = []
         for prize in results['prizes']:
-            query_results['prizes'].append({'institution' : prize['institution'].name,
-                                            'win' : prize['win'],
-                                            'value' : prize['value']})
-        
+            if prize['win']:
+                query_results['prizes_win'].append({'institution' : prize['institution'].name,
+                                                'value' : prize['value']})
+            else:
+                query_results['prizes_nomination'].append({'institution' : prize['institution'].name,
+                                                         'value' : prize['value']})
+
+        query_results['prizes_win'] = sorted(query_results['prizes_win'], key=lambda k: -k['value'])
+        query_results['prizes_win'] = query_results['prizes_win'][:10]
+        query_results['prizes_nomination'] = sorted(query_results['prizes_nomination'], key=lambda k: -k['value'])
+        query_results['prizes_nomination'] = query_results['prizes_nomination'][:10]
+
+
         # Fill query_results['general_box_office']
-        neighbors = []
-        for neighbor in results['general_box_office']['neighbors']:
-            neighbors.append({'rank':neighbor['rank'],
-                              'original_title':neighbor['film'].original_title,
-                              'value':neighbor['film'].box_office})
         
-        general_box_office = {'rank':results['general_box_office']['rank'],
-                              'value':results['general_box_office']['value'],
-                              'neighbors':neighbors
+        bo = self.box_office_matrix.toarray().ravel()
+        sorted_bo = np.sort(bo)
+        sorted_bo_indices = np.argsort(bo)
+        invrank = np.searchsorted(sorted_bo, results['box_office'])
+        rank = self.films.count() - invrank
+
+        neighbors = []
+        
+        try:
+            film = Film.objects.get(
+                pk = self.fromIndextoPk[sorted_bo_indices[invrank - 1]])
+            neighbors.append({
+                'original_title': film.original_title,
+                'rank' : rank + 1,
+                'value' : film.box_office})
+        except:
+            pass
+        
+        try:
+            film = Film.objects.get(
+                pk = self.fromIndextoPk[sorted_bo_indices[invrank]])
+            neighbors.append({
+                'original_title': film.original_title,
+                'rank' : rank - 1,
+                'value' : film.box_office})
+        except:
+            pass
+        
+        general_box_office = {'rank': rank,
+                              'value': results['box_office'],
+                              'neighbors': neighbors
                               }
         
         query_results['general_box_office'] = general_box_office
         
         # Fill query_results['genre_box_office']
-        neighbors_genre = []
-        for neighbor in results['genre_box_office']['neighbors']:
-            neighbors_genre.append({'rank':neighbor['rank'],
-                                    'original_title':neighbor['film'].original_title,
-                                    'value':neighbor['film'].box_office})
-            genre_box_office = {'rank':results['genre_box_office']['rank'],
-                                'value':results['genre_box_office']['value'],
-                                'neighbors':neighbors_genre
-                                }
-            query_results['genre_box_office'] = genre_box_office
+        
+        
+        #neighbors_genre = []
+        #for neighbor in results['genre_box_office']['neighbors']:
+        #    neighbors_genre.append({'rank':neighbor['rank'],
+        #                            'original_title':neighbor['film'].original_title,
+        #                            'value':neighbor['film'].box_office})
+        #    genre_box_office = {'rank':results['genre_box_office']['rank'],
+        #                        'value':results['genre_box_office']['value'],
+        #                        'neighbors':neighbors_genre
+        #                        }
+        #    query_results['genre_box_office'] = genre_box_office
         
         # Fill query_results['critics']
         critics = {}
@@ -979,11 +1048,18 @@ class CinemaService(LearningService):
         grades = []
         for item in results['reviews']:
             reviews.append({'journal' : item['journal'].name,
-                            'grade' : item['grade']
-                            })
+                            'grade' : item['grade']})
             grades.append(item['grade'])
-        
-        critics['reviews'] = reviews
+        reviews = sorted(reviews, key=lambda k: -k['grade'])
+        n_reviews = len(reviews)
+        selected_reviews = []
+        selected_reviews.append(reviews[0])
+        selected_reviews.append(reviews[1*n_reviews/4])
+        selected_reviews.append(reviews[2*n_reviews/4])
+        selected_reviews.append(reviews[3*n_reviews/4])
+        selected_reviews.append(reviews[-1])
+
+        critics['reviews'] = selected_reviews
         critics['average'] = np.mean(grades)
         query_results['critics'] = critics
         
@@ -996,6 +1072,7 @@ class CinemaService(LearningService):
         query_results['bag_of_words'] = bag_of_words
         
         # Return data
+        print query_results
         return query_results
 
     def vectorize_predict_user_input(self, user_input):
@@ -1005,7 +1082,10 @@ class CinemaService(LearningService):
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
                 for actor_id in user_input['actors']:
-                    x_actor_vector[0,self.actor_names.index(actor_id)]=1
+                    try:
+                        x_actor_vector[0,self.actor_names.index(actor_id)]=1
+                    except ValueError:
+                        pass
 
         if self.reduction_actors_in_predictfeatures == 'KM':
             x_actor_reduced = x_actor_vector * self.proj_actors_KM
@@ -1018,13 +1098,19 @@ class CinemaService(LearningService):
         if user_input.has_key('genres'):
             if user_input['genres'].__class__ == list:
                 for genre in user_input['genres']:
-                    x_genres_vector[0,self.genres_names.index(genre)]=1
-
+                    try:
+                        x_genres_vector[0,self.genres_names.index(genre)]=1
+                    except ValueError:
+                        pass
+ 
         x_director_vector = np.zeros([1, len(self.director_names)])
         if user_input.has_key('directors'):
             if user_input['directors'].__class__ == list:
                 for director_id in user_input['directors']:
-                    x_director_vector[0,self.director_names.index(director_id)]=1
+                    try:
+                        x_director_vector[0,self.director_names.index(director_id)]=1
+                    except ValueError:
+                        pass
 
         if self.reduction_directors_in_predictfeatures == 'KM':
             x_director_reduced = x_director_vector * self.proj_directors_KM
@@ -1035,18 +1121,21 @@ class CinemaService(LearningService):
         if user_input.has_key('keywords'):
             if user_input['keywords'].__class__ == list:
                 for keyword in user_input['keywords']:
-                    x_keyword_vector[0,self.keyword_names.index(keyword)]=1
+                    try:
+                        x_keyword_vector[0,self.keyword_names.index(keyword)]=1
+                    except ValueError:
+                        pass
 
         x_keyword_reduced = x_keyword_vector * self.proj_keywords_KM
-        
+
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
             if user_input['budget'].__class__ == int:
-                x_budget_vector[1,1] = float(user_input['budget'])
+                x_budget_vector[0,0] = float(user_input['budget'])
 
         x_season_vector = np.zeros([1, len(self.season_names)]) # Default Season?
         try:
-            for feat in self.genres_names:
+            for feat in self.season_names:
                 i = 0
                 if re.findall(user_input['release_period']['season'], feat):
                     x_season_vector[0,i] = 1

@@ -1,0 +1,8 @@
+response={‘success’ : true, ‘error’ : ‘’,‘prizes_win’ :[{
+‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘prizes_nomination’ :[
+{‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘general_box_office’ : {‘rank’ : 25,‘value’ : 320, ‘neighbors’ :
+[{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘genre_box_office’ : {‘rank’ : 45,‘value’ : 51, 'neighbors’ : 
+[{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘critics’ : {‘average’ : 0.4,
+‘reviews’ : [{‘journal’ : ‘Télérama’,'grade’ : 0.60},{‘journal’ : ‘Télé 7-Jours’,‘grade’ : 0.18}]}}
+
+

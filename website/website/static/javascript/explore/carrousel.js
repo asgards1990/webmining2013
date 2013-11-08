@@ -106,6 +106,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 		canv.id = 'canv'+(i+1);
 		canv.setAttribute("width", largeur);
 		canv.setAttribute("height", hauteur);
+		canv.setAttribute("class", "cover");
 		if(i<=5){
 			canv.style.cssText ='position:absolute;display:none;top:0px;left:'+i*largeur/2+'px;z-index:'+i+';';
 		}
