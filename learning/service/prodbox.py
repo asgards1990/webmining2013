@@ -444,13 +444,14 @@ class CinemaService(LearningService):
                 KM.fit_predict(X)
                 self.search_clustering_KM[k] = {'labels' : KM.labels_, 'cluster_centers' : KM.cluster_centers_}
                 # Second method
-                SC = SpectralClustering(n_clusters=self.n_clusters_search)
-                SC.fit_predict(X)
-                cluster_centers = []
-                for i in range(self.n_clusters_search):
-                    cluster_center = np.mean(X[SC.labels_ == i,:], axis=0)
-                    cluster_centers.append(cluster_center)
-                self.search_clustering_SC[k] = {'labels' : SC.labels_, 'cluster_centers' : cluster_centers}
+                #SC = SpectralClustering(n_clusters=self.n_clusters_search)
+                #SC.fit_predict(X)
+                #cluster_centers = []
+                #for i in range(self.n_clusters_search):
+                #    cluster_center = np.mean(X.toarray()[SC.labels_ == i,:], axis=0)
+                #    cluster_centers.append(cluster_center)
+                #self.search_clustering_SC[k] = {'labels' : SC.labels_, 'cluster_centers' : cluster_centers}
+                self.search_clustering_SC = None #TODO : remove this and uncomment
             # Save object in cache
             self.create_cobject('search_clustering',(self.search_clustering_SC, self.search_clustering_KM))
         else:
@@ -551,7 +552,7 @@ class CinemaService(LearningService):
         self.reduction_actors_in_searchclustering = 'KM'
         self.reduction_directors_in_searchclustering = 'KM'
 
-        self.clustering_type_in_searchclustering = 'SC'
+        self.clustering_type_in_searchclustering = 'KM'
 
         self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
@@ -708,9 +709,9 @@ class CinemaService(LearningService):
             raise ParsingError("Film not found.")
         # Select cluster information according to criteria
         if self.clustering_type_in_searchclustering == 'SC':
-            search_clustering = self.search_clustering_SC
+            self.search_clustering = self.search_clustering_SC
         if self.clustering_type_in_searchclustering == 'KM':
-            search_clustering = self.search_clustering_KM
+            self.search_clustering = self.search_clustering_KM
         criteria_binary = criteria['actor_director'] + 2*criteria['budget'] + 4*criteria['review'] + 8*criteria['genre']
         search_clustering = self.search_clustering[criteria_binary]
         labels = search_clustering['labels']
