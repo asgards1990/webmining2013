@@ -5,12 +5,12 @@ import re
 app = pb.CinemaService()
 
 args = {
-        'actors' : [app.actor_names[0], app.actor_names[50],],
+        'actors' : ['nm0948000',],
         'genres' : ['Action'],
-        'directors': [app.director_names[0],],
-        'keywords': [app.keyword_names[0], app.keyword_names[1], app.keyword_names[2],],
-        'budget' : 1000000,
-        'season' : 'winter'
+        'directors': ['nm0906667',],
+        'keywords': ['pistol', 'murder',],
+        'budget' : 100,
+        'release_period' : {'season':'no-season'}
         }
 
 print 'Actors:'
@@ -31,7 +31,7 @@ for keyword in args['keywords']:
 
 print 'Budget: ', args['budget']
 
-print 'Season: ', args['season']
+print 'Season: ', args['release_period']['season']
 
 
 print('--------------------')

@@ -1002,25 +1002,27 @@ class CinemaService(LearningService):
         neighbors = []
         
         try:
-            film = Film.objects.get(
+            film = Film.objects.get(#TODO C'est debile de chercher dans la BDD, on a les features
                 pk = self.fromIndextoPk[sorted_bo_indices[invrank - 1]])
             neighbors.append({
                 'original_title': film.original_title,
+                'english_title': film.english_title,
                 'rank' : rank + 1,
                 'value' : film.box_office})
         except:
             pass
         
         try:
-            film = Film.objects.get(
+            film = Film.objects.get(#TODO C'est debile de chercher dans la BDD, on a les features
                 pk = self.fromIndextoPk[sorted_bo_indices[invrank]])
             neighbors.append({
                 'original_title': film.original_title,
+                'english_title': film.english_title,
                 'rank' : rank - 1,
                 'value' : film.box_office})
         except:
             pass
-        
+        neighbors = sorted(neighbors, key=lambda k: k['rank'])
         general_box_office = {'rank': rank,
                               'value': results['box_office'],
                               'neighbors': neighbors
@@ -1030,11 +1032,11 @@ class CinemaService(LearningService):
         
         # Fill query_results['genre_box_office']
        
-        if user_input.has_key('genres'):
-            if user_input['genres'].__class__ == list:
+        if args.has_key('genres'):
+            if args['genres'].__class__ == list:
                 bo_genre = []
                 pk_genre = []
-                for i in range(films.count()):
+                for i in range(self.nb_films):
                     add = False
                     for genre in args['genres']:
                         if self.genres_matrix[i, self.genres_names.index(genre)] == 1:
@@ -1051,33 +1053,33 @@ class CinemaService(LearningService):
                 neighbors_genre = []
         
                 try:
-                    film = Film.objects.get(
+                    film = Film.objects.get( #TODO C'est debile de chercher dans la BDD, on a les features
                         pk = pk_genre[sorted_bo_indices_genre[invrank_genre - 1]])
                     neighbors_genre.append({
                         'original_title': film.original_title,
+                        'english_title': film.english_title,
                         'rank' : rank_genre + 1,
                         'value' : film.box_office})
                 except:
                     pass
         
                 try:
-                    film = Film.objects.get(
+                    film = Film.objects.get(#TODO C'est debile de chercher dans la BDD, on a les features
                         pk = pk_genre[sorted_bo_indices_genre[invrank_genre]])
                     neighbors_genre.append({
                         'original_title': film.original_title,
+                        'english_title': film.english_title,
                         'rank' : rank_genre - 1,
                         'value' : film.box_office})
                 except:
                     pass
-        
+                neighbors_genre = sorted(neighbors_genre, key=lambda k: k['rank'])
                 genre_box_office = {'rank': rank_genre,
                                     'value': results['box_office'],
                                     'neighbors': neighbors_genre
                                    }
         
                 query_results['genre_box_office'] = genre_box_office
-               
-           
 
         #neighbors_genre = []
         #for neighbor in results['genre_box_office']['neighbors']:
@@ -1125,8 +1127,6 @@ class CinemaService(LearningService):
         return query_results
 
     def vectorize_predict_user_input(self, user_input):
-
-        print user_input
         x_actor_vector = np.zeros([1,len(self.actor_names)])
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
@@ -1199,5 +1199,4 @@ class CinemaService(LearningService):
             x_budget_vector,
             x_season_vector,
             x_genres_vector,])
-        print x_vector
         return x_vector
