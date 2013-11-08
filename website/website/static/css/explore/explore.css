@@ -126,6 +126,22 @@ margin-top: 3px;
 .menufilters {
     position : relative;
     margin-top : 4em;
+    padding-top:5px;
+}
+
+.menufilters img.steps {
+    left:-1.2em;
+    top:-0.3em;
+}
+
+.menufilters h1.steps {
+    border-top:2px solid #d51c21;
+    border-left:2px solid #d51c21;
+     border-right:2px solid #d51c21;
+    border-radius:5px;
+    padding:15px 0px 0px 5px;
+
+    margin-bottom: 10px;
 }
 
 /* Acteurs */
@@ -207,6 +223,13 @@ text-align:center;
 }
 /* Reviews */
 
+#reviews {
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .73), 0px 0px 18px 0px rgba(0, 0, 0, .13);
+    -moz-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .73), 0px 0px 18px 0px rgba(0, 0, 0, .13);
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .73), 0px 0px 18px 0px rgba(0, 0, 0, .13);
+    margin-bottom: 5px;
+}
+
 .rateit{
 margin-top:0.8em;
     margin-bottom:0.8em;
@@ -233,10 +256,9 @@ margin-top:0.8em;
 
 .listreviews{
 background-color: white;
-text-align:center;
-vertical-align:center;
-overflow:auto;
-/*border-bottom: 1px solid rgb(80,88,100);*/
+    text-align: center;
+    vertical-align: center;
+    overflow: auto;
 }
 
 /* Coverflow */

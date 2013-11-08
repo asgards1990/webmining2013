@@ -255,7 +255,7 @@ text-align:center;
     font-family:'Fenix',serif;
 }
 #release {
-overflow: auto;
+    overflow: auto;
 }
 .seasonbox label {
     display:block;
