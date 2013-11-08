@@ -93,6 +93,11 @@ response = {
                 'rank': 23,
                 'original_title': 'IronMan4',
                 'value': 325.5
+            },
+			{
+                'rank': 25,
+                'original_title': 'test4',
+                'value': 305.5
             }
         ]
     },
@@ -101,9 +106,14 @@ response = {
         'value': 51,
         'neighbors': [
             {
-                'rank': 23,
+                'rank': 44,
                 'original_title': 'IronMan4',
                 'value': 325.5
+            },
+			{
+                'rank': 46,
+                'original_title': '???',
+                'value': 0.5
             }
         ]
     },
@@ -146,28 +156,26 @@ for (k=0;k<lengthOfReviews;k++) {
 	
 
 //affichage des résultats dans le tableau des Box-Office General
-
-//for (k=0;k<lengthOfReviews;k++) { 
 	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.rank;
 	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent="Your movie!";
 	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+response.general_box_office.value+"M";
-
-	//};
-
-//affichage des résultats dans le tableau des Box-Office General (boucle JSON)
-//document.getElementById("bogeneraltable").children[1].children[i].children[0].textContent="% 23 %";
-//document.getElementById("bogeneraltable").children[1].children[i].children[1].textContent="% Iron Man 3 %";
-//document.getElementById("bogeneraltable").children[1].children[i].children[2].textContent="% $325.5 M %";
-
+	document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.neighbors[0].rank;
+	document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent=response.general_box_office.neighbors[0].original_title;
+	document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+response.general_box_office.neighbors[0].value+"M";
+	document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
+	document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].original_title;
+	document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+response.general_box_office.neighbors[1].value+"M";
+	
 //affichage des résultats dans le tableau des Box-Office Genre
-document.getElementById("bogenretable").children[1].children[0].children[0].textContent="% 23bis %";
-document.getElementById("bogenretable").children[1].children[0].children[1].textContent="% Iron Man 4 %";
-document.getElementById("bogenretable").children[1].children[0].children[2].textContent="% $325.6 M %";
-
-//affichage des résultats dans le tableau des Box-Office Genre (boucle JSON)
-document.getElementById("bogenretable").children[1].children[0].children[0].textContent="% 23bis %";
-document.getElementById("bogenretable").children[1].children[0].children[1].textContent="% Iron Man 4 %";
-document.getElementById("bogenretable").children[1].children[0].children[2].textContent="% $325.6 M %";
+	document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.rank;
+	document.getElementById("bogenretable").children[1].children[1].children[1].textContent="Your movie!";
+	document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+response.genre_box_office.value+"M";
+	document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.neighbors[0].rank;
+	document.getElementById("bogenretable").children[1].children[0].children[1].textContent=response.genre_box_office.neighbors[0].original_title;
+	document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+response.genre_box_office.neighbors[0].value+"M";
+	document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
+	document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].original_title;
+	document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+response.genre_box_office.neighbors[1].value+"M";
 
 })
 
