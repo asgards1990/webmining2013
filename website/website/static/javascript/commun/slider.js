@@ -2,6 +2,20 @@ $(function() {
     $( "#slider" ).slider();
       });
 
+  $(function() {
+    $( "#slider-range-min" ).slider({
+      range: "min",
+      value: 100,
+      min: 1,
+      max: 300,
+      slide: function( event, ui ) {
+        $( "#amountb" ).val( "$" + ui.value +" M");
+      }
+    });
+    $( "#amountb" ).val( "$" + $( "#slider-range-min" ).slider( "value" )+" M" );
+  });
+
+
 $(function() {
     $( "#slider-range" ).slider({
       range: true,
