@@ -5,7 +5,7 @@ $(function() {
     
     menu_li.each(function(){
 //    alert('hello');
-    if(!$(this).hasClass('item1') && !$(this).hasClass('item2')){
+    if(!$(this).hasClass('item1') && !$(this).hasClass('item2') && !$(this).hasClass('item3')){
     $(this).children('ul').hide();
     	}
     	})

@@ -672,7 +672,6 @@ class CinemaService(LearningService):
         return list(indexes_fitting_filters)
 
     def compute_search(self, film, nb_results, criteria, filters=None):
-        print filters
         try:
             film_index = self.fromPktoIndex[film.pk]
         except KeyError:
@@ -716,7 +715,8 @@ class CinemaService(LearningService):
                         distances.append(loc_distances[0])
                         neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
         else: # no need to use clusters
-            samples = X[list(indexes_fitting_filters),:]
+            indexes = indexes_fitting_filters
+            samples = X[list(indexes),:]
             neigh = NearestNeighbors(n_neighbors=nb_results+1, p=self.p_norm)
             neigh.fit(samples)
             (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
@@ -949,12 +949,18 @@ class CinemaService(LearningService):
         # Build query_results
         query_results = {}
         
-        # Fill query_results['prizes']
-        query_results['prizes'] = []
+        # Fill query_results['prizes_win'] et query_results['prizes_nomination']
+        query_results['prizes_nomination'] = []
+        query_results['prizes_win'] = []
         for prize in results['prizes']:
-            query_results['prizes'].append({'institution' : prize['institution'].name,
-                                            'win' : prize['win'],
-                                            'value' : prize['value']})
+            if prize['win']:
+                query_results['prizes_win'].append({'institution' : prize['institution'].name,
+                                                    'value' : prize['value']})
+            else:
+                query_results['prizes_nomination'].append({'institution' : prize['institution'].name,
+                                                            'value' : prize['value']})
+        query_results['prizes_win'] = sorted(query_results['prizes_win'], key=lambda k: -k['value'])
+        query_results['prizes_nomination'] = sorted(query_results['prizes_nomination'], key=lambda k: -k['value'])
         
         # Fill query_results['general_box_office']
         neighbors = []

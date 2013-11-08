@@ -5,16 +5,19 @@
     position: relative;
     overflow:auto;
     text-align:center;
-    width : 1000px;
+    font-size:0;
+    width:1000px;
 }
 
 #prizesborder, #boxofficeborder, #reviewsborder, #bagofwordsborder {
+    display:inline-block;
     position : relative;
-    float:left;
-    margin-left:20px;
-    margin-right:20px;
+    margin-left:2%;
+    margin-right:2%;
     border-radius:10px;
-    padding:5px;
+    padding:0.5%;
+    width: 45%;
+    height: 360px;
 }
 
 .topborder {
@@ -45,35 +48,32 @@
 }
 
 #prizesborder, #boxofficeborder {
-    margin-bottom:40px;
+    margin-bottom:27px;
 }
 
+#bagofwordsborder, #reviewsborder {
+    margin-bottom:-13px;
+}
 
 #results h1 {
     display: table-cell;
     text-align: center;
     font-size: 25px;
     word-wrap:break-word;
-    width: 25px;
     color: white;
     vertical-align:top;
     margin:0;
+    width: 25px;
+    height : 360px;
 }
 
-#boxofficeborder h1, #bagofwordsborder h1{
-    padding-left:5px;
-}
-
-#reviewsborder h1{
-    padding-right:5px;
-    height:360px;
-}
-
-#prizesborder h1{
-    height:345px;
+#prizesborder h1, #reviewsborder h1 {
     padding-right:5px;
 }
 
+#boxofficeborder h1, #bagofwordsborder h1 {
+    padding-right:5px;
+}
 
 #results h1 span {
     display : block;
@@ -82,11 +82,9 @@
 .prizes, .boxoffice, .reviews, .bagofwords{
     display: table-cell;
     background: white;
-    width: 420px;
     border-radius: 5px;
-}
-.boxoffice, .bagofwords{
-    height:360px;
+    width: 420px;
+    height : 360px;
 }
 
 .circle{
