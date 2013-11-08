@@ -16,7 +16,8 @@ from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
 from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingClassifier,GradientBoostingRegressor
+from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import cross_val_score
 from sklearn.neighbors.kde import KernelDensity
 
@@ -818,8 +819,19 @@ class CinemaService(LearningService):
             print "Error {}".format(e)
             print s+' object not found. Creating it...'
             self.log_box_office_random_forest_reg = RandomForestRegressor()
-            self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office)
+            self.log_box_office_random_forest_reg.fit(self.predict_features, self.predict_labels_log_box_office.ravel())
             self.dumpJoblibObject(self.log_box_office_random_forest_reg, s)
+
+    def loadLogBoxOfficeGradientBoostingRegressor(self):
+        s = 'log_box_office_gradient_boosting_reg'
+        try:
+            self.log_box_office_gradient_boosting_reg = self.loadJoblibObject(s)
+        except IOError as e:
+            print "Error {}".format(e)
+            print s+' object not found. Creating it...'
+            self.log_box_office_gradient_boosting_reg = GradientBoostingRegressor()
+            self.log_box_office_gradient_boosting_reg.fit(self.predict_features, self.predict_labels_log_box_office.ravel())
+            self.dumpJoblibObject(self.log_box_office_gradient_boosting_reg, s)
 
     def loadReviewRandomForestRegressors(self):
         s = 'review_random_forest_reg'
@@ -833,6 +845,18 @@ class CinemaService(LearningService):
                 self.review_random_forest_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
             self.dumpJoblibObject(self.review_random_forest_reg, s)
 
+    def loadReviewGradientBoostingRegressors(self):
+        s = 'review_gradient_boosting_reg'
+        try:
+            self.review_gradient_boosting_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.review_gradient_boosting_reg = []
+            for i in range(len(self.reviews_names)): #TODO : stocker un self.nb_journals pour eviter le len()
+                self.review_gradient_boosting_reg.append(GradientBoostingRegressor())
+                self.review_gradient_boosting_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
+            self.dumpJoblibObject(self.review_gradient_boosting_reg, s)
+
     def loadPrizeRandomForestRegressors(self):
         s = 'prize_random_forest_reg'
         try:
@@ -845,10 +869,25 @@ class CinemaService(LearningService):
                 self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_random_forest_reg, s)
 
+    def loadPrizeLogisticRegression(self):
+        s = 'prize_logistic_reg'
+        try:
+            self.prize_logistic_reg = self.loadJoblibObject(s)
+        except IOError:
+            print s+' object not found. Creating it...'
+            self.prize_logistic_reg = []
+            for i in range(len(self.prizes_names)): #TODO : stocker un self.nb_institutions pour eviter le len()
+                self.prize_logistic_reg.append(LogisticRegression())
+                self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
+            self.dumpJoblibObject(self.prize_logistic_reg, s)
+
     def init_predict(self):
         self.loadLogBoxOfficeRandomForestRegressor()
+        self.loadLogBoxOfficeGradientBoostingRegressor()
         self.loadReviewRandomForestRegressors()
+        self.loadReviewGradientBoostingRegressors()
         self.loadPrizeRandomForestRegressors()
+        self.loadPrizeLogisticRegression()
 
     def compute_predict(self, x_vector, language=None):
         '''
@@ -877,14 +916,14 @@ class CinemaService(LearningService):
                }
         '''
         
-        predicted_box_office = np.exp(self.log_box_office_random_forest_reg.predict(x_vector)[0])
+        predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
 
         journals = []
         predicted_grades = []
         for i in range(len(self.reviews_names)):
             try:
                 journals.append(Journal.objects.get(name=self.reviews_names[i]))
-                predicted_grades.append(self.review_random_forest_reg[i].predict(x_vector)[0])
+                predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
             except:
                 pass
 
@@ -899,7 +938,7 @@ class CinemaService(LearningService):
                 else:
                     wins.append(False)
                 predicted_probabilities.append(
-                    self.prize_random_forest_reg[i].predict(x_vector)[0]
+                    self.prize_logistic_reg[i].predict_proba(x_vector)[0,1]
                 )
             except:
                 pass
