@@ -141,11 +141,69 @@ function ajoutActors (actor) {
 };
 
 
+
 function ajoutTabActors (actors) {
     for (k=0;k<actors.length;k++) {
         ajoutActors(actors[k]);
     };
 };
+
+function ajoutDirectors (director) {
+    
+    var superior = document.getElementById("directors").getElementsByTagName("ul")[0];
+
+    var father = document.createElement('li');
+    father.className="listdirector";
+
+    
+    var paragraph = document.createElement('p');
+    paragraph.className="director";
+    paragraph.id = director.imdb_id;
+  
+
+    
+    var check = document.createElement('input');
+    check.type="checkbox";
+    check.name="director";
+    check.value="???";
+
+    var name = document.createElement('span');
+    name.className="name";
+
+    var text = director.name;
+    name.appendChild(document.createTextNode(text));
+
+    paragraph.appendChild(check);
+    paragraph.appendChild(name);
+ 
+    father.appendChild(paragraph);
+    superior.appendChild(father);
+    
+        $(check).each(function () {
+        var self = $(this),
+        label = self.next(),
+        label_text = label.text();
+        label.remove();
+        self.iCheck({
+            checkboxClass: 'icheckbox_line-red',
+            radioClass: 'iradio_line-red',
+            insert: '<div class="icheck_line-icon"></div>' + label_text
+        })
+    });
+
+    element = document.getElementById(director.imdb_id).getElementsByClassName('iCheck-helper')[0];
+    element.onclick=function(){changement();};
+};
+
+
+function ajoutTabDirectors (directors) {
+    for (k=0;k<directors.length;k++) {
+        
+        ajoutDirectors(directors[k]);
+    };
+};
+
+
 
 function ajoutGenres (genre) {
     var superior = document.getElementById("genres").getElementsByTagName("ul")[0];
@@ -156,7 +214,7 @@ function ajoutGenres (genre) {
     
     var paragraph = document.createElement('p');
     paragraph.className="genre";
-    paragraph.id = genre.id;
+    paragraph.id = "id_genre_"+genre;
     
     var check = document.createElement('input');
     check.type="checkbox";
@@ -190,7 +248,7 @@ function ajoutGenres (genre) {
         });
     });
 
-    element = document.getElementById(genre.id).getElementsByClassName('iCheck-helper')[0];
+    element = document.getElementById("id_genre_"+genre).getElementsByClassName('iCheck-helper')[0];
     element.onclick=function(){changement();};
 };
 
@@ -233,7 +291,7 @@ $(document).ready(function() {
             isSubmitted = true;
             var film = $('#id_title_original');
             var film_name = $('#id_title_original-deck').clone().children().children().remove().end().text();
-			var film_imdb_id = $('#id_title_original-deck span.div').attr('data-value');
+	    var film_imdb_id = $('#id_title_original-deck span.div').attr('data-value');
 
             var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
             ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
@@ -252,7 +310,8 @@ $(document).ready(function() {
                };
 
         function affichage(film_id) {           
-              $.post("/cinema/filmInfo/","film_id="+film_id,function(data){ajoutTabActors(data.actors);ajoutTabGenres(data.genres);});
+              $.post("/cinema/filmInfo/","film_id="+film_id,function(data){ajoutTabActors(data.actors);
+                                                                           ajoutTabGenres(data.genres);ajoutTabDirectors(data.directors);});
               };
 
               
