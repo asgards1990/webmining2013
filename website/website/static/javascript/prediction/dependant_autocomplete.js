@@ -149,7 +149,7 @@ function ajoutKeywordSuggest(keyword) {
 function keywordClick (icone) {
     $(icone).click(function(){
         if((this.className=="remove div")&&(this.id=="suggest")){
-            alert('je suis ici');
+  
             var element = this.parentNode;
             var remove = document.createElement('span');
             var newImg1 = document.createElement('img');
@@ -162,7 +162,6 @@ function keywordClick (icone) {
             newImg2.src="../pesto/static/img/prediction/AddBlue.png";
             var newName = document.createElement('span');
             var suggestion = document.getElementById("keywordSuggest");
-            alert(suggestion.id);
             
             newName.className="name";
 
@@ -180,7 +179,6 @@ function keywordClick (icone) {
             element.className="newKeyword";
             newDelete.appendChild(newImg1);
             newDelete.appendChild(newImg2);
-             alert('wsd');
             element.appendChild(newDelete);
             element.appendChild(newName);
             
@@ -195,7 +193,6 @@ function keywordClick (icone) {
             this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
                }
             else {
-                alert("123");
                 var element = this.parentNode.parentNode;
                 var remove = document.createElement('span');
                 var text = document.createTextNode(element.getElementsByClassName("name")[0].textContent);
