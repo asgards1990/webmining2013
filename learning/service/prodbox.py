@@ -522,6 +522,7 @@ class CinemaService(LearningService):
         self.reduction_actors_in_directoractormatrix = 'SC'
         self.reduction_actors_in_searchclustering = 'SC'
         self.reduction_directors_in_searchclustering = 'SC'
+        self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
@@ -691,27 +692,35 @@ class CinemaService(LearningService):
         # Find neighbors
         # 30 % time can be saved here with cache
         X = self.getWeightedSearchFeatures(criteria_binary).toarray()
-        distance_to_each_cluster = []
-        distance_to_each_cluster = np.array([np.linalg.norm(X[film_index]-cluster_center,self.p_norm) for cluster_center in cluster_centers])
-        clusters_by_distance = distance_to_each_cluster.argsort()
         nb_results_found=0
         distances=[]
         neighbors_indexes=[]
-        for cluster in clusters_by_distance:
-            if nb_results_found < nb_results +1:
-                #print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
-                indexes_of_cluster = np.where(labels == cluster)[0]
-                indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
-                if len(indexes)>0:
-                    samples = X[list(indexes),:]
-                    neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
-                    neigh.fit(samples)
-                    (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
-                    local_nb_results_found = loc_distances[0].shape[0]
-                    #print('--> Found '+str(local_nb_results_found)+' results in this cluster')
-                    nb_results_found = nb_results_found + local_nb_results_found
-                    distances.append(loc_distances[0])
-                    neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
+        if len(indexes_fitting_filters) >= self.min_nb_of_films_to_use_clusters_in_search:
+            distance_to_each_cluster = []
+            distance_to_each_cluster = np.array([np.linalg.norm(X[film_index]-cluster_center,self.p_norm) for cluster_center in cluster_centers])
+            clusters_by_distance = distance_to_each_cluster.argsort()
+            for cluster in clusters_by_distance:
+                if nb_results_found < nb_results +1:
+                    #print('--> Looking in cluster '+str(cluster)+' ('+str(nb_results_found)+' results found yet)')
+                    indexes_of_cluster = np.where(labels == cluster)[0]
+                    indexes = np.intersect1d(indexes_of_cluster, indexes_fitting_filters)
+                    if len(indexes)>0:
+                        samples = X[list(indexes),:]
+                        neigh = NearestNeighbors(n_neighbors=(nb_results-nb_results_found)+1, p=self.p_norm)
+                        neigh.fit(samples)
+                        (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
+                        local_nb_results_found = loc_distances[0].shape[0]
+                        #print('--> Found '+str(local_nb_results_found)+' results in this cluster')
+                        nb_results_found = nb_results_found + local_nb_results_found
+                        distances.append(loc_distances[0])
+                        neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
+        else: # no need to use clusters
+            samples = X[list(indexes_fitting_filters),:]
+            neigh = NearestNeighbors(n_neighbors=nb_results+1, p=self.p_norm)
+            neigh.fit(samples)
+            (loc_distances,loc_neighbors_indexes) = neigh.kneighbors(X[film_index])
+            distances.append(loc_distances[0])
+            neighbors_indexes.append(indexes[loc_neighbors_indexes[0]])
         if len(neighbors_indexes)>0:
             neighbors_indexes = np.concatenate(neighbors_indexes)
             distances = np.concatenate(distances)
@@ -1035,36 +1044,3 @@ class CinemaService(LearningService):
             x_genres_vector,])
 
         return x_vector
-
-
-# VIEUX CODE BENJAMIN
-#        self.dim_actors = 20
-#        s = raw_input('Start Spectral Clustering on actors ?')
-#        if s=='y':
-#            self.firstKM = MiniBatchKMeans(n_clusters=500, init='k-means++', n_init=1, init_size=2000, batch_size=3000, verbose=1)
-#            first_reduction = self.firstKM.fit_transform(self.actor_matrix)
-#            #first_reduction = np.exp( - first_reduction ** 2 ) # go from distance to similarity matrix
-#
-#            #self.firstSVD = TruncatedSVD(n_components = 500, n_iterations = 100)
-#            #first_reduction = self.firstSVD.fit_transform(self.actor_matrix)
-#
-#            self.actors_SC = SpectralClustering(n_clusters = self.dim_actors, eigen_solver='arpack', affinity="nearest_neighbors", n_neighbors=10)
-#            self.actor_labels = self.actors_SC.fit_predict(first_reduction.transpose())
-#            self.proj_actors = scipy.sparse.csc_matrix(self.actor_labels==0, dtype=int).transpose()
-#            for i in range(1, self.dim_actors):
-#                self.proj_actors = scipy.sparse.hstack([self.proj_actors, scipy.sparse.csc_matrix(self.actor_labels==i, dtype=int).transpose()])
-#            self.actor_reduced = first_reduction * self.proj_actors
-#            self.actor_reduced = normalize(self.actor_reduced.astype(np.double), norm='l1', axis=1)
-#            self.topic_actors = []
-#            tot0 = np.asarray( np.sum(self.actor_matrix.todense(), axis=0) )[0, :]
-#            for i in range(self.dim_actors):
-#                tot = np.sum(self.firstKM.cluster_centers_[self.firstKM.labels_[self.actor_labels == i]], axis=0)
-#                 tot = tot0 * (self.actor_labels == i)
-#                #tot = self.firstSVD.inverse_transform(self.actor_labels == i)[0,:]
-#                persons = []
-#                for person in (np.array(self.actor_names)[np.argsort(-tot)[:10]]).tolist():
-#                    try:
-#                        persons.append( Person.objects.get(imdb_id = person[:9]) )
-#                    except:
-#                        continue
-#                self.topic_actors.append((persons))
