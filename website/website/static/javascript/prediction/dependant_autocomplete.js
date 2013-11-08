@@ -183,8 +183,6 @@ function keywordClick (icone) {
             element.appendChild(newName);
             
             suggestion.appendChild(element);
-            alert('alert');
-
             keywordClick(newImg1);
             }
 
