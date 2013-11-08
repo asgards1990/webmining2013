@@ -1,3 +1,5 @@
+// -*- coding: utf-8 -*-
+
 var nbactors_min=1;
 var nbactors_max=100;
 var nbgenres_min=1;
@@ -10,12 +12,12 @@ var nbgenres=0;
 var nbkeywords=0;
 var nbdirector=0;
 
-/*$(document).ready(function() {
+$(document).ready(function() {
 	$('.item6').click(function() {
 	alert(verifSiRequete());
 		changementPredict();
 		});
-	});*/
+	});
 
 
 function verifSiRequete(){
@@ -49,7 +51,7 @@ $(document).ready(function(){
 //setTimeout(function(){unloadChargement("results");},2000)
 //$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()))})
 
-$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));changementPredict()})
+//$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));changementPredict()})
 //envoiDeLaRequete()
 //alert("hello")
 //alert(JSON.stringify(genererRequetePredict()))
@@ -58,47 +60,122 @@ $("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));ch
 //$("#title").click(function(){envoiDeLaRequetePredict()})
 
 //response= JSON.stringify(data)
-response={‘success’ : true, ‘error’ : ‘’,‘prizes_win’ :[{
-‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘prizes_nomination’ :[
-{‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘general_box_office’ : {‘rank’ : 25,‘value’ : 320, ‘neighbors’ :
-[{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘genre_box_office’ : {‘rank’ : 45,‘value’ : 51, 'neighbors’ : 
-[{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘critics’ : {‘average’ : 0.4,
-‘reviews’ : [{‘journal’ : ‘Télérama’,'grade’ : 0.60},{‘journal’ : ‘Télé 7-Jours’,‘grade’ : 0.18}]}}
-document.getElementById("prizestable").children[1].children[0].children[0].textContent=response.prizes_nomination[0].institution;
-document.getElementById("prizestable").children[1].children[0].children[1].textContent=response.prizes_nomination[0].value;
+var response = new Object();
+response = {
+    'success': true,
+    'error': '',
+    'prizes_win': [
+        {
+            'institution': 'test1',
+            'value': 0.3
+        },
+        {
+            'institution': 'test2',
+            'value': 0.2
+        }
+    ],
+    'prizes_nomination': [
+        {
+            'institution': 'test1',
+            'value': 0.4
+        }
+        ,
+        {
+            'institution': 'test2',
+            'value': 0.5
+        }
+    ],
+    'general_box_office': {
+        'rank': 24,
+        'value': 320,
+        'neighbors': [
+            {
+                'rank': 23,
+                'original_title': 'IronMan4',
+                'value': 325.5
+            },
+			{
+                'rank': 25,
+                'original_title': 'test4',
+                'value': 305.5
+            }
+        ]
+    },
+    'genre_box_office': {
+        'rank': 45,
+        'value': 51,
+        'neighbors': [
+            {
+                'rank': 44,
+                'original_title': 'IronMan4',
+                'value': 325.5
+            },
+			{
+                'rank': 46,
+                'original_title': '???',
+                'value': 0.5
+            }
+        ]
+    },
+    'critics': {
+        'average': 0.4
+    },
+    'reviews': [
+        {
+            'journal': 'Télérama',
+            'grade': 0.60
+        },
+        {
+            'journal': 'Télé7-Jours',
+            'grade': 0.18
+        }
+    ]
+};
 
-// affichage des nominations dans le tableau des Prizes
-document.getElementById("prizestable").children[1].children[0].children[0].textContent=response.prizes_win[0].institution;
-document.getElementById("prizestable").children[1].children[0].children[1].textContent=response.prizes_win[0].value;
-
-// affichage des victoires dans le tableau des Prizes
-document.getElementById("prizestable").children[1].children[0].children[2].textContent="% Festival de Cannes %";
-document.getElementById("prizestable").children[1].children[0].children[3].textContent="% 10 %";
-
+var nominationValue = 0;
 
 //affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 à 9)
-// document.getElementById("prizestable").children[1].children[i].children[0].textContent="% Festival de Cannes %";
-// document.getElementById("prizestable").children[1].children[i].children[1].textContent="% 30 %";
+for (k=0;k<2;k++) {
+    var nominationValue = response.prizes_nomination[k].value*100+"%";
+    document.getElementById("prizestable").children[1].children[k].children[0].textContent=response.prizes_nomination[k].institution;
+    document.getElementById("prizestable").children[1].children[k].children[1].textContent=nominationValue;
+   };
+
+// affichage des victoires dans le tableau des Prizes
+for (k=0;k<2;k++) {  
+    var nominationValue = response.prizes_win[k].value*100+"%";
+    document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
+    document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
+   };
+
+var lengthOfReviews = response.reviews.length;
+for (k=0;k<lengthOfReviews;k++) {   
+	document.getElementById("reviewstable").children[1].children[k].children[0].textContent=response.reviews[k].journal;
+	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=response.reviews[k].grade;
+	};
+	
 
 //affichage des résultats dans le tableau des Box-Office General
-document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent="% 23 %";
-document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent="% Iron Man 3 %";
-document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="% $325.5 M %";
-
-//affichage des résultats dans le tableau des Box-Office General (boucle JSON)
-//document.getElementById("bogeneraltable").children[1].children[i].children[0].textContent="% 23 %";
-//document.getElementById("bogeneraltable").children[1].children[i].children[1].textContent="% Iron Man 3 %";
-//document.getElementById("bogeneraltable").children[1].children[i].children[2].textContent="% $325.5 M %";
-
+	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.rank;
+	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent="Your movie!";
+	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+response.general_box_office.value+"M";
+	document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.neighbors[0].rank;
+	document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent=response.general_box_office.neighbors[0].original_title;
+	document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+response.general_box_office.neighbors[0].value+"M";
+	document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
+	document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].original_title;
+	document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+response.general_box_office.neighbors[1].value+"M";
+	
 //affichage des résultats dans le tableau des Box-Office Genre
-document.getElementById("bogenretable").children[1].children[0].children[0].textContent="% 23bis %";
-document.getElementById("bogenretable").children[1].children[0].children[1].textContent="% Iron Man 4 %";
-document.getElementById("bogenretable").children[1].children[0].children[2].textContent="% $325.6 M %";
-
-//affichage des résultats dans le tableau des Box-Office Genre (boucle JSON)
-document.getElementById("bogenretable").children[1].children[0].children[0].textContent="% 23bis %";
-document.getElementById("bogenretable").children[1].children[0].children[1].textContent="% Iron Man 4 %";
-document.getElementById("bogenretable").children[1].children[0].children[2].textContent="% $325.6 M %";
+	document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.rank;
+	document.getElementById("bogenretable").children[1].children[1].children[1].textContent="Your movie!";
+	document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+response.genre_box_office.value+"M";
+	document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.neighbors[0].rank;
+	document.getElementById("bogenretable").children[1].children[0].children[1].textContent=response.genre_box_office.neighbors[0].original_title;
+	document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+response.genre_box_office.neighbors[0].value+"M";
+	document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
+	document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].original_title;
+	document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+response.genre_box_office.neighbors[1].value+"M";
 
 })
 
