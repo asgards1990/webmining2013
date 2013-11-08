@@ -271,21 +271,20 @@ canvas.cover {
 /* Zone de resultat */
 
 div#carreCentral {
-	border-radius:0.5em;
+	border-radius:10em;
 	display: table;
 	position:absolute;
 	width: 6em;
 	height: 6em;
-	background-color: #5697DB;
-	border: 1px solid Black;
 	z-index:10;
 	text-align : center ;
 	cursor: pointer;
+	background: #Ea7a7d;
 }
 
 div#carreCentral:hover {
-	background-color: #1277E0;
-}
+	background: #Ea5255;
+	}
 
 p#conteneurTexteCentral{
 	display:table-cell;
@@ -298,8 +297,8 @@ p#conteneurTexteCentral{
 div .barre_lien {
 	position:absolute;
 	height: 1px;
-	background-color: #5697DB;
-	border: 1px solid #5697DB;
+	background-color: grey;
+	border: 1px solid grey;
 	z-index:1;
 	display:none;
 }
