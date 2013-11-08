@@ -5,7 +5,7 @@ $(document).ready(function() {
     var s = d3.scale.linear().range([0, 100]).domain([10,50]);
     console.log(d3.zip(jWord, jCount));
 
-    d3.layout.cloud().size([420, 353])
+    d3.layout.cloud().size([420, 340])
         /* .words([
          "Hello", "world", "normallyvrgtrbtnthn", "your", "want", "more", "words",
          "than", "this"].map(function (d) {
@@ -28,7 +28,7 @@ $(document).ready(function() {
 	function draw(words) {
 	    d3.select("#bagofwords").append("svg")
 	            .attr("width", 420)
-	            .attr("height", 353)
+	            .attr("height", 340)
 	            .append("g")
 	            .attr("transform", "translate(210,177)")
 	            .selectAll("text")
