@@ -141,9 +141,13 @@ response = {
     ]
 
 };
+
+Math.floor((Math.random()*5)+1);
+   
 	var fill = d3.scale.category20();
     var jWord = [] ;
     var jCount = [];
+	var jColor = ["#d51c21","#4d4d4d","#ea5255","#727a86","#a31512","#505864"];
 	var length = response.bag_of_words.length;
 	for (k=0;k<length;k++) {
 		jWord[k] = [response.bag_of_words[k].word];
@@ -187,7 +191,12 @@ response = {
 	            })
 	            .style("font-family", "Impact")
 	            .style("fill", function (d, i) {
-	                return fill(i);
+			
+				var value = Math.floor((Math.random()*4)+1);
+				
+	                return jColor[value];
+					
+					//return fill(i);
 	            })
 	            .attr("text-anchor", "middle")
 	            .attr("transform", function (d) {

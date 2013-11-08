@@ -32,6 +32,7 @@ for (k=0;k<8;k++) {
 // affichage des victoires dans le tableau des Prizes
 for (k=0;k<8;k++) {  
     var nominationValue = Math.round(response.prizes_win[k].value*10000)/100+"%";
+	alert(nominationValue);
     document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
     document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
    };
