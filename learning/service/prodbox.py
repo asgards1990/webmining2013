@@ -46,7 +46,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms()
+        self.films = flt.getFilms(20)
         if not self.is_loaded('films'):
             self.fromPktoIndex, self.fromIndextoPk = hashIndexes(self.films.iterator())
             self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk))
@@ -937,6 +937,30 @@ class CinemaService(LearningService):
         
         predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
 
+        general_bo = self.box_office_matrix.toarray().ravel()
+        sorted_general_bo = np.sort(general_bo)
+        sorted_general_bo_indices = np.argsort(general_bo)
+        general_invrank = np.searchsorted(sorted_general_bo, predicted_box_office)
+        general_rank = self.films.count() - general_invrank
+
+        general_neighbors = []
+        
+        try:
+            general_neighbors.append({
+                'film' : Film.objects.get(
+                    pk = self.fromIndextoPk[sorted_general_bo_indices[general_invrank - 1]]),
+                'rank' : general_rank + 1})
+        except:
+            pass
+        
+        try:
+            general_neighbors.append({
+                'film' : Film.objects.get(
+                    pk = self.fromIndextoPk[sorted_general_bo_indices[general_invrank]]),
+                'rank' : general_rank - 1})
+        except:
+            pass
+        
         journals = []
         predicted_grades = []
         for i in range(len(self.reviews_names)):
@@ -967,9 +991,9 @@ class CinemaService(LearningService):
                                 'value' : predicted_probabilities[i]} 
                                for i in range(len(institutions))],
                    'general_box_office' :
-                        {'rank' : 0, # TODO
+                        {'rank' : general_rank,
                          'value' : predicted_box_office,
-                         'neighbors' : [] # TODO
+                         'neighbors' : general_neighbors
                          },
                     'genre_box_office' :
                         {'rank' : 0, # TODO
