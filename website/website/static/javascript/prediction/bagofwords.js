@@ -182,7 +182,7 @@ Math.floor((Math.random()*5)+1);
 	            .attr("width", 420)
 	            .attr("height", 340)
 	            .append("g")
-	            .attr("transform", "translate(210,177)")
+	            .attr("transform", "translate(210,170)")
 	            .selectAll("text")
 	            .data(words)
 	            .enter().append("text")
