@@ -26,7 +26,7 @@ class Handler(tornado.web.RequestHandler):
                     elif self.method=='suggest_keywords':
                         query_results = self.app_learn.suggest_keywords(args)
                     else:
-                        raise service.objects.ParsingError('')
+                        raise service.objects.ParsingError('Undefined method.')
                     query_results['success'] = True
                     query_results['error'] = ''
                     self.finish(tornado.escape.json_encode(query_results))
