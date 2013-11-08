@@ -4,7 +4,8 @@ import re
 
 app = pb.CinemaService()
 
-args = {'actors' : [app.actor_names[0], app.actor_names[50],],
+args = {
+        'actors' : [app.actor_names[0], app.actor_names[50],],
         'genres' : ['Action'],
         'directors': [app.director_names[0],],
         'keywords': [app.keyword_names[0], app.keyword_names[1], app.keyword_names[2],],

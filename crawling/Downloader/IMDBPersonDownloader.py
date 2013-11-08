@@ -85,7 +85,7 @@ class IMDBPersonDownloader:
         while self.failed_requests < self.global_limit:
             imdb_ids = self.connector.getNotDownloaded()
             try:
-                imdb_id = random.choice(imdb_ids)
+                imdb_id = imdb_ids[0] #random.choice(imdb_ids)
             except IndexError as e:
                 self.logger.debug("Nothing to download")
                 time.sleep(60)
