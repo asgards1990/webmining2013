@@ -1,4 +1,4 @@
-var nbactors_min=1;
+﻿var nbactors_min=1;
 var nbactors_max=100;
 var nbgenres_min=1;
 var nbgenres_max=2;
@@ -10,12 +10,12 @@ var nbgenres=0;
 var nbkeywords=0;
 var nbdirector=0;
 
-/*$(document).ready(function() {
+$(document).ready(function() {
 	$('.item6').click(function() {
 	alert(verifSiRequete());
 		changementPredict();
 		});
-	});*/
+	});
 
 
 function verifSiRequete(){
@@ -58,12 +58,15 @@ $("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));ch
 //$("#title").click(function(){envoiDeLaRequetePredict()})
 
 //response= JSON.stringify(data)
-response={‘success’ : true, ‘error’ : ‘’,‘prizes_win’ :[{
-‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘prizes_nomination’ :[
-{‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘general_box_office’ : {‘rank’ : 25,‘value’ : 320, ‘neighbors’ :
+var response = new Object();
+response = JSON.stringify({‘success’ : true, ‘error’ : ‘’,‘prizes_win’ :[{
+‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘prizes_nomination’ :[{
+‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘general_box_office’ : {‘rank’ : 25,‘value’ : 320, ‘neighbors’ :
 [{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘genre_box_office’ : {‘rank’ : 45,‘value’ : 51, 'neighbors’ : 
-[{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘critics’ : {‘average’ : 0.4,
-‘reviews’ : [{‘journal’ : ‘Télérama’,'grade’ : 0.60},{‘journal’ : ‘Télé 7-Jours’,‘grade’ : 0.18}]}}
+[{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘critics’ : {‘average’ : 0.4},
+‘reviews’ : [{‘journal’ : ‘Télérama’,'grade’ : 0.60},{‘journal’ : ‘Télé 7-Jours’,‘grade’ : 0.18}]});
+
+              
 document.getElementById("prizestable").children[1].children[0].children[0].textContent=response.prizes_nomination[0].institution;
 document.getElementById("prizestable").children[1].children[0].children[1].textContent=response.prizes_nomination[0].value;
 
