@@ -46,7 +46,7 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms(20)
+        self.films = flt.getFilms()
         if not self.is_loaded('films'):
             self.fromPktoIndex, self.fromIndextoPk = hashIndexes(self.films.iterator())
             self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk))
@@ -336,7 +336,7 @@ class CinemaService(LearningService):
                     self.proj_actors_BOC = scipy.sparse.hstack([self.proj_actors_BOC,  scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1) )])
                 else:
                     self.proj_actors_BOC = scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1))
-            self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_SC
+            self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_BOC
             self.actor_reduced_BOC = normalize(self.actor_reduced_BOC.astype(np.double), norm='l1', axis=1)
             # Save object in cache
             self.create_cobject('actors_reduced', (self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC))
