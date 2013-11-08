@@ -120,10 +120,10 @@ class LearningService(object):
                 co.save()
 
     def dumpJoblibObject(self,obj,filename):
-        joblib.dump(obj,JOBLIB_DIRECTORY + filename + '.pkl')
+        joblib.dump(obj,JOBLIB_DIRECTORY + filename + '.pkl', compress=9)
 
     def loadJoblibObject(self,filename):
-        joblib.load(JOBLIB_DIRECTORY + filename + '.pkl')
+        return joblib.load(JOBLIB_DIRECTORY + filename + '.pkl')
 
     def quit(self):
         print("Learning service initialized at "+ self.init_time.isoformat()  +" is closing : objects are being cached.")

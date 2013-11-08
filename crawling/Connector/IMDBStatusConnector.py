@@ -374,7 +374,7 @@ class IMDBPersonStatusConnector:
         if not self.id_exists(imdb_id):
             person_status = IMDBPersonStatus(imdb_id=imdb_id,
                                              downloaded=0, extracted=0,
-                                             priority=1000000, name=0, image=0)
+                                             priority=1000000, name=1, image=0)
             try:
                 person_status.save()
             except Exception as e:

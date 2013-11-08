@@ -1,8 +1,8 @@
 $(document).ready(function() {
 	var fill = d3.scale.category20();
     var jWord = ["abc","def","ghi"] ;
-    var jCount = [80, 50, 30];
-    var s = d3.scale.linear().range([0, 100]).domain([10,50]);
+    var jCount = [110, 20, 30];
+    var s = d3.scale.linear().domain([d3.min(jCount),d3.max(jCount)]).range([20, 60]);
     console.log(d3.zip(jWord, jCount));
 
     d3.layout.cloud().size([420, 340])
@@ -12,7 +12,7 @@ $(document).ready(function() {
          return {text: d, size: 10 + Math.random() * 40};
          }))*/
         .words(d3.zip(jWord, jCount).map(function (d) {
-            return {text: d[0], size: d[1]};
+            return {text: d[0], size: s(d[1])};
         }))
         .padding(5)
                 .rotate(function () {
