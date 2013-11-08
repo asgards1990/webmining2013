@@ -1,4 +1,6 @@
-﻿var nbactors_min=1;
+//# -*- coding: utf-8 -*-
+
+var nbactors_min=1;
 var nbactors_max=100;
 var nbgenres_min=1;
 var nbgenres_max=2;
@@ -49,7 +51,7 @@ $(document).ready(function(){
 //setTimeout(function(){unloadChargement("results");},2000)
 //$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()))})
 
-$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));changementPredict()})
+//$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));changementPredict()})
 //envoiDeLaRequete()
 //alert("hello")
 //alert(JSON.stringify(genererRequetePredict()))
@@ -59,16 +61,62 @@ $("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));ch
 
 //response= JSON.stringify(data)
 var response = new Object();
-response = JSON.stringify({‘success’ : true, ‘error’ : ‘’,‘prizes_win’ :[{
-‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘prizes_nomination’ :[{
-‘institution’ : ‘Festival du film de Berlin’,‘value’ : 0.3}],‘general_box_office’ : {‘rank’ : 25,‘value’ : 320, ‘neighbors’ :
-[{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘genre_box_office’ : {‘rank’ : 45,‘value’ : 51, 'neighbors’ : 
-[{‘rank’ : 23,‘original_title’ : ‘Iron Man 4’,‘value’ : 325.5}]}, ‘critics’ : {‘average’ : 0.4},
-‘reviews’ : [{‘journal’ : ‘Télérama’,'grade’ : 0.60},{‘journal’ : ‘Télé 7-Jours’,‘grade’ : 0.18}]});
+response = {
+    'success': true,
+    'error': '',
+    'prizes_win': [
+        {
+            'institution': 'FestivaldufilmdeBerlin',
+            'value': 0.3
+        }
+    ],
+    'prizes_nomination': [
+        {
+            'institution': 'FestivaldufilmdeBerlin',
+            'value': 0.3
+        }
+    ],
+    'general_box_office': {
+        'rank': 25,
+        'value': 320,
+        'neighbors': [
+            {
+                'rank': 23,
+                'original_title': 'IronMan4',
+                'value': 325.5
+            }
+        ]
+    },
+    'genre_box_office': {
+        'rank': 45,
+        'value': 51,
+        'neighbors': [
+            {
+                'rank': 23,
+                'original_title': 'IronMan4',
+                'value': 325.5
+            }
+        ]
+    },
+    'critics': {
+        'average': 0.4
+    },
+    'reviews': [
+        {
+            'journal': 'Télérama',
+            'grade': 0.60
+        },
+        {
+            'journal': 'Télé7-Jours',
+            'grade': 0.18
+        }
+    ]
+};
 
-              
+var nomination0value = response.prizes_nomination[0].value*100+"%";
+alert(nomination0value);
 document.getElementById("prizestable").children[1].children[0].children[0].textContent=response.prizes_nomination[0].institution;
-document.getElementById("prizestable").children[1].children[0].children[1].textContent=response.prizes_nomination[0].value;
+document.getElementById("prizestable").children[1].children[0].children[1].textContent=nomination0value;
 
 // affichage des nominations dans le tableau des Prizes
 document.getElementById("prizestable").children[1].children[0].children[0].textContent=response.prizes_win[0].institution;
