@@ -243,8 +243,7 @@ overflow:auto;
 
 canvas.cover {
 	cursor:pointer;
-	-webkit-box-reflect: below 20px;
-	-webkit-box-reflect: above -40px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(50%, transparent), to(white));
+	-webkit-box-reflect: above 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(50%, transparent), to(white));
 }
 
 /* Zone de resultat */
@@ -270,7 +269,7 @@ p#conteneurTexteCentral{
 	display:table-cell;
 	text-align: center;
 	vertical-align: middle;
-	font-size: 1.8em;
+	font-size: 1.5em;
 	color:#fff;
 }
 

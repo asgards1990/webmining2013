@@ -49,6 +49,7 @@ function chargementBulleInfo(nomDuCadre,idDuFilm){
 		conteneurActeurs.appendChild(texteActeurs)
 		texteActeurs.textContent=stringActors;
 		var texteSynopsis=document.createTextNode("Plot : " + data.plot);
+		var conteneurSynopsis=document.createElement('p');
 		conteneurSynopsis.appendChild(texteSynopsis)
 		$("#bulleInfoExt").fadeIn(1000);
 	}
