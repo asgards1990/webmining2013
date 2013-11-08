@@ -1028,8 +1028,56 @@ class CinemaService(LearningService):
         query_results['general_box_office'] = general_box_office
         
         # Fill query_results['genre_box_office']
+       
+        if user_input.has_key('genres'):
+            if user_input['genres'].__class__ == list:
+                bo_genre = []
+                pk_genre = []
+                for i in range(films.count()):
+                    add = False
+                    for genre in args['genres']:
+                        if self.genres_matrix[i, self.genres_names.index(genre)] == 1:
+                            add = True
+                    if add:
+                        bo_genre.append(bo[i])
+                        pk_genre.append(self.fromIndextoPk[i])
+                
+                sorted_bo_genre = np.sort(bo_genre)
+                sorted_bo_indices_genre = np.argsort(bo_genre)
+                invrank_genre = np.searchsorted(sorted_bo_genre, results['box_office'])
+                rank_genre = self.films.count() - invrank_genre
+
+                neighbors_genre = []
         
+                try:
+                    film = Film.objects.get(
+                        pk = pk_genre[sorted_bo_indices_genre[invrank_genre - 1]])
+                    neighbors_genre.append({
+                        'original_title': film.original_title,
+                        'rank' : rank_genre + 1,
+                        'value' : film.box_office})
+                except:
+                    pass
         
+                try:
+                    film = Film.objects.get(
+                        pk = pk_genre[sorted_bo_indices_genre[invrank_genre]])
+                    neighbors_genre.append({
+                        'original_title': film.original_title,
+                        'rank' : rank_genre - 1,
+                        'value' : film.box_office})
+                except:
+                    pass
+        
+                genre_box_office = {'rank': rank_genre,
+                                    'value': results['box_office'],
+                                    'neighbors': neighbors_genre
+                                   }
+        
+                query_results['genre_box_office'] = genre_box_office
+               
+           
+
         #neighbors_genre = []
         #for neighbor in results['genre_box_office']['neighbors']:
         #    neighbors_genre.append({'rank':neighbor['rank'],
