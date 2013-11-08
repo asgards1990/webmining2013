@@ -123,3 +123,8 @@
 #reviews .moreinfo a{
 color: beige;
 }
+
+#bagofwords svg {
+	z-index: 10;
+	position: relative;
+}
