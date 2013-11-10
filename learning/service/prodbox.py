@@ -147,7 +147,7 @@ class CinemaService(LearningService):
             self.create_cobject('genres', (self.genres_names, self.genres_matrix))
         else:
             self.genres_names, self.genres_matrix = self.get_cobject('genres').get_content()
-        self.nb_genres = len(self.genres_names)
+        self.nb_genres = self.genres_matrix.shape[1]
 
     def loadPrizes(self):
         if not self.is_loaded('prizes'):
@@ -159,7 +159,7 @@ class CinemaService(LearningService):
             self.create_cobject('prizes', (self.prizes_names, self.prizes_matrix))
         else:
             self.prizes_names, self.prizes_matrix = self.get_cobject('prizes').get_content()
-        self.nb_prizes = len(self.prizes_names)
+        self.nb_prizes = self.prizes_matrix.shape[1]
 
     def loadCountries(self):
         if not self.is_loaded('countries'):
@@ -214,7 +214,7 @@ class CinemaService(LearningService):
             self.create_cobject('reviews', (self.reviews_names, self.reviews_matrix))
         else:
             self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
-        self.nb_journals = len(self.reviews_names)
+        self.nb_journals = self.reviews_matrix.shape[1]
 
     def loadReviewsContent(self):
         # TODO : finish implementation
@@ -357,7 +357,7 @@ class CinemaService(LearningService):
             self.create_cobject('writers', (self.writer_matrix, self.writer_names, self.writer_keyword_matrix))
         else:
             self.writer_matrix, self.writer_names, self.writer_keyword_matrix = self.get_cobject('writers').get_content()
-        self.nb_writers = len(self.writer_names)
+        self.nb_writers = self.writer_matrix.shape[1]
     
     def loadWritersReduced(self):
         if not self.is_loaded('writers_reduced'):
@@ -404,7 +404,7 @@ class CinemaService(LearningService):
             self.create_cobject('directors', (self.director_matrix, self.director_names, self.director_actor_matrix))
         else:
             self.director_matrix, self.director_names, self.director_actor_matrix = self.get_cobject('directors').get_content()
-        self.nb_directors = len(self.director_names)
+        self.nb_directors = self.director_matrix.shape[1]
     
     def loadDirectorsReduced(self):
         if not self.is_loaded('directors_reduced'):
@@ -454,7 +454,7 @@ class CinemaService(LearningService):
                 #    cluster_center = np.mean(X.toarray()[SC.labels_ == i,:], axis=0)
                 #    cluster_centers.append(cluster_center)
                 #self.search_clustering_SC[k] = {'labels' : SC.labels_, 'cluster_centers' : cluster_centers}
-                self.search_clustering_SC = None #TODO : remove this and uncomment
+                self.search_clustering_SC = None #TODO : remove this and uncomment above
             # Save object in cache
             self.create_cobject('search_clustering',(self.search_clustering_SC, self.search_clustering_KM))
         else:
@@ -509,9 +509,7 @@ class CinemaService(LearningService):
             director_reduced=self.director_reduced_SC
         if self.reduction_directors_in_searchclustering == 'KM':
             director_reduced=self.director_reduced_KM
-        #print actor_reduced.toarray()[0:10,:]
         X_people = scipy.sparse.hstack([normalize(actor_reduced.astype(np.double),norm='l1',axis=1),normalize(director_reduced.astype(np.double),norm='l1',axis=1)])
-        #TODO:play on clustering types
         X_budget = self.budget_matrix
         X_review = self.reviews_matrix
         X_genre =  self.genres_matrix
@@ -530,7 +528,6 @@ class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
         # TODO: also try log of budget for testing search requests
-        # TODO manage projectors of each clustering
         # Define parameters # TODO : optimize all these parameters
         self.dim_writers = 20
         self.dim_directors = 10
@@ -874,7 +871,7 @@ class CinemaService(LearningService):
         except IOError:
             print s+' object not found. Creating it...'
             self.review_gradient_boosting_reg = []
-            for i in range(self.nb_journals):
+            for i in range(self.nb_journals): 
                 self.review_gradient_boosting_reg.append(GradientBoostingRegressor())
                 self.review_gradient_boosting_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
             self.dumpJoblibObject(self.review_gradient_boosting_reg, s)
@@ -886,7 +883,7 @@ class CinemaService(LearningService):
         except IOError:
             print s+' object not found. Creating it...'
             self.prize_random_forest_reg = []
-            for i in range(self.nb_journals):
+            for i in range(self.nb_prizes):
                 self.prize_random_forest_reg.append(RandomForestRegressor())
                 self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_random_forest_reg, s)
@@ -898,7 +895,7 @@ class CinemaService(LearningService):
         except IOError:
             print s+' object not found. Creating it...'
             self.prize_logistic_reg = []
-            for i in range(len(self.prizes_names)): #TODO : stocker un self.nb_institutions pour eviter le len()
+            for i in range(self.nb_prizes): 
                 self.prize_logistic_reg.append(LogisticRegression())
                 self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_logistic_reg, s)
@@ -944,7 +941,7 @@ class CinemaService(LearningService):
         institutions = []
         wins = []
         predicted_probabilities = []
-        for i in range(len(self.prizes_names)):
+        for i in range(self.nb_prizes):
             try:
                 institutions.append(self.prizes_names[i].split('_')[0])
                 if self.prizes_names[i].split('_')[1] == 'True':
@@ -966,7 +963,7 @@ class CinemaService(LearningService):
                    'box_office' : predicted_box_office,
                    'reviews' : [{'journal' : journals[i],
                                  'grade' : predicted_grades[i]} 
-                                for i in range(len(journals))],
+                                for i in range(self.nb_journals)],
                    'bag_of_words' : [] # TODO
                     }                   
 
@@ -987,12 +984,13 @@ class CinemaService(LearningService):
         query_results['prizes_nomination'] = query_results['prizes_nomination'][:10]
 
 
-        # Fill query_results['general_box_office']
+        # Fill query_results['general_box_office'] #TODO careful if no upper neighbor or no lower neighbor
         
         bo = self.box_office_matrix.toarray().ravel()
         sorted_bo = np.sort(bo)
         sorted_bo_indices = np.argsort(bo)
         invrank = np.searchsorted(sorted_bo, results['box_office'])
+
         rank = self.nb_films - invrank
 
         neighbors = []
@@ -1034,6 +1032,7 @@ class CinemaService(LearningService):
                 sorted_bo_genre = np.sort(bo_genre)
                 sorted_bo_indices_genre = np.argsort(bo_genre)
                 invrank_genre = np.searchsorted(sorted_bo_genre, results['box_office'])
+
                 rank_genre = self.nb_films - invrank_genre
 
                 neighbors_genre = []
@@ -1090,7 +1089,7 @@ class CinemaService(LearningService):
         return query_results
 
     def vectorize_predict_user_input(self, user_input):
-        x_actor_vector = np.zeros([1,len(self.actor_names)])
+        x_actor_vector = np.zeros([1,self.nb_actors])
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
                 for actor_id in user_input['actors']:
