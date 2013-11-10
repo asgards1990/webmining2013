@@ -47,14 +47,6 @@ class CinemaService(LearningService):
     
     def loadFilms(self):
         self.films = flt.getFilms()
-        #for film in self.films:
-        #    print film.original_title
-        #    for review in Review.objects.filter(film=film):
-        #        print review
-        #        print review.journal
-        #        if np.isnan(review.grade) or not np.isfinite(review.grade):
-        #            print 'Unusual grade for film '+film.original_title
-        #            print 'Grade from '+str(review.journal.name)+' : '+str(review.grade)
         if not self.is_loaded('films'):
             self.fromPktoIndex, self.fromIndextoPk, self.film_names = hashIndexes(self.films.iterator())
             self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk, self.film_names))
@@ -526,15 +518,6 @@ class CinemaService(LearningService):
         X_review = X_review # because grades should be in [0,1]
         X_genre = normalize(X_genre.astype(np.double),norm='l1',axis=1) #normalize
         X_people = X_people/2 #normalize
-        #check if features contain NaN
-        #if np.sum(np.isnan(X_review.toarray())) >0:
-        #    print 'X_review contains nan'
-        #if np.sum(np.isfinite(X_review.toarray())) != X_review.toarray().shape[0]*X_review.toarray().shape[1]:
-        #    print 'X_review contains infinity'
-        #if np.sum(np.isnan(X_budget.toarray())) >0:
-        #    print 'X_budget contains nan'        
-        #if np.sum(np.isfinite(X_budget.toarray())) != X_budget.toarray().shape[0]*X_budget.toarray().shape[1]:
-        #    print 'X_budget contains infinity'
         people_weight = self.high_weight if (k>>0)%2 else self.low_weight
         budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight
@@ -1008,22 +991,33 @@ class CinemaService(LearningService):
         sorted_bo_indices = np.argsort(bo)
         invrank = np.searchsorted(sorted_bo, results['box_office'])
 
-        rank = self.nb_films - invrank
+        rank = (self.nb_films+1) - invrank
 
         neighbors = []
         
-        if invrank>0:
+        if rank<self.nb_films+1:
             k = sorted_bo_indices[invrank - 1]
             neighbors.append({
                 'english_title': self.film_names[k],
                 'rank' : rank + 1,
                 'value' : bo[k]})
-                
-        k = sorted_bo_indices[invrank]
-        neighbors.append({
-                'english_title': self.film_names[k],
-                'rank' : rank - 1,
-                'value' : bo[k]})
+        else: #our film is last
+            neighbors.append({
+                'english_title': '-',
+                'rank' : rank + 1,
+                'value' : 0})          
+        
+        if rank>1:
+            k = sorted_bo_indices[invrank]
+            neighbors.append({
+                    'english_title': self.film_names[k],
+                    'rank' : rank - 1,
+                    'value' : bo[k]})
+        else: # our film is first
+            neighbors.append({
+                    'english_title': '-',
+                    'rank' : rank - 1,
+                    'value' : 0})
 
         neighbors = sorted(neighbors, key=lambda k: k['rank'])
         general_box_office = {'rank': rank,
@@ -1050,22 +1044,33 @@ class CinemaService(LearningService):
                 sorted_bo_indices_genre = np.argsort(bo_genre)
                 invrank_genre = np.searchsorted(sorted_bo_genre, results['box_office'])
 
-                rank_genre = self.nb_films - invrank_genre
+                rank_genre = (self.nb_films +1 )- invrank_genre
 
                 neighbors_genre = []
         
-                if invrank_genre>0:
+                if rank_genre < self.nb_films+1:
                     k = sorted_bo_indices_genre[invrank_genre - 1]
                     neighbors_genre.append({
                         'english_title': self.film_names[k],
                         'rank' : rank_genre + 1,
                         'value' : bo[k]})
+                else: #our film is last
+                    neighbors_genre.append({
+                        'english_title': '',
+                        'rank' : rank_genre + 1,
+                        'value' : 0})
 
-                k = sorted_bo_indices_genre[invrank_genre]
-                neighbors_genre.append({
-                        'english_title': self.film_names[k],
+                if rank_genre>1
+                    k = sorted_bo_indices_genre[invrank_genre]
+                    neighbors_genre.append({
+                            'english_title': self.film_names[k],
+                            'rank' : rank_genre - 1,
+                            'value' : bo[k]})
+                else:
+                    neighbors_genre.append({
+                        'english_title': '',
                         'rank' : rank_genre - 1,
-                        'value' : bo[k]})
+                        'value' : 0})
                
                 neighbors_genre = sorted(neighbors_genre, key=lambda k: k['rank'])
                 genre_box_office = {'rank': rank_genre,
