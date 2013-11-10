@@ -834,6 +834,7 @@ class CinemaService(LearningService):
         s = 'log_box_office_random_forest_reg'
         try:
             self.log_box_office_random_forest_reg = self.loadJoblibObject(s)
+            print s+' object has been loaded'
         except IOError as e:
             print "Error {}".format(e)
             print s+' object not found. Creating it...'
@@ -845,6 +846,7 @@ class CinemaService(LearningService):
         s = 'log_box_office_gradient_boosting_reg'
         try:
             self.log_box_office_gradient_boosting_reg = self.loadJoblibObject(s)
+            print s+' object has been loaded'
         except IOError as e:
             print "Error {}".format(e)
             print s+' object not found. Creating it...'
@@ -856,6 +858,7 @@ class CinemaService(LearningService):
         s = 'review_random_forest_reg'
         try:
             self.review_random_forest_reg = self.loadJoblibObject(s)
+            print s+' object has been loaded'
         except IOError:
             print s+' object not found. Creating it...'
             self.review_random_forest_reg = []
@@ -868,6 +871,7 @@ class CinemaService(LearningService):
         s = 'review_gradient_boosting_reg'
         try:
             self.review_gradient_boosting_reg = self.loadJoblibObject(s)
+            print s+' object has been loaded'
         except IOError:
             print s+' object not found. Creating it...'
             self.review_gradient_boosting_reg = []
@@ -880,6 +884,7 @@ class CinemaService(LearningService):
         s = 'prize_random_forest_reg'
         try:
             self.prize_random_forest_reg = self.loadJoblibObject(s)
+            print s+' object has been loaded'
         except IOError:
             print s+' object not found. Creating it...'
             self.prize_random_forest_reg = []
@@ -892,6 +897,7 @@ class CinemaService(LearningService):
         s = 'prize_logistic_reg'
         try:
             self.prize_logistic_reg = self.loadJoblibObject(s)
+            print s+' object has been loaded'
         except IOError:
             print s+' object not found. Creating it...'
             self.prize_logistic_reg = []
@@ -925,14 +931,18 @@ class CinemaService(LearningService):
         '''
         
         # Box office
-        predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
+        try:
+            predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
+        except:
+            pass
 
+       
         # Reviews
         journals = []
         predicted_grades = []
         for i in range(self.nb_journals):
             try:
-                journals.append(reviews_names[i])
+                journals.append(self.reviews_names[i])
                 predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
             except:
                 pass
@@ -984,7 +994,7 @@ class CinemaService(LearningService):
         query_results['prizes_nomination'] = query_results['prizes_nomination'][:10]
 
 
-        # Fill query_results['general_box_office'] #TODO careful if no upper neighbor or no lower neighbor
+        # Fill query_results['general_box_office'] 
         
         bo = self.box_office_matrix.toarray().ravel()
         sorted_bo = np.sort(bo)
@@ -997,33 +1007,28 @@ class CinemaService(LearningService):
         
         if rank<self.nb_films+1:
             k = sorted_bo_indices[invrank - 1]
-            neighbors.append({
-                'english_title': self.film_names[k],
-                'rank' : rank + 1,
-                'value' : bo[k]})
+            neighbors.append({'english_title': self.film_names[k],
+                              'rank' : rank + 1,
+                              'value' : bo[k]})
         else: #our film is last
-            neighbors.append({
-                'english_title': '-',
-                'rank' : rank + 1,
-                'value' : 0})          
+            neighbors.append({'english_title': '-',
+                              'rank' : rank + 1,
+                              'value' : 0})          
         
         if rank>1:
             k = sorted_bo_indices[invrank]
-            neighbors.append({
-                    'english_title': self.film_names[k],
-                    'rank' : rank - 1,
-                    'value' : bo[k]})
+            neighbors.append({'english_title': self.film_names[k],
+                              'rank' : rank - 1,
+                              'value' : bo[k]})
         else: # our film is first
-            neighbors.append({
-                    'english_title': '-',
-                    'rank' : rank - 1,
-                    'value' : 0})
+            neighbors.append({'english_title': '-',
+                              'rank' : rank - 1,
+                              'value' : 0})
 
         neighbors = sorted(neighbors, key=lambda k: k['rank'])
         general_box_office = {'rank': rank,
                               'value': results['box_office'],
-                              'neighbors': neighbors
-                              }
+                              'neighbors': neighbors}
         
         query_results['general_box_office'] = general_box_office
         
@@ -1062,21 +1067,18 @@ class CinemaService(LearningService):
 
                 if rank_genre>1:
                     k = sorted_bo_indices_genre[invrank_genre]
-                    neighbors_genre.append({
-                            'english_title': self.film_names[k],
-                            'rank' : rank_genre - 1,
-                            'value' : bo[k]})
+                    neighbors_genre.append({'english_title': self.film_names[k],
+                                            'rank' : rank_genre - 1,
+                                            'value' : bo[k]})
                 else:
-                    neighbors_genre.append({
-                        'english_title': '',
-                        'rank' : rank_genre - 1,
-                        'value' : 0})
+                    neighbors_genre.append({'english_title': '',
+                                           'rank' : rank_genre - 1,
+                                           'value' : 0})
                
                 neighbors_genre = sorted(neighbors_genre, key=lambda k: k['rank'])
                 genre_box_office = {'rank': rank_genre,
                                     'value': results['box_office'],
-                                    'neighbors': neighbors_genre
-                                   }
+                                    'neighbors': neighbors_genre}
         
                 query_results['genre_box_office'] = genre_box_office
 
@@ -1102,12 +1104,10 @@ class CinemaService(LearningService):
         bag_of_words = []
         for item in results['bag_of_words']:
             bag_of_words.append({'word' : item['keyword'],
-                                 'value' : item['value']
-                                 })
+                                 'value' : item['value']})
         query_results['bag_of_words'] = bag_of_words
         
         # Return data
-        print query_results
         return query_results
 
     def vectorize_predict_user_input(self, user_input):
