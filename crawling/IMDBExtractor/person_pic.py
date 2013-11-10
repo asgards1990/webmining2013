@@ -23,14 +23,15 @@ logger = initLogger.getLogger(IMDBExtractorConfig.EXTRACTOR_PERSON_PIC_LOGGER_NA
 
 ###################################################################
 
-priority_min=0
-priority_max=10000
+priority_min=20000
+priority_max=100000
 
 person_conn =  Connector.IMDBStatusConnector.IMDBPersonStatusConnector()
-person_id_tab = person_conn.getDownloadedNoImage(priority_min,priority_max)[:1000]
-for person_id in person_id_tab:
-   FilmExtractor.IMDB_Extractor.IMDB_PersonExtractorPicture(person_id)
-   time.sleep(random.random())
+while True:
+   person_id_tab = person_conn.getDownloadedNoImage(priority_min,priority_max)[:1000]
+   for person_id in person_id_tab:
+      FilmExtractor.IMDB_Extractor.IMDB_PersonExtractorPicture(person_id)
+      time.sleep(random.random())
    
 
 
