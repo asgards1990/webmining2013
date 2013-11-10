@@ -48,7 +48,7 @@ function changement(){
 			//envoiDeLaRequeteSearch(nomfilm,false);
 		}
 		else{
-			alert("Please select at least one criterion.")
+			alert("Please select at least one criteria.")
 		}
 	}
 	else{
@@ -77,6 +77,7 @@ function genererRequeteSearch(nomfilm,init){
 		requestInter.criteria.genre=$("#genre").prop("checked");
 		requestInter.criteria.budget=$("#budgets").prop("checked");
 		requestInter.criteria.review=$("#review").prop("checked");
+		requestInter.criteria.director=$("#directors").prop("checked");
 		requestInter.filter=new Object();
 		var compteur=0;
 		for(var i=0;i<document.getElementById("actors").getElementsByClassName("listactor").length;i++){
@@ -95,20 +96,20 @@ function genererRequeteSearch(nomfilm,init){
 			}
 		}
 		var compteur=0;
-		for(var i=0;i<document.getElementById("actors").getElementsByClassName("listdirector").length;i++){
-			if (document.getElementById("actors").getElementsByClassName("listdirector")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
+		for(var i=0;i<document.getElementById("directors").getElementsByClassName("listdirector").length;i++){
+			if (document.getElementById("directors").getElementsByClassName("listdirector")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
 				compteur=compteur+1;
 			}
 		}
 		if(compteur>0){
 			requestInter.filter.directors=new Array();
 			compteur=0;
-			for(var i=0;i<document.getElementById("actors").getElementsByClassName("listdirector").length;i++){
-				if (document.getElementById("actors").getElementsByClassName("listdirector")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
-					requestInter.filter.directors[compteur]=document.getElementById("actors").getElementsByClassName("listdirector")[i].children[0].id;
-					compteur=compteur+1;
+			for(var i=0;i<document.getElementById("directors").getElementsByClassName("listdirector").length;i++){
+				if (document.getElementById("directors").getElementsByClassName("listdirector")[i].getElementsByClassName("icheckbox_line-red")[0].children[0].checked==true){
+						requestInter.filter.directors[compteur]=document.getElementById("directors").getElementsByClassName("listdirector")[i].children[0].id;
+						compteur=compteur+1;
 				}
-			}
+			}	
 		}
 		var compteur=0;
 		for(var i=0;i<document.getElementById("genres").getElementsByClassName("listgenre").length;i++){
@@ -138,6 +139,7 @@ function genererRequeteSearch(nomfilm,init){
 	else{
 		requestInter.criteria=new Object();
 		requestInter.criteria.actor_director=true;
+		requestInter.criteria.director=true;
 		requestInter.criteria.genre=true;
 		requestInter.criteria.budget=true;
 		requestInter.criteria.review=true;
@@ -169,7 +171,7 @@ function envoiDeLaRequeteSearch(nomfilm,init){
 	data.results[1].value=0.8;
 	data.results[2]=new Object;
 	data.results[2].id="tt1981115";
-	data.results[2].title="Thor: Le Monde des Ténèbres";
+	data.results[2].title="Thor: Le Monde des Tï¿½nï¿½bres";
 	data.results[2].value=0.5;
 	data.results[3]=new Object;
 	data.results[3].id="tt0816442";
