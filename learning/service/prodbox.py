@@ -46,7 +46,6 @@ class TableDependentCachedObject(CachedObject):
 class CinemaService(LearningService):
     
     def loadFilms(self):
-        self.films = flt.getFilms()
         if not self.is_loaded('films'):
             self.fromPktoIndex, self.fromIndextoPk, self.film_names = hashIndexes(self.films.iterator())
             self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk, self.film_names))
@@ -89,15 +88,13 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=np.float32)
             self.budget_matrix = v.fit_transform(gkey)
 
-            self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
             budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
             budget_data = budget_data.reshape( [budget_data.shape[0], 1])
             kde = KernelDensity(kernel='gaussian', bandwidth=self.budget_bandwidth).fit(budget_data)
-            # 
 
             for i in range(self.budget_matrix.shape[0]):
                 if np.isnan(self.budget_matrix[i,0]):
-                    self.budget_matrix[i,0]= kde.sample(1)
+                    self.budget_matrix[i,0]= max(kde.sample(1), 1)
             #completer = Imputer(missing_values=-1)
             #completer.fit(self.budget_matrix)
             #self.budget_matrix = completer.transform(self.budget_matrix)
@@ -132,7 +129,21 @@ class CinemaService(LearningService):
             gkey = genBoxOffice(self.films.iterator())
             v =  DictVectorizer(dtype=np.float32)
             self.box_office_matrix = v.fit_transform(gkey)
-            # Save object in cache
+
+            y = self.box_office_matrix.toarray()[:,0]
+            nan_indexes = np.isnan(y)
+            if np.sum(nan_indexes)>0:
+                X = scipy.sparse.hstack([
+                        self.imdb_user_rating_matrix,
+                        self.imdb_nb_user_ratings_matrix,
+                        self.languages_matrix,
+                        self.genres_matrix]).toarray()
+                reg = GradientBoostingRegressor()
+                reg.fit(X[-nan_indexes, :], y[-nan_indexes])
+                y[nan_indexes] = np.max(0, reg.predict(X[nan_indexes, :]))
+                self.box_office_matrix = scipy.sparse.csc_matrix(y).transpose()
+
+            # Save object in cche
             self.create_cobject('box_office', self.box_office_matrix)
         else:
             self.box_office_matrix = self.get_cobject('box_office').get_content()
@@ -444,7 +455,7 @@ class CinemaService(LearningService):
                 X = self.getWeightedSearchFeatures(k)
                 # First method
                 KM = KMeans(n_clusters=self.n_clusters_search)
-                KM.fit_predict(X)
+                KM.fit(X)
                 self.search_clustering_KM[k] = {'labels' : KM.labels_, 'cluster_centers' : KM.cluster_centers_}
                 # Second method
                 #SC = SpectralClustering(n_clusters=self.n_clusters_search)
@@ -527,7 +538,9 @@ class CinemaService(LearningService):
         
     def __init__(self):
         super(CinemaService, self).__init__()
+        self.films = flt.getFilms(withnanbo = True)
         # TODO: also try log of budget for testing search requests
+        self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
         self.dim_writers = 20
         self.dim_directors = 10
@@ -537,10 +550,10 @@ class CinemaService(LearningService):
         self.p_norm = 2 # p-norm used for distances
         self.high_weight = 1 # for the distance definition
         self.low_weight = 0 # for the distance definition
-        self.actors_theta_BOC = 0.5
-        self.n_neighbors_SC_actors = 8 # soectral clustering parameter
-        self.n_neighbors_SC_writers = 8 # soectral clustering parameter
-        self.n_neighbors_SC_directors = 8 # soectral clustering parameter
+        self.actors_theta_BOC = 0.8
+        self.n_neighbors_SC_actors = 8 # spectral clustering parameter
+        self.n_neighbors_SC_writers = 8 # spectral clustering parameter
+        self.n_neighbors_SC_directors = 8 # spectral clustering parameter
         self.actor_reduction_rank_threshold = 10
 
         self.reduction_actors_in_predictfeatures = 'KM' 
@@ -558,9 +571,12 @@ class CinemaService(LearningService):
         assert self.dim_actors >= self.dim_directors, 'dim_directors should be lower than dim_actors' 
         # Load films data
         self.loadFilms()
-        self.loadBoxOffice()
+        self.loadImdb()
+        self.loadLanguages()
+        self.loadGenres()
+        self.loadBoxOffice() # Need nb_user_ratings, user_rating, genres, languages
         # Load prediction features
-        self.loadActors()
+        self.loadActors() # Need box office
         self.loadStars()
         self.loadRanks()
         self.loadActorsReduced()
@@ -570,7 +586,6 @@ class CinemaService(LearningService):
         self.loadBudget()
         self.loadKeywords()        
         self.loadKeywordsReduced()
-        self.loadGenres()
         # Load prediction labels
         self.loadPrizes()
         self.loadReviews()
@@ -583,17 +598,15 @@ class CinemaService(LearningService):
         self.loadMetacriticScore()
         self.loadReleaseDate()
         self.loadProductionCompanies()
-        self.loadImdb()
         self.loadCountries()
-        self.loadLanguages()
         # Load search clusterings
-        self.loadSearchClustering()
+        #self.loadSearchClustering()
         # Load predict features
-        self.loadPredictFeatures()
-        self.loadPredictLabels()
+        #self.loadPredictFeatures()
+        #self.loadPredictLabels()
         # Init predict classifier
-        self.init_predict()
-        print('Loadings finished. Server now running.')
+        #self.init_predict()
+        #print('Loadings finished. Server now running.')
     
     def suggest_keywords(self, args):
         if args.has_key('str') and args.has_key('nbresults'):
