@@ -22,12 +22,15 @@ logger = initLogger.getLogger(FilmExtractorConfig.EXTRACTOR_IMDB_INIT_LOGGER_NAM
 
 ###################################################################
 
-year_min=2006
-year_max=2012
+year_min=1980
+year_max=1985
 priority_max=1000
 
 def extractOneMovie(imdb_id):
    FilmExtractor.IMDB_Extractor.IMDB_SuperExtractor(imdb_id) 
+
+def extractOneMovieAwards(imdb_id):
+   FilmExtractor.IMDB_Extractor.IMDB_awardsExtract(imdb_id)
 
 def setUnextractedToOneMovie(imdb_id):
    Connector.IMDBStatusConnector.IMDBFilmStatusConnector().setExtractedStatus(imdb_id, "0")
@@ -35,6 +38,11 @@ def setUnextractedToOneMovie(imdb_id):
 def reExtractOneMovie(imdb_id):
    setUnextractedToOneMovie(imdb_id)
    extractOneMovie(imdb_id)
+
+def reExtractOneMovieAwards(imdb_id):
+   setUnextractedToOneMovie(imdb_id)
+   extractOneMovieAwards(imdb_id)
+
 def setUnextractedToBuggyFilm():
    """Met le bit extracted à 0 sur les personnes bugguées"""
    object_list = Film.objects.filter(english_title="")
@@ -162,18 +170,18 @@ class getIMDBCompany(threading.Thread):
                 FilmExtractor.IMDB_Extractor.IMDB_CompanyExtractor(company_id)
 
 
-IMDB_FILM_EXTRACTOR = getIMDBFilm(year_min,year_max,priority_max)
-IMDB_PERSON_EXTRACTOR = getIMDBPerson()
-IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
+#IMDB_FILM_EXTRACTOR = getIMDBFilm(year_min,year_max,priority_max)
+#IMDB_PERSON_EXTRACTOR = getIMDBPerson()
+#IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 
-IMDB_FILM_EXTRACTOR.start()
-IMDB_PERSON_EXTRACTOR.start()
-IMDB_COMPANY_EXTRACTOR.start()
+#IMDB_FILM_EXTRACTOR.start()
+#IMDB_PERSON_EXTRACTOR.start()
+#IMDB_COMPANY_EXTRACTOR.start()
 
 #reExtractBuggyFilm()
    
-#reExtractOneMovie("tt3029940")
-
+reExtractOneMovieAwards("tt1655442")
+#The artist tt1655442
 #Exemple avec des devises Japonaises : tt0245429
 #Exemple avec des devises € : tt302994
 #Exemple avec des Reviews decalees : tt0390221
