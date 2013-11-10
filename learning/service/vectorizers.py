@@ -97,13 +97,14 @@ def genProductionCompanies(iter_films):
     return genFeature(iter_films,'production_companies', 'imdb_id')
 
 def hashIndexes(iter_films):
-    d1, d2 = {}, {}
+    d1, d2, d3 = {}, {}, {}
     k = 0
     for film in iter_films:
         d1[film.pk] = k
         d2[k] = film.pk
+        d3[k] = film.english_title
         k += 1
-    return d1, d2
+    return d1, d2, d3
 
 def genPrizes(iter_films):
     while True:
@@ -125,9 +126,15 @@ def genReviews(iter_films):
             yield {'_nothing' : 1}
         else:
             d = {}
+            nb_reviews_added = 0
             for review in reviews.all():
-                d[review.journal.name] = review.grade
-            yield d
+                if review.grade != None:
+                    d[review.journal.name] = review.grade
+                    nb_reviews_added = nb_reviews_added + 1
+            if nb_reviews_added >0:
+                yield d
+            else:
+                yield {'_nothing' : 1}
 
 def genReviewsContent(iter_films):
     while True:

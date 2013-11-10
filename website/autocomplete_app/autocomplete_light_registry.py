@@ -2,6 +2,7 @@ import autocomplete_light
 
 from cinema.models import Film, Person, Genre, Keyword
 from django.db.models import Q
+from itertools import chain
 
 # Autocompletion pour un film
 class FilmAutocomplete(autocomplete_light.AutocompleteModelBase):
@@ -114,6 +115,20 @@ autocomplete_light.register(Keyword, KeywordAutocomplete,name='keyword_complex')
 class KeywordAutocomplete(autocomplete_light.AutocompleteModelBase):
     search_fields=['word']
     autocomplete_js_attributes={'placeholder': 'Add a keyword','minimum_characters': 1,}
+    
+    def choices_for_request(self):
+        q=self.request.GET.get('q','')
+        choices=self.choices.all()
+        #Selection quand on ecrit le keyword
+        if q:
+            a=choices.filter(word__icontains=q)
+            b=choices.filter(word__regex=r'^%s' % q)
+            all = list(chain(b, a))
+            newall=[]
+            for i in all:
+                if i not in newall:
+                    newall.append(i)
+        return newall[0:self.limit_choices]
 
 autocomplete_light.register(Keyword, KeywordAutocomplete,name='keyword_simple')
 

@@ -23,7 +23,11 @@ logger = initLogger.getLogger(FilmExtractorConfig.EXTRACTOR_IMDB_INIT_LOGGER_NAM
 ###################################################################
 
 year_min=1980
+<<<<<<< HEAD
 year_max=1990
+=======
+year_max=1985
+>>>>>>> 5b16fc930a251e93452a8a6c18b5908bf9e267bd
 priority_max=1000
 
 def extractOneMovie(imdb_id):

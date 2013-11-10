@@ -1,96 +1,6 @@
-
-/*$(document).ready(function(){
-
-critereEnable = false;
-	function createClick(nom) {
-
-		if (nom=="movieinput") {
-        			
-			$("#movieinput").keyup(function(event){
-			if(event.keyCode == 13){
-			var p = this.parentNode;
-			var element = this.parentNode.parentNode;
-			var value = this.value
-			var textNode = document.createTextNode(value)
-			p.removeChild(this);
-
-			p.appendChild(textNode);
-			element.getElementsByTagName("img")[0].src="http://goo.gl/8IrUDR";
-
-			var deleteicon = document.createElement('div');
-			deleteicon.className = "deleteicon";
-			deleteicon.style="cursor: pointer;"; 
-
-			var image = document.createElement('img');
-			image.style="max-height:1.4em;max-width:1.4em";
-			image.src="http://goo.gl/61lXjQ";
-			image.alt="Edit";
-
-			deleteicon.appendChild(image);
-			element.appendChild(deleteicon);
-			
-			if (critereEnable==false) {
-				var tabCriteres=document.getElementById("filters").getElementsByTagName("input");
-				var formGenres=document.getElementById("genres").getElementsByTagName("form")[0];
-				var formBudget=document.getElementById("slider-range");
-				var formReviews=document.getElementById("ex_1b");
-				
-			
-				critereEnable=true;
-			
-			for (k=0; k<tabCriteres.length;k++)   {
-				tabCriteres[k].disabled=false; 
-				formGenres.style.display = "block";
-				formBudget.style.display = "block";
-				formReviews.style.display = "block";
-			
-				}
-			
-			}
-	createClick(deleteicon);
-			}
-		});
-		
-
-	}
-
-
-		else {$(".deleteicon").click(function(){
-			var p = this.parentNode.getElementsByTagName("p")[0];
-			text = p.textContent;
-			var element = this.parentNode;
-			var movieinput = document.createElement('input');
-			var newP = document.createElement('p');
-			element.getElementsByTagName("img")[0].src="../pesto/static/img/explore/questionmark.png";
-
-
-			element.removeChild(this);
-			element.removeChild(p);
-
-
-			movieinput.id="movieinput";
-			movieinput.type="text";
-			movieinput.name="actorname"
-			movieinput.value=text;
-			movieinput.size="12";
-			movieinput.style="text-align : left";
-
-			newP.appendChild(movieinput);
-			element.appendChild(newP);
-	
-		createClick("movieinput");
-			});	
-		}
-	};
-	
-createClick("movieinput");	
-	
-	
-
-});*/
-
 function ajoutActors (actor) {
-    
+
+    if(!actor.name=="") {
     var superior = document.getElementById("actors").getElementsByTagName("ul")[0];
 
     var father = document.createElement('li');
@@ -138,6 +48,7 @@ function ajoutActors (actor) {
 
     element = document.getElementById(actor.imdb_id).getElementsByClassName('iCheck-helper')[0];
     element.onclick=function(){changement();};
+	}
 };
 
 
@@ -266,7 +177,7 @@ function ajoutTabGenres (genres) {
                     </p>                       
                 </li>*/
 	
-function ajoutBudget (budget) {
+/*function ajoutBudget (budget) {
    var slider = document.getElementById('slider-range');
    var budgetInM = budget/100000
    $(slider).slider( "option", "values", [budgetInM,budgetInM] );
@@ -278,7 +189,7 @@ function ajoutBudget (budget) {
 function ajoutDate (date) {
     var amountyear = document.getElementById('amountyear');
     $(amountyear).val( date );
-    };
+    };*/
     
 
 
@@ -294,7 +205,8 @@ $(document).ready(function() {
 	    var film_imdb_id = $('#id_title_original-deck span.div').attr('data-value');
 
             var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
-            ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
+            var ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
+			var ul3 = document.getElementById("directors").getElementsByTagName("ul")[0];
             
             if (ul.hasChildNodes())
            {
@@ -306,6 +218,12 @@ $(document).ready(function() {
            {
                while (ul2.childNodes.length>=1)
                {ul2.removeChild(ul2.firstChild);
+                }
+               };
+			  if (ul3.hasChildNodes())
+           {
+               while (ul3.childNodes.length>=1)
+               {ul3.removeChild(ul3.firstChild);
                 }
                };
 
@@ -324,7 +242,8 @@ $(document).ready(function() {
             isSubmitted = false;
             
             var ul = document.getElementById("actors").getElementsByTagName("ul")[0];
-            ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
+            var ul2 = document.getElementById("genres").getElementsByTagName("ul")[0];
+			var ul3 = document.getElementById("directors").getElementsByTagName("ul")[0];
             
             if (ul.hasChildNodes())
            {
@@ -338,6 +257,13 @@ $(document).ready(function() {
                {ul2.removeChild(ul2.firstChild);
                 }
                };
+			 if (ul3.hasChildNodes())
+           {
+               while (ul3.childNodes.length>=1)
+               {ul3.removeChild(ul3.firstChild);
+                }
+               };
+
             
             };
         });

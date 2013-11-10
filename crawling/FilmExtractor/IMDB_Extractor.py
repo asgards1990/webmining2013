@@ -42,6 +42,12 @@ def IMDB_awardsExtract(film_id):
    if awardsPage.isExtractable:
       awardsPage.extractAwardsPage_DB()
 
+def IMDB_awardsExtractInstitution(film_id):
+   #sur la page awards
+   logger.debug("Lancement de l'extraction des awards pour le film {}".format(film_id))
+   awardsPage = IMDBExtractor_Awards(film_id)
+   if awardsPage.isExtractable:
+      awardsPage.extractInstitution()
 
 
 def IMDB_reviewsExtract(film_id):

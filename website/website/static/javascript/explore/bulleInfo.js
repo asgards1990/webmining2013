@@ -7,10 +7,11 @@ function chargementBulleInfo(nomDuCadre,idDuFilm){
 	var bulleInfo=document.createElement("div");
 	bulleInfo.id="bulleInfo";
 	document.getElementById("bulleInfoExt").appendChild(bulleInfo);
-	bulleInfo.style.cssText="position:relative; width:100%; height:100%; background-color:Silver; border : 1px solid Black; border-radius:10px;"
+	var TitreInfo=document.createElement("h1");
+	TitreInfo.id="TitreInfo";
+	document.getElementById("bulleInfo").appendChild(TitreInfo);
 	var conteneurInfo=document.createElement('p');
 	conteneurInfo.id="conteneurInfo";
-	conteneurInfo.style.cssText='margin:0px; position:absolute; height:100%;top:0px; padding-left:5px;padding-right:5px;text-align: justify;'//border-radius:10px;'
 	document.getElementById("bulleInfo").appendChild(conteneurInfo);
 	
 	$.post("/cinema/filmInfo/","film_id="+idDuFilm,function(data){affecter(data)});
@@ -18,10 +19,10 @@ function chargementBulleInfo(nomDuCadre,idDuFilm){
 	function affecter(data){
 		var conteneurTitre=document.createElement('p');
 		conteneurTitre.style.cssText='margin-left:2px; margin-right:2px; margin-top:4px; margin-bottom:0px;float:left;width:100%;text-align: left;'
-		conteneurInfo.appendChild(conteneurTitre)
+		TitreInfo.appendChild(conteneurTitre)
 		var conteneurDateSortie=document.createElement('p');
 		conteneurDateSortie.style.cssText='margin-left:2px; margin-right:2px;margin-top:4px;margin-bottom:0px;float:left;width:100%;text-align: left;'
-		conteneurInfo.appendChild(conteneurDateSortie)
+		TitreInfo.appendChild(conteneurDateSortie)
 		var conteneurRealisateur=document.createElement('p');
 		conteneurRealisateur.style.cssText='margin-left:2px; margin-right:2px;margin-top:4px;margin-bottom:0px;float:left;width:100%;text-align: left;'
 		conteneurInfo.appendChild(conteneurRealisateur)
@@ -48,6 +49,7 @@ function chargementBulleInfo(nomDuCadre,idDuFilm){
 		conteneurActeurs.appendChild(texteActeurs)
 		texteActeurs.textContent=stringActors;
 		var texteSynopsis=document.createTextNode("Plot : " + data.plot);
+		var conteneurSynopsis=document.createElement('p');
 		conteneurSynopsis.appendChild(texteSynopsis)
 		$("#bulleInfoExt").fadeIn(1000);
 	}

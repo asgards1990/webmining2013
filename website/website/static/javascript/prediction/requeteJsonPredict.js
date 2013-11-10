@@ -12,13 +12,103 @@ var nbgenres=0;
 var nbkeywords=0;
 var nbdirector=0;
 
-$(document).ready(function() {
+/*$(document).ready(function() {
 	$('.item6').click(function() {
 	alert(verifSiRequete());
 		changementPredict();
+		alert('hello');
 		});
-	});
+	});*/
+function callback (response) {
+		
+alert(JSON.stringify(response));
+//affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 à 9)
+for (k=0;k<8;k++) {
+    var nominationValue = response.prizes_nomination[k].value*100+"%";
+    document.getElementById("prizestable").children[1].children[k].children[0].textContent=response.prizes_nomination[k].institution;
+    document.getElementById("prizestable").children[1].children[k].children[1].textContent=nominationValue;
+   };
 
+// affichage des victoires dans le tableau des Prizes
+for (k=0;k<8;k++) {  
+    var nominationValue = Math.round(response.prizes_win[k].value*10000)/100+"%";
+	alert(nominationValue);
+    document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
+    document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
+   };
+
+var lengthOfReviews = response.critics.reviews.length;
+alert(lengthOfReviews);
+
+	document.getElementById("reviewstable").children[1].children[0].children[0].textContent="Average rating";
+	document.getElementById("reviewstable").children[1].children[0].children[1].textContent=response.critics.average;
+	
+for (k=1;k<5;k++) {   
+	document.getElementById("reviewstable").children[1].children[k].children[0].textContent=response.critics.reviews[k].journal;
+	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=response.critics.reviews[k].grade;
+	};
+	
+if (response.general_box_office.rank==1) {
+//affichage des résultats dans le tableau des Box-Office General
+	var boxOffice = 0;
+	document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.rank;
+	document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent="Your movie!";
+	boxOffice = Math.round(response.general_box_office.value/10000)/100;
+	document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+boxOffice+"M";
+	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.neighbors[0].rank;
+	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent=response.general_box_office.neighbors[0].original_title;
+	boxOffice = Math.round(response.general_box_office.neighbors[1].value/10000)/100;
+	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+boxOffice.value+"M";
+	document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
+	document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].original_title;
+	boxOffice = Math.round(response.general_box_office.neighbors[2].value/10000)/100;
+	document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
+	
+//affichage des résultats dans le tableau des Box-Office Genre
+	document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.rank;
+	document.getElementById("bogenretable").children[1].children[0].children[1].textContent="Your movie!";
+	boxOffice = Math.round(response.general_box_office.value/10000)/100;
+	document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+boxOffice+"M";
+	document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.neighbors[0].rank;
+	document.getElementById("bogenretable").children[1].children[1].children[1].textContent=response.genre_box_office.neighbors[0].original_title;
+	boxOffice = Math.round(response.genre_box_office.neighbors[0].value/10000)/100;
+	document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+boxOffice.value+"M";
+	document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
+	document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].original_title;
+	boxOffice = Math.round(response.genre_box_office.neighbors[1].value/10000)/100;
+	document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
+	}
+	else {
+//affichage des résultats dans le tableau des Box-Office General
+	var boxOffice = 0;
+	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.rank;
+	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent="Your movie!";
+	boxOffice = Math.round(response.general_box_office.value/10000)/100;
+	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+boxOffice+"M";
+	document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.neighbors[0].rank;
+	document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent=response.general_box_office.neighbors[0].original_title;
+	boxOffice = Math.round(response.general_box_office.neighbors[0].value/10000)/100;
+	document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+boxOffice.value+"M";
+	document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
+	document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].original_title;
+	boxOffice = Math.round(response.general_box_office.neighbors[1].value/10000)/100;
+	document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
+	
+//affichage des résultats dans le tableau des Box-Office Genre
+	document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.rank;
+	document.getElementById("bogenretable").children[1].children[1].children[1].textContent="Your movie!";
+	boxOffice = Math.round(response.general_box_office.value/10000)/100;
+	document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+boxOffice+"M";
+	document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.neighbors[0].rank;
+	document.getElementById("bogenretable").children[1].children[0].children[1].textContent=response.genre_box_office.neighbors[0].original_title;
+	boxOffice = Math.round(response.genre_box_office.neighbors[0].value/10000)/100;
+	document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+boxOffice.value+"M";
+	document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
+	document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].original_title;
+	boxOffice = Math.round(response.genre_box_office.neighbors[1].value/10000)/100;
+	document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
+	};
+};
 
 function verifSiRequete(){
 	nbactors=document.getElementById("id_actors-deck").getElementsByClassName("hilight").length;
@@ -41,7 +131,8 @@ function verifSiRequete(){
 
 function changementPredict(){
 	if(verifSiRequete()){
-		$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data));},"json")
+		$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),callback,"json")
+		
 	}
 }
 
@@ -51,7 +142,7 @@ $(document).ready(function(){
 //setTimeout(function(){unloadChargement("results");},2000)
 //$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()))})
 
-//$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()));changementPredict()})
+$("#results").click(function(){changementPredict()})
 //envoiDeLaRequete()
 //alert("hello")
 //alert(JSON.stringify(genererRequetePredict()))
@@ -60,7 +151,7 @@ $(document).ready(function(){
 //$("#title").click(function(){envoiDeLaRequetePredict()})
 
 //response= JSON.stringify(data)
-var response = new Object();
+/*var response = new Object();
 response = {
     'success': true,
     'error': '',
@@ -130,52 +221,8 @@ response = {
             'grade': 0.18
         }
     ]
-};
+};*/
 
-var nominationValue = 0;
-
-//affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 à 9)
-for (k=0;k<2;k++) {
-    var nominationValue = response.prizes_nomination[k].value*100+"%";
-    document.getElementById("prizestable").children[1].children[k].children[0].textContent=response.prizes_nomination[k].institution;
-    document.getElementById("prizestable").children[1].children[k].children[1].textContent=nominationValue;
-   };
-
-// affichage des victoires dans le tableau des Prizes
-for (k=0;k<2;k++) {  
-    var nominationValue = response.prizes_win[k].value*100+"%";
-    document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
-    document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
-   };
-
-var lengthOfReviews = response.reviews.length;
-for (k=0;k<lengthOfReviews;k++) {   
-	document.getElementById("reviewstable").children[1].children[k].children[0].textContent=response.reviews[k].journal;
-	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=response.reviews[k].grade;
-	};
-	
-
-//affichage des résultats dans le tableau des Box-Office General
-	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.rank;
-	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent="Your movie!";
-	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+response.general_box_office.value+"M";
-	document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.neighbors[0].rank;
-	document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent=response.general_box_office.neighbors[0].original_title;
-	document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+response.general_box_office.neighbors[0].value+"M";
-	document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
-	document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].original_title;
-	document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+response.general_box_office.neighbors[1].value+"M";
-	
-//affichage des résultats dans le tableau des Box-Office Genre
-	document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.rank;
-	document.getElementById("bogenretable").children[1].children[1].children[1].textContent="Your movie!";
-	document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+response.genre_box_office.value+"M";
-	document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.neighbors[0].rank;
-	document.getElementById("bogenretable").children[1].children[0].children[1].textContent=response.genre_box_office.neighbors[0].original_title;
-	document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+response.genre_box_office.neighbors[0].value+"M";
-	document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
-	document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].original_title;
-	document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+response.genre_box_office.neighbors[1].value+"M";
 
 })
 
@@ -237,9 +284,7 @@ function genererRequetePredict(){
 		}
 	}
 
-	requestInter.budget=new Object();
-	requestInter.budget.min=parseInt(document.getElementById("amount").value.slice(1,document.getElementById("amount").value.slice(1,-1).indexOf("-")-1));
-	requestInter.budget.max=parseInt(document.getElementById("amount").value.slice(document.getElementById("amount").value.slice(1,-1).indexOf("-")+4,-1));
+	requestInter.budget=parseInt($("#slider-range-min").slider("option", "value"));
 	requestInter.release_period=new Object();
 	if(document.getElementById("release").getElementsByClassName("checked").length>0){
 		requestInter.release_period.season=document.getElementById("release").getElementsByClassName("checked")[0].parentNode.textContent.trim().toLowerCase();
