@@ -222,7 +222,7 @@ class CinemaService(LearningService):
             gkey = genReviewsContent(self.films.iterator())
             self.reviews_content = []
             for d in gkey:
-                self.reviews_content.append(d.values())
+                self.reviews_content.append(d)
             self.create_cobject('reviews_content', self.reviews_content)
         else:
             self.reviews_content = self.get_cobject('reviews_content').get_content()
