@@ -47,6 +47,14 @@ class CinemaService(LearningService):
     
     def loadFilms(self):
         self.films = flt.getFilms()
+        #for film in self.films:
+        #    print film.original_title
+        #    for review in Review.objects.filter(film=film):
+        #        print review
+        #        print review.journal
+        #        if np.isnan(review.grade) or not np.isfinite(review.grade):
+        #            print 'Unusual grade for film '+film.original_title
+        #            print 'Grade from '+str(review.journal.name)+' : '+str(review.grade)
         if not self.is_loaded('films'):
             self.fromPktoIndex, self.fromIndextoPk = hashIndexes(self.films.iterator())
             self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk))
@@ -517,6 +525,15 @@ class CinemaService(LearningService):
         X_review = X_review # because grades should be in [0,1]
         X_genre = normalize(X_genre.astype(np.double),norm='l1',axis=1) #normalize
         X_people = X_people/2 #normalize
+        #check if features contain NaN
+        #if np.sum(np.isnan(X_review.toarray())) >0:
+        #    print 'X_review contains nan'
+        #if np.sum(np.isfinite(X_review.toarray())) != X_review.toarray().shape[0]*X_review.toarray().shape[1]:
+        #    print 'X_review contains infinity'
+        #if np.sum(np.isnan(X_budget.toarray())) >0:
+        #    print 'X_budget contains nan'        
+        #if np.sum(np.isfinite(X_budget.toarray())) != X_budget.toarray().shape[0]*X_budget.toarray().shape[1]:
+        #    print 'X_budget contains infinity'
         people_weight = self.high_weight if (k>>0)%2 else self.low_weight
         budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight

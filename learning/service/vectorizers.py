@@ -125,9 +125,15 @@ def genReviews(iter_films):
             yield {'_nothing' : 1}
         else:
             d = {}
+            nb_reviews_added = 0
             for review in reviews.all():
-                d[review.journal.name] = review.grade
-            yield d
+                if review.grade != None:
+                    d[review.journal.name] = review.grade
+                    nb_reviews_added = nb_reviews_added + 1
+            if nb_reviews_added >0:
+                yield d
+            else:
+                yield {'_nothing' : 1}
 
 def genReviewsContent(iter_films):
     while True:
