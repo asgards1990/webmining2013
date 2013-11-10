@@ -31,8 +31,8 @@ class Handler(tornado.web.RequestHandler):
                     query_results['success'] = True
                     query_results['error'] = ''
                     print query_results
-                    #self.finish(simplejson.dumps(query_results))
-                    self.finish(tornado.escape.json_encode(query_results))                    
+                    self.finish(simplejson.dumps(query_results))
+                    #self.finish(tornado.escape.json_encode(query_results))                    
                 except service.objects.ParsingError as e:
                     self.error(e.value)
             except ValueError:

@@ -650,26 +650,42 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
          try:
             logger.debug( '########### {}  ##############'.format(institution_list[i-1]) )
          except:
-            institution_list[i-1]=md5.new("{}".format(random.random())).hexdigest() 
-            logger.debug( ' NEW ID ########### {}  ##############'.format(institution_list[i-1]) )
-         for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
-            award_detail = []
-            logger.debug(award_category_status[0])
-            logger.debug(award_category_list[0])
-            logger.debug(award_year_list[i-1])
-            logger.debug(j)
+            for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
+               award_detail = []
+               logger.debug(award_category_status[0])
+               logger.debug(award_category_list[0])
+               logger.debug(award_year_list[i-1])
+               logger.debug(j)
            
-            award_detail.append(award_category_status[0]) #WIN/NPMINATED
-            award_detail.append(award_category_list[0])   #Palme d'or
-            award_detail.append(award_year_list[i-1])       #2013
-            award_detail.append(institution_list[i-1])     #Cannes Film Festival
+               award_detail.append(award_category_status[0]) #WIN/NPMINATED
+               award_detail.append(award_category_list[0])   #Palme d'or
+               award_detail.append(award_year_list[i-1])       #2013
+               award_detail.append(institution_list[i-1])     #Cannes Film Festival
 
-	    award_category_status.pop(0)
-            award_category_list.pop(0)
+   	       award_category_status.pop(0)
+               award_category_list.pop(0)
 
-         award_tab.append(award_detail)
+            award_tab.append(award_detail)
+      logger.debug('Il y a {} éléments dans le tableau '.format(len(award_tab)))
       return award_tab
 
+   def extractInstitution(self):
+      self.extractAwards()
+      """
+      logger.debug("Extract Institution (à remettre en forme) : ")
+      institution_list = self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/h3')#Cannes Film Festival
+      for i in institution_list:
+         try:
+            logger.debug( '########### {}  ##############'.format(i))
+         except:
+            ins = defineInstitution(i)
+            logger.debug('MD5 à changer')
+            if ins:
+               ins.name=i
+               ins.save()
+      """
+
+            
    def extractContent(self):
       self.award_tab = self.extractAwards()
 
@@ -682,7 +698,10 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
             win=hasWon(award[0])
             ins = defineInstitution(name=award[3])
             if ins:
-               logger.info("Mise à jour du film {}, lien avec un nouvel award pour l'institution {}".format(self.id_,ins))
+               try:
+                  logger.info("Mise à jour du film {}, lien avec un nouvel award pour l'institution {}".format(self.id_,ins))
+               except:
+                  logger.info("Mise à jour du film {}, lien avec un nouvel award pour l'institution dont on ne prononce pas le nom")
                Prize.objects.create(win=win, year=int(award[2]), institution=ins, film=f)
 
          except Exception as e:

@@ -4,6 +4,7 @@ from status.models import TableUpdateTime
 from cinema.models import Film, Person, Genre, Keyword, Journal, Institution
 import filmsfilter as flt
 from dimreduce import *
+import simplejson
 
 import numpy as np
 import scipy
@@ -228,11 +229,14 @@ class CinemaService(LearningService):
         self.nb_journals = self.reviews_matrix.shape[1]
 
     def loadReviewsContent(self):
-        # TODO : finish implementation
-        gkey = genReviewsContent(self.films.iterator())
-        self.reviews_content = []
-        for d in gkey:
-            self.reviews_content.append(d.values())
+        if not self.is_loaded('reviews_content'):
+            gkey = genReviewsContent(self.films.iterator())
+            self.reviews_content = []
+            for d in gkey:
+                self.reviews_content.append(d.values())
+            self.create_cobject('reviews_content', self.reviews_content)
+        else:
+            self.reviews_content = self.get_cobject('reviews_content').get_content()
 
     def loadSeason(self):
         if not self.is_loaded('season'):
@@ -589,7 +593,7 @@ class CinemaService(LearningService):
         # Load prediction labels
         self.loadPrizes()
         self.loadReviews()
-        #self.loadReviewsContent() # TODO : finish implementation
+        self.loadReviewsContent()
         # Load other features
         self.loadStats()
         self.loadWriters()
@@ -1016,32 +1020,40 @@ class CinemaService(LearningService):
 
         rank = (self.nb_films+1) - invrank
 
+
+
+
         neighbors = []
         
         if rank<self.nb_films+1:
             k = sorted_bo_indices[invrank - 1]
-            neighbors.append({'english_title': self.film_names[k],
+            lower_neighbor = {'english_title': self.film_names[k],
                               'rank' : rank + 1,
-                              'value' : bo[k]})
+                              'value' : bo[k]}
         else: #our film is last
-            neighbors.append({'english_title': '-',
+            lower_neighbor = {'english_title': '-',
                               'rank' : rank + 1,
-                              'value' : 0})          
+                              'value' : 0}       
         
         if rank>1:
             k = sorted_bo_indices[invrank]
-            neighbors.append({'english_title': self.film_names[k],
+            upper_neighbor = {'english_title': self.film_names[k],
                               'rank' : rank - 1,
-                              'value' : bo[k]})
+                              'value' : bo[k]}
         else: # our film is first
-            neighbors.append({'english_title': '-',
+            upper_neighbor = {'english_title': '-',
                               'rank' : rank - 1,
-                              'value' : 0})
-
+                              'value' : 0}
+        
+        neighbors.append(lower_neighbor)
+        neighbors.append(upper_neighbor)
         neighbors = sorted(neighbors, key=lambda k: k['rank'])
+
         general_box_office = {'rank': rank,
                               'value': results['box_office'],
                               'neighbors': neighbors}
+                              #'upper_neighbor': upper_neighbor,
+                              #'lower_neighbor': lower_neighbor}
         
         query_results['general_box_office'] = general_box_office
         
@@ -1057,7 +1069,6 @@ class CinemaService(LearningService):
                         continue
                 useful_indexes = np.where(self.genres_matrix * genres_list > 0)
                 bo_genre = bo[useful_indexes]
-                                                
                 sorted_bo_genre = np.sort(bo_genre)
                 sorted_bo_indices_genre = np.argsort(bo_genre)
                 invrank_genre = np.searchsorted(sorted_bo_genre, results['box_office'])
@@ -1068,30 +1079,35 @@ class CinemaService(LearningService):
         
                 if rank_genre < self.nb_films+1:
                     k = sorted_bo_indices_genre[invrank_genre - 1]
-                    neighbors_genre.append({
+                    lower_neighbor_genre = {
                         'english_title': self.film_names[k],
                         'rank' : rank_genre + 1,
-                        'value' : bo[k]})
+                        'value' : bo[k]}
                 else: #our film is last
-                    neighbors_genre.append({
+                    lower_neighbor_genre = {
                         'english_title': '',
                         'rank' : rank_genre + 1,
-                        'value' : 0})
+                        'value' : 0}
 
                 if rank_genre>1:
                     k = sorted_bo_indices_genre[invrank_genre]
-                    neighbors_genre.append({'english_title': self.film_names[k],
+                    upper_neighbor_genre = {'english_title': self.film_names[k],
                                             'rank' : rank_genre - 1,
-                                            'value' : bo[k]})
+                                            'value' : bo[k]}
                 else:
-                    neighbors_genre.append({'english_title': '',
+                    upper_neighbor_genre = {'english_title': '',
                                            'rank' : rank_genre - 1,
-                                           'value' : 0})
-               
+                                           'value' : 0}
+                
+                neighbors_genre.append(lower_neighbor_genre)
+                neighbors_genre.append(upper_neighbor_genre)
                 neighbors_genre = sorted(neighbors_genre, key=lambda k: k['rank'])
+
                 genre_box_office = {'rank': rank_genre,
                                     'value': results['box_office'],
                                     'neighbors': neighbors_genre}
+                                    #'upper_neighbor': upper_neighbor_genre,
+                                    #'lower_neighbor': lower_neighbor_genre}
         
                 query_results['genre_box_office'] = genre_box_office
 
