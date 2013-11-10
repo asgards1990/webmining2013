@@ -43,14 +43,14 @@ class IMDbSpider(CrawlSpider):
     extract_company = lambda self, s : self.ext_company.search(s).group(0)
     ext_language = re.compile("language/\w+\?")
     extract_language = lambda self, s : self.ext_language.search(s).group(0).split('/')[1][:-1]
-    ext_budget_dollar = re.compile("\$[\d|,]+")
-    ext_budget_euro = re.compile(u'\u20ac[\d|,]+')
-    extract_budget_dollar = lambda self, s : self.ext_budget_dollar.search(s).group(0)[1:].replace(',', '')
-    extract_budget_euro = lambda self, s : self.ext_budget_euro.search(s).group(0)[1:].replace(',', '')
+    ext_dollar = re.compile("\$[\d|,]+")
+    ext_euro = re.compile(u'\u20ac[\d|,]+')
+    extract_dollar = lambda self, s : self.ext_budget_dollar.search(s).group(0)[1:].replace(',', '')
+    extract_euro = lambda self, s : self.ext_budget_euro.search(s).group(0)[1:].replace(',', '')
     ext_country = re.compile("country/\w+\?")
     extract_country = lambda self, s : self.ext_country.search(s).group(0).split('/')[1][:-1]
 
-    def __init__(self, year = 1950, actors_max_rank = 100, fetch_person = False, fetch_company = False, max_position = 10000, *args, **kwargs):
+    def __init__(self, year = 2000, actors_max_rank = 15, fetch_person = True, fetch_company = False, max_position = 500, *args, **kwargs):
         super(IMDbSpider, self).__init__(*args, **kwargs)
         self.year = year
         self.actors_max_rank = actors_max_rank
@@ -173,16 +173,26 @@ class IMDbSpider(CrawlSpider):
         except:
             self.log('Unable to extract countries for ' + film['imdb_id'] + '.')
 
+        budget_string = ''.join(hxs.select('//h4[contains(text(),"Budget")]/parent::*/text()').extract())
         try:
-            budget_string = ''.join(hxs.select('//h4[contains(text(),"Budget")]/parent::*/text()').extract())
-            film['budget'] = int(self.extract_budget(budget_string))
+            film['budget'] = int(self.extract_dollar(budget_string))
         except:
-            self.log('No budget found for ' + film['imdb_id'] + '.')
+            self.log('No budget in dollars found for ' + film['imdb_id'] + '.')
+        try:
+            film['budget'] = int(self.extract_euro(budget_string))
+        except:
+            self.log('No budget in euros found for ' + film['imdb_id'] + '.')
+        
+        bo_string = ''.join(hxs.select('//h4[contains(text(),"Gross")]/parent::*/text()').extract())
+        try:
+            film['boxoffice'] = int(self.extract_dollar( bo_string ) )
+        except:
+            self.log('No box office in dollars found for ' + film['imdb_id'] + '.')
+        try:
+            film['boxoffice'] = int(self.extract_euro( bo_string ) )
+        except:
+            self.log('No box office in euros found for ' + film['imdb_id'] + '.')
 
-        try:
-            film['boxoffice'] = int(self.extract_budget_dollar( ''.join(hxs.select('//h4[contains(text(),"Gross")]/parent::*/text()').extract()) ) )
-        except:
-            self.log('No box office found for ' + film['imdb_id'] + '.')
 
         try:
             film['rating_count'] = int(hxs.select('//span[@itemprop="ratingCount"]//text()').extract()[0].replace(',',''))
@@ -207,7 +217,7 @@ class IMDbSpider(CrawlSpider):
 
         try:
             metacritic_score_string = hxs.select('//a[starts-with(@href,criticreviews) and contains(@title, "Metacritic.com")]//text()').extract()[0].split('/')[0]
-            film['metacritic_score'] = int(re.search('\d+', metacritic_score_string).group(0))
+            film['metacritic_score'] = float(re.search('\d+', metacritic_score_string).group(0))/100.0
         except IndexError, ValueError:
             self.log('No metacritic score for ' + film['imdb_id'] + '.')
 
@@ -395,7 +405,7 @@ class IMDbSpider(CrawlSpider):
             item = ReviewItem()
             item['attached_to'] = imdb_id
             try:
-                item['grade'] = int(review_frame.select('.//span[@itemprop="ratingValue"]/text()').extract()[0])
+                item['grade'] = float(review_frame.select('.//span[@itemprop="ratingValue"]/text()').extract()[0])/100.0
             except ValueError:
                 self.log('Unable to extact grade.')
             try:
