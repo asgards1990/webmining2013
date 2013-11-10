@@ -1060,7 +1060,7 @@ class CinemaService(LearningService):
                         'rank' : rank_genre + 1,
                         'value' : 0})
 
-                if rank_genre>1
+                if rank_genre>1:
                     k = sorted_bo_indices_genre[invrank_genre]
                     neighbors_genre.append({
                             'english_title': self.film_names[k],
