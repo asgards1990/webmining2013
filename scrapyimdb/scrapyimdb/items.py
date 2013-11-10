@@ -85,3 +85,6 @@ class CountryCompany(LinkItem):
 
 class CountryItem(LinkItem):
     country = Field()
+    
+class GrossItem(LinkItem):
+    bo = Field()

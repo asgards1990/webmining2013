@@ -43,10 +43,10 @@ class IMDbSpider(CrawlSpider):
     extract_company = lambda self, s : self.ext_company.search(s).group(0)
     ext_language = re.compile("language/\w+\?")
     extract_language = lambda self, s : self.ext_language.search(s).group(0).split('/')[1][:-1]
-    ext_dollar = re.compile("\$[\d|,]+")
-    ext_euro = re.compile(u'\u20ac[\d|,]+')
-    extract_dollar = lambda self, s : self.ext_budget_dollar.search(s).group(0)[1:].replace(',', '')
-    extract_euro = lambda self, s : self.ext_budget_euro.search(s).group(0)[1:].replace(',', '')
+#    ext_dollar = re.compile("\$[\d|,]+")
+#    ext_euro = re.compile(u'\u20ac[\d|,]+')
+#    extract_dollar = lambda self, s : self.ext_budget_dollar.search(s).group(0)[1:].replace(',', '')
+#    extract_euro = lambda self, s : self.ext_budget_euro.search(s).group(0)[1:].replace(',', '')
     ext_country = re.compile("country/\w+\?")
     extract_country = lambda self, s : self.ext_country.search(s).group(0).split('/')[1][:-1]
 
@@ -57,7 +57,6 @@ class IMDbSpider(CrawlSpider):
         self.fetch_person = fetch_person
         self.fetch_company = fetch_company
         self.max_position = max_position
-        # http://www.imdb.com/search/title?at=0&count=250&release_date=2000,2000&sort=release_date_us,asc&start=251&title_type=feature&view=simple
         self.start_urls = ["http://www.imdb.com/search/title?at=0&count=250&release_date={0},{0}&sort={1}&start=1&title_type={2}&view=simple".format(self.year, self.sort, self.tags)]
 
     def stop_max(self, links):
@@ -65,9 +64,11 @@ class IMDbSpider(CrawlSpider):
             return []
         link = links[0]
         if int(re.search('start=\d+', link.url).group(0).split('=')[1]) > int(self.max_position):
-            self.log('Stopping URLs above ' + self.max_position + '.', level=log.WARNING)
+            self.log('Stopping URLs above ' + str(self.max_position) + '.', level=log.WARNING)
             return []
-        return links
+        else:
+            self.log(str(link))
+            return [link]
 
     def stop_parsed(self, links):
         approved = []
@@ -95,6 +96,28 @@ class IMDbSpider(CrawlSpider):
             pass
         status.save()
 
+    def convert_currency(self, val):
+        """Convert to $ (based on x-rates)"""
+        try:
+            val = val.replace(",","").strip()
+            if val[0] == "$":
+                return val.split("$")[1]
+            elif val[0] == u'\xa3':
+                return int(int(val[1:])*1.603157)
+            elif val[0] == u'\u20ac' :
+                return int(int(val[1:])*1.360673)
+            elif len(val)>3 and val[:3]=="JPY":
+                return int(int(val.split("JPY")[1])*0.010171)
+            elif len(val)>3 and val[:3]=="FRF":
+                return int(int(val.split("FRF")[1])*0.207433)
+            elif len(val)>3 and val[:3]=="ESP":
+                return int(int(val.split("ESP")[1][1:])*0.00803385)
+            else:
+                self.log("Unknown currency.")
+                return None
+        except Exception as e:
+            self.log("Unable to extract money value. Error : {} ".format(val,e))
+
     def parse_film(self, response):
         hxs = HtmlXPathSelector(response)
 
@@ -108,14 +131,14 @@ class IMDbSpider(CrawlSpider):
         film['imdb_id'] = imdb_id
         
         try:
-            film['english_title'] = hxs.select('//td[@id="overview-top"]/h1[@class="header"]/span[@class="itemprop" and @itemprop="name"]/text()').extract()[0]
+            film['english_title'] = hxs.select('//td[@id="overview-top"]/h1[@class="header"]/span[@class="itemprop" and @itemprop="name"]/text()').extract()[0].strip()
         except:
             self.log('No english title for ' + film['imdb_id'] + ' : film is not parsed.')
             return []
 
         film['original_title'] = ''
         try:
-            film['original_title'] = re.search('".+"', hxs.select('//td[@id="overview-top"]/h1[@class="header"]/span[@class="title-extra" and @itemprop="name"]/text()').extract()[0]).group(0)
+            film['original_title'] = re.search('".+"', hxs.select('//td[@id="overview-top"]/h1[@class="header"]/span[@class="title-extra" and @itemprop="name"]/text()').extract()[0]).group(0).strip()
         except IndexError:
             self.log("No original title for " + film['imdb_id'] + ".")
 
@@ -147,13 +170,13 @@ class IMDbSpider(CrawlSpider):
 
         film['summary'] = ''
         try:
-            film['summary'] = hxs.select('//td[@id="overview-top"]/p[@itemprop="description"]/text()').extract()[0][1:]
+            film['summary'] = hxs.select('//td[@id="overview-top"]/p[@itemprop="description"]/text()').extract()[0].strip()
         except IndexError:
             self.log('No summary found for ' + film['imdb_id'] + '.')
 
         film['story_line'] = ''
         try:
-            film['story_line'] = hxs.select('//div[@class="inline canwrap" and @itemprop="description"]/p/text()').extract()[0][1:]
+            film['story_line'] = hxs.select('//div[@class="inline canwrap" and @itemprop="description"]/p/text()').extract()[0].strip()
         except IndexError:
             self.log('No story line found for ' + film['imdb_id'] + '.')
 
@@ -162,7 +185,7 @@ class IMDbSpider(CrawlSpider):
         try:
             list_url_writers = hxs.select('//td[@id="overview-top"]/div[@itemprop="creator"]/a[starts-with(@href, "/name")]/@href').extract()
             film['writers'] = map(self.extract_person, list_url_writers)
-            writers_names = hxs.select('//td[@id="overview-top"]/div[@itemprop="creator"]/a[starts-with(@href, "/name")]/span/text()').extract()
+            writers_names = map(unicode.strip, hxs.select('//td[@id="overview-top"]/div[@itemprop="creator"]/a[starts-with(@href, "/name")]/span/text()').extract())
         except:
             self.log('Cannot extract writers for ' + film['imdb_id'] + '.')
 
@@ -175,23 +198,15 @@ class IMDbSpider(CrawlSpider):
 
         budget_string = ''.join(hxs.select('//h4[contains(text(),"Budget")]/parent::*/text()').extract())
         try:
-            film['budget'] = int(self.extract_dollar(budget_string))
+            film['budget'] = self.convert_currency(budget_string)
         except:
             self.log('No budget in dollars found for ' + film['imdb_id'] + '.')
-        try:
-            film['budget'] = int(self.extract_euro(budget_string))
-        except:
-            self.log('No budget in euros found for ' + film['imdb_id'] + '.')
         
         bo_string = ''.join(hxs.select('//h4[contains(text(),"Gross")]/parent::*/text()').extract())
         try:
-            film['boxoffice'] = int(self.extract_dollar( bo_string ) )
+            film['boxoffice'] = self.convert_currency(bo_string)
         except:
             self.log('No box office in dollars found for ' + film['imdb_id'] + '.')
-        try:
-            film['boxoffice'] = int(self.extract_euro( bo_string ) )
-        except:
-            self.log('No box office in euros found for ' + film['imdb_id'] + '.')
 
 
         try:
@@ -206,18 +221,18 @@ class IMDbSpider(CrawlSpider):
 
         review_count = hxs.select('//span[@itemprop="reviewCount"]//text()').extract()
         try:
-            film['review_count_user'] = int(re.search('\d+', review_count[0]).group(0))
+            film['review_count_user'] = int(re.search('\d+', review_count[0].replace(',', '')).group(0))
         except:
             self.log('No users\' review count found for ' + film['imdb_id'])
 
         try:
-            film['review_count_critic'] = int(re.search('\d+', review_count[1]).group(0))
+            film['review_count_critic'] = int(re.search('\d+', review_count[1].replace(',', '')).group(0))
         except:
             self.log('No users\' review count found for ' + film['imdb_id'])
 
         try:
             metacritic_score_string = hxs.select('//a[starts-with(@href,criticreviews) and contains(@title, "Metacritic.com")]//text()').extract()[0].split('/')[0]
-            film['metacritic_score'] = float(re.search('\d+', metacritic_score_string).group(0))/100.0
+            film['metacritic_score'] = int(re.search('\d+', metacritic_score_string).group(0))
         except IndexError, ValueError:
             self.log('No metacritic score for ' + film['imdb_id'] + '.')
 
@@ -226,7 +241,7 @@ class IMDbSpider(CrawlSpider):
         try:
             parse_stars = hxs.select('//a[contains(@href,"tt_ov_st") and starts-with(@href, "/name")]/@href').extract()
             film['stars'] = map(self.extract_person , parse_stars)
-            stars_names = hxs.select('//a[contains(@href,"tt_ov_st") and starts-with(@href, "/name")]/span/text()').extract()
+            stars_names = map(unicode.strip, hxs.select('//a[contains(@href,"tt_ov_st") and starts-with(@href, "/name")]/span/text()').extract())
         except:
             self.log('No stars found for ' + film['imdb_id'] + '.')
 
@@ -235,7 +250,7 @@ class IMDbSpider(CrawlSpider):
         try:
             parse_dir = hxs.select('//td[@id="overview-top"]/div[@itemprop="director"]/a/@href').extract()
             film['directors'] = map(self.extract_person, parse_dir)
-            directors_names = hxs.select('//td[@id="overview-top"]/div[@itemprop="director"]/a/span/text()').extract()
+            directors_names = map(unicode.strip, hxs.select('//td[@id="overview-top"]/div[@itemprop="director"]/a/span/text()').extract())
         except:
             self.log('No director found for ' + film['imdb_id'] + '.')
 
@@ -258,6 +273,7 @@ class IMDbSpider(CrawlSpider):
                      Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/awards', callback = self.parse_film_awards, meta={'id' : film['imdb_id']}),
                      Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/keywords', callback = self.parse_film_keywords, meta={'id' : film['imdb_id']}),
                      Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/companycredits', callback = self.parse_company_credits, meta={'id' : film['imdb_id']}),
+                     Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/business', callback = self.parse_gross, meta={'id' : film['imdb_id']}),
                      Request(url = 'http://www.imdb.com/title/' + film['imdb_id'] + '/fullcredits', callback = self.parse_film_credits, meta={'id' : film['imdb_id']})]
 
         k=0
@@ -349,7 +365,7 @@ class IMDbSpider(CrawlSpider):
         else:
             imdb_id = self.ext_title.search(response.url).group(0)
         list_actor_urls = hxs.select('//td[@itemprop="actor"]/a/@href').extract()
-        list_actor_names = hxs.select('//td[@itemprop="actor"]/a/span/text()').extract()
+        list_actor_names = map(unicode.strip, hxs.select('//td[@itemprop="actor"]/a/span/text()').extract())
         list_actor = map(self.extract_person, list_actor_urls)
         for k in range(min(len(list_actor), self.actors_max_rank )):
             item = ActorItem()
@@ -362,7 +378,7 @@ class IMDbSpider(CrawlSpider):
                 list_item.append(Request(url = 'http://www.imdb.com/name/' + list_actor[k], callback=self.parse_person, meta={'id' : list_actor[k]} ))
 
         list_writer_urls = hxs.select('//a[contains(@href,"ttfc_fc_dr")]/@href').extract()
-        list_writer_names = hxs.select('//a[contains(@href,"ttfc_fc_dr")]/text()').extract()
+        list_writer_names = map(unicode.strip, hxs.select('//a[contains(@href,"ttfc_fc_dr")]/text()').extract())
         list_writers = map(self.extract_person, list_writer_urls)
         k = 0
         for writer in list_writers:
@@ -376,7 +392,7 @@ class IMDbSpider(CrawlSpider):
                 list_item.append(Request(url = 'http://www.imdb.com/name/' + writer, callback=self.parse_person, meta={'id' : writer} ))
 
         list_dir_urls = hxs.select('//a[contains(@href,"ttfc_fc_dr")]/@href').extract()
-        list_dir_names = hxs.select('//a[contains(@href,"ttfc_fc_dr")]/text()').extract()
+        list_dir_names = map(unicode.strip, hxs.select('//a[contains(@href,"ttfc_fc_dr")]/text()').extract())
         list_directors = map(self.extract_person, list_dir_urls)
         k = 0
         for director in list_directors:
@@ -409,7 +425,7 @@ class IMDbSpider(CrawlSpider):
             except ValueError:
                 self.log('Unable to extact grade.')
             try:
-                item['summary'] = review_frame.select('.//div[@class="summary"]/text()').extract()[0]
+                item['summary'] = review_frame.select('.//div[@class="summary"]/text()').extract()[0].strip()
             except IndexError:
                 self.log('Unable to extract summary')
             try:
@@ -446,7 +462,7 @@ class IMDbSpider(CrawlSpider):
             return []
         
         try:
-            person['name'] = hxs.select('//h1/span[@itemprop="name"]/text()').extract()[0]
+            person['name'] = hxs.select('//h1/span[@itemprop="name"]/text()').extract()[0].strip()
         except IndexError:
             self.log('No name found for ' + person['imdb_id'] + '.')
         
@@ -483,7 +499,7 @@ class IMDbSpider(CrawlSpider):
             link = ProducerItem()
             link['attached_to'] = imdb_id
             link['imdb_id'] = list_co_ids[k]
-            link['name'] = list_co_names[k]
+            link['name'] = list_co_names[k].strip()
             list_items.append(link)
             if self.fetch_company and not self.is_parsed(link['imdb_id']):
                 list_items.append(Request(url = 'http://www.imdb.com/company/'+link['imdb_id'], callback = self.parse_company, meta = {'id' : link['imdb_id']}))
@@ -505,3 +521,20 @@ class IMDbSpider(CrawlSpider):
             self.log('No language found for ' + co_co['attached_to'] + '.')
             self.log('Error {}'.format(e))
             return []
+
+    def parse_gross(self, response):
+        hxs = HtmlXPathSelector(response)
+        gross = GrossItem()
+        if response.meta.has_key('id'):
+            gross['attached_to'] = response.meta['id']
+        else:
+            gross['attached_to'] = self.ext_title.search(response.url).group(0)
+        try:
+            s = ''.join(hxs.select('//div[@id="tn15content"]//text()').extract())
+            gross['bo'] = int(re.search("Gross\n\$[\d|,]+", s).group(0).split('$')[1].replace(',', ''))
+            return [gross]
+        except Exception as e:
+            self.log('Error {}'.format(e))
+            return []
+        
+        
