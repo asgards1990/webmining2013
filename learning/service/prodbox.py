@@ -48,10 +48,10 @@ class CinemaService(LearningService):
     def loadFilms(self):
         self.films = flt.getFilms()
         if not self.is_loaded('films'):
-            self.fromPktoIndex, self.fromIndextoPk = hashIndexes(self.films.iterator())
-            self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk))
+            self.fromPktoIndex, self.fromIndextoPk, self.film_names = hashIndexes(self.films.iterator())
+            self.create_cobject('films', (self.fromPktoIndex, self.fromIndextoPk, self.film_names))
         else:
-            self.fromPktoIndex, self.fromIndextoPk = self.get_cobject('films').get_content()
+            self.fromPktoIndex, self.fromIndextoPk, self.film_names = self.get_cobject('films').get_content()
         self.nb_films = len(self.fromPktoIndex)
     
     def loadImdb(self):
@@ -147,7 +147,8 @@ class CinemaService(LearningService):
             self.create_cobject('genres', (self.genres_names, self.genres_matrix))
         else:
             self.genres_names, self.genres_matrix = self.get_cobject('genres').get_content()
-    
+        self.nb_genres = len(self.genres_names)
+
     def loadPrizes(self):
         if not self.is_loaded('prizes'):
             gkey = genPrizes(self.films.iterator())
@@ -158,7 +159,8 @@ class CinemaService(LearningService):
             self.create_cobject('prizes', (self.prizes_names, self.prizes_matrix))
         else:
             self.prizes_names, self.prizes_matrix = self.get_cobject('prizes').get_content()
-    
+        self.nb_prizes = len(self.prizes_names)
+
     def loadCountries(self):
         if not self.is_loaded('countries'):
             gkey = genCountries(self.films.iterator())
@@ -212,7 +214,8 @@ class CinemaService(LearningService):
             self.create_cobject('reviews', (self.reviews_names, self.reviews_matrix))
         else:
             self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
-    
+        self.nb_journals = len(self.reviews_names)
+
     def loadReviewsContent(self):
         # TODO : finish implementation
         gkey = genReviewsContent(self.films.iterator())
@@ -859,7 +862,7 @@ class CinemaService(LearningService):
         except IOError:
             print s+' object not found. Creating it...'
             self.review_random_forest_reg = []
-            for i in range(len(self.reviews_names)): #TODO : stocker un self.nb_journals pour eviter le len()
+            for i in range(self.nb_journals):
                 self.review_random_forest_reg.append(RandomForestRegressor())
                 self.review_random_forest_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
             self.dumpJoblibObject(self.review_random_forest_reg, s)
@@ -871,7 +874,7 @@ class CinemaService(LearningService):
         except IOError:
             print s+' object not found. Creating it...'
             self.review_gradient_boosting_reg = []
-            for i in range(len(self.reviews_names)): #TODO : stocker un self.nb_journals pour eviter le len()
+            for i in range(self.nb_journals):
                 self.review_gradient_boosting_reg.append(GradientBoostingRegressor())
                 self.review_gradient_boosting_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
             self.dumpJoblibObject(self.review_gradient_boosting_reg, s)
@@ -883,7 +886,7 @@ class CinemaService(LearningService):
         except IOError:
             print s+' object not found. Creating it...'
             self.prize_random_forest_reg = []
-            for i in range(len(self.prizes_names)): #TODO : stocker un self.nb_institutions pour eviter le len()
+            for i in range(self.nb_journals):
                 self.prize_random_forest_reg.append(RandomForestRegressor())
                 self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_random_forest_reg, s)
@@ -908,17 +911,17 @@ class CinemaService(LearningService):
         self.loadPrizeRandomForestRegressors()
         self.loadPrizeLogisticRegression()
 
-    def compute_predict(self, x_vector, language=None):
+    def compute_predict(self, x_vector):
         '''
-        Return {'prizes' : list of {'institution' : Institution Object,
+        Return {'prizes' : list of {'institution' : Institution name,
                                     'win' : boolean,
                                     'value' : probability
                                    },
                 'box_office' : int,
-                'reviews' : list of {'journal': Journal Object,
+                'reviews' : list of {'journal': Journal name,
                                      'grade' : float,
                                     },
-                'bag_of_words' : list of {'keyword' : Keyword Object,
+                'bag_of_words' : list of {'keyword' : Keyword name,
                                           'value' : float dans [0,1]
                                          }
                }
@@ -930,9 +933,9 @@ class CinemaService(LearningService):
         # Reviews
         journals = []
         predicted_grades = []
-        for i in range(len(self.reviews_names)):
+        for i in range(self.nb_journals):
             try:
-                journals.append(Journal.objects.get(name=self.reviews_names[i]))
+                journals.append(reviews_names[i])
                 predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
             except:
                 pass
@@ -943,7 +946,7 @@ class CinemaService(LearningService):
         predicted_probabilities = []
         for i in range(len(self.prizes_names)):
             try:
-                institutions.append(Institution.objects.get(name=self.prizes_names[i].split('_')[0]))
+                institutions.append(self.prizes_names[i].split('_')[0])
                 if self.prizes_names[i].split('_')[1] == 'True':
                     wins.append(True)
                 else:
@@ -952,12 +955,14 @@ class CinemaService(LearningService):
                     self.prize_logistic_reg[i].predict_proba(x_vector)[0,1]
                 )
             except:
-                pass
+                continue
 
-        results = {'prizes' : [{'institution' : institutions[i],
-                                'win' : wins[i],
-                                'value' : predicted_probabilities[i]} 
-                               for i in range(len(institutions))],
+        results = {'prizes_win' : [{'institution' : institutions[i],
+                                    'value' : predicted_probabilities[i]} 
+                                   for i in range(len(institutions)) if wins[i]],
+                   'prizes_nomination' : [{'institution' : institutions[i],
+                                           'value' : predicted_probabilities[i]}
+                                          for i in range(len(institutions)) if not wins[i]],
                    'box_office' : predicted_box_office,
                    'reviews' : [{'journal' : journals[i],
                                  'grade' : predicted_grades[i]} 
@@ -974,16 +979,8 @@ class CinemaService(LearningService):
         query_results = {}
         
         # Fill query_results['prizes']
-        query_results['prizes_win'] = []
-        query_results['prizes_nomination'] = []
-        for prize in results['prizes']:
-            if prize['win']:
-                query_results['prizes_win'].append({'institution' : prize['institution'].name,
-                                                'value' : prize['value']})
-            else:
-                query_results['prizes_nomination'].append({'institution' : prize['institution'].name,
-                                                         'value' : prize['value']})
-
+        query_results['prizes_win'] = results['prizes_win']
+        query_results['prizes_nomination'] = results['prizes_nomination']
         query_results['prizes_win'] = sorted(query_results['prizes_win'], key=lambda k: -k['value'])
         query_results['prizes_win'] = query_results['prizes_win'][:10]
         query_results['prizes_nomination'] = sorted(query_results['prizes_nomination'], key=lambda k: -k['value'])
@@ -996,31 +993,23 @@ class CinemaService(LearningService):
         sorted_bo = np.sort(bo)
         sorted_bo_indices = np.argsort(bo)
         invrank = np.searchsorted(sorted_bo, results['box_office'])
-        rank = self.films.count() - invrank
+        rank = self.nb_films - invrank
 
         neighbors = []
         
-        try:
-            film = Film.objects.get(#TODO C'est debile de chercher dans la BDD, on a les features
-                pk = self.fromIndextoPk[sorted_bo_indices[invrank - 1]])
+        if invrank>0:
+            k = sorted_bo_indices[invrank - 1]
             neighbors.append({
-                'original_title': film.original_title,
-                'english_title': film.english_title,
+                'english_title': self.film_names[k],
                 'rank' : rank + 1,
-                'value' : film.box_office})
-        except:
-            pass
-        
-        try:
-            film = Film.objects.get(#TODO C'est debile de chercher dans la BDD, on a les features
-                pk = self.fromIndextoPk[sorted_bo_indices[invrank]])
-            neighbors.append({
-                'original_title': film.original_title,
-                'english_title': film.english_title,
+                'value' : bo[k]})
+                
+        k = sorted_bo_indices[invrank]
+        neighbors.append({
+                'english_title': self.film_names[k],
                 'rank' : rank - 1,
-                'value' : film.box_office})
-        except:
-            pass
+                'value' : bo[k]})
+
         neighbors = sorted(neighbors, key=lambda k: k['rank'])
         general_box_office = {'rank': rank,
                               'value': results['box_office'],
@@ -1033,45 +1022,35 @@ class CinemaService(LearningService):
        
         if args.has_key('genres'):
             if args['genres'].__class__ == list:
-                bo_genre = []
-                pk_genre = []
-                for i in range(self.nb_films):
-                    add = False
-                    for genre in args['genres']:
-                        if self.genres_matrix[i, self.genres_names.index(genre)] == 1:
-                            add = True
-                    if add:
-                        bo_genre.append(bo[i])
-                        pk_genre.append(self.fromIndextoPk[i])
-                
+                genres_list = np.zeros(self.nb_genres)
+                for genre in args['genres']:
+                    try:
+                        genres_list[self.genres_names.index(genre)] = 1
+                    except IndexError:
+                        continue
+                useful_indexes = np.where(self.genres_matrix * genres_list > 0)
+                bo_genre = bo[useful_indexes]
+                                                
                 sorted_bo_genre = np.sort(bo_genre)
                 sorted_bo_indices_genre = np.argsort(bo_genre)
                 invrank_genre = np.searchsorted(sorted_bo_genre, results['box_office'])
-                rank_genre = self.films.count() - invrank_genre
+                rank_genre = self.nb_films - invrank_genre
 
                 neighbors_genre = []
         
-                try:
-                    film = Film.objects.get( #TODO C'est debile de chercher dans la BDD, on a les features
-                        pk = pk_genre[sorted_bo_indices_genre[invrank_genre - 1]])
+                if invrank_genre>0:
+                    k = sorted_bo_indices_genre[invrank_genre - 1]
                     neighbors_genre.append({
-                        'original_title': film.original_title,
-                        'english_title': film.english_title,
+                        'english_title': self.film_names[k],
                         'rank' : rank_genre + 1,
-                        'value' : film.box_office})
-                except:
-                    pass
-        
-                try:
-                    film = Film.objects.get(#TODO C'est debile de chercher dans la BDD, on a les features
-                        pk = pk_genre[sorted_bo_indices_genre[invrank_genre]])
-                    neighbors_genre.append({
-                        'original_title': film.original_title,
-                        'english_title': film.english_title,
+                        'value' : bo[k]})
+
+                k = sorted_bo_indices_genre[invrank_genre]
+                neighbors_genre.append({
+                        'english_title': self.film_names[k],
                         'rank' : rank_genre - 1,
-                        'value' : film.box_office})
-                except:
-                    pass
+                        'value' : bo[k]})
+               
                 neighbors_genre = sorted(neighbors_genre, key=lambda k: k['rank'])
                 genre_box_office = {'rank': rank_genre,
                                     'value': results['box_office'],
@@ -1080,26 +1059,11 @@ class CinemaService(LearningService):
         
                 query_results['genre_box_office'] = genre_box_office
 
-        #neighbors_genre = []
-        #for neighbor in results['genre_box_office']['neighbors']:
-        #    neighbors_genre.append({'rank':neighbor['rank'],
-        #                            'original_title':neighbor['film'].original_title,
-        #                            'value':neighbor['film'].box_office})
-        #    genre_box_office = {'rank':results['genre_box_office']['rank'],
-        #                        'value':results['genre_box_office']['value'],
-        #                        'neighbors':neighbors_genre
-        #                        }
-        #    query_results['genre_box_office'] = genre_box_office
-        
         # Fill query_results['critics']
         critics = {}
         
-        reviews = []
-        grades = []
-        for item in results['reviews']:
-            reviews.append({'journal' : item['journal'].name,
-                            'grade' : item['grade']})
-            grades.append(item['grade'])
+        reviews = results['reviews']
+        grades = map(lambda k: k['grade'], reviews)
         reviews = sorted(reviews, key=lambda k: -k['grade'])
         n_reviews = len(reviews)
         selected_reviews = []
@@ -1116,7 +1080,7 @@ class CinemaService(LearningService):
         # Fill query_results['bag_of_words']
         bag_of_words = []
         for item in results['bag_of_words']:
-            bag_of_words.append({'word' : item['keyword'].word,
+            bag_of_words.append({'word' : item['keyword'],
                                  'value' : item['value']
                                  })
         query_results['bag_of_words'] = bag_of_words
@@ -1142,7 +1106,7 @@ class CinemaService(LearningService):
         if self.reduction_actors_in_predictfeatures == 'BOC':
             x_actor_reduced = x_actor_vector * self.proj_actors_BOC
 
-        x_genres_vector = np.zeros([1, len(self.genres_names)])
+        x_genres_vector = np.zeros([1, self.nb_genres])
         if user_input.has_key('genres'):
             if user_input['genres'].__class__ == list:
                 for genre in user_input['genres']:
@@ -1151,7 +1115,7 @@ class CinemaService(LearningService):
                     except ValueError:
                         pass
  
-        x_director_vector = np.zeros([1, len(self.director_names)])
+        x_director_vector = np.zeros([1, self.nb_directors])
         if user_input.has_key('directors'):
             if user_input['directors'].__class__ == list:
                 for director_id in user_input['directors']:
@@ -1165,7 +1129,7 @@ class CinemaService(LearningService):
         if self.reduction_directors_in_predictfeatures == 'SC':
             x_director_reduced = x_director_vector * self.proj_directors_SC
 
-        x_keyword_vector = np.zeros([1, len(self.keyword_names)])
+        x_keyword_vector = np.zeros([1, self.nb_keywords])
         if user_input.has_key('keywords'):
             if user_input['keywords'].__class__ == list:
                 for keyword in user_input['keywords']:
