@@ -1,9 +1,11 @@
 from cinema.models import Film
 from status.models import IMDBFilmStatus
 
-def getFilms(n=None): #like filter1 but returns n films, useful for tests
+def getFilms(n=None, withnanbo = False): #like filter1 but returns n films, useful for tests
     print('Nb of films in DB : ' + str(Film.objects.count()))
-    films = Film.objects.exclude(runtime=None).exclude(genres=None).exclude(country=None).exclude(imdb_user_rating=None).exclude(imdb_nb_user_ratings=None).exclude(box_office=None).exclude(release_date=None).order_by('release_date')
+    films = Film.objects.exclude(runtime=None).exclude(genres=None).exclude(country=None).exclude(imdb_user_rating=None).exclude(imdb_nb_user_ratings=None).exclude(release_date=None).order_by('release_date')
+    if not withnanbo:
+        films = films.exclude(box_office=None)
     if n!=None:
         films=films[:n]
     print('Nb of films after cleaning : ' + str(films.count()) + '. Selected ' + str(100*float(films.count())/Film.objects.count()) + ' %.')
