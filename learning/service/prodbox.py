@@ -1030,11 +1030,11 @@ class CinemaService(LearningService):
         
         # Fill query_results['genre_box_office']
        
-        if user_input.has_key('genres'):
-            if user_input['genres'].__class__ == list:
+        if args.has_key('genres'):
+            if args['genres'].__class__ == list:
                 bo_genre = []
                 pk_genre = []
-                for i in range(films.count()):
+                for i in range(self.films.count()):
                     add = False
                     for genre in args['genres']:
                         if self.genres_matrix[i, self.genres_names.index(genre)] == 1:
