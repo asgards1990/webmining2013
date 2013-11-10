@@ -66,7 +66,6 @@ def defineGenre(name):
         return Genre.objects.get(name = name)
     except Genre.DoesNotExist:
         log.msg('Unlisted genre : ' + name + '.')
-        #WARNING
         return Genre.objects.create(name = name)
 
 def defineLanguage(identifier):

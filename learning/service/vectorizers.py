@@ -97,13 +97,14 @@ def genProductionCompanies(iter_films):
     return genFeature(iter_films,'production_companies', 'imdb_id')
 
 def hashIndexes(iter_films):
-    d1, d2 = {}, {}
+    d1, d2, d3 = {}, {}, {}
     k = 0
     for film in iter_films:
         d1[film.pk] = k
         d2[k] = film.pk
+        d3[k] = film.english_title
         k += 1
-    return d1, d2
+    return d1, d2, d3
 
 def genPrizes(iter_films):
     while True:
