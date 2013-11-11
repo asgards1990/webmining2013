@@ -6,7 +6,7 @@
     {% ifequal choice.image_url "" %}
         <img src="{% static 'img/prediction/avatar_default.png' %}"  alt={{choice.name}}/>
     {% else %}
-        <img src="http://prodbox.co/media/picture/{{ choice.imdb_id  }}.jpg" alt={{choice.name}}/>
+        <img src="http://prodbox.co/media/{% choice.image_url %}" alt={{choice.name}}/>
     {% endifequal %}
     </div>
     <p>{{ choice.name}}

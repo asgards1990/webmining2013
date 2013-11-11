@@ -12,16 +12,8 @@ var nbgenres=0;
 var nbkeywords=0;
 var nbdirector=0;
 
-/*$(document).ready(function() {
-	$('.item6').click(function() {
-	alert(verifSiRequete());
-		changementPredict();
-		alert('hello');
-		});
-	});*/
 function callback (response) {
 		
-alert(JSON.stringify(response));
 //affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 à 9)
 for (k=0;k<8;k++) {
     var nominationValue = response.prizes_nomination[k].value*100+"%";
@@ -32,14 +24,11 @@ for (k=0;k<8;k++) {
 // affichage des victoires dans le tableau des Prizes
 for (k=0;k<8;k++) {  
     var nominationValue = Math.round(response.prizes_win[k].value*10000)/100+"%";
-	alert(nominationValue);
     document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
     document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
    };
 
 var lengthOfReviews = response.critics.reviews.length;
-alert(lengthOfReviews);
-
 	document.getElementById("reviewstable").children[1].children[0].children[0].textContent="Average rating";
 	document.getElementById("reviewstable").children[1].children[0].children[1].textContent=response.critics.average;
 	
@@ -132,98 +121,12 @@ function verifSiRequete(){
 function changementPredict(){
 	if(verifSiRequete()){
 		$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),callback,"json")
-		
 	}
 }
 
 
 $(document).ready(function(){
-//loadChargement("results");
-//setTimeout(function(){unloadChargement("results");},2000)
-//$("#results").click(function(){alert(JSON.stringify(genererRequetePredict()))})
-
 $("#results").click(function(){changementPredict()})
-//envoiDeLaRequete()
-//alert("hello")
-//alert(JSON.stringify(genererRequetePredict()))
-//$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
-//setTimeout(function(){envoiDeLaRequetePredict()},1000)
-//$("#title").click(function(){envoiDeLaRequetePredict()})
-
-//response= JSON.stringify(data)
-/*var response = new Object();
-response = {
-    'success': true,
-    'error': '',
-    'prizes_win': [
-        {
-            'institution': 'test1',
-            'value': 0.3
-        },
-        {
-            'institution': 'test2',
-            'value': 0.2
-        }
-    ],
-    'prizes_nomination': [
-        {
-            'institution': 'test1',
-            'value': 0.4
-        }
-        ,
-        {
-            'institution': 'test2',
-            'value': 0.5
-        }
-    ],
-    'general_box_office': {
-        'rank': 24,
-        'value': 320,
-        'neighbors': [
-            {
-                'rank': 23,
-                'original_title': 'IronMan4',
-                'value': 325.5
-            },
-			{
-                'rank': 25,
-                'original_title': 'test4',
-                'value': 305.5
-            }
-        ]
-    },
-    'genre_box_office': {
-        'rank': 45,
-        'value': 51,
-        'neighbors': [
-            {
-                'rank': 44,
-                'original_title': 'IronMan4',
-                'value': 325.5
-            },
-			{
-                'rank': 46,
-                'original_title': '???',
-                'value': 0.5
-            }
-        ]
-    },
-    'critics': {
-        'average': 0.4
-    },
-    'reviews': [
-        {
-            'journal': 'Télérama',
-            'grade': 0.60
-        },
-        {
-            'journal': 'Télé7-Jours',
-            'grade': 0.18
-        }
-    ]
-};*/
-
-
 })
 
 
