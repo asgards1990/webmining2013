@@ -77,7 +77,7 @@ function genererRequeteSearch(nomfilm,init){
 		requestInter.criteria.genre=$("#genre").prop("checked");
 		requestInter.criteria.budget=$("#budgets").prop("checked");
 		requestInter.criteria.review=$("#review").prop("checked");
-		requestInter.criteria.director=$("#directors").prop("checked");
+		//requestInter.criteria.director=$("#directors").prop("checked");
 		requestInter.filter=new Object();
 		var compteur=0;
 		for(var i=0;i<document.getElementById("actors").getElementsByClassName("listactor").length;i++){
@@ -139,7 +139,7 @@ function genererRequeteSearch(nomfilm,init){
 	else{
 		requestInter.criteria=new Object();
 		requestInter.criteria.actor_director=true;
-		requestInter.criteria.director=true;
+		//requestInter.criteria.director=true;
 		requestInter.criteria.genre=true;
 		requestInter.criteria.budget=true;
 		requestInter.criteria.review=true;
@@ -156,7 +156,7 @@ function envoiDeLaRequeteSearch(nomfilm,init){
 		unloadChargement("sousCadreResultats");
 	}
 	loadChargement("sousCadreResultats");
-	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
+	requete=$.post("http://www.prodbox.co/learning/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
 	/*var data=new Object;
 	data.success=true;
 	data.nbresults=4;
