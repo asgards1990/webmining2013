@@ -25,7 +25,7 @@ import exceptions
 class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
-        self.films = flt.getFilms(withnanbo = True)
+        self.films = flt.getFilms(n=10000, withnanbo = True)
         # TODO: also try log of budget for testing search requests
         self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
@@ -693,12 +693,13 @@ class CinemaService(LearningService):
                                 results = self.compute_search(film, nbresults, crit, filters = self.parse_search_filter(args['filter']) )
                             else:
                                 results = self.compute_search(film, nbresults, crit)
-                            query_results = {'nbresults' : nbresults, 'results' : []}
+                            query_results = {'nbresults' : nbresults, 'results' : [], 'img' : film.image_url if film.image_url else "poster/"+f.imdb_id}
                             for (v, f) in results:
                                 query_results['results'].append(
                                     {'id': f.imdb_id,
                                      'orignal_title': f.original_title,
                                      'title' : f.english_title,
+                                     'img' : f.image_url if f.image_url else "poster/"+f.imdb_id,
                                      'value' : v}
                                     )
                             return query_results
