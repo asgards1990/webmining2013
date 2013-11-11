@@ -273,6 +273,13 @@ function montrerResultats(nomDuCadre,data){
 	var contenu=document.createTextNode("");
 	contenu.id="nomFilmChoisi";
 
+	var text;
+	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
+		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
+			text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
+		}
+	}	
+	
 	contenu.textContent=text
 	document.getElementById("carreCentral").appendChild(conteneurTexteCentral);
 	document.getElementById("conteneurTexteCentral").appendChild(contenu);
