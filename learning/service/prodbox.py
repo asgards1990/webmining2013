@@ -25,7 +25,7 @@ import exceptions
 class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
-        self.films = flt.getFilms(n=100, withnanbo = True)
+        self.films = flt.getFilms(withnanbo = True)
         # TODO: also try log of budget for testing search requests
         self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
@@ -599,7 +599,7 @@ class CinemaService(LearningService):
         self.predict_labels_prizes = self.prizes_matrix.toarray()
         awards_per_institution = np.sum(self.predict_labels_prizes, axis=0)
         self.predict_labels_prizes = self.predict_labels_prizes[:, awards_per_institution > self.min_awards]
-        self.predict_labels_prizes_names = ['prize_' + s for s in self.prizes_names[awards_per_institution > self.min_awards]] # a priori inutile
+        self.predict_labels_prizes_names = ['prize_' + self.prizes_names[k] for k in range(self.nb_prizes) if (awards_per_institution > self.min_awards)[k] ] # a priori inutile
 
     def loadLogBoxOfficeRandomForestRegressor(self):
         s = 'log_box_office_random_forest_reg'
