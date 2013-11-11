@@ -8,7 +8,7 @@ if __name__ == "__main__":
     app_learn = service.prodbox.CinemaService()
     app_learn.loadData()
     app_learn.loadSearchClustering()
-    #app_learn.loadPredict()
+    app_learn.loadPredict()
 
     app = tornado.web.Application(
         [(r'/', ajax_server.handlers.TestHandler),
