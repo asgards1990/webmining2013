@@ -969,7 +969,7 @@ class CinemaService(LearningService):
                                          }
                }
         '''
-        
+
         # Box office
         predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
        
@@ -995,7 +995,7 @@ class CinemaService(LearningService):
             )
 
         # Bag of words
-        input_genres = x_vector[-self.nb_genres]
+        input_genres = x_vector[0,-self.nb_genres:]
         bagofwords = self.get_bagofwords(np.mean(predicted_grades), input_genres)
                                          
         results = {'prizes_win' : [{'institution' : institutions[i],
