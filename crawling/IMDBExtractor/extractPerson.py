@@ -23,17 +23,17 @@ logger = initLogger.getLogger(IMDBExtractorConfig.EXTRACTOR_PERSON_PIC_LOGGER_NA
 
 ###################################################################
 
-year_min=1980
+year_min=2000
 year_max=2012
 priority_max=1000
 
 
 film_conn = Connector.IMDBStatusConnector.IMDBFilmStatusConnector()
-film_id_tab = film_conn.getExtractedWithAwards()
+film_id_tab = film_conn.getExtractedFiltered(year_min,year_max,priority_max)
 for film_id in film_id_tab:
    logger.debug('Film en cours d extraction : {}'.format(film_id))
    Connector.IMDBStatusConnector.IMDBFilmStatusConnector().setExtractedStatus(film_id, "0")
-   FilmExtractor.IMDB_Extractor.IMDB_awardsExtract(film_id)
+   FilmExtractor.IMDB_Extractor.IMDB_actorsDirectorsExtract(film_id)
    Connector.IMDBStatusConnector.IMDBFilmStatusConnector().setExtractedStatus(film_id, "1")
    
 
