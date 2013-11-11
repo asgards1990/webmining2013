@@ -6,6 +6,9 @@ import service.prodbox
 
 if __name__ == "__main__":
     app_learn = service.prodbox.CinemaService()
+    app_learn.loadData()
+    app_learn.loadSearchClustering()
+    #app_learn.loadPredict()
 
     app = tornado.web.Application(
         [(r'/', ajax_server.handlers.TestHandler),
@@ -14,6 +17,7 @@ if __name__ == "__main__":
          (r'/suggest/', ajax_server.handlers.Handler, dict(app_learn = app_learn, method="suggest_keywords"))]
         )
     app.listen(8080)
+    
     s = raw_input("Should we start the server ?")
     if s!="y":
         app.quit()

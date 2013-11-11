@@ -1,8 +1,6 @@
 import tornado.ioloop
 import tornado.web
 import tornado.escape
-import simplejson
-
 import service.objects
 
 class TestHandler(tornado.web.RequestHandler):
@@ -30,13 +28,12 @@ class Handler(tornado.web.RequestHandler):
                         raise service.objects.ParsingError('Undefined method.')
                     query_results['success'] = True
                     query_results['error'] = ''
-                    print query_results
-                    self.finish(simplejson.dumps(query_results))
-                    #self.finish(tornado.escape.json_encode(query_results))                    
+                    print(query_results)
+                    self.finish(tornado.escape.json_encode(query_results))                    
                 except service.objects.ParsingError as e:
                     self.error(e.value)
-            except ValueError:
-                self.error('Wrong JSON format.')
+            except ValueError as e:
+                self.error('Wrong JSON format. Error: {}'.format(e))
         else:
             self.error('No proper JSON request found.')
 
