@@ -703,13 +703,13 @@ class CinemaService(LearningService):
                                 results = self.compute_search(film, nbresults, crit, filters = self.parse_search_filter(args['filter']) )
                             else:
                                 results = self.compute_search(film, nbresults, crit)
-                            query_results = {'nbresults' : nbresults, 'results' : [], 'img' : film.image_url if film.image_url else "poster/"+film.imdb_id}
+                            query_results = {'nbresults' : nbresults, 'results' : [], 'img' : film.image_url}
                             for (v, f) in results:
                                 query_results['results'].append(
                                     {'id': f.imdb_id,
                                      'orignal_title': f.original_title,
                                      'title' : f.english_title,
-                                     'img' : f.image_url if f.image_url else "poster/"+f.imdb_id,
+                                     'img' : f.image_url,
                                      'value' : v}
                                     )
                             return query_results
@@ -893,9 +893,6 @@ class CinemaService(LearningService):
             pass
         
         return filt_out
-        
-        accuracy = 4.
-
 
 ### PREDICTION ###
     def get_bagofwords(self, predicted_score, input_genres):
@@ -1182,7 +1179,7 @@ class CinemaService(LearningService):
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
             if user_input['budget'].__class__ == int:
-                x_budget_vector[0,0] = float(user_input['budget'])
+                x_budget_vector[0,0] = float(1000000.0 * user_input['budget'])
         
         x_season_vector = np.zeros([1, len(self.season_names)]) # Default Season?
         try:
