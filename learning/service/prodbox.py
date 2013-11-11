@@ -25,7 +25,7 @@ import exceptions
 class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
-        self.films = flt.getFilms(n=10000, withnanbo = True)
+        self.films = flt.getFilms(n=100, withnanbo = True)
         # TODO: also try log of budget for testing search requests
         self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
@@ -55,6 +55,8 @@ class CinemaService(LearningService):
 
         self.search_latent_vars = False
         self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
+        
+        self.min_awards = 100
         
     def loadData(self):
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
@@ -595,7 +597,9 @@ class CinemaService(LearningService):
         self.predict_labels_reviews = self.reviews_matrix.toarray()
         self.predict_labels_reviews_names = ['review_' + s for s in self.reviews_names] # a priori inutile
         self.predict_labels_prizes = self.prizes_matrix.toarray()
-        self.predict_labels_prizes_names = ['prize_' + s for s in self.prizes_names] # a priori inutile
+        awards_per_institution = np.sum(self.predict_labels_prizes, axis=0)
+        self.predict_labels_prizes = self.predict_labels_prizes[:, awards_per_institution > self.min_awards]
+        self.predict_labels_prizes_names = ['prize_' + s for s in self.prizes_names[awards_per_institution > self.min_awards]] # a priori inutile
 
     def loadLogBoxOfficeRandomForestRegressor(self):
         s = 'log_box_office_random_forest_reg'
@@ -904,38 +908,28 @@ class CinemaService(LearningService):
         '''
         
         # Box office
-        try:
-            predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
-        except:
-            pass
-
+        predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
        
         # Reviews
         journals = []
         predicted_grades = []
         for i in range(self.nb_journals):
-            try:
-                journals.append(self.reviews_names[i])
-                predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
-            except:
-                pass
+            journals.append(self.reviews_names[i])
+            predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
 
         # Prizes
         institutions = []
         wins = []
         predicted_probabilities = []
         for i in range(self.nb_prizes):
-            try:
-                institutions.append(self.prizes_names[i].split('_')[0])
-                if self.prizes_names[i].split('_')[1] == 'True':
-                    wins.append(True)
-                else:
-                    wins.append(False)
-                predicted_probabilities.append(
-                    self.prize_logistic_reg[i].predict_proba(x_vector)[0,1]
-                )
-            except:
-                continue
+            institutions.append(self.prizes_names[i].split('_')[0])
+            if self.prizes_names[i].split('_')[1] == 'True':
+                wins.append(True)
+            else:
+                wins.append(False)
+            predicted_probabilities.append(
+                self.prize_logistic_reg[i].predict_proba(x_vector)[0,1]
+            )
 
         results = {'prizes_win' : [{'institution' : institutions[i],
                                     'value' : predicted_probabilities[i]} 
