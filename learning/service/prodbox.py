@@ -898,12 +898,12 @@ class CinemaService(LearningService):
 
 
 ### PREDICTION ###
-    def get_bagofwords(predicted_score, input_genres):
+    def get_bagofwords(self, predicted_score, input_genres):
         # le niveau de précision qui détermine quelles notes on considère comme proches de la note du film virtuel
         # On sélectionne d'abord les critiques pertinentes pour élaborer le bag of words :
         accuracy = 4.
         corpus = []
-        for i in range(len(self.films)):
+        for i in range(self.nb_films):
         # on retient le film n° i s'il est de l'un des genres voulus...
             if max([self.genres_matrix[i, genre] == input_genres[genre] == 1 for genre in range(self.nb_genres)]):
             # ... et on retient alors les critiques de ce film dont la note est proche de predicted_score :
@@ -927,8 +927,8 @@ class CinemaService(LearningService):
         # on s'intéresse aux adjectifs qui apparaissent le plus souvent dans l'ensemble du corpus
         top_indexes = sorted(range(len(y)), key = lambda i: y[i])[-10:]
         inv_dic = {adj : key for key, adj in dic.items()}
-        return [{'keyword' : inv_dic[i], 'value': y[i]} for i in top_indexes if y[i] > 1]
         # on sélectionne les 10 adjectifs les plus utilisés et on les retourne avec un poids égal à leur nombre d'occurences
+        return [{'keyword' : inv_dic[i], 'value': y[i]} for i in top_indexes if y[i] > 1]
 
     def compute_predict(self, x_vector):
         '''
