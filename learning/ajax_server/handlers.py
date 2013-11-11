@@ -31,7 +31,8 @@ class Handler(tornado.web.RequestHandler):
                         raise service.objects.ParsingError('Undefined method.')
                     query_results['success'] = True
                     query_results['error'] = ''
-                    self.finish(tornado.escape.json_encode(query_results))                    
+                    print(query_results)
+                    self.finish(tornado.escape.json_encode(query_results))                
                 except service.objects.ParsingError as e:
                     self.error(e.value)
         else:
