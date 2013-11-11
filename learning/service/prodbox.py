@@ -1068,7 +1068,7 @@ class CinemaService(LearningService):
                     lower_neighbor_genre = {
                         'english_title': self.film_names[k],
                         'rank' : int(rank_genre + 1),
-                        'value' : float(bo[k])}
+                        'value' : float(bo_genre[k])}
                 else: #our film is last
                     lower_neighbor_genre = {
                         'english_title': '',
@@ -1079,7 +1079,7 @@ class CinemaService(LearningService):
                     k = sorted_bo_indices_genre[invrank_genre]
                     upper_neighbor_genre = {'english_title': self.film_names[k],
                                             'rank' : int(rank_genre - 1),
-                                            'value' : float(bo[k])}
+                                            'value' : float(bo_genre[k])}
                 else:
                     upper_neighbor_genre = {'english_title': '',
                                            'rank' : int(rank_genre - 1),
