@@ -19,7 +19,6 @@ def get_dictionary():
 'positive','plus',
 'disadvantageous',
 'negative','minus',
-
 'unaffected',
 'negative',
 'dismissive',
@@ -34,7 +33,6 @@ def get_dictionary():
 'unagitated',
 'disagreeable',
 'harsh','abrasive',
-
 'pulseless','inanimate','breathless',
 'lifeless',
 'selfless','altruistic',
@@ -74,7 +72,6 @@ def get_dictionary():
 'sightly','fair','comely','bonny','bonnie',
 'gorgeous',
 'picturesque',
-
 'ravishing',
 'stunning',
 'fugly',
@@ -89,14 +86,9 @@ def get_dictionary():
 'vixenish',
 'unmalicious',
 'benignant','benign',
-
 'top-quality','top-grade','high-grade',
 'unsurpassable',
-
-
 'finer',
-
-
 'reckless','rash','heady','foolhardy',
 'unbound',
 'untethered',
@@ -252,7 +244,6 @@ def get_dictionary():
 'undated','dateless',
 'indecent',
 'vulgar','gross','earthy','crude',
-
 'indelicate',
 'undeclared',
 'decorous',
@@ -455,7 +446,6 @@ def get_dictionary():
 'inspired','elysian','divine',
 'unsung','unknown','obscure',
 'no-go',
-
 'swell','smashing','slap-up','peachy','not_bad','nifty','neat','keen','groovy','dandy','cracking','corking','bully','bang-up',
 'good_enough',
 'goodish',
@@ -648,7 +638,6 @@ def get_dictionary():
 'unlisted',
 'unliveable','unlivable',
 'unextended',
-
 'wasted','squandered',
 'stray',
 'straying',
@@ -716,7 +705,6 @@ def get_dictionary():
 'psychoneurotic','neurotic',
 'abulic','aboulic',
 'nice',
-
 'pleasant',
 'nasty','awful',
 'lousy','filthy','dirty',
@@ -730,7 +718,6 @@ def get_dictionary():
 'pestilent','pernicious','deadly','baneful',
 'innocuous',
 'unoccupied',
-
 'offensive',
 'repulsive','repugnant','obscene','detestable','abhorrent',
 'creepy',
@@ -748,7 +735,6 @@ def get_dictionary():
 'unrecognized','unrecognised',
 'off-street',
 'off-line',
-
 'wrong','untimely','unseasonable','ill-timed',
 'inconvenient',
 'unopposed',
@@ -829,9 +815,7 @@ def get_dictionary():
 'constructive',
 'negative',
 'neutral',
-
 'unworkable','unfeasible','infeasible','impracticable',
-
 'uncultivatable','uncultivable',
 'unfunctional',
 'precise',
@@ -866,7 +850,6 @@ def get_dictionary():
 'vain','swollen-headed','swollen','self-conceited','egotistical','egotistic','conceited',
 'modest','mild','meek',
 'disarming',
-
 'unmixed','unmingled',
 'unadulterated',
 'modified','limited',
@@ -934,7 +917,6 @@ def get_dictionary():
 'rust-resistant',
 'sublime','reverend',
 'unsafe','dangerous',
-
 'opposite',
 'sane',
 'manic-depressive',
@@ -993,7 +975,6 @@ def get_dictionary():
 'ungregarious',
 'unsold',
 'wide-eyed','simple','round-eyed','dewy-eyed','childlike',
-
 'unsound',
 'speculative','risky','high-risk',
 'substantial','strong','solid',
@@ -1020,7 +1001,6 @@ def get_dictionary():
 'sufficient',
 'insufficient','deficient',
 'olympian','majestic',
-
 'modest','lowly','humble',
 'indifferent',
 'banner',
@@ -1028,7 +1008,7 @@ def get_dictionary():
 'superb','brilliant',
 'splendid','first-class','fantabulous','excellent',
 'gilt-edged',
-'superlative','sterling','greatest',
+'superlative','sterling','great',
 'outstanding',
 'premium',
 'pukka','pucka',
@@ -1066,7 +1046,6 @@ def get_dictionary():
 'unswept',
 'unsympathetic',
 'buttoned-up',
-
 'wild','untamed',
 'esthetic','artistic','aesthetic',
 'unpretentious','unostentatious','understated',
@@ -1128,7 +1107,6 @@ def get_dictionary():
 'unsafe','insecure',
 'sheltered',
 'unwelcome',
-
 'sick','ill',
 'autistic',
 'livery','liverish','bilious',
