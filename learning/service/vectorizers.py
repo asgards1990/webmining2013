@@ -125,7 +125,7 @@ def genReviews(iter_films):
         film = next(iter_films)
         reviews = Review.objects.filter(film=film).exclude(grade=None)
         if reviews.count() == 0:
-            yield {'_nothing' : 1}
+            yield {} #{'_nothing' : 1}
         else:
             d = {}
             for review in reviews.all():
@@ -135,7 +135,7 @@ def genReviews(iter_films):
 def genReviewsContent(iter_films):
     while True:
         film = next(iter_films)
-        reviews = Review.objects.filter(film=film)
+        reviews = Review.objects.filter(film=film).exclude(grade=None)
         d = {}
         for review in reviews.all():
             d[review.journal.name] = review.summary

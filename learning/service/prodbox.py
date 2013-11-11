@@ -1004,7 +1004,6 @@ class CinemaService(LearningService):
         query_results['prizes_nomination'] = query_results['prizes_nomination'][:10]
         
         # Fill query_results['general_box_office']
-        
         bo = self.box_office_matrix.toarray().ravel()
         sorted_bo = np.sort(bo)
         sorted_bo_indices = np.argsort(bo)
