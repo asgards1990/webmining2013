@@ -27,7 +27,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.contrib.downloadermiddleware.httpcache.HttpCacheMiddleware': 300,
 }
 
-HTTPCACHE_ENABLED = True
+HTTPCACHE_ENABLED = False
 
 HTTPCACHE_DIR = '/Users/benjamin/webmining2013/scrapyimdb/scrapy-http-cache/'
 

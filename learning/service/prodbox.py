@@ -693,12 +693,13 @@ class CinemaService(LearningService):
                                 results = self.compute_search(film, nbresults, crit, filters = self.parse_search_filter(args['filter']) )
                             else:
                                 results = self.compute_search(film, nbresults, crit)
-                            query_results = {'nbresults' : nbresults, 'results' : []}
+                            query_results = {'nbresults' : nbresults, 'results' : [], 'img' : film.image_url if film.image_url else "poster/"+f.imdb_id}
                             for (v, f) in results:
                                 query_results['results'].append(
                                     {'id': f.imdb_id,
                                      'orignal_title': f.original_title,
                                      'title' : f.english_title,
+                                     'img' : f.image_url if f.image_url else "poster/"+f.imdb_id,
                                      'value' : v}
                                     )
                             return query_results
