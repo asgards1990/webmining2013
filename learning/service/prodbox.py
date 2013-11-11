@@ -511,7 +511,8 @@ class CinemaService(LearningService):
             director_reduced=self.director_reduced_KM
         X_people = scipy.sparse.hstack([normalize(actor_reduced.astype(np.double),norm='l1',axis=1),normalize(director_reduced.astype(np.double),norm='l1',axis=1)])
         X_budget = self.budget_matrix
-        X_review = self.reviews_matrix
+        X_review = self.reviews_matrix / 2 # TODO : check if results are better
+        #X_review.data = X_review.data - 1
         X_genre =  self.genres_matrix
         X_budget = scipy.sparse.csr_matrix(np.log(X_budget.toarray()))
         X_budget = X_budget/max(X_budget.data)
@@ -950,8 +951,10 @@ class CinemaService(LearningService):
         journals = []
         predicted_grades = []
         for i in range(self.nb_journals):
-            journals.append(self.reviews_names[i])
-            predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
+            gr = self.review_gradient_boosting_reg[i].predict(x_vector)[0]
+            if gr >= 1.0:
+                journals.append(self.reviews_names[i])
+                predicted_grades.append(gr-1)
         
         # Prizes
         institutions = []
