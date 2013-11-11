@@ -53,6 +53,7 @@ class CinemaService(LearningService):
 
         self.clustering_type_in_searchclustering = 'KM'
 
+        self.search_latent_vars = False
         self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
         
     def loadData(self):
@@ -492,7 +493,7 @@ class CinemaService(LearningService):
         else:
             self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM = self.get_cobject('directors_reduced').get_content()
 
-    def getWeightedSearchFeatures(self, k, latent_vars=False):
+    def getWeightedSearchFeatures(self, k):
         if self.reduction_actors_in_searchclustering == 'SC':
             actor_reduced=self.actor_reduced_SC
         if self.reduction_actors_in_searchclustering == 'KM':
@@ -517,7 +518,7 @@ class CinemaService(LearningService):
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight
         genre_weight = self.high_weight if (k>>3)%2 else self.low_weight
         res = scipy.sparse.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
-        if latent_vars:
+        if self.search_latent_vars:
             res = scipy.sparse.hstack([res, self.low_weight * self.keywords_reduced_KM])
         return res
 
@@ -527,7 +528,7 @@ class CinemaService(LearningService):
             self.search_clustering_SC = {}
             for k in range(1, 16): # 0 is not a correct value
                 print('Doing search clustering number '+str(k)+'/15')
-                X = self.getWeightedSearchFeatures(k, latent_vars=True)
+                X = self.getWeightedSearchFeatures(k)
                 # First method
                 KM = KMeans(n_clusters=self.n_clusters_search, verbose=verbose)
                 KM.fit(X)
