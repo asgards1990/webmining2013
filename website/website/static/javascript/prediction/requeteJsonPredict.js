@@ -131,7 +131,7 @@ function verifSiRequete(){
 
 function changementPredict(){
 	if(verifSiRequete()){
-		$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),callback,"json")
+		$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),callback,"json")
 		
 	}
 }
@@ -146,7 +146,7 @@ $("#results").click(function(){changementPredict()})
 //envoiDeLaRequete()
 //alert("hello")
 //alert(JSON.stringify(genererRequetePredict()))
-//$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
+//$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),function(data){alert(JSON.stringify(data))},"json")
 //setTimeout(function(){envoiDeLaRequetePredict()},1000)
 //$("#title").click(function(){envoiDeLaRequetePredict()})
 
@@ -304,10 +304,10 @@ function envoiDeLaRequetePredict(){
 		unloadChargement("results");
 	}
 	loadChargement("results");
-	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
+	requete=$.post("http://www.prodbox.co/learning/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
 	//alert("hello")
 	//alert(JSON.stringify(genererRequetePredict()))
-	//$.post("http://senellart.com:8080/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
+	//$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
 	/*var data=new Object;
 	data.success=true;
 	data.error="";
