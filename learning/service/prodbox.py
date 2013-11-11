@@ -928,7 +928,7 @@ class CinemaService(LearningService):
         top_indexes = sorted(range(len(y)), key = lambda i: y[i])[-10:]
         inv_dic = {adj : key for key, adj in dic.items()}
         # on sélectionne les 10 adjectifs les plus utilisés et on les retourne avec un poids égal à leur nombre d'occurences
-        return [{'keyword' : inv_dic[i], 'value': y[i]} for i in top_indexes if y[i] > 1]
+        return [{'keyword' : inv_dic[i], 'value': float(y[i])} for i in top_indexes if y[i] > 1]
     
     def compute_predict(self, x_vector):
         '''
