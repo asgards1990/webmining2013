@@ -5,3 +5,4 @@ $(document).ready(function() {
 	$('#genres > a > span').text($('#genres > ul > li > p > .checked').length);
     })
 });
+
