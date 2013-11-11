@@ -893,9 +893,6 @@ class CinemaService(LearningService):
             pass
         
         return filt_out
-        
-        accuracy = 4.
-
 
 ### PREDICTION ###
     def get_bagofwords(self, predicted_score, input_genres):
@@ -1182,7 +1179,7 @@ class CinemaService(LearningService):
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
             if user_input['budget'].__class__ == int:
-                x_budget_vector[0,0] = float(user_input['budget'])
+                x_budget_vector[0,0] = float(1000000.0 * user_input['budget'])
         
         x_season_vector = np.zeros([1, len(self.season_names)]) # Default Season?
         try:
