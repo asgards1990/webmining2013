@@ -156,7 +156,7 @@ function envoiDeLaRequeteSearch(nomfilm,init){
 		unloadChargement("sousCadreResultats");
 	}
 	loadChargement("sousCadreResultats");
-	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
+	requete=$.post("http://www.prodbox.co/learning/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
 	/*var data=new Object;
 	data.success=true;
 	data.nbresults=4;
