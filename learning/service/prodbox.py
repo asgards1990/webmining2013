@@ -28,7 +28,7 @@ import exceptions
 class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
-        self.films = flt.getFilms(n=10000, withnanbo = True)
+        self.films = flt.getFilms(withnanbo = True)
         # TODO: also try log of budget for testing search requests
         self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
@@ -56,7 +56,10 @@ class CinemaService(LearningService):
 
         self.clustering_type_in_searchclustering = 'KM'
 
+        self.search_latent_vars = False
         self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
+        
+        self.min_awards = 100
         
     def loadData(self):
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords' 
@@ -495,7 +498,7 @@ class CinemaService(LearningService):
         else:
             self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM = self.get_cobject('directors_reduced').get_content()
 
-    def getWeightedSearchFeatures(self, k, latent_vars=False):
+    def getWeightedSearchFeatures(self, k):
         if self.reduction_actors_in_searchclustering == 'SC':
             actor_reduced=self.actor_reduced_SC
         if self.reduction_actors_in_searchclustering == 'KM':
@@ -520,7 +523,7 @@ class CinemaService(LearningService):
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight
         genre_weight = self.high_weight if (k>>3)%2 else self.low_weight
         res = scipy.sparse.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
-        if latent_vars:
+        if self.search_latent_vars:
             res = scipy.sparse.hstack([res, self.low_weight * self.keywords_reduced_KM])
         return res
 
@@ -530,7 +533,7 @@ class CinemaService(LearningService):
             self.search_clustering_SC = {}
             for k in range(1, 16): # 0 is not a correct value
                 print('Doing search clustering number '+str(k)+'/15')
-                X = self.getWeightedSearchFeatures(k, latent_vars=True)
+                X = self.getWeightedSearchFeatures(k)
                 # First method
                 KM = KMeans(n_clusters=self.n_clusters_search, verbose=verbose)
                 KM.fit(X)
@@ -597,7 +600,9 @@ class CinemaService(LearningService):
         self.predict_labels_reviews = self.reviews_matrix.toarray()
         self.predict_labels_reviews_names = ['review_' + s for s in self.reviews_names] # a priori inutile
         self.predict_labels_prizes = self.prizes_matrix.toarray()
-        self.predict_labels_prizes_names = ['prize_' + s for s in self.prizes_names] # a priori inutile
+        awards_per_institution = np.sum(self.predict_labels_prizes, axis=0)
+        self.predict_labels_prizes = self.predict_labels_prizes[:, awards_per_institution > self.min_awards]
+        self.predict_labels_prizes_names = ['prize_' + self.prizes_names[k] for k in range(self.nb_prizes) if (awards_per_institution > self.min_awards)[k] ] # a priori inutile
 
     def loadLogBoxOfficeRandomForestRegressor(self):
         s = 'log_box_office_random_forest_reg'
@@ -696,12 +701,13 @@ class CinemaService(LearningService):
                                 results = self.compute_search(film, nbresults, crit, filters = self.parse_search_filter(args['filter']) )
                             else:
                                 results = self.compute_search(film, nbresults, crit)
-                            query_results = {'nbresults' : nbresults, 'results' : []}
+                            query_results = {'nbresults' : nbresults, 'results' : [], 'img' : film.image_url if film.image_url else "poster/"+f.imdb_id}
                             for (v, f) in results:
                                 query_results['results'].append(
                                     {'id': f.imdb_id,
                                      'orignal_title': f.original_title,
                                      'title' : f.english_title,
+                                     'img' : f.image_url if f.image_url else "poster/"+f.imdb_id,
                                      'value' : v}
                                     )
                             return query_results
@@ -963,38 +969,28 @@ def get_bagofwords(predicted_score, input_genres):
         '''
         
         # Box office
-        try:
-            predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
-        except:
-            pass
-
+        predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
        
         # Reviews
         journals = []
         predicted_grades = []
         for i in range(self.nb_journals):
-            try:
-                journals.append(self.reviews_names[i])
-                predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
-            except:
-                pass
+            journals.append(self.reviews_names[i])
+            predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
 
         # Prizes
         institutions = []
         wins = []
         predicted_probabilities = []
         for i in range(self.nb_prizes):
-            try:
-                institutions.append(self.prizes_names[i].split('_')[0])
-                if self.prizes_names[i].split('_')[1] == 'True':
-                    wins.append(True)
-                else:
-                    wins.append(False)
-                predicted_probabilities.append(
-                    self.prize_logistic_reg[i].predict_proba(x_vector)[0,1]
-                )
-            except:
-                continue
+            institutions.append(self.prizes_names[i].split('_')[0])
+            if self.prizes_names[i].split('_')[1] == 'True':
+                wins.append(True)
+            else:
+                wins.append(False)
+            predicted_probabilities.append(
+                self.prize_logistic_reg[i].predict_proba(x_vector)[0,1]
+            )
 
         # Bag of words
         input_genres = x_vector[-self.nb_genres]
