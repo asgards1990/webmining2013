@@ -28,7 +28,7 @@ import exceptions
 class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
-        self.films = flt.getFilms(withnanbo = True)
+        self.films = flt.getFilms(n=10000, withnanbo = True)
         # TODO: also try log of budget for testing search requests
         self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
@@ -703,7 +703,7 @@ class CinemaService(LearningService):
                                 results = self.compute_search(film, nbresults, crit, filters = self.parse_search_filter(args['filter']) )
                             else:
                                 results = self.compute_search(film, nbresults, crit)
-                            query_results = {'nbresults' : nbresults, 'results' : [], 'img' : film.image_url if film.image_url else "poster/"+f.imdb_id}
+                            query_results = {'nbresults' : nbresults, 'results' : [], 'img' : film.image_url if film.image_url else "poster/"+film.imdb_id}
                             for (v, f) in results:
                                 query_results['results'].append(
                                     {'id': f.imdb_id,
@@ -894,37 +894,59 @@ class CinemaService(LearningService):
         
         return filt_out
 
-
-### PREDICTION ###
-    def get_bagofwords(predicted_score, input_genres):
         accuracy = 4.
-        # le niveau de précision qui détermine quelles notes on considère comme proches de la note du film virtuel
-        # On sélectionne d'abord les critiques pertinentes pour élaborer le bag of words :
+    # le niveau de précision qui détermine quelles notes on considère comme proches de la note du film virtuel
+
+    # On sélectionne d'abord les critiques pertinentes pour élaborer le bag of words :
+
         corpus = []
-        for i in range(self.nb_films):
-            # on retient le film n° i s'il est de l'un des genres voulus...
+
+        for i in range(len(self.films)):
+
+        # on retient le film n° i s'il est de l'un des genres voulus...
+
             if max([self.genres_matrix[i, genre] == input_genres[genre] == 1 for genre in range(self.nb_genres)]):
-               # ... et on retient alors les critiques de ce film dont la note est proche de predicted_score :
+
+            # ... et on retient alors les critiques de ce film dont la note est proche de predicted_score :
+            
                 for journal in self.reviews_content[i].keys():
+                
                     journal_index = self.reviews_names.index(journal)
+
                     if abs(predicted_score - self.reviews_matrix[i, journal_index]) < .5/accuracy:
+
                         corpus.append(self.reviews_content[i][journal])
-                # Une fois le corpus de critiques construit, on procède au comptage automatique des mots du dictionnaire
+
+    # Une fois le corpus de critiques construit, on procède au comptage automatique des mots du dictionnaire
+
         v = CountVectorizer()
+
         dic = get_dictionary()
-        # le dictionnaire d'adjectifs
-        # On retire du dictionnaire certains mots positifs qui pourraient apparaître artificiellement, sans être pertinents pour un film mal noté :
+    # le dictionnaire d'adjectifs
+
+    # On retire du dictionnaire certains mots positifs qui pourraient apparaître artificiellement, sans être pertinents pour un film mal noté :
+
         positive_adjectives = {'perfect' : .6, 'great' : .6, 'epic' : .6, 'artful' : .6}
+
         for adj, adj_positivity in positive_adjectives.items():
+        
             if predicted_score < adj_positivity:
+
                 del dic[adj]
-        # Puis on procède au comptage :
+
+    # Puis on procède au comptage :
+
         v.vocabulary_ = dic
+
         X = v.transform(corpus).toarray()
+
         y = [sum(X[:,i]) for i in range(len(v.vocabulary_))]
-        # on s'intéresse aux adjectifs qui apparaissent le plus souvent dans l'ensemble du corpus
+    # on s'intéresse aux adjectifs qui apparaissent le plus souvent dans l'ensemble du corpus
+
         top_indexes = sorted(range(len(y)), key = lambda i: y[i])[-10:]
+
         inv_dic = {adj : key for key, adj in dic.items()}
+
         return [{'keyword' : inv_dic[i], 'value': y[i]} for i in top_indexes if y[i] > 1]
 # on sélectionne les 10 adjectifs les plus utilisés et on les retourne avec un poids égal à leur nombre d'occurences
 
@@ -943,7 +965,7 @@ class CinemaService(LearningService):
                                          }
                }
         '''
-        
+
         # Box office
         predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
        
@@ -969,9 +991,9 @@ class CinemaService(LearningService):
             )
 
         # Bag of words
-        x_genres_vector = x_vector[-self.nb_genres:]
-        bagofwords = self.get_bagofwords(np.mean(predicted_grades), x_genres_vector)
-        
+        input_genres = x_vector[0,-self.nb_genres:]
+        bagofwords = self.get_bagofwords(np.mean(predicted_grades), input_genres)
+                                         
         results = {'prizes_win' : [{'institution' : institutions[i],
                                     'value' : predicted_probabilities[i]} 
                                    for i in range(len(institutions)) if wins[i]],
@@ -982,8 +1004,8 @@ class CinemaService(LearningService):
                    'reviews' : [{'journal' : journals[i],
                                  'grade' : predicted_grades[i]} 
                                 for i in range(self.nb_journals)],
-                   'bag_of_words' : []
-                    }
+                   'bag_of_words' : bagofwords
+                    }                   
 
         return results
 
