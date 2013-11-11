@@ -171,16 +171,16 @@ class getIMDBCompany(threading.Thread):
 
 
 #IMDB_FILM_EXTRACTOR = getIMDBFilm(year_min,year_max,priority_max)
-#IMDB_PERSON_EXTRACTOR = getIMDBPerson()
-#IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
+IMDB_PERSON_EXTRACTOR = getIMDBPerson()
+IMDB_COMPANY_EXTRACTOR = getIMDBCompany()
 
 #IMDB_FILM_EXTRACTOR.start()
-#IMDB_PERSON_EXTRACTOR.start()
-#IMDB_COMPANY_EXTRACTOR.start()
+IMDB_PERSON_EXTRACTOR.start()
+IMDB_COMPANY_EXTRACTOR.start()
 
 #reExtractBuggyFilm()
    
-reExtractOneMovieAwards("tt1655442")
+#reExtractOneMovieAwards("tt1655442")
 #The artist tt1655442
 #Exemple avec des devises Japonaises : tt0245429
 #Exemple avec des devises € : tt302994

@@ -50,6 +50,13 @@ def IMDB_awardsExtractInstitution(film_id):
       awardsPage.extractInstitution()
 
 
+def IMDB_actorsDirectorsExtract(film_id):
+   logger.debug("Lancement de l'extraction des acteurs/directeurs  pour le film {}".format(film_id))
+   fullCreditsPage = IMDBExtractor_fullCredits(film_id)
+   if fullCreditsPage.isExtractable:
+      fullCreditsPage.extractFullCredit_Actor_DB()
+
+
 def IMDB_reviewsExtract(film_id):
    logger.debug("Lancement de l'extraction des reviews pour le film {}".format(film_id))
    reviewPage = IMDBExtractor_Reviews(film_id)
