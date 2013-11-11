@@ -170,6 +170,7 @@ function callback_bag_of_words(response) {
 		.start();
 	
 		function draw(words) {
+            d3.select("#bagofwords").html("");
 			d3.select("#bagofwords").append("svg")
 			.attr("width", 420)
 			.attr("height", 340)
