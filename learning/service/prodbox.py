@@ -25,7 +25,7 @@ import exceptions
 class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
-        self.films = flt.getFilms(withnanbo = True)
+        self.films = flt.getFilms(n=100, withnanbo = True)
         # TODO: also try log of budget for testing search requests
         self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
@@ -598,8 +598,10 @@ class CinemaService(LearningService):
         self.predict_labels_reviews_names = ['review_' + s for s in self.reviews_names] # a priori inutile
         self.predict_labels_prizes = self.prizes_matrix.toarray()
         awards_per_institution = np.sum(self.predict_labels_prizes, axis=0)
-        self.predict_labels_prizes = self.predict_labels_prizes[:, awards_per_institution > self.min_awards]
-        self.predict_labels_prizes_names = ['prize_' + self.prizes_names[k] for k in range(self.nb_prizes) if (awards_per_institution > self.min_awards)[k] ] # a priori inutile
+        considered = awards_per_institution > self.min_awards
+        self.nb_considered_prizes = sum(considered)
+        self.predict_labels_prizes = self.predict_labels_prizes[:, considered]
+        self.predict_labels_prizes_names = ['prize_' + self.prizes_names[k] for k in range(self.nb_prizes) if considered[k] ] # a priori inutile
 
     def loadLogBoxOfficeRandomForestRegressor(self):
         s = 'log_box_office_random_forest_reg'
@@ -659,7 +661,7 @@ class CinemaService(LearningService):
         except IOError:
             print s+' object not found. Creating it...'
             self.prize_random_forest_reg = []
-            for i in range(self.nb_prizes):
+            for i in range(self.nb_considered_prizes):
                 self.prize_random_forest_reg.append(RandomForestRegressor())
                 self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_random_forest_reg, s)
@@ -672,7 +674,7 @@ class CinemaService(LearningService):
         except IOError:
             print s+' object not found. Creating it...'
             self.prize_logistic_reg = []
-            for i in range(self.nb_prizes): 
+            for i in range(self.nb_considered_prizes): 
                 self.prize_logistic_reg.append(LogisticRegression())
                 self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_logistic_reg, s)
@@ -921,9 +923,9 @@ class CinemaService(LearningService):
         institutions = []
         wins = []
         predicted_probabilities = []
-        for i in range(self.nb_prizes):
-            institutions.append(self.prizes_names[i].split('_')[0])
-            if self.prizes_names[i].split('_')[1] == 'True':
+        for i in range(self.nb_considered_prizes):
+            institutions.append(self.predict_labels_prizes_names[i].split('_')[1])
+            if self.predict_labels_prizes_names[i].split('_')[2] == 'True':
                 wins.append(True)
             else:
                 wins.append(False)
