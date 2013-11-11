@@ -2,14 +2,20 @@
 
 from dictionary_bagofwords import get_dictionary
 from sklearn.feature_extraction.text import CountVectorizer
+import prodbox
 
-def get_bagofwords(app, predicted_score, genre_numbers):
+def get_bagofwords(predicted_score, genre_numbers):
 
-    # app : l'objet CinemaService contenant les données vectorisées
     # predicted_score : la note moyenne prédite pour le film virtuel (nombre)
     # genre_numbers : la liste du (des) indice(s) donnant le(s) genre(s) du film virtuel
 
-    accuracy = 5.
+    app = prodbox.CinemaService()
+    app.loadFilms()
+    app.loadGenres()
+    app.loadReviews()
+    app.loadReviewsContent()
+
+    accuracy = 4.
     # le niveau de précision qui détermine quelles notes on considère comme proches de la note du film virtuel
 
     # On sélectionne d'abord les critiques pertinentes pour élaborer le bag of words :
@@ -24,13 +30,14 @@ def get_bagofwords(app, predicted_score, genre_numbers):
 
                # ... et on retient alors les critiques de ce film dont la note est proche de predicted_score :
                
-               for journal in app.reviews_content[i].keys():
+            for journal in app.reviews_content[i].keys():
                    
-                   journal_index = app.reviews_names.index(journal)
+                journal_index = app.reviews_names.index(journal)
 
-                   if abs(predicted_score - app.reviews_matrix[i, journal_index]) < .5/accuracy:
-                       
-                       corpus.append(app.reviews_content[i][journal])
+                if abs(predicted_score - app.reviews_matrix[i, journal_index]) < .5/accuracy:
+                    
+                    print "Note : " + str(app.reviews_matrix[i, journal_index]) + ", critique : " + app.reviews_content[i][journal]
+                    corpus.append(app.reviews_content[i][journal])
 
     # Une fois le corpus de critiques construit, on procède au comptage automatique des mots du dictionnaire
 
@@ -41,7 +48,7 @@ def get_bagofwords(app, predicted_score, genre_numbers):
 
     # On retire du dictionnaire certains mots positifs qui pourraient apparaître artificiellement, sans être pertinents pour un film mal noté :
 
-    positive_adjectives = {'perfect' : .6, 'great' : .6, 'epic' : .6}
+    positive_adjectives = {'perfect' : .6, 'great' : .6, 'epic' : .6, 'artful' : .6}
 
     for adj, adj_positivity in positive_adjectives.items():
         
@@ -62,5 +69,5 @@ def get_bagofwords(app, predicted_score, genre_numbers):
 
     inv_dic = {adj : key for key, adj in dic.items()}
 
-    return {inv_dic[i]: y[i] for i in top_indexes}
+    return {inv_dic[i]: y[i] for i in top_indexes if y[i] > 1}
 # on sélectionne les 10 adjectifs les plus utilisés et on les retourne avec un poids égal à leur nombre d'occurences
