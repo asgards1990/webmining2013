@@ -13,7 +13,7 @@ NEWSPIDER_MODULE = 'scrapyimdb.spiders'
 
 ITEM_PIPELINES = {'scrapyimdb.pipelines.MyImagesPipeline' : 500, 'scrapyimdb.pipelines.PagesPipeline' : 300, 'scrapyimdb.pipelines.LinksPipeline' : 400}
 
-IMAGES_STORE = '/home/bdrighes/cache-img/'
+IMAGES_STORE = '/Users/benjamin/webmining2013/scrapyimdb/cache/'
 IMAGES_EXPIRES = 90
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -29,7 +29,7 @@ DOWNLOADER_MIDDLEWARES = {
 
 HTTPCACHE_ENABLED = True
 
-HTTPCACHE_DIR = '/home/bdrighes/cache/'
+HTTPCACHE_DIR = '/Users/benjamin/webmining2013/scrapyimdb/scrapy-http-cache/'
 
 #HTTPCACHE_POLICY = 'scrapy.contrib.httpcache.RFC2616Policy'
 

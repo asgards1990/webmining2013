@@ -227,4 +227,7 @@ class LinksPipeline(object):
                     film.save()
                 except Country.DoesNotExist:
                     log.msg('No country found with name ' + item['country'] + '.')
+            elif isinstance(item, GrossItem):
+                film.box_office = item['bo']
+                film.save()
         return item
