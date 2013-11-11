@@ -675,6 +675,8 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
       award_tab=[]
       for i in range(1,len(institution_list)+1):
          try:
+            logger.debug( '########### {}  ##############'.format(institution_list[i-1]))
+         except:
             for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
                award_detail = []
                logger.debug(award_category_status[0])
@@ -691,8 +693,6 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
                award_category_list.pop(0)
 
             award_tab.append(award_detail)
-         except Exception as e:
-            logger.debug("ERROR dans le chargement d'un awards : {}".format(e))
       logger.debug('Il y a {} éléments dans le tableau '.format(len(award_tab)))
       return award_tab
 
@@ -722,13 +722,16 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
    
       for award in self.award_tab:
          try:
+            logger.debug("hasWon")
             win=hasWon(award[0])
+            logger.debug("defineInstitution")
             ins = defineInstitution(name=award[3])
             if ins:
                try:
                   logger.info("Mise à jour du film {}, lien avec un nouvel award pour l'institution {}".format(self.id_,ins))
                except:
                   logger.info("Mise à jour du film lien avec un nouvel award pour l'institution dont on ne prononce pas le nom")
+               logger.debug("Create Prize")
                Prize.objects.create(win=win, year=int(award[2]), institution=ins, film=f)
 
          except Exception as e:

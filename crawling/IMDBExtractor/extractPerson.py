@@ -23,8 +23,8 @@ logger = initLogger.getLogger(IMDBExtractorConfig.EXTRACTOR_PERSON_PIC_LOGGER_NA
 
 ###################################################################
 
-year_min=2000
-year_max=2012
+year_min=1980
+year_max=1989
 priority_max=1000
 
 

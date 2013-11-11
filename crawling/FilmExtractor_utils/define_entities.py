@@ -130,7 +130,7 @@ def defineInstitution(name):
       i = Institution.objects.get(name=name)
       return i
    except Institution.DoesNotExist :
-      logger.info("Création de l'institution {} dans la base de données".format(name))
+      logger.info("Création de l'institution dont on ne doit pas prononcer le nom dans la base de données".format(name))
       i = Institution.objects.create(name=name)
       return i
    except Exception as e:
