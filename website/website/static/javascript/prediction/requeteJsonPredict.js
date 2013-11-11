@@ -76,27 +76,27 @@ for (k=1;k<5;k++) {
 		boxOffice = Math.round(response.general_box_office.value/10000)/100;
 		document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+boxOffice+"M";
 		document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.neighbors[0].rank;
-		document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent=response.general_box_office.neighbors[0].original_title;
+		document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent=response.general_box_office.neighbors[0].english_title.substring(0,35);
 		boxOffice = Math.round(response.general_box_office.neighbors[0].value/10000)/100;
-		document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+boxOffice.value+"M";
+		document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+boxOffice+"M";
 		document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
-		document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].original_title;
+		document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].english_title.substring(0,35);
 		boxOffice = Math.round(response.general_box_office.neighbors[1].value/10000)/100;
-		document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
-	
+		document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+boxOffice+"M";
+
 		//affichage des résultats dans le tableau des Box-Office Genre
 		document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.rank;
 		document.getElementById("bogenretable").children[1].children[1].children[1].textContent="Your movie!";
 		boxOffice = Math.round(response.general_box_office.value/10000)/100;
 		document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+boxOffice+"M";
 		document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.neighbors[0].rank;
-		document.getElementById("bogenretable").children[1].children[0].children[1].textContent=response.genre_box_office.neighbors[0].original_title;
+		document.getElementById("bogenretable").children[1].children[0].children[1].textContent=response.genre_box_office.neighbors[0].english_title.substring(0,35);
 		boxOffice = Math.round(response.genre_box_office.neighbors[0].value/10000)/100;
-		document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+boxOffice.value+"M";
+		document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+boxOffice+"M";
 		document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
-		document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].original_title;
+		document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].english_title.substring(0,35);
 		boxOffice = Math.round(response.genre_box_office.neighbors[1].value/10000)/100;
-		document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
+		document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice+"M";
 	};
 	
 	callback_bag_of_words(response);
