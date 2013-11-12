@@ -17,6 +17,7 @@ function callback (response) {
 alert(JSON.stringify(response));
 //affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 à 9)
 for (k=0;k<8;k++) {
+
     var nominationValue = Math.round(response.prizes_nomination[k].value*10000)/100+" %";
     document.getElementById("prizestable").children[1].children[k].children[0].textContent=response.prizes_nomination[k].institution;
     document.getElementById("prizestable").children[1].children[k].children[1].textContent=nominationValue;
@@ -24,16 +25,20 @@ for (k=0;k<8;k++) {
 
 // affichage des victoires dans le tableau des Prizes
 for (k=0;k<8;k++) {  
+
     var nominationValue = Math.round(response.prizes_win[k].value*10000)/100+" %";
     document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
     document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
    };
 
+
 	var lengthOfReviews = response.critics.reviews.length;
 	document.getElementById("reviewstable").children[1].children[0].children[0].textContent="Average rating";
 	document.getElementById("reviewstable").children[1].children[0].children[1].textContent=Math.round(response.critics.average*100)+" %";
+
 	
 for (k=1;k<5;k++) {   
+    valueRating = response.critics.reviews[k].grade;
 	document.getElementById("reviewstable").children[1].children[k].children[0].textContent=response.critics.reviews[k].journal;
 	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=Math.round(response.critics.reviews[k].grade*100)+" %";
 	};
