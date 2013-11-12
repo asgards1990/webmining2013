@@ -19,7 +19,7 @@ from sklearn.cluster import SpectralClustering
 from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
 from sklearn.linear_model import LogisticRegression
 from dictionary_bagofwords import get_dictionary
-from sklearn.svm import SVM
+from sklearn.svm import SVC
 
 import dateutil.parser
 import re
@@ -685,7 +685,7 @@ class CinemaService(LearningService):
             self.prize_random_forest_reg = []
             for i in range(self.nb_considered_prizes):
                 self.prize_random_forest_reg.append(RandomForestRegressor())
-                #self.prize_logistic_reg.append(SVM(probability=True))
+                #self.prize_logistic_reg.append(SVC(probability=True))
                 self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_random_forest_reg, s)
     
@@ -699,7 +699,7 @@ class CinemaService(LearningService):
             self.prize_logistic_reg = []
             for i in range(self.nb_considered_prizes):
                 self.prize_logistic_reg.append(LogisticRegression())
-                #self.prize_logistic_reg.append(SVM(probability=True))
+                #self.prize_logistic_reg.append(SVC(probability=True))
                 self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_logistic_reg, s)
 
