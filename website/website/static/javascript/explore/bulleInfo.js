@@ -1,11 +1,13 @@
 function chargementBulleInfo(nomDuCadre,idDuFilm){
 	//if(document.getElementById("bulleInfoExt")){document.getElementById("bulleInfoExt").parentNode.removeChild(document.getElementById("bulleInfoExt"))};
 	if(document.getElementById("bulleInfoExt")){
-		document.getElementById("conteneurTitre").textContent="Title : ";
-		document.getElementById("conteneurDateSortie").textContent="Release date : ";
-		document.getElementById("conteneurActeurs").textContent="Actors : ";
-		document.getElementById("conteneurSynopsis").textContent="Plot : ";
-		$.post("/cinema/filmInfo/","film_id="+idDuFilm,function(data){affecter2(data)});
+		$.post("/cinema/filmInfo/","film_id="+idDuFilm,function(data){affecter2(data)})
+		.fail(function(){
+			document.getElementById("conteneurTitre").textContent="Title : ";
+			document.getElementById("conteneurDateSortie").textContent="Release date : ";
+			document.getElementById("conteneurActeurs").textContent="Actors : ";
+			document.getElementById("conteneurSynopsis").textContent="Plot : ";
+		});
 		function affecter2(data){
 			console.log(JSON.stringify(data))
 			document.getElementById("conteneurTitre").textContent="Title : " + data.english_title;
@@ -57,7 +59,7 @@ function chargementBulleInfo(nomDuCadre,idDuFilm){
 			conteneurInfo.appendChild(conteneurActeurs)
 			var conteneurSynopsis=document.createElement('p');
 			conteneurSynopsis.id="conteneurSynopsis";
-			conteneurSynopsis.style.cssText='margin-left:2px; margin-right:2px;margin-top:4px;margin-bottom:0px;float:left;width:100%;text-align: justify;'
+			conteneurSynopsis.style.cssText='margin-left:2px; margin-right:2px;margin-top:12px;margin-bottom:0px;float:left;width:100%;text-align: left;'
 			conteneurInfo.appendChild(conteneurSynopsis)
 			var texteTitre=document.createTextNode("Title : " + data.english_title);
 			conteneurTitre.appendChild(texteTitre)
