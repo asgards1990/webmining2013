@@ -27,11 +27,11 @@ function changement(){
 			envoiDeLaRequeteSearch(film_imdb_id,false);
 		}
 		else{
-			alert("Please select at least one criteria.")
+			$("#lightbox_criteria").click();
 		}
 	}
 	else{
-		alert("Please select a film.")
+		$("#lightbox_oneMovie").click();
 	}
 }
 
@@ -134,7 +134,6 @@ function envoiDeLaRequeteSearch(nomfilm,init){
 		unloadChargement("sousCadreResultats");
 	}
 	loadChargement("sousCadreResultats");
-	//alert("hello")
 	requete=$.post("http://www.prodbox.co/learning/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
 }
 
