@@ -110,7 +110,10 @@ class  Film (models.Model):
     writers = models.ManyToManyField(Person, related_name='films_from_writer')
     actors = models.ManyToManyField(Person, through='ActorWeight', related_name='films_from_actor')
     def __unicode__(self):
-        return u'%s (%s)' % (self.english_title, self.release_date.year)
+        if self.release_date:
+            return u'%s (%s)' % (self.english_title,self.release_date.year)
+        else:
+            return u'%s' % (self.english_title)
     class Meta:
         ordering = ['english_title', 'release_date']
 
