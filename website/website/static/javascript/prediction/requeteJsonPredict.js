@@ -402,16 +402,16 @@ function genererRequetePredict(){
 	
 	function tousSontRemplis(type){
 		if (type=="win"){
-			for(var i = 0;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
-				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].childNodes[3].textContent==""){
+			for(var i = 1;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
+				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].getElementsByClassName("probav")[0].textContent==""){
 					return false;
 				}
 			}
 			return true;
 		}
 		else{
-			for(var i = 0;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
-				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].childNodes[1].textContent==""){
+			for(var i = 1;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
+				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].getElementsByClassName("proban")[0].textContent==""){
 					return false;
 				}
 			}
@@ -421,16 +421,16 @@ function genererRequetePredict(){
 	
 	function premierePlaceDispo(type){
 		if (type=="win"){
-			for(var i = 0;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
-				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].childNodes[3].textContent==""){
+			for(var i = 1;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
+				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].getElementsByClassName("probav")[0].textContent==""){
 					return i;
 				}
 			}
 			return -1;
 		}
 		else{
-			for(var i = 0;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
-				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].childNodes[1].textContent==""){
+			for(var i = 1;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
+				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].getElementsByClassName("proban")[0].textContent==""){
 					return i;
 				}
 			}
