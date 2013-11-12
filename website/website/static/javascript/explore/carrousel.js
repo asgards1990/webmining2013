@@ -164,7 +164,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 	setTimeout(function(){$("#canv4").fadeIn(fadeTime),$("#canv8").fadeIn(fadeTime)},2*fadeIntervalle)
 	setTimeout(function(){$("#canv3").fadeIn(fadeTime),$("#canv9").fadeIn(fadeTime)},3*fadeIntervalle)
 	setTimeout(function(){$("#canv2").fadeIn(fadeTime),$("#canv10").fadeIn(fadeTime)},4*fadeIntervalle)
-	setTimeout(function(){$("#canv1").fadeIn(fadeTime),$("#canv11").fadeIn(fadeTime,function(){carrouselDispo=true;})},5*fadeIntervalle)
+	setTimeout(function(){$("#canv1").fadeIn(fadeTime),$("#canv11").fadeIn(fadeTime,function(){carrouselDispo=true;unloadChargement("sousCadreResultats");})},5*fadeIntervalle)
 	var text;
 	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
 		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
