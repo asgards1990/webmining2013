@@ -242,7 +242,7 @@ $(document).ready(function() {
         var genre2 = $('#id_genre2');
         var id1 = genre1.val();
         var id2 = genre2.val();
-        urlSubmit = 'http://senellart.com:8080/suggest/';
+        urlSubmit = 'http://www.prodbox.co/learning/suggest/';
 	var bloc = document.getElementById("keywordSuggest");
 
         if (id1) {
@@ -305,7 +305,7 @@ $(document).ready(function() {
         var genre2 = $('#id_genre2');
         var id1 = genre1.val();
         var id2 = genre2.val();
-        urlSubmit = 'http://senellart.com:8080/suggest/';
+        urlSubmit = 'http://www.prodbox.co/learning/suggest/';
 		var bloc = document.getElementById("keywordSuggest");
 
         if (id1) {

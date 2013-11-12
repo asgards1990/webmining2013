@@ -208,9 +208,9 @@ function maxTab(tableau){
 }
 
 function minTab(tableau){
-	var min=1;
+	var min=-1;
 	for (var i=0;i<tableau.length;i++){
-		if(tableau[i].value<min){
+		if(tableau[i].value<min || min==-1){
 			min=tableau[i].value;
 		}
 	}
@@ -229,11 +229,16 @@ function montrerResultats(nomDuCadre,data){
 	}
 	for (var i = 0;i<nbrResultats;i++){
 		Afficher[i]=true;
-		if(minTab(data.results)!=1 && (maxTab(data.results)-minTab(data.results))>0){
+		if(minTab(data.results)!=-1 && (maxTab(data.results)-minTab(data.results))>0){
 			coeffDist[i]=(data.results[i].value-minTab(data.results))/(maxTab(data.results)-minTab(data.results))
 		}
 		else{
-			coeffDist[i]=data.results[i].value;
+			if(maxTab(data.results)>1){
+				coeffDist[i]=data.results[i].value/maxTab(data.results);
+			}
+			else{
+				coeffDist[i]=data.results[i].value;
+			}
 		}
 		nomFilm[i]=data.results[i].title; // CHANGER 0 par i
 	}
@@ -268,6 +273,13 @@ function montrerResultats(nomDuCadre,data){
 	var contenu=document.createTextNode("");
 	contenu.id="nomFilmChoisi";
 
+	var text;
+	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
+		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
+			text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
+		}
+	}	
+	
 	contenu.textContent=text
 	document.getElementById("carreCentral").appendChild(conteneurTexteCentral);
 	document.getElementById("conteneurTexteCentral").appendChild(contenu);

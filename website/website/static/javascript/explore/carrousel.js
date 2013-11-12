@@ -21,7 +21,7 @@ function carrousel(nomDuCadre,data){
 					milieuRep=1;
 				}
 				else{
-					repLien[5+((1-2*(i%2))*(Math.floor(i/2)+1))]="http://prodbox.co/media/"+data.poster;
+					repLien[5+((1-2*(i%2))*(Math.floor(i/2)+1))]="http://prodbox.co/media/"+data.poster; // ?
 					ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=1;
 				}
 				var mult=milieuRep;;
@@ -49,9 +49,11 @@ function carrousel(nomDuCadre,data){
 		}
 	}*/
 	for(var j=0;j<nombre;j++){
-		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="http://prodbox.co/media/poster/"+data.results[j].id+".jpg";
+		//repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="http://prodbox.co/media/poster/"+data.results[j].id+".jpg";
+		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="http://prodbox.co/media/"+data.results[j].img;
 	}
-	repLien[5]="http://prodbox.co/media/poster/"+idFilm+".jpg"
+	repLien[5]="http://prodbox.co/media/"+data.img;
+	//repLien[5]="http://prodbox.co/media/poster/"+idFilm+".jpg"
 	for(var j=nombre;j<10;j++){
 		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../pesto/static/img/explore/filmVide.jpg";
 	}

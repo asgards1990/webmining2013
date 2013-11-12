@@ -22,8 +22,12 @@ logger = initLogger.getLogger(FilmExtractorConfig.EXTRACTOR_IMDB_INIT_LOGGER_NAM
 
 ###################################################################
 
-year_min=2000
-year_max=2012
+year_min=1980
+<<<<<<< HEAD
+year_max=1990
+=======
+year_max=1985
+>>>>>>> 5b16fc930a251e93452a8a6c18b5908bf9e267bd
 priority_max=1000
 
 def extractOneMovie(imdb_id):
@@ -180,9 +184,7 @@ class getIMDBCompany(threading.Thread):
 
 #reExtractBuggyFilm()
    
-film_id_tab = film_conn.getDownloadedNotExtractedFiltered(year_min, year_max, priority_max)
-for film in film_id_tab:
-   reExtractOneMovieAwards(film)
+reExtractOneMovieAwards("tt1655442")
 #The artist tt1655442
 #Exemple avec des devises Japonaises : tt0245429
 #Exemple avec des devises € : tt302994

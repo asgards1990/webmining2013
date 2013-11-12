@@ -57,6 +57,7 @@ autocomplete_light.register(Keyword, KeywordAutocomplete)
 class Genre1Autocomplete(autocomplete_light.AutocompleteModelBase):
     search_fields=['name']
     autocomplete_js_attributes={'placeholder': 'Add a genre','minimum_characters': 0,}
+    limit_choices=30
     
     def choices_for_request(self):
         q=self.request.GET.get('q','')
@@ -73,7 +74,8 @@ autocomplete_light.register(Genre, Genre1Autocomplete, name='genre1')
 class Genre2Autocomplete(autocomplete_light.AutocompleteModelBase):
     search_fields=['name']
     autocomplete_js_attributes={'placeholder': 'Add a genre','minimum_characters': 0,}
-    
+    limit_choices=30
+
     def choices_for_request(self):
         q=self.request.GET.get('q','')
         genre1_name=self.request.GET.get('genre1_id',None)

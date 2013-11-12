@@ -37,6 +37,20 @@
 
             <!-- Genres -->
     
+
+		<li class="itemDirector"><a href="#">Director</a>
+            <ul class="menubox">
+                <div id="directorsearch">
+                    {% for field in form.visible_fields %}
+                        {% if field.name == 'directors' %}
+                            {{ field }}
+                        {% endif %}
+                    {% endfor %}
+                </div> 
+            </ul>
+		</li>
+
+
 		<li class="item2" id="prediction_item_genres"><a href="#">Genres<span>0</span></a>
                 <ul class="menubox">
                     <div id="genresearch">
@@ -69,19 +83,6 @@
 					
                 </ul>
 		</li>
-
-		<li class="item4"><a href="#">Director</a>
-            <ul class="menubox">
-                <div id="directorsearch">
-                    {% for field in form.visible_fields %}
-                        {% if field.name == 'directors' %}
-                            {{ field }}
-                        {% endif %}
-                    {% endfor %}
-                </div> 
-            </ul>
-		</li>
-
 
 		<li class="item5"><a href="#">Budget</a>
             <ul>

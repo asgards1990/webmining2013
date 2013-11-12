@@ -66,7 +66,6 @@ def defineGenre(name):
         return Genre.objects.get(name = name)
     except Genre.DoesNotExist:
         log.msg('Unlisted genre : ' + name + '.')
-        #WARNING
         return Genre.objects.create(name = name)
 
 def defineLanguage(identifier):
@@ -228,4 +227,7 @@ class LinksPipeline(object):
                     film.save()
                 except Country.DoesNotExist:
                     log.msg('No country found with name ' + item['country'] + '.')
+            elif isinstance(item, GrossItem):
+                film.box_office = item['bo']
+                film.save()
         return item
