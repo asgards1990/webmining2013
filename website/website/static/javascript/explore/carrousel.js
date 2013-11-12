@@ -164,8 +164,14 @@ function carrousel2(data,nomDuCadre,lienImage){
 	setTimeout(function(){$("#canv4").fadeIn(fadeTime),$("#canv8").fadeIn(fadeTime)},2*fadeIntervalle)
 	setTimeout(function(){$("#canv3").fadeIn(fadeTime),$("#canv9").fadeIn(fadeTime)},3*fadeIntervalle)
 	setTimeout(function(){$("#canv2").fadeIn(fadeTime),$("#canv10").fadeIn(fadeTime)},4*fadeIntervalle)
-	setTimeout(function(){$("#canv1").fadeIn(fadeTime),$("#canv11").fadeIn(fadeTime,function(){carrouselDispo=true;})},5*fadeIntervalle)
-	chargementBulleInfo("cadreInfo",idFilm)
+	setTimeout(function(){$("#canv1").fadeIn(fadeTime),$("#canv11").fadeIn(fadeTime,function(){carrouselDispo=true;unloadChargement("sousCadreResultats");})},5*fadeIntervalle)
+	var text;
+	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
+		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
+			text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent.slice(0,-6).trim();
+		}
+	}
+	chargementBulleInfo("cadreInfo",idFilm,text)
 
 	var positioninv = new Array;
 	for (var j = 1; j <= 11; j++) {
@@ -433,37 +439,44 @@ function carrousel2(data,nomDuCadre,lienImage){
 
 	$("#canv1").click(function(){if(carrouselDispo==true && imageinter[0].src.slice(-12) != "filmVide.jpg"){
 		//alert(imageinter[0].src.slice(-12))
-		defClic(1);chargementBulleInfo("cadreInfo",data.results[9].id);}
+		defClic(1);chargementBulleInfo("cadreInfo",data.results[9].id,data.results[9].title);}
 	});
 	$("#canv2").click(function(){if(carrouselDispo==true && imageinter[1].src.slice(-12) != "filmVide.jpg"){
-		defClic(2);chargementBulleInfo("cadreInfo",data.results[7].id);}
+		defClic(2);chargementBulleInfo("cadreInfo",data.results[7].id,data.results[7].title);}
 	});
 	$("#canv3").click(function(){if(carrouselDispo==true && imageinter[2].src.slice(-12) != "filmVide.jpg"){
-		defClic(3);chargementBulleInfo("cadreInfo",data.results[5].id);}
+		defClic(3);chargementBulleInfo("cadreInfo",data.results[5].id,data.results[5].title);}
 	});
 	$("#canv4").click(function(){if(carrouselDispo==true && imageinter[3].src.slice(-12) != "filmVide.jpg"){
-		defClic(4);chargementBulleInfo("cadreInfo",data.results[3].id);}
+		defClic(4);chargementBulleInfo("cadreInfo",data.results[3].id,data.results[3].title);}
 	});
 	$("#canv5").click(function(){if(carrouselDispo==true && imageinter[4].src.slice(-12) != "filmVide.jpg"){
-		defClic(5);chargementBulleInfo("cadreInfo",data.results[1].id);}
-	});
+		defClic(5);chargementBulleInfo("cadreInfo",data.results[1].id,data.results[1].title);}
+	});	
 	$("#canv6").click(function(){if(carrouselDispo==true && imageinter[5].src.slice(-12) != "filmVide.jpg"){
-		defClic(6);chargementBulleInfo("cadreInfo",idFilm);}
+		var text;
+		for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
+			if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
+				text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent.slice(0,-6).trim();
+			}
+		}
+		//alert(text)
+		defClic(6);chargementBulleInfo("cadreInfo",idFilm,text);}
 	});
 	$("#canv7").click(function(){if(carrouselDispo==true && imageinter[6].src.slice(-12) != "filmVide.jpg"){
-		defClic(7);chargementBulleInfo("cadreInfo",data.results[0].id);}
+		defClic(7);chargementBulleInfo("cadreInfo",data.results[0].id,data.results[0].title);}
 	});
 	$("#canv8").click(function(){if(carrouselDispo==true && imageinter[7].src.slice(-12) != "filmVide.jpg"){
-		defClic(8);chargementBulleInfo("cadreInfo",data.results[2].id);}
+		defClic(8);chargementBulleInfo("cadreInfo",data.results[2].id,data.results[2].title);}
 	});
 	$("#canv9").click(function(){if(carrouselDispo==true && imageinter[8].src.slice(-12) != "filmVide.jpg"){
-		defClic(9);chargementBulleInfo("cadreInfo",data.results[4].id);}
+		defClic(9);chargementBulleInfo("cadreInfo",data.results[4].id,data.results[4].title);}
 	});
 	$("#canv10").click(function(){if(carrouselDispo==true && imageinter[9].src.slice(-12) != "filmVide.jpg"){
-		defClic(10);chargementBulleInfo("cadreInfo",data.results[6].id);}
+		defClic(10);chargementBulleInfo("cadreInfo",data.results[6].id,data.results[6].title);}
 	});
 	$("#canv11").click(function(){if(carrouselDispo==true && imageinter[10].src.slice(-12) != "filmVide.jpg"){
-		defClic(11);chargementBulleInfo("cadreInfo",data.results[8].id);}
+		defClic(11);chargementBulleInfo("cadreInfo",data.results[8].id,data.results[8].title);}
 	});
 	
 	}

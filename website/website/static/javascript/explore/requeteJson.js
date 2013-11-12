@@ -140,7 +140,7 @@ function envoiDeLaRequeteSearch(nomfilm,init){
 function fctCallbackSearch(data){
 	console.log(JSON.stringify(data))
 	if(data.success==true){
-		unloadChargement("sousCadreResultats");
+		//unloadChargement("sousCadreResultats");
 		$("#cadreProches").empty();
 		$("#cadreCoverflow").empty();
 		montrerResultats("cadreProches",data);
