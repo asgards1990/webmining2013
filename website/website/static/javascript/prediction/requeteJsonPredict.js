@@ -383,6 +383,7 @@ function genererRequetePredict(){
 	}
 
 	function fctCallbackPredict(data){
+		unloadChargement("results");
 		console.log(JSON.stringify(data))
 	}
 		//	//alert(JSON.stringify(data))
