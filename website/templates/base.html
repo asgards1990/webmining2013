@@ -10,6 +10,8 @@
         <script type="text/javascript" src="{% static 'javascript/commun/slider.js' %}"></script>
         <script type="text/javascript" src="{% static 'javascript/commun/lightbox-2.6.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'javascript/commun/spin.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/commun/jquery.colorbox.js' %}"></script>
+        <script type="text/javascript" src="{% static 'javascript/commun/jquery.colorbox-min.js' %}"></script>
 
         <!-- Appels css -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/commun/commun.css' %}"/>
@@ -30,7 +32,11 @@
     </head>
 
     <body>
+    
+        <a href="{% static 'img/explore/selection.png' %}" data-lightbox="image-1" title="What just happened?" id="lightbox_criteria"></a>
+        <a href="{% static 'img/explore/select_movie.png' %}" data-lightbox="image-2" title="What just happened?" id="lightbox_oneMovie"></a>
 
+        
         <div id="header">       
             <div id="title">
                 <a href="../">

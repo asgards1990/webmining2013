@@ -27,11 +27,11 @@ function changement(){
 			envoiDeLaRequeteSearch(film_imdb_id,false);
 		}
 		else{
-			alert("Please select at least one criteria.")
+			$("#lightbox_criteria").click();
 		}
 	}
 	else{
-		alert("Please select a film.")
+		$("#lightbox_oneMovie").click();
 	}
 }
 
