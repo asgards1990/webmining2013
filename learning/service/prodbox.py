@@ -28,7 +28,7 @@ import exceptions
 class CinemaService(LearningService):
     def __init__(self):
         super(CinemaService, self).__init__()
-        self.films = flt.getFilms(withnanbo = True)
+        self.films = flt.getFilms(n=10000,withnanbo = True)
         # TODO: also try log of budget for testing search requests
         self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
@@ -86,6 +86,7 @@ class CinemaService(LearningService):
         self.loadPrizes()
         self.loadReviews()
         self.loadReviewsContent()
+        self.loadReviewsContent2()
         # Load other features
         self.loadStats()
         self.loadWriters()
@@ -289,9 +290,8 @@ class CinemaService(LearningService):
     
     def loadReviewsContent2(self):
         if not self.is_loaded('reviews_content_2'):
-            gkey = genReviewsContent(self.films.iterator())
-            v = CountVectorizer(dtype=int)
-            v.vocabulary_ = get_dictionary()
+            gkey = genReviewsContent2(self.films.iterator())
+            v = CountVectorizer(dtype=int, vocabulary = get_dictionary())
             self.reviews_content_matrix = v.fit_transform(gkey)
             self.reviews_content_names = v.get_feature_names()
             self.create_cobject('reviews_content_2',(self.reviews_content_matrix,self.reviews_content_names))
@@ -943,14 +943,16 @@ class CinemaService(LearningService):
         return [{'keyword' : inv_dic[i], 'value': float(y[i])} for i in top_indexes if y[i] > 1]
     
     def get_bagofwords2(self, predicted_score, input_genres):
-        accuracy = self.bagofwords_accuracy
+        accuracy = 0.5 #TODO : when missing values of grades will be made, take a better accuracy
         films_of_same_genre = self.genres_matrix[:,np.where(input_genres==1)[0]].sum(axis=1)
         films_of_same_genre_indexes = np.where(films_of_same_genre>0)[0]
         films_of_same_grade_indexes = np.where(np.abs(self.reviews_matrix.mean(axis=1)-predicted_score)<.5/accuracy)[0]
-        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist())
+        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist()[0],films_of_same_grade_indexes.tolist()[0])
         token_occurences = self.reviews_content_matrix[films_indexes,:].sum(axis=0)
-        top_indexes = token_occurences.argsort()[-10:]
-        return [{'keyword' : self.reviews_content_names[i], 'value': float(token_occurences[i])} for i in top_indexes if y[i] > 1]
+        token_occurences = np.array(token_occurences[0,:])
+        top_indexes = token_occurences.argsort()
+        top_indexes = top_indexes[0,-10:]
+        return [{'keyword' : self.reviews_content_names[i], 'value': float(token_occurences[0,i])} for i in top_indexes if token_occurences[0,i] > 1]
     
     def compute_predict(self, x_vector):
         '''
@@ -996,7 +998,7 @@ class CinemaService(LearningService):
         
         # Bag of words
         input_genres = x_vector[0,-self.nb_genres:]
-        bagofwords = self.get_bagofwords(np.mean(predicted_grades), input_genres)
+        bagofwords = self.get_bagofwords2(np.mean(predicted_grades), input_genres)
         
         results = {'prizes_win' : [{'institution' : institutions[i],
                                     'value' : float(predicted_probabilities[i])}
