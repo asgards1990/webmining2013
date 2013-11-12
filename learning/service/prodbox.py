@@ -1209,7 +1209,7 @@ class CinemaService(LearningService):
             if user_input['budget'].__class__ == int:
                 x_budget_vector[0,0] = float(1000000.0 * user_input['budget'])
         
-        x_season_vector = np.zeros([1, len(self.season_names)]) # Default Season?
+        x_season_vector = np.zeros([1, len(self.season_names)])
         try:
             for feat in self.season_names:
                 i = 0
@@ -1217,7 +1217,7 @@ class CinemaService(LearningService):
                     x_season_vector[0,i] = 1
                 i += 1
         except exceptions.KeyError:
-            pass
+            x_season_vector[0,:] = np.array([0.25, 0.25, 0.25, 0.25])
         
         x_vector = np.hstack([
             x_actor_reduced,
