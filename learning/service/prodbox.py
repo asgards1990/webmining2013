@@ -944,7 +944,7 @@ class CinemaService(LearningService):
     
     def get_bagofwords2(self, predicted_score, input_genres):
         accuracy = 0.5 #TODO : when missing values of grades will be made, take a better accuracy
-        films_of_same_genre = self.genres_matrix[:,np.where(input_genres==1)[0]].sum(axis=1)
+        films_of_same_genre = self.genres_matrix.toarray().[:,np.where(input_genres==1)[0]].sum(axis=1)
         films_of_same_genre_indexes = np.where(films_of_same_genre>0)[0]
         films_of_same_grade_indexes = np.where(np.abs(self.reviews_matrix.mean(axis=1)-predicted_score)<.5/accuracy)[0]
         films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist()[0],films_of_same_grade_indexes.tolist()[0])
