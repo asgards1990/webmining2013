@@ -69,6 +69,21 @@ class CachedObject:
         '''
         pass
 
+from status.models import TableUpdateTime
+
+class TableDependentCachedObject(CachedObject):
+    def __init__(self, name, table_name, content = None):
+        __init__(self, name, content = content)
+        self.table_name = table_name
+    
+    def update_status(self):
+        try:
+            field = TableUpdateTime.objects.get(model_name = self.table_name)
+            if field.update_time > self.version:
+                self.modified = True
+        except TableUpdateTime.DoesNotExist:
+            print('Table "' + self.table_name + ' not found.')
+
 class LearningService(object):
     def __init__(self, list_file="cache_list"):
         self.init_time = datetime.datetime.now()

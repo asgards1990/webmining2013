@@ -1,6 +1,5 @@
 var requete;
 var idFilm;
-var text;
 
 function verifAuMoinsUnCrit(){
 	if($("#acteurs").prop("checked")==true || $("#genre").prop("checked")==true || $("#budgets").prop("checked")==true || $("#review").prop("checked")==true){
@@ -12,40 +11,20 @@ function verifAuMoinsUnCrit(){
 }
 
 function changement2(){
-	//alert("hello")
 	$("#acteurs").prop("checked",true);
 	$("#genre").prop("checked",true);
 	$("#budgets").prop("checked",true);
 	$("#review").prop("checked",true);
-	//useless ?
-	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
-		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
-			text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
-		}
-	}
-	//console.log(text);
 	var film_imdb_id = $('#id_title_original-deck span.div').attr('data-value');
-	//$.post("/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,true);});
 	envoiDeLaRequeteSearch(film_imdb_id,true);
-	//envoiDeLaRequeteSearch(nomfilm,true);
 }
 
 function changement(){
 	if(document.getElementById("id_title_original-deck").children.length >0){
 		//console.log("hello")
 		if(verifAuMoinsUnCrit()==true){
-			var text;
-			//useless ?
-			for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
-				if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
-					text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
-				}
-			}
-			//console.log(text)
-			//$.post("/cinema/getId/","film_name="+text,function(data){envoiDeLaRequeteSearch(data,false);});
 			var film_imdb_id = $('#id_title_original-deck span.div').attr('data-value');
 			envoiDeLaRequeteSearch(film_imdb_id,false);
-			//envoiDeLaRequeteSearch(nomfilm,false);
 		}
 		else{
 			alert("Please select at least one criteria.")
@@ -68,8 +47,7 @@ $( "#slider-rangeyear" ).on( "slidechange", function( event, ui ) {changement();
 
 function genererRequeteSearch(nomfilm,init){
 	var requestInter=new Object();
-	//alert("nomfilm")
-	requestInter.id=nomfilm;//document.getElementById("moviesearch").children[0].id;
+	requestInter.id=nomfilm;
 	requestInter.nbresults=10;
 	if(init==false){
 		requestInter.criteria=new Object();
@@ -77,7 +55,7 @@ function genererRequeteSearch(nomfilm,init){
 		requestInter.criteria.genre=$("#genre").prop("checked");
 		requestInter.criteria.budget=$("#budgets").prop("checked");
 		requestInter.criteria.review=$("#review").prop("checked");
-		requestInter.criteria.director=$("#directors").prop("checked");
+		//requestInter.criteria.director=$("#directors").prop("checked");
 		requestInter.filter=new Object();
 		var compteur=0;
 		for(var i=0;i<document.getElementById("actors").getElementsByClassName("listactor").length;i++){
@@ -139,7 +117,7 @@ function genererRequeteSearch(nomfilm,init){
 	else{
 		requestInter.criteria=new Object();
 		requestInter.criteria.actor_director=true;
-		requestInter.criteria.director=true;
+		//requestInter.criteria.director=true;
 		requestInter.criteria.genre=true;
 		requestInter.criteria.budget=true;
 		requestInter.criteria.review=true;
@@ -156,28 +134,7 @@ function envoiDeLaRequeteSearch(nomfilm,init){
 		unloadChargement("sousCadreResultats");
 	}
 	loadChargement("sousCadreResultats");
-	requete=$.post("http://senellart.com:8080/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
-	/*var data=new Object;
-	data.success=true;
-	data.nbresults=4;
-	data.results=new Array;
-	data.results[0]=new Object;
-	data.results[0].id="tt1951264";
-	data.results[0].title="Hunger Games: L'embrasement";
-	data.results[0].value=0.25;
-	data.results[1]=new Object;
-	data.results[1].id="tt2294629";
-	data.results[1].title="La reine des neiges";
-	data.results[1].value=0.8;
-	data.results[2]=new Object;
-	data.results[2].id="tt1981115";
-	data.results[2].title="Thor: Le Monde des T�n�bres";
-	data.results[2].value=0.5;
-	data.results[3]=new Object;
-	data.results[3].id="tt0816442";
-	data.results[3].title="La Voleuse de livres";
-	data.results[3].value=0;
-	fctCallbackSearch(data);*/
+	requete=$.post("http://www.prodbox.co/learning/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
 }
 
 function fctCallbackSearch(data){

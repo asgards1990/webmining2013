@@ -6,7 +6,7 @@ import datetime
 
 def getSeason(date):
     if not date:
-        return 'no-season'
+        return False
     if date.month in [12, 1, 2]:
         return 'winter'
     if date.month in [3, 4, 5]:
@@ -63,7 +63,11 @@ def genLanguages(iter_films):
 def genSeason(iter_films):
     while True:
         film = next(iter_films)
-	yield {'season':getSeason(film.release_date)}
+        season = getSeason(film.release_date)
+        if season:
+	        yield {getSeason(film.release_date) : 1}
+        else:
+            yield {'winter' : 0.25, 'fall': 0.25, 'summer' : 0.25, 'spring' : 0.25}
 
 def genFeature(iter_films, feature_name, feature_content_name):
     while True:
@@ -97,13 +101,14 @@ def genProductionCompanies(iter_films):
     return genFeature(iter_films,'production_companies', 'imdb_id')
 
 def hashIndexes(iter_films):
-    d1, d2 = {}, {}
+    d1, d2, d3 = {}, {}, {}
     k = 0
     for film in iter_films:
         d1[film.pk] = k
         d2[k] = film.pk
+        d3[k] = film.english_title
         k += 1
-    return d1, d2
+    return d1, d2, d3
 
 def genPrizes(iter_films):
     while True:
@@ -114,29 +119,40 @@ def genPrizes(iter_films):
         else:
             d = {}
             for prize in prizes.all():
-                d[prize.institution.name+'_'+str(prize.win)] = 1
+                #d[prize.institution.name+'_'+str(prize.win)] = 1
+                d[prize.institution.name+'_False'] = 1
+                d[prize.institution.name+'_True'] = 1 if prize.win else 0
             yield d
 
 def genReviews(iter_films):
     while True:
         film = next(iter_films)
-        reviews = Review.objects.filter(film=film)
+        reviews = Review.objects.filter(film=film).exclude(grade=None)
         if reviews.count() == 0:
             yield {'_nothing' : 1}
         else:
             d = {}
             for review in reviews.all():
-                d[review.journal.name] = review.grade
+                d[review.journal.name] = 1+review.grade
             yield d
 
 def genReviewsContent(iter_films):
     while True:
         film = next(iter_films)
-        reviews = Review.objects.filter(film=film)
+        reviews = Review.objects.filter(film=film).exclude(grade=None)
         d = {}
         for review in reviews.all():
             d[review.journal.name] = review.summary
         yield d
+
+def genReviewsContent2(iter_films):
+    while True:
+        film = next(iter_films)
+        reviews = Review.objects.filter(film=film).exclude(grade=None)
+        s = ""
+        for review in reviews.all():
+            s = s+" "+review.summary
+        yield s
 
 def genActors(iter_films):
     while True:

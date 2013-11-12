@@ -492,6 +492,33 @@ class IMDBExtractor_fullCredits(IMDBFilmExtractor):
       self.writer_name_list = self.extractor.extractXpathText('//a[contains(@href,"ttfc_fc_wr")]')
       return createPersonList(writer_url_list)
 
+   def extractFullCredit_Actor_DB(self):
+      self.actors=self.extractActors()
+      self.directors=self.extractDirectors()
+      try:
+         i=0
+         for d in self.directors:
+            director = definePerson(d.id_)
+            if director:
+               if director.name=="":
+                  director.name=self.director_name_list[i]
+                  logger.debug("Mise à jour pour le Director : {}".format(director.name))
+                  director.save()
+            i+=1
+         i=0
+         for a in self.actors:
+           actor = definePerson(a.id_)
+           if actor:
+              if actor.name=="":
+                 actor.name=self.actor_name_list[i]
+                 logger.debug("Mise à jour pour l'actor : {}".format(actor.name))
+                 actor.save()
+           i+=1
+      except Exception as e:
+         logger.error('La mise à jour de la DB pour le film {} : extraction des Directors / Writers / Actors a échoué'.format(self.id_))
+         logger.error("-> Error: {}".format(e))
+ 
+
  
    def extractFullCreditsPage_DB(self):
 
@@ -648,28 +675,44 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
       award_tab=[]
       for i in range(1,len(institution_list)+1):
          try:
-            logger.debug( '########### {}  ##############'.format(institution_list[i-1]) )
+            logger.debug( '########### {}  ##############'.format(institution_list[i-1]))
          except:
-            institution_list[i-1]=md5.new("{}".format(random.random())).hexdigest() 
-            logger.debug( ' NEW ID ########### {}  ##############'.format(institution_list[i-1]) )
-         for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
-            award_detail = []
-            logger.debug(award_category_status[0])
-            logger.debug(award_category_list[0])
-            logger.debug(award_year_list[i-1])
-            logger.debug(j)
+            for j in self.extractor.extractXpathElement('//div[@id="main"]/div/div[@class="article listo"]/table[@class="awards"]['+str(i)+']/tr/td[@class="title_award_outcome"]/@rowspan'):
+               award_detail = []
+               logger.debug(award_category_status[0])
+               logger.debug(award_category_list[0])
+               logger.debug(award_year_list[i-1])
+               logger.debug(j)
            
-            award_detail.append(award_category_status[0]) #WIN/NPMINATED
-            award_detail.append(award_category_list[0])   #Palme d'or
-            award_detail.append(award_year_list[i-1])       #2013
-            award_detail.append(institution_list[i-1])     #Cannes Film Festival
+               award_detail.append(award_category_status[0]) #WIN/NPMINATED
+               award_detail.append(award_category_list[0])   #Palme d'or
+               award_detail.append(award_year_list[i-1])       #2013
+               award_detail.append(institution_list[i-1])     #Cannes Film Festival
 
-	    award_category_status.pop(0)
-            award_category_list.pop(0)
+   	       award_category_status.pop(0)
+               award_category_list.pop(0)
 
-         award_tab.append(award_detail)
+            award_tab.append(award_detail)
+      logger.debug('Il y a {} éléments dans le tableau '.format(len(award_tab)))
       return award_tab
 
+   def extractInstitution(self):
+      self.extractAwards()
+      """
+      logger.debug("Extract Institution (à remettre en forme) : ")
+      institution_list = self.extractor.extractXpathText('//div[@id="main"]/div/div[@class="article listo"]/h3')#Cannes Film Festival
+      for i in institution_list:
+         try:
+            logger.debug( '########### {}  ##############'.format(i))
+         except:
+            ins = defineInstitution(i)
+            logger.debug('MD5 à changer')
+            if ins:
+               ins.name=i
+               ins.save()
+      """
+
+            
    def extractContent(self):
       self.award_tab = self.extractAwards()
 
@@ -679,10 +722,16 @@ class IMDBExtractor_Awards(IMDBFilmExtractor):
    
       for award in self.award_tab:
          try:
+            logger.debug("hasWon")
             win=hasWon(award[0])
+            logger.debug("defineInstitution")
             ins = defineInstitution(name=award[3])
             if ins:
-               logger.info("Mise à jour du film {}, lien avec un nouvel award pour l'institution {}".format(self.id_,ins))
+               try:
+                  logger.info("Mise à jour du film {}, lien avec un nouvel award pour l'institution {}".format(self.id_,ins))
+               except:
+                  logger.info("Mise à jour du film lien avec un nouvel award pour l'institution dont on ne prononce pas le nom")
+               logger.debug("Create Prize")
                Prize.objects.create(win=win, year=int(award[2]), institution=ins, film=f)
 
          except Exception as e:
