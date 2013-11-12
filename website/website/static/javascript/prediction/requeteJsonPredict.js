@@ -131,6 +131,7 @@ function changementPredict(){
 
 
 $(document).ready(function(){
+	//$("#results").click(function(){$("#prizestable tbody").empty();})
 	//$("#results").click(function(){changementPredict()})
 	//$("#id_actors_text").change(function(){console.log(document.getElementById("id_actors-deck").getElementsByClassName("hilight")[0].id)})
 	$("#id_actors-deck").bind("DOMSubtreeModified",function(){changementPredict()})
@@ -537,6 +538,7 @@ function genererRequetePredict(){
 					}
 				}
 			}*/
+			$("#prizestable tbody").empty();
 			for(var i=0;i<data.prizes_win.length;i++){
 				var pourcent=Math.round(data.prizes_win[i].value*10000)/100+" %";
 				if(tousSontRemplis("win")==true){
@@ -560,11 +562,11 @@ function genererRequetePredict(){
 			//}
 			var lengthOfReviews = data.critics.reviews.length;
 				document.getElementById("reviewstable").children[1].children[0].children[0].textContent="Average rating";
-				document.getElementById("reviewstable").children[1].children[0].children[1].textContent=Math.round(data.critics.average*100)+" %";
+				document.getElementById("reviewstable").children[1].children[0].children[1].textContent=Math.round(data.critics.average*100)+"/100";
 				
 			for (k=0;k<Math.min(data.critics.reviews.length,8);k++) {   
 				document.getElementById("reviewstable").children[1].children[k].children[0].textContent=data.critics.reviews[k].journal;
-				document.getElementById("reviewstable").children[1].children[k].children[1].textContent=Math.round(data.critics.reviews[k].grade*100)+" %";
+				document.getElementById("reviewstable").children[1].children[k].children[1].textContent=Math.round(data.critics.reviews[k].grade*100)+"/100";
 			};
 			
 			if (data.general_box_office.rank==1) {
