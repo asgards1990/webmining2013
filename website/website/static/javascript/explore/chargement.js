@@ -8,7 +8,7 @@ function loadChargement(nomDuCadre){
 	document.getElementById(nomDuCadre).appendChild(loader);
 	var image=document.createElement("img");
 	image.id="bandeauLoader";
-	image.src="../pesto/static/img/explore/bandecine4.jpg";
+	image.src="../pesto/static/img/explore/bandecine6.jpg";
 	image.onload=function(){
 	//alert("LOADER3")
 	image.style.cssText='position:absolute;top:40%;left:0%;width:100%;height:20%;z-index:11;opacity:1;'

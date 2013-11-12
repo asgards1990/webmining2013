@@ -338,4 +338,7 @@ p.conteneur {
 	white-space:nowrap;
 	transform:translate(0px,-0.8em);
 	-webkit-transform:translate(0px,-0.8em);
+      padding-left:3px;
+      padding-left:3px;
+
 }
