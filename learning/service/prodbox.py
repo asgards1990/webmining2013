@@ -45,6 +45,7 @@ class CinemaService(LearningService):
         self.n_neighbors_SC_writers = 8 # spectral clustering parameter
         self.n_neighbors_SC_directors = 8 # spectral clustering parameter
         self.actor_reduction_rank_threshold = 10
+        self.bagofwords_accuracy = 4.
         
         self.reduction_actors_in_predictfeatures = 'KM'
         self.reduction_directors_in_predictfeatures = 'KM'
@@ -285,6 +286,17 @@ class CinemaService(LearningService):
             self.create_cobject('reviews_content', self.reviews_content)
         else:
             self.reviews_content = self.get_cobject('reviews_content').get_content()
+    
+    def loadReviewsContent2(self):
+        if not self.is_loaded('reviews_content_2'):
+            gkey = genReviewsContent(self.films.iterator())
+            v = CountVectorizer(dtype=int)
+            v.vocabulary_ = get_dictionary()
+            self.reviews_content_matrix = v.fit_transform(gkey)
+            self.reviews_content_names = v.get_feature_names()
+            self.create_cobject('reviews_content_2',(self.reviews_content_matrix,self.reviews_content_names))
+        else:
+            self.reviews_content_matrix,self.reviews_content_names = self.get_cobject('reviews_content_2').get_content()
     
     def loadSeason(self):
         if not self.is_loaded('season'):
@@ -898,7 +910,7 @@ class CinemaService(LearningService):
     def get_bagofwords(self, predicted_score, input_genres):
         # le niveau de précision qui détermine quelles notes on considère comme proches de la note du film virtuel
         # On sélectionne d'abord les critiques pertinentes pour élaborer le bag of words :
-        accuracy = 4.
+        accuracy = self.bagofwords_accuracy
         corpus = []
         for i in range(self.nb_films):
         # on retient le film n° i s'il est de l'un des genres voulus...
@@ -908,6 +920,8 @@ class CinemaService(LearningService):
                     journal_index = self.reviews_names.index(journal)
                     if abs(predicted_score - self.reviews_matrix[i, journal_index]) < .5/accuracy:
                         corpus.append(self.reviews_content[i][journal])
+
+
         # Une fois le corpus de critiques construit, on procède au comptage automatique des mots du dictionnaire
         v = CountVectorizer()
         dic = get_dictionary()
@@ -926,6 +940,16 @@ class CinemaService(LearningService):
         inv_dic = {adj : key for key, adj in dic.items()}
         # on sélectionne les 10 adjectifs les plus utilisés et on les retourne avec un poids égal à leur nombre d'occurences
         return [{'keyword' : inv_dic[i], 'value': float(y[i])} for i in top_indexes if y[i] > 1]
+    
+    def get_bagofwords2(self, predicted_score, input_genres):
+        accuracy = self.bagofwords_accuracy
+        films_of_same_genre = self.genres_matrix[:,np.where(input_genres==1)[0]].sum(axis=1)
+        films_of_same_genre_indexes = np.where(films_of_same_genre>0)[0]
+        films_of_same_grade_indexes = np.where(np.abs(self.reviews_matrix.mean(axis=1)-predicted_score)<.5/accuracy)[0]
+        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist())
+        token_occurences = self.reviews_content_matrix[films_indexes,:].sum(axis=0)
+        top_indexes = token_occurences.argsort()[-10:]
+        return [{'keyword' : self.reviews_content_names[i], 'value': float(token_occurences[i])} for i in top_indexes if y[i] > 1]
     
     def compute_predict(self, x_vector):
         '''
