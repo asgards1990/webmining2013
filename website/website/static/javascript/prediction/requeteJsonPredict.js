@@ -27,38 +27,39 @@ function verifSiRequete(){
 	nbdirector=document.getElementById("id_directors-deck").getElementsByClassName("hilight").length;
 	
 	if (nbactors<nbactors_min || nbactors > nbactors_max){
-	document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundColor="Red";
+	document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/red2.png')";
+	//document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundColor="rgba(0,0,0,0)"
 	}
 	else{
 		if(nbactors<nbactors_ok){
-		document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundColor="Orange";
+		document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/orange2.png')";
 		}
 		else{
-		document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundColor="Green";
+		document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/green2.png')";
 		}
 	}
 	if (nbdirector<nbdirector_min){
-		document.getElementsByClassName("itemDirector")[0].getElementsByTagName("div")[0].style.backgroundColor="Red";
+		document.getElementsByClassName("itemDirector")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/red2.png')";
 	}
 	else{
-		document.getElementsByClassName("itemDirector")[0].getElementsByTagName("div")[0].style.backgroundColor="Green";
+		document.getElementsByClassName("itemDirector")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/green2.png')";
 	}
 	if(nbgenres<nbgenres_min){
-		document.getElementById("prediction_item_genres").getElementsByTagName("div")[0].style.backgroundColor="Red";
+		document.getElementById("prediction_item_genres").getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/red2.png')";
 	}
 	else{
 		if(nbgenres<nbgenres_max){
-		document.getElementById("prediction_item_genres").getElementsByTagName("div")[0].style.backgroundColor="Orange";
+		document.getElementById("prediction_item_genres").getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/orange2.png')";
 		}
 		else{
-		document.getElementById("prediction_item_genres").getElementsByTagName("div")[0].style.backgroundColor="Green";
+		document.getElementById("prediction_item_genres").getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/green2.png')";
 		}
 	}
 	if(nbkeywords<nbkeywords_ok){
-	document.getElementById("prediction_item_keyword").getElementsByTagName("div")[0].style.backgroundColor="Orange";
+	document.getElementById("prediction_item_keyword").getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/orange2.png')";
 	}
 	else{
-	document.getElementById("prediction_item_keyword").getElementsByTagName("div")[0].style.backgroundColor="Green";
+	document.getElementById("prediction_item_keyword").getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/green2.png')";
 	}
 	if(nbactors>=nbactors_min && nbactors<=nbactors_max && nbgenres>=nbgenres_min && nbgenres<=nbgenres_max && nbkeywords>=nbkeywords_min && nbdirector>=nbdirector_min){
 		return true;
@@ -86,11 +87,11 @@ $(document).ready(function(){
 	$("#id_genre1-deck").bind("DOMSubtreeModified",function(){changementPredict()})
 	$("#id_genre2-deck").bind("DOMSubtreeModified",function(){changementPredict()})
 	$("#id_keyword-deck").bind("DOMSubtreeModified",function(){changementPredict()})
-	$( "#slider-range-min" ).on( "slidechange", function( event, ui ) {changementPredict(); document.getElementsByClassName("item5")[0].getElementsByTagName("div")[0].style.backgroundColor="Green";} );
-	$(".iCheck-helper").click(function(){changementPredict();document.getElementsByClassName("item6")[0].getElementsByTagName("div")[0].style.backgroundColor="Green";});
+	$( "#slider-range-min" ).on( "slidechange", function( event, ui ) {changementPredict(); document.getElementsByClassName("item5")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/green2.png')";} );
+	$(".iCheck-helper").click(function(){changementPredict();document.getElementsByClassName("item6")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/green2.png')";});
 	verifSiRequete()
-	document.getElementsByClassName("item5")[0].getElementsByTagName("div")[0].style.backgroundColor="Orange";
-	document.getElementsByClassName("item6")[0].getElementsByTagName("div")[0].style.backgroundColor="Orange";
+	document.getElementsByClassName("item5")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/orange2.png')";
+	document.getElementsByClassName("item6")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../pesto/static/img/prediction/orange2.png')";
 })
 
 
