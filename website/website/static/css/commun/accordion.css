@@ -142,5 +142,16 @@ border-radius:3px;
 	color: #32373D;
 }
 
+.menu > li > a div {
+	display: inline-block;
+	position: absolute;
+	left:15px;
+	top: 15px; 
+	background: Red;
+	height: 14px;
+	width:14px;
+	border-radius: 7px;
+}
+
 
 

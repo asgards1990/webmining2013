@@ -3,7 +3,6 @@
 h1.steps {
     font-variant: small-caps;
     font-size: 1.5em;
-    border-bottom: dashed 1px;
     margin: 0 auto;
     margin-top:10px;
     color : #a31512;
@@ -26,12 +25,12 @@ img.steps {
     position: relative;
     padding: 5px;
     overflow: visible;
-    border: solid 2px #d51c21;
     border-radius: 5px;
     background-image:url("/pesto/static/img/explore/cubes2.jpg");
     background-repeat:no-repeat;
     background-position: center left;
-    background-size: 100% 100%;
+    background-size: 100%;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.73), 0 0 18px 0 rgba(0, 0, 0, 0.13);
 }
 
 .movie {
@@ -70,12 +69,10 @@ margin-top: 3px;
     overflow: visible;
     margin-left: 21em;
     padding: 5px;
-    border: solid 2px #d51c21;
     border-radius: 5px;
     width: 72%;
-    background-image: -moz-radial-gradient(center, ellipse farthest-side, white 20%, #EDEDED 100%);
-    background-image: -webkit-radial-gradient(center, ellipse farthest-side, white 20%, #EDEDED 100%);
-    background: -webkit-radial-gradient(center, ellipse farthest-side, white 20%, #EDEDED 100%);}
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.73), 0 0 18px 0 rgba(0, 0, 0, 0.13);
+}
 
 /* Contenu case 2 */
 
@@ -110,7 +107,6 @@ margin-top: 3px;
 
 #results {
     position: relative;
-    border: solid 2px #d51c21;
     border-radius: 5px;
     overflow: auto;
     text-align: center;
@@ -119,6 +115,8 @@ margin-top: 3px;
     width: 72%;
     padding: 5px;
     margin-top : 3em;
+    background-image: radial-gradient(ellipse farthest-side at 39% 62% , #FFFFFF 10%, rgba(226, 165, 141, 0.4) 100%);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.73), 0 0 18px 0 rgba(0, 0, 0, 0.13);
 }
 
 /* Gestion du menu */
@@ -135,13 +133,10 @@ margin-top: 3px;
 }
 
 .menufilters h1.steps {
-    border-top:2px solid #d51c21;
-    border-left:2px solid #d51c21;
-     border-right:2px solid #d51c21;
     border-radius:5px;
-    padding:15px 0px 0px 5px;
-
+    padding:15px 0px 15px 5px;
     margin-bottom: 10px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.73), 0 0 18px 0 rgba(0, 0, 0, 0.13);
 }
 
 /* Acteurs */
@@ -279,12 +274,8 @@ div#carreCentral {
 	z-index:10;
 	text-align : center ;
 	cursor: pointer;
-	background: #Ea7a7d;
-}
-
-div#carreCentral:hover {
 	background: #Ea5255;
-	}
+}
 
 p#conteneurTexteCentral{
 	display:table-cell;
@@ -297,25 +288,18 @@ p#conteneurTexteCentral{
 div .barre_lien {
 	position:absolute;
 	height: 1px;
-	background-color: grey;
 	border: 1px solid grey;
 	z-index:1;
 	display:none;
 }
 
 div .cadre_film {
-	position:absolute;
-	height: 1.6em;
-	background-color: Red;
-	border: 1px solid Black;
-	z-index:2;
-	display:none;
-
-    /*padding: 5px 15px 5px 38px;*/
+    position:absolute;
+    height: 1.6em;
+    z-index:2;
     font-size:0.95em;
     line-height: 17px;
     color: #fff;
-    background: #Ea7a7d;
     border: none;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -324,6 +308,12 @@ div .cadre_film {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(114, 122, 134)),to(rgb(80, 88, 100)));
+    background-image: -webkit-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -moz-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -o-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -ms-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
 }
 
 div .cadre_film:hover{
@@ -338,4 +328,7 @@ p.conteneur {
 	white-space:nowrap;
 	transform:translate(0px,-0.8em);
 	-webkit-transform:translate(0px,-0.8em);
+      padding-left:3px;
+      padding-left:3px;
+
 }

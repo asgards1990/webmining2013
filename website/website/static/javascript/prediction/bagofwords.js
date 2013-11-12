@@ -148,11 +148,31 @@ function callback_bag_of_words(response) {
 	var jColor = ["#d51c21","#4d4d4d","#ea5255","#727a86","#a31512","#505864"];
 	var length = response.bag_of_words.length;
 	for (k=0;k<length;k++) {
-		jWord[k] = [response.bag_of_words[k].word];
-		jCount[k] = [response.bag_of_words[k].value];
+		jWord[k] = response.bag_of_words[k].word;
+		jCount[k] = response.bag_of_words[k].value;
 	};
-		
-	var s = d3.scale.linear().domain([d3.min(jCount),d3.max(jCount)]).range([20, 60]);
+
+	function miniTab(tableau){
+		var rep=-1;
+		for (var i=0;i<tableau.length;i++){
+			if(rep==-1 || tableau[i]<rep){
+				rep=tableau[i];
+			}
+		}
+		return rep
+	}
+	
+	function maxiTab(tableau){
+		var rep=-1;
+		for (var i=0;i<tableau.length;i++){
+			if(tableau[i]>rep){
+				rep=tableau[i];
+			}
+		}
+		return rep
+	}
+	
+	var s = d3.scale.linear().domain([miniTab(jCount),maxiTab(jCount)]).range([20, 60]);
 	
 	d3.layout.cloud().size([420, 340])
 		.words(d3.zip(jWord, jCount).map(function (d) {
