@@ -1,9 +1,9 @@
-function chargementBulleInfo(nomDuCadre,idDuFilm){
+function chargementBulleInfo(nomDuCadre,idDuFilm,titreDuFilm){
 	//if(document.getElementById("bulleInfoExt")){document.getElementById("bulleInfoExt").parentNode.removeChild(document.getElementById("bulleInfoExt"))};
 	if(document.getElementById("bulleInfoExt")){
 		$.post("/cinema/filmInfo/","film_id="+idDuFilm,function(data){affecter2(data)})
 		.fail(function(){
-			document.getElementById("conteneurTitre").textContent="Title : ";
+			document.getElementById("conteneurTitre").textContent="Title : "+titreDuFilm;
 			document.getElementById("conteneurDateSortie").textContent="Release date : ";
 			document.getElementById("conteneurActeurs").textContent="Actors : ";
 			document.getElementById("conteneurSynopsis").textContent="Plot : ";

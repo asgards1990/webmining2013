@@ -223,12 +223,12 @@ function montrerResultats(nomDuCadre,data){
 	var Afficher=new Array;
 	var nomFilm=new Array;
 	for (var i = nbrResultats;i<10;i++){
-		Afficher[i]=false;
+		Afficher[i]=-1;
 		coeffDist[i]=1;
 		nomFilm[i]="Inexistant";
 	}
 	for (var i = 0;i<nbrResultats;i++){
-		Afficher[i]=true;
+		Afficher[i]=i;
 		if(minTab(data.results)!=-1 && (maxTab(data.results)-minTab(data.results))>0){
 			coeffDist[i]=(data.results[i].value-minTab(data.results))/(maxTab(data.results)-minTab(data.results))
 		}
@@ -276,7 +276,7 @@ function montrerResultats(nomDuCadre,data){
 	var text;
 	for (var i = 0; i < document.getElementsByClassName("div hilight")[0].childNodes.length; ++i){
 		if (document.getElementsByClassName("div hilight")[0].childNodes[i].nodeType === 3){
-			text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent;
+			text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent.slice(0,-6).trim();
 		}
 	}	
 	
@@ -308,7 +308,7 @@ function montrerResultats(nomDuCadre,data){
 		cadre[i] = document.createElement('div');
 		cadre[i].id="cadre"+i;
 		cadre[i].setAttribute('class', 'cadre_film');
-		cadre[i].style.cssText ='width: '+coeffTailleCadreTitre*largeurBox+'px;left :'+(largeurBox/2+coeffEmToPx*lBarre[i]*Math.cos(angleBarre[i]))+'px;top:'+(hauteurBox/2+coeffEmToPx*lBarre[i]*Math.sin(angleBarre[i]))+'px;transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em);-webkit-transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em)';
+		cadre[i].style.cssText ='display:none; width: '+coeffTailleCadreTitre*largeurBox+'px;left :'+(largeurBox/2+coeffEmToPx*lBarre[i]*Math.cos(angleBarre[i]))+'px;top:'+(hauteurBox/2+coeffEmToPx*lBarre[i]*Math.sin(angleBarre[i]))+'px;transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em);-webkit-transform:translate('+(-coeffTailleCadreTitre*largeurBox/2)+'px,-0.8em)';
 
 		document.getElementById(nomDuCadre).appendChild(cadre[i]);
 		
@@ -328,26 +328,27 @@ function montrerResultats(nomDuCadre,data){
 	}
 
 	var vitesse=2.5;
-	if(Afficher[0]==true){
-	setTimeout(function(){$("#barre0").fadeIn(1000/vitesse);$("#cadre0").fadeIn(1000/vitesse);},(9-0)*300/vitesse)}
-	if(Afficher[1]==true){
-	setTimeout(function(){$("#barre1").fadeIn(1000/vitesse);$("#cadre1").fadeIn(1000/vitesse);},(9-1)*300/vitesse)}
-	if(Afficher[2]==true){
-	setTimeout(function(){$("#barre2").fadeIn(1000/vitesse);$("#cadre2").fadeIn(1000/vitesse);},(9-2)*300/vitesse)}
-	if(Afficher[3]==true){
-	setTimeout(function(){$("#barre3").fadeIn(1000/vitesse);$("#cadre3").fadeIn(1000/vitesse);},(9-3)*300/vitesse)}
-	if(Afficher[4]==true){
-	setTimeout(function(){$("#barre4").fadeIn(1000/vitesse);$("#cadre4").fadeIn(1000/vitesse);},(9-4)*300/vitesse)}
-	if(Afficher[5]==true){
-	setTimeout(function(){$("#barre5").fadeIn(1000/vitesse);$("#cadre5").fadeIn(1000/vitesse);},(9-5)*300/vitesse)}
-	if(Afficher[6]==true){
-	setTimeout(function(){$("#barre6").fadeIn(1000/vitesse);$("#cadre6").fadeIn(1000/vitesse);},(9-6)*300/vitesse)}
-	if(Afficher[7]==true){
-	setTimeout(function(){$("#barre7").fadeIn(1000/vitesse);$("#cadre7").fadeIn(1000/vitesse);},(9-7)*300/vitesse)}
-	if(Afficher[8]==true){
-	setTimeout(function(){$("#barre8").fadeIn(1000/vitesse);$("#cadre8").fadeIn(1000/vitesse);},(9-8)*300/vitesse)}
-	if(Afficher[9]==true){
-	setTimeout(function(){$("#barre9").fadeIn(1000/vitesse);$("#cadre9").fadeIn(1000/vitesse);},(9-9)*300/vitesse)}
+	//alert(Afficher);
+	if(Afficher[0]>=0){
+	setTimeout(function(){$("#barre0").fadeIn(1000/vitesse);$("#cadre0").fadeIn(1000/vitesse);},Afficher[0]*300/vitesse)}//(9-0)*300/vitesse)}
+	if(Afficher[1]>=0){
+	setTimeout(function(){$("#barre1").fadeIn(1000/vitesse);$("#cadre1").fadeIn(1000/vitesse);},Afficher[1]*300/vitesse)}//(9-1)*300/vitesse)}
+	if(Afficher[2]>=0){
+	setTimeout(function(){$("#barre2").fadeIn(1000/vitesse);$("#cadre2").fadeIn(1000/vitesse);},Afficher[2]*300/vitesse)}//(9-2)*300/vitesse)}
+	if(Afficher[3]>=0){
+	setTimeout(function(){$("#barre3").fadeIn(1000/vitesse);$("#cadre3").fadeIn(1000/vitesse);},Afficher[3]*300/vitesse)}//(9-3)*300/vitesse)}
+	if(Afficher[4]>=0){
+	setTimeout(function(){$("#barre4").fadeIn(1000/vitesse);$("#cadre4").fadeIn(1000/vitesse);},Afficher[4]*300/vitesse)}//(9-4)*300/vitesse)}
+	if(Afficher[5]>=0){
+	setTimeout(function(){$("#barre5").fadeIn(1000/vitesse);$("#cadre5").fadeIn(1000/vitesse);},Afficher[5]*300/vitesse)}//(9-5)*300/vitesse)}
+	if(Afficher[6]>=0){
+	setTimeout(function(){$("#barre6").fadeIn(1000/vitesse);$("#cadre6").fadeIn(1000/vitesse);},Afficher[6]*300/vitesse)}//(9-6)*300/vitesse)}
+	if(Afficher[7]>=0){
+	setTimeout(function(){$("#barre7").fadeIn(1000/vitesse);$("#cadre7").fadeIn(1000/vitesse);},Afficher[7]*300/vitesse)}//(9-7)*300/vitesse)}
+	if(Afficher[8]>=0){
+	setTimeout(function(){$("#barre8").fadeIn(1000/vitesse);$("#cadre8").fadeIn(1000/vitesse);},Afficher[8]*300/vitesse)}//(9-8)*300/vitesse)}
+	if(Afficher[9]>=0){
+	setTimeout(function(){$("#barre9").fadeIn(1000/vitesse);$("#cadre9").fadeIn(1000/vitesse);},Afficher[9]*300/vitesse)}//(9-9)*300/vitesse)}
 
 	$(window).resize(function() {
 		largeurBox=$("#cadreInter1").width();
@@ -381,17 +382,17 @@ function montrerResultats(nomDuCadre,data){
 		}
 	});
 
-	$("#carreCentral").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 6");$("#canv6").click();}})
-	$("#cadre0").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 1");$("#canv7").click();}})
-	$("#cadre1").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 2");$("#canv5").click();}})
-	$("#cadre2").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 3");$("#canv8").click();}})
-	$("#cadre3").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 4");$("#canv4").click();}})
-	$("#cadre4").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 5");$("#canv9").click();}})
-	$("#cadre5").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 7");$("#canv3").click();}})
-	$("#cadre6").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 8");$("#canv10").click();}})
-	$("#cadre7").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 9");$("#canv2").click();}})
-	$("#cadre8").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 10");$("#canv11").click();}})
-	$("#cadre9").click(function(){if(carrouselDispo==true){chargementBulleInfo("cadreInfo","Film 11");$("#canv1").click();}})
+	$("#carreCentral").click(function(){if(carrouselDispo==true){$("#canv6").click();}})//chargementBulleInfo("cadreInfo","Film 6");$("#canv6").click();}})
+	$("#cadre0").click(function(){if(carrouselDispo==true){$("#canv7").click();}})//chargementBulleInfo("cadreInfo","Film 1");$("#canv7").click();}})
+	$("#cadre1").click(function(){if(carrouselDispo==true){$("#canv5").click();}})//chargementBulleInfo("cadreInfo","Film 2");$("#canv5").click();}})
+	$("#cadre2").click(function(){if(carrouselDispo==true){$("#canv8").click();}})//chargementBulleInfo("cadreInfo","Film 3");$("#canv8").click();}})
+	$("#cadre3").click(function(){if(carrouselDispo==true){$("#canv4").click();}})//chargementBulleInfo("cadreInfo","Film 4");$("#canv4").click();}})
+	$("#cadre4").click(function(){if(carrouselDispo==true){$("#canv9").click();}})//chargementBulleInfo("cadreInfo","Film 5");$("#canv9").click();}})
+	$("#cadre5").click(function(){if(carrouselDispo==true){$("#canv3").click();}})//chargementBulleInfo("cadreInfo","Film 7");$("#canv3").click();}})
+	$("#cadre6").click(function(){if(carrouselDispo==true){$("#canv10").click();}})//chargementBulleInfo("cadreInfo","Film 8");$("#canv10").click();}})
+	$("#cadre7").click(function(){if(carrouselDispo==true){$("#canv2").click();}})//chargementBulleInfo("cadreInfo","Film 9");$("#canv2").click();}})
+	$("#cadre8").click(function(){if(carrouselDispo==true){$("#canv11").click();}})//chargementBulleInfo("cadreInfo","Film 10");$("#canv11").click();}})
+	$("#cadre9").click(function(){if(carrouselDispo==true){$("#canv1").click();}})//chargementBulleInfo("cadreInfo","Film 11");$("#canv1").click();}})
 
 }
 /*$(document).ready(function(){
