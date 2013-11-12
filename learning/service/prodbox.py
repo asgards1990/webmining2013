@@ -628,7 +628,7 @@ class CinemaService(LearningService):
     def loadPredictLabels(self):
         self.predict_labels_log_box_office = np.log(self.box_office_matrix.toarray())
         self.predict_labels_log_box_office_names = ['log_box_office'] # a priori inutile
-        self.predict_labels_reviews = self.reviews_matrix.toarray()
+        self.predict_labels_reviews = self.reviews_matrix
         self.predict_labels_reviews_names = ['review_' + s for s in self.reviews_names] # a priori inutile
         self.predict_labels_prizes = self.prizes_matrix.toarray()
         awards_per_institution = np.sum(self.predict_labels_prizes, axis=0)
