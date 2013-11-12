@@ -6,7 +6,7 @@ import datetime
 
 def getSeason(date):
     if not date:
-        return 'no-season'
+        return False
     if date.month in [12, 1, 2]:
         return 'winter'
     if date.month in [3, 4, 5]:
@@ -63,7 +63,11 @@ def genLanguages(iter_films):
 def genSeason(iter_films):
     while True:
         film = next(iter_films)
-	yield {'season':getSeason(film.release_date)}
+        season = getSeason(film.release_date)
+        if season:
+	        yield {getSeason(film.release_date) : 1}
+        else:
+            yield {'winter' : 0.25, 'fall': 0.25, 'summer' : 0.25, 'spring' : 0.25}
 
 def genFeature(iter_films, feature_name, feature_content_name):
     while True:
@@ -111,7 +115,7 @@ def genPrizes(iter_films):
         film = next(iter_films)
         prizes = Prize.objects.filter(film=film)
         if prizes.count() == 0:
-            yield {} #{'_nothing' : 1}
+            yield {'_nothing' : 1}
         else:
             d = {}
             for prize in prizes.all():
@@ -125,7 +129,7 @@ def genReviews(iter_films):
         film = next(iter_films)
         reviews = Review.objects.filter(film=film).exclude(grade=None)
         if reviews.count() == 0:
-            yield {} #{'_nothing' : 1}
+            yield {'_nothing' : 1}
         else:
             d = {}
             for review in reviews.all():
