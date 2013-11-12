@@ -48,13 +48,14 @@ class CinemaService(LearningService):
         self.actor_reduction_rank_threshold = 10
         self.bagofwords_accuracy = 4.
         
-        self.reduction_actors_in_predictfeatures = 'KM'
-        self.reduction_directors_in_predictfeatures = 'KM'
+        self.reduction_actors_in_predictfeatures = 'SVD'
+        self.reduction_directors_in_predictfeatures = 'SVD'
+        self.reduction_keywords_in_predictfeatures = 'SVD'
         
         self.reduction_actors_in_directoractormatrix = 'KM' # useful only for spectral clustering
         
-        self.reduction_actors_in_searchclustering = 'KM'
-        self.reduction_directors_in_searchclustering = 'KM'
+        self.reduction_actors_in_searchclustering = 'SVD'
+        self.reduction_directors_in_searchclustering = 'SVD'
         
         self.clustering_type_in_searchclustering = 'KM'
         
@@ -90,8 +91,8 @@ class CinemaService(LearningService):
         self.loadReviewsContent2()
         # Load other features
         self.loadStats()
-        self.loadWriters()
-        self.loadWritersReduced()
+        #self.loadWriters()
+        #self.loadWritersReduced()
         self.loadRuntime()
         self.loadMetacriticScore()
         self.loadReleaseDate()
@@ -273,7 +274,7 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=np.float32)
             self.reviews_matrix = v.fit_transform(gkey)
             
-            completer = Imputer(missing_values=0, strategy="median")
+            completer = Imputer(missing_values=0, strategy="mean")
             self.reviews_matrix.data -= 1.0
             self.reviews_matrix = completer.fit_transform(self.reviews_matrix)
             
@@ -307,7 +308,7 @@ class CinemaService(LearningService):
     def loadSeason(self):
         if not self.is_loaded('season'):
             gkey = genSeason(self.films.iterator())
-            v =  DictVectorizer(dtype=int)
+            v =  DictVectorizer(dtype=np.float32)
             self.season_matrix = v.fit_transform(gkey)
             self.season_names = v.get_feature_names()
             # Save object in cache
@@ -342,8 +343,8 @@ class CinemaService(LearningService):
             self.proj_keywords_KM = scipy.sparse.csc_matrix(keyword_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_keywords):
                 self.proj_keywords_KM = scipy.sparse.hstack([self.proj_keywords_KM, scipy.sparse.csc_matrix(keyword_labels_KM==i, dtype=int).transpose()])
-            self.proj_keywords_KM=normalize(self.proj_keywords_KM.astype(np.double),axis=0, norm='l1')
-            self.keywords_reduced_KM = self.keyword_matrix * self.proj_keywords_KM
+            self.proj_keywords_KM=self.proj_keywords_KM.astype(np.double)
+            self.keywords_reduced_KM = Normalizer(copy=False, norm='l1').fit_transform(self.keyword_matrix * self.proj_keywords_KM)
             #SVD method
             svd = TruncatedSVD(n_components = self.dim_keywords, n_iterations = 100)
             self.keywords_reduced_SVD = Normalizer(copy=False, norm='l1').fit_transform(svd.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix)))
@@ -406,8 +407,8 @@ class CinemaService(LearningService):
             self.proj_actors_KM = scipy.sparse.csc_matrix(actor_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_actors):
                 self.proj_actors_KM = scipy.sparse.hstack([self.proj_actors_KM, scipy.sparse.csc_matrix(actor_labels_KM==i, dtype=int).transpose()])
-            self.proj_actors_KM=normalize(self.proj_actors_KM.astype(np.double),axis=0, norm='l1')
-            self.actor_reduced_KM = self.actor_matrix * self.proj_actors_KM
+            self.proj_actors_KM=self.proj_actors_KM.astype(np.double)
+            self.actor_reduced_KM = Normalizer(copy=False, norm='l1').fit_transform( self.actor_matrix * self.proj_actors_KM)
             # Third method : box office clustering
             actor_weight_matrix = self.rank_matrix
             rv = scipy.stats.poisson(self.actors_theta_BOC)
@@ -425,7 +426,7 @@ class CinemaService(LearningService):
                 else:
                     self.proj_actors_BOC = scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1))
             self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_BOC
-            self.actor_reduced_BOC = normalize(self.actor_reduced_BOC.astype(np.double), norm='l1', axis=1)
+            self.actor_reduced_BOC = Normalizer(copy=False, norm='l1').fit_transform(self.actor_reduced_BOC.astype(np.double))
             #Fourth method
             svd = TruncatedSVD(n_components = self.dim_actors, n_iterations = 100)
             self.actor_reduced_SVD = Normalizer(copy=False, norm='l1').fit_transform(svd.fit_transform(TfidfTransformer().fit_transform(self.actor_matrix)))
@@ -435,6 +436,7 @@ class CinemaService(LearningService):
         else:
             self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC, self.actor_reduced_SVD, self.proj_actors_SVD = self.get_cobject('actors_reduced').get_content()
     
+    #useless
     def loadWriters(self):
         keywords_reduced = self.keywords_reduced_KM
         if not self.is_loaded('writers'):
@@ -448,6 +450,7 @@ class CinemaService(LearningService):
             self.writer_matrix, self.writer_names, self.writer_keyword_matrix = self.get_cobject('writers').get_content()
         self.nb_writers = self.writer_matrix.shape[1]
     
+    #useless
     def loadWritersReduced(self):
         if not self.is_loaded('writers_reduced'):
             # First clustering method: Spectral Clustering
@@ -517,8 +520,7 @@ class CinemaService(LearningService):
             self.proj_directors_KM = scipy.sparse.csc_matrix(director_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_directors):
                 self.proj_directors_KM = scipy.sparse.hstack([self.proj_directors_KM, scipy.sparse.csc_matrix(director_labels_KM==i, dtype=int).transpose()])
-            self.proj_directors_KM=normalize(self.proj_directors_KM.astype(np.double),axis=0, norm='l1')
-            self.director_reduced_KM = self.director_matrix * self.proj_directors_KM
+            self.director_reduced_KM = Normalizer(copy=False, norm='l1').fit_transform( (self.director_matrix * self.proj_directors_KM).astype(np.double) )
             #Fourth method
             svd = TruncatedSVD(n_components = self.dim_directors, n_iterations = 100)
             self.director_reduced_SVD = Normalizer(copy=False, norm='l1').fit_transform(svd.fit_transform(TfidfTransformer().fit_transform(self.director_matrix)))
@@ -535,17 +537,20 @@ class CinemaService(LearningService):
             actor_reduced=self.actor_reduced_KM
         if self.reduction_actors_in_searchclustering == 'BOC':
             actor_reduced=self.actor_reduced_BOC
+        if self.reduction_actors_in_searchclustering == 'SVD':
+            actor_reduced=self.actor_reduced_SVD
         if self.reduction_directors_in_searchclustering == 'SC':
             director_reduced=self.director_reduced_SC
         if self.reduction_directors_in_searchclustering == 'KM':
             director_reduced=self.director_reduced_KM
-        X_people = scipy.sparse.hstack([normalize(actor_reduced.astype(np.double),norm='l1',axis=1),normalize(director_reduced.astype(np.double),norm='l1',axis=1)])
-        X_budget = self.budget_matrix
+        if self.reduction_directors_in_searchclustering == 'SVD':
+            director_reduced=self.director_reduced_SVD
+        X_people = np.hstack([actor_reduced, director_reduced])
         X_review = self.reviews_matrix # TODO : check if results are better
         #X_review.data = X_review.data - 1
-        X_genre =  self.genres_matrix
-        X_budget = scipy.sparse.csr_matrix(np.log(X_budget.toarray()))
-        X_budget = X_budget/max(X_budget.data)
+        X_genre =  self.genres_matrix.toarray()
+        X_budget = np.log(self.budget_matrix.toarray())
+        X_budget = X_budget/max(X_budget)
         X_review = X_review # because grades should be in [0,1]
         X_genre = normalize(X_genre.astype(np.double),norm='l1',axis=1) #normalize
         X_people = X_people/2 #normalize
@@ -553,9 +558,9 @@ class CinemaService(LearningService):
         budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight
         genre_weight = self.high_weight if (k>>3)%2 else self.low_weight
-        res = scipy.sparse.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
+        res = np.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
         if self.search_latent_vars:
-            res = scipy.sparse.hstack([res, self.low_weight * self.keywords_reduced_KM])
+            res = np.hstack([res, self.low_weight * self.keywords_reduced_SVD])
         return res
     
     def loadSearchClustering(self, verbose=False):
@@ -602,14 +607,21 @@ class CinemaService(LearningService):
             actor_reduced = self.actor_reduced_SC
         if self.reduction_actors_in_predictfeatures == 'BOC':
             actor_reduced = self.actor_reduced_BOC
+        if self.reduction_actors_in_predictfeatures == 'SVD':
+            actor_reduced = self.actor_reduced_SVD
         
         if self.reduction_directors_in_predictfeatures == 'KM':
             director_reduced = self.director_reduced_KM
         if self.reduction_directors_in_predictfeatures == 'SC':
             director_reduced = self.director_reduced_SC
+        if self.reduction_directors_in_predictfeatures == 'SVD':
+            director_reduced = self.director_reduced_SVD
         
-        keyword_reduced = self.keywords_reduced_KM
-        
+        if self.reduction_keywords_in_predictfeatures == 'SVD':
+            keyword_reduced = self.keywords_reduced_SVD
+        if self.reduction_keywords_in_predictfeatures == 'KM':
+            keyword_reduced = self.keywords_reduced_KM
+
         self.predict_features = scipy.sparse.hstack([
             actor_reduced,
             director_reduced,
@@ -822,7 +834,7 @@ class CinemaService(LearningService):
         #print('--> Start looking for neighbors...')
         # Find neighbors
         # 30 % time can be saved here with cache
-        X = self.getWeightedSearchFeatures(criteria_binary).toarray()
+        X = self.getWeightedSearchFeatures(criteria_binary)
         nb_results_found=0
         distances=[]
         neighbors_indexes=[]
@@ -963,7 +975,7 @@ class CinemaService(LearningService):
         return [{'keyword' : inv_dic[i], 'value': float(y[i])} for i in top_indexes if y[i] > 1]
     
     def get_bagofwords2(self, predicted_score, input_genres):
-        accuracy = 0.5 #TODO : when missing values of grades will be made, take a better accuracy
+        accuracy = self.bagofwords_accuracy #TODO : when missing values of grades will be made, take a better accuracy
         films_of_same_genre = self.genres_matrix.toarray()[:,np.where(input_genres==1)[0]].sum(axis=1)
         films_of_same_genre_indexes = np.where(films_of_same_genre>0)[0]
         films_of_same_grade_indexes = np.where(np.abs(self.reviews_matrix.mean(axis=1)-predicted_score)<.5/accuracy)[0]
@@ -1173,6 +1185,7 @@ class CinemaService(LearningService):
         return query_results
     
     def vectorize_predict_user_input(self, user_input):
+
         x_actor_vector = np.zeros([1,self.nb_actors])
         if user_input.has_key('actors'):
             if user_input['actors'].__class__ == list:
@@ -1183,12 +1196,16 @@ class CinemaService(LearningService):
                         pass
         
         if self.reduction_actors_in_predictfeatures == 'KM':
-            x_actor_reduced = x_actor_vector * self.proj_actors_KM
+            proj_actors = self.proj_actors_KM
         if self.reduction_actors_in_predictfeatures == 'SC':
-            x_actor_reduced = x_actor_vector * self.proj_actors_SC
+            proj_actors = self.proj_actors_SC
         if self.reduction_actors_in_predictfeatures == 'BOC':
-            x_actor_reduced = x_actor_vector * self.proj_actors_BOC
-        
+            proj_actors = self.proj_actors_BOC
+        if self.reduction_actors_in_predictfeatures == 'SVD':
+            proj_actors = self.proj_actors_SVD
+
+        x_actor_reduced = Normalizer(copy=False, norm='l1').fit_transform(x_actor_vector * proj_actors)
+
         x_genres_vector = np.zeros([1, self.nb_genres])
         if user_input.has_key('genres'):
             if user_input['genres'].__class__ == list:
@@ -1208,9 +1225,11 @@ class CinemaService(LearningService):
                         pass
         
         if self.reduction_directors_in_predictfeatures == 'KM':
-            x_director_reduced = x_director_vector * self.proj_directors_KM
-        if self.reduction_directors_in_predictfeatures == 'SC':
-            x_director_reduced = x_director_vector * self.proj_directors_SC
+            proj_directors = self.proj_directors_KM
+        if self.reduction_directors_in_predictfeatures == 'SVD':
+            proj_directors = self.proj_directors_SVD
+
+        x_director_reduced = Normalizer(copy=False, norm='l1').fit_transform(x_director_vector * proj_directors)
         
         x_keyword_vector = np.zeros([1, self.nb_keywords])
         if user_input.has_key('keywords'):
@@ -1221,7 +1240,12 @@ class CinemaService(LearningService):
                     except ValueError:
                         pass
         
-        x_keyword_reduced = x_keyword_vector * self.proj_keywords_KM
+        if self.reduction_keywords_in_predictfeatures == 'KM':
+            proj_keywords = self.proj_keywords_KM
+        if self.reduction_keywords_in_predictfeatures == 'SVD':
+            proj_keywords = self.proj_keywords_SVD
+
+        x_keyword_reduced = Normalizer(copy=False, norm='l1').fit_transform(x_keyword_vector * proj_keywords)
         
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
