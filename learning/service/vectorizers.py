@@ -143,7 +143,7 @@ def genReviewsContent(iter_films):
         d = {}
         for review in reviews.all():
             d[review.journal.name] = review.summary
-        yield s
+        yield d
 
 def genReviewsContent2(iter_films):
     while True:
