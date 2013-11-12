@@ -269,7 +269,7 @@ class CinemaService(LearningService):
         if not self.is_loaded('reviews'):
             gkey = genReviews(self.films.iterator())
             v =  DictVectorizer(dtype=np.float32)
-            self.reviews_matrix = v.fit_transform(gkey)
+            self.reviews_matrix = v.fit_transform(gkey) / 2.
             self.reviews_names = v.get_feature_names()
             # Save object in cache
             self.create_cobject('reviews', (self.reviews_names, self.reviews_matrix))
@@ -523,7 +523,8 @@ class CinemaService(LearningService):
             director_reduced=self.director_reduced_KM
         X_people = scipy.sparse.hstack([normalize(actor_reduced.astype(np.double),norm='l1',axis=1),normalize(director_reduced.astype(np.double),norm='l1',axis=1)])
         X_budget = self.budget_matrix
-        X_review = self.reviews_matrix
+        X_review = self.reviews_matrix # TODO : check if results are better
+        #X_review.data = X_review.data - 1
         X_genre =  self.genres_matrix
         X_budget = scipy.sparse.csr_matrix(np.log(X_budget.toarray()))
         X_budget = X_budget/max(X_budget.data)
@@ -974,8 +975,10 @@ class CinemaService(LearningService):
         journals = []
         predicted_grades = []
         for i in range(self.nb_journals):
-            journals.append(self.reviews_names[i])
-            predicted_grades.append(self.review_gradient_boosting_reg[i].predict(x_vector)[0])
+            gr = 2 * self.review_gradient_boosting_reg[i].predict(x_vector)[0] - 1
+            if gr >= 0:
+                journals.append(self.reviews_names[i])
+                predicted_grades.append(gr)
         
         # Prizes
         institutions = []
@@ -1004,7 +1007,7 @@ class CinemaService(LearningService):
                    'box_office' : predicted_box_office,
                    'reviews' : [{'journal' : journals[i],
                                  'grade' : float(predicted_grades[i])}
-                                for i in range(self.nb_journals)],
+                                for i in range(len(journals))],
                    'bag_of_words' : bagofwords
                     }
         
@@ -1025,7 +1028,6 @@ class CinemaService(LearningService):
         query_results['prizes_nomination'] = query_results['prizes_nomination'][:10]
         
         # Fill query_results['general_box_office']
-        
         bo = self.box_office_matrix.toarray().ravel()
         sorted_bo = np.sort(bo)
         sorted_bo_indices = np.argsort(bo)

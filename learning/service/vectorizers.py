@@ -111,35 +111,31 @@ def genPrizes(iter_films):
         film = next(iter_films)
         prizes = Prize.objects.filter(film=film)
         if prizes.count() == 0:
-            yield {'_nothing' : 1}
+            yield {} #{'_nothing' : 1}
         else:
             d = {}
             for prize in prizes.all():
-                d[prize.institution.name+'_'+str(prize.win)] = 1
+                #d[prize.institution.name+'_'+str(prize.win)] = 1
+                d[prize.institution.name+'_False'] = 1
+                d[prize.institution.name+'_True'] = 1 if prize.win else 0
             yield d
 
 def genReviews(iter_films):
     while True:
         film = next(iter_films)
-        reviews = Review.objects.filter(film=film)
+        reviews = Review.objects.filter(film=film).exclude(grade=None)
         if reviews.count() == 0:
-            yield {'_nothing' : 1}
+            yield {} #{'_nothing' : 1}
         else:
             d = {}
-            nb_reviews_added = 0
             for review in reviews.all():
-                if review.grade != None:
-                    d[review.journal.name] = review.grade
-                    nb_reviews_added = nb_reviews_added + 1
-            if nb_reviews_added >0:
-                yield d
-            else:
-                yield {'_nothing' : 1}
+                d[review.journal.name] = 1+review.grade
+            yield d
 
 def genReviewsContent(iter_films):
     while True:
         film = next(iter_films)
-        reviews = Review.objects.filter(film=film)
+        reviews = Review.objects.filter(film=film).exclude(grade=None)
         d = {}
         for review in reviews.all():
             d[review.journal.name] = review.summary
