@@ -12,7 +12,7 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.neighbors.kde import KernelDensity
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
-from sklearn.preprocessing import normalize, Imputer
+from sklearn.preprocessing import normalize, Imputer, Normalizer
 from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
@@ -34,9 +34,9 @@ class CinemaService(LearningService):
         self.budget_bandwidth = 1000.0 # TODO : optimize this parameter
         # Define parameters # TODO : optimize all these parameters
         self.dim_writers = 20
-        self.dim_directors = 10
+        self.dim_directors = 20
         self.dim_actors = 20
-        self.dim_keywords = 30
+        self.dim_keywords = 40
         self.n_clusters_search = 20
         self.p_norm = 2 # p-norm used for distances
         self.high_weight = 1.2 # for the distance definition
@@ -334,7 +334,7 @@ class CinemaService(LearningService):
         else:
             self.keyword_names, self.keyword_matrix = self.get_cobject('keywords').get_content()
         self.nb_keywords = self.keyword_matrix.shape[1]
-    
+
     def loadKeywordsReduced(self):
         if not self.is_loaded('keywords_reduced'):
             keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++')
@@ -344,10 +344,14 @@ class CinemaService(LearningService):
                 self.proj_keywords_KM = scipy.sparse.hstack([self.proj_keywords_KM, scipy.sparse.csc_matrix(keyword_labels_KM==i, dtype=int).transpose()])
             self.proj_keywords_KM=normalize(self.proj_keywords_KM.astype(np.double),axis=0, norm='l1')
             self.keywords_reduced_KM = self.keyword_matrix * self.proj_keywords_KM
+            #SVD method
+            svd = TruncatedSVD(n_components = self.dim_keywords, n_iterations = 100)
+            self.keywords_reduced_SVD = Normalizer(copy=False, norm='l1').fit_transform(svd.fit_transform(TfidfTransformer().fit_transform(self.keyword_matrix)))
+            self.proj_keywords_SVD = svd.components_.transpose()
             # Save object in cache
-            self.create_cobject('keywords_reduced', (self.keywords_reduced_KM, self.proj_keywords_KM))
+            self.create_cobject('keywords_reduced', (self.keywords_reduced_KM, self.proj_keywords_KM, self.keywords_reduced_SVD, self.proj_keywords_SVD))
         else:
-            self.keywords_reduced_KM, self.proj_keywords_KM = self.get_cobject('keywords_reduced').get_content()
+            self.keywords_reduced_KM, self.proj_keywords_KM, self.keywords_reduced_SVD, self.proj_keywords_SVD = self.get_cobject('keywords_reduced').get_content()
     
     def loadRanks(self):
         if not self.is_loaded('ranks'):
@@ -422,10 +426,14 @@ class CinemaService(LearningService):
                     self.proj_actors_BOC = scipy.sparse.csr_matrix((data, (row, col)), shape=(self.nb_actors, 1))
             self.actor_reduced_BOC = self.actor_matrix * self.proj_actors_BOC
             self.actor_reduced_BOC = normalize(self.actor_reduced_BOC.astype(np.double), norm='l1', axis=1)
+            #Fourth method
+            svd = TruncatedSVD(n_components = self.dim_actors, n_iterations = 100)
+            self.actor_reduced_SVD = Normalizer(copy=False, norm='l1').fit_transform(svd.fit_transform(TfidfTransformer().fit_transform(self.actor_matrix)))
+            self.proj_actors_SVD = svd.components_.transpose()
             # Save object in cache
-            self.create_cobject('actors_reduced', (self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC))
+            self.create_cobject('actors_reduced', (self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC, self.actor_reduced_SVD, self.proj_actors_SVD))
         else:
-            self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC = self.get_cobject('actors_reduced').get_content()
+            self.actor_reduced_KM, self.proj_actors_KM, self.actor_reduced_BOC, self.proj_actors_BOC, self.actor_reduced_SVD, self.proj_actors_SVD = self.get_cobject('actors_reduced').get_content()
     
     def loadWriters(self):
         keywords_reduced = self.keywords_reduced_KM
@@ -465,9 +473,9 @@ class CinemaService(LearningService):
             self.proj_writers_KM=normalize(self.proj_writers_KM.astype(np.double),axis=0, norm='l1')
             self.writer_reduced_KM = self.writer_matrix * self.proj_writers_KM
             # Save object in cache
-            self.create_cobject('writers_reduced', (self.writer_reduced_avg, self.writer_reduced_KM))
+            self.create_cobject('writers_reduced', (self.writer_reduced_avg, self.writer_reduced_KM, self.proj_writers_KM))
         else:
-            self.writer_reduced_avg, self.writer_reduced_KM = self.get_cobject('writers_reduced').get_content()
+            self.writer_reduced_avg, self.writer_reduced_KM, self.proj_writers_KM = self.get_cobject('writers_reduced').get_content()
     
     def loadDirectors(self):
         if self.reduction_actors_in_directoractormatrix == 'KM':
@@ -511,10 +519,14 @@ class CinemaService(LearningService):
                 self.proj_directors_KM = scipy.sparse.hstack([self.proj_directors_KM, scipy.sparse.csc_matrix(director_labels_KM==i, dtype=int).transpose()])
             self.proj_directors_KM=normalize(self.proj_directors_KM.astype(np.double),axis=0, norm='l1')
             self.director_reduced_KM = self.director_matrix * self.proj_directors_KM
+            #Fourth method
+            svd = TruncatedSVD(n_components = self.dim_directors, n_iterations = 100)
+            self.director_reduced_SVD = Normalizer(copy=False, norm='l1').fit_transform(svd.fit_transform(TfidfTransformer().fit_transform(self.director_matrix)))
+            self.proj_directors_SVD = svd.components_.transpose()
             # Save object in cache
-            self.create_cobject('directors_reduced', (self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM))
+            self.create_cobject('directors_reduced', (self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM, self.director_reduced_SVD, self.proj_directors_SVD))
         else:
-            self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM = self.get_cobject('directors_reduced').get_content()
+            self.director_reduced_avg, self.director_reduced_KM, self.proj_directors_KM, self.director_reduced_SVD, self.proj_directors_SVD = self.get_cobject('directors_reduced').get_content()
     
     def getWeightedSearchFeatures(self, k):
         if self.reduction_actors_in_searchclustering == 'SC':
