@@ -17,111 +17,29 @@ function callback (response) {
 alert(JSON.stringify(response));
 //affichage des nominations dans le tableau des Prizes (boucle JSON, i allant de 0 à 9)
 for (k=0;k<8;k++) {
-<<<<<<< HEAD
-    var nominationValue = Math.round(response.prizes_nomination[k].value*10000)/100+"%";
-=======
+
     var nominationValue = Math.round(response.prizes_nomination[k].value*10000)/100+" %";
->>>>>>> 2ffcd52b362c470a99632e72b46a18211759e808
     document.getElementById("prizestable").children[1].children[k].children[0].textContent=response.prizes_nomination[k].institution;
     document.getElementById("prizestable").children[1].children[k].children[1].textContent=nominationValue;
    };
 
 // affichage des victoires dans le tableau des Prizes
 for (k=0;k<8;k++) {  
-<<<<<<< HEAD
-    var nominationValue = Math.round(response.prizes_win[k].value*10000)/100+"%";
-=======
+
     var nominationValue = Math.round(response.prizes_win[k].value*10000)/100+" %";
->>>>>>> 2ffcd52b362c470a99632e72b46a18211759e808
     document.getElementById("prizestable").children[1].children[k].children[2].textContent=response.prizes_win[k].institution;
     document.getElementById("prizestable").children[1].children[k].children[3].textContent=nominationValue;
    };
 
-<<<<<<< HEAD
-var lengthOfReviews = response.critics.reviews.length;
-var valueRating = Math.round(response.critics.average*100)/100;
 
-	document.getElementById("reviewstable").children[1].children[0].children[0].textContent="Average rating";
-	document.getElementById("reviewstable").children[1].children[0].children[1].textContent=valueRating;
-=======
 	var lengthOfReviews = response.critics.reviews.length;
 	document.getElementById("reviewstable").children[1].children[0].children[0].textContent="Average rating";
 	document.getElementById("reviewstable").children[1].children[0].children[1].textContent=Math.round(response.critics.average*100)+" %";
->>>>>>> 2ffcd52b362c470a99632e72b46a18211759e808
+
 	
 for (k=1;k<5;k++) {   
     valueRating = response.critics.reviews[k].grade;
 	document.getElementById("reviewstable").children[1].children[k].children[0].textContent=response.critics.reviews[k].journal;
-<<<<<<< HEAD
-	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=valueRating;
-	};
-	
-if (response.general_box_office.rank==1) {
-//affichage des résultats dans le tableau des Box-Office General
-	var boxOffice = 0;
-	document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.rank;
-	document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent="Your movie!";
-	boxOffice = Math.round(response.general_box_office.value/10000.)/100.;	
-	document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+boxOffice+"M";
-	
-	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.neighbors[0].rank;
-	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent=response.general_box_office.neighbors[0].english_title;
-	boxOffice = Math.round(response.general_box_office.neighbors[1].value/10000.)/100.;                    
-	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+boxOffice.value+"M";
-	
-	document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
-	document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].english_title;
-	boxOffice = Math.round(response.general_box_office.neighbors[2].value/10000.)/100.;
-	document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
-	
-//affichage des résultats dans le tableau des Box-Office Genre
-	document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.rank;
-	document.getElementById("bogenretable").children[1].children[0].children[1].textContent="Your movie!";
-	boxOffice = Math.round(response.general_box_office.value/10000.)/100.;
-	document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+boxOffice+"M";
-	document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.neighbors[0].rank;
-	document.getElementById("bogenretable").children[1].children[1].children[1].textContent=response.genre_box_office.neighbors[0].english_title;
-	boxOffice = Math.round(response.genre_box_office.neighbors[0].value/10000.)/100.;
-	document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+boxOffice.value+"M";
-	document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
-	document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].english_title;
-	boxOffice = Math.round(response.genre_box_office.neighbors[1].value/10000.)/100.;
-	document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
-	}
-	else {
-//affichage des résultats dans le tableau des Box-Office General
-	var boxOffice = 0;
-	document.getElementById("bogeneraltable").children[1].children[1].children[0].textContent=response.general_box_office.rank;
-	document.getElementById("bogeneraltable").children[1].children[1].children[1].textContent="Your movie!";
-	boxOffice = Math.round(response.general_box_office.value/10000)/100;
-	alert(boxOffice);
-	document.getElementById("bogeneraltable").children[1].children[1].children[2].textContent="$"+boxOffice+"M";
-	
-	document.getElementById("bogeneraltable").children[1].children[0].children[0].textContent=response.general_box_office.neighbors[0].rank;
-	document.getElementById("bogeneraltable").children[1].children[0].children[1].textContent=response.general_box_office.neighbors[0].english_title;
-	boxOffice = Math.round(response.general_box_office.neighbors[0].value/10000)/100;
-	alert(boxOffice);
-	document.getElementById("bogeneraltable").children[1].children[0].children[2].textContent="$"+boxOffice.value+"M";
-	
-	document.getElementById("bogeneraltable").children[1].children[2].children[0].textContent=response.general_box_office.neighbors[1].rank;
-	document.getElementById("bogeneraltable").children[1].children[2].children[1].textContent=response.general_box_office.neighbors[1].english_title;
-	boxOffice = Math.round(response.general_box_office.neighbors[1].value/10000)/100;
-	document.getElementById("bogeneraltable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
-	
-//affichage des résultats dans le tableau des Box-Office Genre
-	document.getElementById("bogenretable").children[1].children[1].children[0].textContent=response.genre_box_office.rank;
-	document.getElementById("bogenretable").children[1].children[1].children[1].textContent="Your movie!";
-	boxOffice = Math.round(response.general_box_office.value/10000)/100;
-	document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+boxOffice+"M";
-	document.getElementById("bogenretable").children[1].children[0].children[0].textContent=response.genre_box_office.neighbors[0].rank;
-	document.getElementById("bogenretable").children[1].children[0].children[1].textContent=response.genre_box_office.neighbors[0].english_title;
-	boxOffice = Math.round(response.genre_box_office.neighbors[0].value/10000)/100;
-	document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+boxOffice.value+"M";
-	document.getElementById("bogenretable").children[1].children[2].children[0].textContent=response.genre_box_office.neighbors[1].rank;
-	document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].english_title;
-	boxOffice = Math.round(response.genre_box_office.neighbors[1].value/10000)/100;
-	document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice.value+"M";
-=======
 	document.getElementById("reviewstable").children[1].children[k].children[1].textContent=Math.round(response.critics.reviews[k].grade*100)+" %";
 	};
 	
@@ -184,7 +102,6 @@ if (response.general_box_office.rank==1) {
 		document.getElementById("bogenretable").children[1].children[2].children[1].textContent=response.genre_box_office.neighbors[1].english_title.substring(0,35);
 		boxOffice = Math.round(response.genre_box_office.neighbors[1].value/10000)/100;
 		document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice+"M";
->>>>>>> 2ffcd52b362c470a99632e72b46a18211759e808
 	};
 	
 	callback_bag_of_words(response);
