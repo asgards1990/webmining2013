@@ -122,14 +122,25 @@ function verifSiRequete(){
 }
 
 function changementPredict(){
+	//verifSiRequete()
+	//console.log(JSON.stringify(genererRequetePredict()))
 	if(verifSiRequete()){
-		$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),callback,"json")
+		envoiDeLaRequetePredict()
 	}
 }
 
 
 $(document).ready(function(){
 	$("#results").click(function(){changementPredict()})
+	//$("#id_actors_text").change(function(){console.log(document.getElementById("id_actors-deck").getElementsByClassName("hilight")[0].id)})
+	$("#id_actors-deck").bind("DOMSubtreeModified",function(){changementPredict()})
+	$("#id_directors-deck").bind("DOMSubtreeModified",function(){changementPredict()})
+	$("#id_genre1-deck").bind("DOMSubtreeModified",function(){changementPredict()})
+	$("#id_genre2-deck").bind("DOMSubtreeModified",function(){changementPredict()})
+	$("#id_keyword-deck").bind("DOMSubtreeModified",function(){changementPredict()})
+	$( "#slider-range-min" ).on( "slidechange", function( event, ui ) {changementPredict()} );
+	$(".iCheck-helper").click(function(){changementPredict()});
+	
 })
 
 
@@ -142,7 +153,7 @@ function genererRequetePredict(){
 		}
 	}
 
-	if (true || nbgenres!=0){
+	if (nbgenres!=0){
 		requestInter.genres=new Array();
 		var texte1="";
 		var texte2="";
@@ -176,7 +187,7 @@ function genererRequetePredict(){
 			}*/
 		}
 
-		if (true || nbkeywords!=0){
+		if (nbkeywords!=0){
 			requestInter.keywords=new Array();
 			for(var i=0;i<document.getElementById("id_keyword-deck").getElementsByClassName("div hilight").length;i++){
 				requestInter.keywords[i]=document.getElementById("id_keyword-deck").getElementsByClassName("hilight")[i].textContent.trim();
@@ -210,7 +221,7 @@ function genererRequetePredict(){
 			unloadChargement("results");
 		}
 		loadChargement("results");
-		requete=$.post("http://www.prodbox.co/learning/search/","json_request="+JSON.stringify(genererRequeteSearch(nomfilm,init)),fctCallbackSearch,"json")
+		requete=$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackPredict,"json")
 		//alert("hello")
 		//alert(JSON.stringify(genererRequetePredict()))
 		//$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
@@ -303,7 +314,7 @@ function genererRequetePredict(){
 		data.bag_of_words[9].word="Waste of time";
 		data.bag_of_words[9].value=0.5;*/
 	
-		fctCallbackPredict(data);
+		//fctCallbackPredict(data);
 		
 	}
 
@@ -371,7 +382,9 @@ function genererRequetePredict(){
 		}
 	}
 
-	//function fctCallbackPredict(data){
+	function fctCallbackPredict(data){
+		console.log(JSON.stringify(data))
+	}
 		//	//alert(JSON.stringify(data))
 		//	var boiteBoxOffice=document.getElementById("boxoffice");
 		//	var boiteGeneral=document.createElement("div");
