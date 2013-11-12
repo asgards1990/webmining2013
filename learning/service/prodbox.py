@@ -12,13 +12,14 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.neighbors.kde import KernelDensity
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import normalize, Imputer
 from sklearn.cluster import MiniBatchKMeans, KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import SpectralClustering
 from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
 from sklearn.linear_model import LogisticRegression
 from dictionary_bagofwords import get_dictionary
+from sklearn.svm import SVM
 
 import dateutil.parser
 import re
@@ -270,7 +271,12 @@ class CinemaService(LearningService):
         if not self.is_loaded('reviews'):
             gkey = genReviews(self.films.iterator())
             v =  DictVectorizer(dtype=np.float32)
-            self.reviews_matrix = v.fit_transform(gkey) / 2.
+            self.reviews_matrix = v.fit_transform(gkey)
+            
+            completer = Imputer(missing_values=0, strategy="median")
+            self.reviews_matrix.data -= 1.0
+            self.reviews_matrix = completer.fit_transform(self.reviews_matrix)
+            
             self.reviews_names = v.get_feature_names()
             # Save object in cache
             self.create_cobject('reviews', (self.reviews_names, self.reviews_matrix))
@@ -679,6 +685,7 @@ class CinemaService(LearningService):
             self.prize_random_forest_reg = []
             for i in range(self.nb_considered_prizes):
                 self.prize_random_forest_reg.append(RandomForestRegressor())
+                #self.prize_logistic_reg.append(SVM(probability=True))
                 self.prize_random_forest_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_random_forest_reg, s)
     
@@ -692,6 +699,7 @@ class CinemaService(LearningService):
             self.prize_logistic_reg = []
             for i in range(self.nb_considered_prizes):
                 self.prize_logistic_reg.append(LogisticRegression())
+                #self.prize_logistic_reg.append(SVM(probability=True))
                 self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_logistic_reg, s)
 
