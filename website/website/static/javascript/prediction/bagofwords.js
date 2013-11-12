@@ -151,8 +151,8 @@ function callback_bag_of_words(response) {
 		jWord[k] = [response.bag_of_words[k].word];
 		jCount[k] = [response.bag_of_words[k].value];
 	};
-		
-	var s = d3.scale.linear().domain([d3.min(jCount),d3.max(jCount)]).range([20, 60]);
+
+	var s = d3.scale.linear().domain([jCount[0],jCount[9]]).range([20, 60]);
 	
 	d3.layout.cloud().size([420, 340])
 		.words(d3.zip(jWord, jCount).map(function (d) {
