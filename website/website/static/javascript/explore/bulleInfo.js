@@ -30,6 +30,7 @@ function chargementBulleInfo(nomDuCadre,idDuFilm,titreDuFilm){
 		bulleInfoExt.style.cssText="width:100%; height:100%; display: none;"	
 		var bulleInfo=document.createElement("div");
 		bulleInfo.id="bulleInfo";
+		bulleInfo.style.cssText="border:1px Grey solid"
 		document.getElementById("bulleInfoExt").appendChild(bulleInfo);
 		var TitreInfo=document.createElement("h1");
 		TitreInfo.id="TitreInfo";
