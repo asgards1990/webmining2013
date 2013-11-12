@@ -45,11 +45,16 @@ function loadChargement(nomDuCadre){
 
 function unloadChargement(nomDuCadre){
 	//alert("hello2")
+	/*
 	document.getElementById("boxLoader").style.zIndex=-1;
 	document.getElementById("boxLoader").style.display="none";
 	//alert("hello")
 	arreter=true;
 	if(typeof(document.getElementById("loaderProvisoire"))!="undefined" && document.getElementById("loaderProvisoire") != null){
 		document.getElementById("boxLoader").removeChild(document.getElementById("loaderProvisoire"));
+	}
+	*/
+	if(typeof(document.getElementById("boxLoader"))!="undefined" && document.getElementById("boxLoader") != null){
+		document.getElementById("boxLoader").parentNode.removeChild(document.getElementById("boxLoader"));
 	}
 }

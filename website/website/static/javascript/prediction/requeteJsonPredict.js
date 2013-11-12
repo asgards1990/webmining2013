@@ -131,7 +131,7 @@ function changementPredict(){
 
 
 $(document).ready(function(){
-	$("#results").click(function(){changementPredict()})
+	//$("#results").click(function(){changementPredict()})
 	//$("#id_actors_text").change(function(){console.log(document.getElementById("id_actors-deck").getElementsByClassName("hilight")[0].id)})
 	$("#id_actors-deck").bind("DOMSubtreeModified",function(){changementPredict()})
 	$("#id_directors-deck").bind("DOMSubtreeModified",function(){changementPredict()})
@@ -221,11 +221,12 @@ function genererRequetePredict(){
 			unloadChargement("results");
 		}
 		loadChargement("results");
-		requete=$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
+		
+		//requete=$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
 		//alert("hello")
 		//alert(JSON.stringify(genererRequetePredict()))
 		//$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
-		/*var data=new Object;
+		var data=new Object;
 		data.success=true;
 		data.error="";
 		data.prizes=new Array;
@@ -312,9 +313,9 @@ function genererRequetePredict(){
 		data.bag_of_words[8].value=0.45;
 		data.bag_of_words[9]=new Object;
 		data.bag_of_words[9].word="Waste of time";
-		data.bag_of_words[9].value=0.5;*/
+		data.bag_of_words[9].value=0.5;
 	
-		//fctCallbackPredict(data);
+		fctCallbackPredict(data);
 		
 	}
 
@@ -382,9 +383,129 @@ function genererRequetePredict(){
 		}
 	}
 
+	//var inter = document.createElement("tr");
+	//document.getElementById("prizestable").getElementsByTagName("tbody").appendChild(inter);
+	//var institution = document.createElement("tr");
+	
+	function tousSontRemplis(type){
+		if (type=="win"){
+			for(var i = 0;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
+				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].childNodes[3].textContent==""){
+					return false;
+				}
+			}
+			return true;
+		}
+		else{
+			for(var i = 0;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
+				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].childNodes[1].textContent==""){
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+	
+	function premierePlaceDispo(type){
+		if (type=="win"){
+			for(var i = 0;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
+				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].childNodes[3].textContent==""){
+					return i;
+				}
+			}
+			return -1;
+		}
+		else{
+			for(var i = 0;i<document.getElementById("prizestable").getElementsByTagName("tr").length;i++){
+				if(document.getElementById("prizestable").getElementsByTagName("tr")[i].childNodes[1].textContent==""){
+					return i;
+				}
+			}
+			return -1;
+		}
+	}
+	
+	function creerNouvelElement(type, institution, valeur){
+		if (type=="win"){
+			var inter = document.createElement("tr");
+			document.getElementById("prizestable").getElementsByTagName("tbody").appendChild(inter);
+			var institution1 = document.createElement("td");
+			institution1.className="institution";
+			inter.appendChild(institution1);
+			var proban = document.createElement("td");
+			proban.className="proban";
+			inter.appendChild(proban);
+			var institution2 = document.createElement("td");
+			institution2.className="institution";
+			inter.appendChild(institution1);
+			var texteInstitution=document.createTextNode(institution);
+			institution2.appendChild(texteInstitution);
+			var probav = document.createElement("td");
+			probav.className="probav";
+			inter.appendChild(probav);
+			var texteValeur=document.createTextNode(valeur);
+			probav.appendChild(texteValeur);
+		}
+		else{
+			var inter = document.createElement("tr");
+			document.getElementById("prizestable").getElementsByTagName("tbody").appendChild(inter);
+			var institution1 = document.createElement("td");
+			institution1.className="institution";
+			inter.appendChild(institution1);
+			var texteInstitution=document.createTextNode(institution);
+			institution1.appendChild(texteInstitution);
+			var proban = document.createElement("td");
+			proban.className="proban";
+			inter.appendChild(proban);
+			var texteValeur=document.createTextNode(valeur);
+			proban.appendChild(texteValeur);
+			var institution2 = document.createElement("td");
+			institution2.className="institution";
+			inter.appendChild(institution1);
+			var probav = document.createElement("td");
+			probav.className="probav";
+			inter.appendChild(probav);		
+		}
+	}
+	
+	function rajouterDonnees(type,place,institution,valeur){
+		if(type=="win"){
+			var texteInstitution=document.createTextNode(institution);
+			document.getElementById("prizestable").getElementsByTagName("tr")[place].getElementsByClassName("institution")[1].appendChild(texteInstitution);
+			var texteValeur=document.createTextNode(valeur);
+			document.getElementById("prizestable").getElementsByTagName("tr")[place].getElementsByClassName("probav")[0].appendChild(texteValeur);
+		}
+		else{
+			var texteInstitution=document.createTextNode(institution);
+			document.getElementById("prizestable").getElementsByTagName("tr")[place].getElementsByClassName("institution")[0].appendChild(texteInstitution);
+			var texteValeur=document.createTextNode(valeur);
+			document.getElementById("prizestable").getElementsByTagName("tr")[place].getElementsByClassName("proban")[0].appendChild(texteValeur);
+		}
+	}
+	
 	function fctCallbackPredict(data){
 		unloadChargement("results");
 		console.log(JSON.stringify(data))
+		if(data.success==true){
+			for(var i=0;i<data.prizes.length;i++){
+				if(data.prizes[i].win=="true"){
+					if(tousSontRemplis("win")==true){
+						creerNouvelElement("win",data.prizes[i].institution,data.prizes[i].value)
+					}
+					else{
+						rajouterDonnees("win",premierePlaceDispo("win"),data.prizes[i].institution,data.prizes[i].value)
+					}
+				}
+				else{
+					if(tousSontRemplis("nomination")==true){
+						creerNouvelElement("nomination",data.prizes[i].institution,data.prizes[i].value)
+					}
+					else{
+						rajouterDonnees("nomination",premierePlaceDispo("nomination"),data.prizes[i].institution,data.prizes[i].value)
+					}
+				}
+			}
+		}
 	}
 		//	//alert(JSON.stringify(data))
 		//	var boiteBoxOffice=document.getElementById("boxoffice");
