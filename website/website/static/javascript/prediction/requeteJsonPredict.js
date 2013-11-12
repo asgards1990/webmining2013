@@ -1,5 +1,5 @@
 // -*- coding: utf-8 -*-
-
+var requete;
 var nbactors_min=1;
 var nbactors_max=100;
 var nbgenres_min=1;
@@ -221,7 +221,7 @@ function genererRequetePredict(){
 			unloadChargement("results");
 		}
 		loadChargement("results");
-		requete=$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequeteSearch()),fctCallbackPredict,"json")
+		requete=$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
 		//alert("hello")
 		//alert(JSON.stringify(genererRequetePredict()))
 		//$.post("http://www.prodbox.co/learning/predict/","json_request="+JSON.stringify(genererRequetePredict()),fctCallbackPredict,"json")
@@ -383,6 +383,7 @@ function genererRequetePredict(){
 	}
 
 	function fctCallbackPredict(data){
+		unloadChargement("results");
 		console.log(JSON.stringify(data))
 	}
 		//	//alert(JSON.stringify(data))
