@@ -27,7 +27,7 @@ function verifSiRequete(){
 	nbdirector=document.getElementById("id_directors-deck").getElementsByClassName("hilight").length;
 	
 	if (nbactors<nbactors_min || nbactors > nbactors_max){
-	document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundColor="rgba(246,31,31,0.8)";
+	document.getElementById("prediction_item_actors").getElementsByTagName("div")[0].style.backgroundColor="Red";
 	}
 	else{
 		if(nbactors<nbactors_ok){
