@@ -1,8 +1,29 @@
 function chargementBulleInfo(nomDuCadre,idDuFilm,titreDuFilm){
 	//if(document.getElementById("bulleInfoExt")){document.getElementById("bulleInfoExt").parentNode.removeChild(document.getElementById("bulleInfoExt"))};
 	if(document.getElementById("bulleInfoExt")){
+		var opts = {
+			lines: 13, // The number of lines to draw
+			length: 11, // The length of each line
+			width: 9, // The line thickness
+			radius: 29, // The radius of the inner circle
+			corners: 1, // Corner roundness (0..1)
+			rotate: 0, // The rotation offset
+			direction: 1, // 1: clockwise, -1: counterclockwise
+			color: '#000', // #rgb or #rrggbb or array of colors
+			speed: 1.3, // Rounds per second
+			trail: 70, // Afterglow percentage
+			shadow: true, // Whether to render a shadow
+			hwaccel: true, // Whether to use hardware acceleration
+			className: 'spinner', // The CSS class to assign to the spinner
+			zIndex: 2e9, // The z-index (defaults to 2000000000)
+			top: 'auto', // Top position relative to parent in px
+			left: 'auto' // Left position relative to parent in px
+		};
+		var target = document.getElementById('bulleInfo');
+		var spinner = new Spinner(opts).spin(target);
 		$.post("/cinema/filmInfo/","film_id="+idDuFilm,function(data){affecter2(data)})
 		.fail(function(){
+			document.getElementById('bulleInfo').removeChild(document.getElementById('bulleInfo').getElementsByClassName('spinner')[0])
 			document.getElementById("conteneurTitre").textContent="Title : "+titreDuFilm;
 			document.getElementById("conteneurDateSortie").textContent="Release date : ";
 			document.getElementById("conteneurActeurs").textContent="Actors : ";
@@ -10,6 +31,7 @@ function chargementBulleInfo(nomDuCadre,idDuFilm,titreDuFilm){
 		});
 		function affecter2(data){
 			console.log(JSON.stringify(data))
+			document.getElementById('bulleInfo').removeChild(document.getElementById('bulleInfo').getElementsByClassName('spinner')[0])
 			document.getElementById("conteneurTitre").textContent="Title : " + data.english_title;
 			document.getElementById("conteneurDateSortie").textContent="Release date : " + data.release_date.slice(-2)+"/"+data.release_date.slice(-5,-3)+"/"+data.release_date.slice(0,4);
 			var stringActors="Actors : ";
