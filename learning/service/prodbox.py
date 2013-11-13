@@ -995,8 +995,10 @@ class CinemaService(LearningService):
         accuracy = 0.5 #self.bagofwords_accuracy #TODO : when missing values of grades will be made, take a better accuracy
         films_of_same_genre = self.genres_matrix.toarray()[:,np.where(input_genres==1)[0]].sum(axis=1)
         films_of_same_genre_indexes = np.where(films_of_same_genre>0)[0]
+        print self.reviews_matrix.mean(axis=1)
+        print predicted_score
         films_of_same_grade_indexes = np.where(np.abs(self.reviews_matrix.mean(axis=1)-predicted_score)<.5/accuracy)[0]
-        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist())
+        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist()[0])
         token_occurences = self.reviews_content_matrix[films_indexes,:].sum(axis=0)
         token_occurences = np.array(token_occurences[0,:])
         top_indexes = token_occurences.argsort()
