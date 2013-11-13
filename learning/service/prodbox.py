@@ -992,15 +992,15 @@ class CinemaService(LearningService):
         return [{'keyword' : inv_dic[i], 'value': float(y[i])} for i in top_indexes if y[i] > 1]
     
     def get_bagofwords2(self, predicted_score, input_genres):
-        accuracy = self.bagofwords_accuracy #TODO : when missing values of grades will be made, take a better accuracy
+        accuracy = 0.5 #self.bagofwords_accuracy #TODO : when missing values of grades will be made, take a better accuracy
         films_of_same_genre = self.genres_matrix.toarray()[:,np.where(input_genres==1)[0]].sum(axis=1)
         films_of_same_genre_indexes = np.where(films_of_same_genre>0)[0]
         films_of_same_grade_indexes = np.where(np.abs(self.reviews_matrix.mean(axis=1)-predicted_score)<.5/accuracy)[0]
-        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist()[0])
+        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist())
         token_occurences = self.reviews_content_matrix[films_indexes,:].sum(axis=0)
         token_occurences = np.array(token_occurences[0,:])
         top_indexes = token_occurences.argsort()
-        top_indexes = top_indexes[0,-10:]
+        top_indexes = top_indexes[0,-20:]
         return [{'keyword' : self.reviews_content_names[i], 'value': float(token_occurences[0,i])} for i in top_indexes if token_occurences[0,i] > 1]
     
     def compute_predict(self, x_vector):
@@ -1064,6 +1064,7 @@ class CinemaService(LearningService):
         return results
     
     def predict_request(self, args):
+        print args
         # Get results
         results = self.compute_predict(self.vectorize_predict_user_input(args))
         # Build query_results
@@ -1073,8 +1074,10 @@ class CinemaService(LearningService):
         query_results['prizes_win'] = results['prizes_win']
         query_results['prizes_nomination'] = results['prizes_nomination']
         query_results['prizes_win'] = sorted(query_results['prizes_win'], key=lambda k: -k['value'])
+        query_results['prizes_win'] = [d for d in query_results['prizes_win'] if d.get('institution') != '']
         query_results['prizes_win'] = query_results['prizes_win'][:10]
         query_results['prizes_nomination'] = sorted(query_results['prizes_nomination'], key=lambda k: -k['value'])
+        query_results['prizes_nomination'] = [d for d in query_results['prizes_nomination'] if d.get('institution') != '']
         query_results['prizes_nomination'] = query_results['prizes_nomination'][:10]
         
         # Fill query_results['general_box_office']
@@ -1179,13 +1182,14 @@ class CinemaService(LearningService):
         reviews = results['reviews']
         grades = map(lambda k: k['grade'], reviews)
         reviews = sorted(reviews, key=lambda k: -k['grade'])
-        n_reviews = len(reviews)
+        nonneg_reviews = [d for d in reviews if d.get('grade') >=0]
+        n_reviews = len(nonneg_reviews)
         selected_reviews = []
-        selected_reviews.append(reviews[0])
-        selected_reviews.append(reviews[1*n_reviews/4])
-        selected_reviews.append(reviews[2*n_reviews/4])
-        selected_reviews.append(reviews[3*n_reviews/4])
-        selected_reviews.append(reviews[-1])
+        selected_reviews.append(nonneg_reviews[0])
+        selected_reviews.append(nonneg_reviews[1*n_reviews/4])
+        selected_reviews.append(nonneg_reviews[2*n_reviews/4])
+        selected_reviews.append(nonneg_reviews[3*n_reviews/4])
+        selected_reviews.append(nonneg_reviews[-1])
         
         critics['reviews'] = selected_reviews
         critics['average'] = np.mean(grades)
@@ -1221,7 +1225,7 @@ class CinemaService(LearningService):
         if self.reduction_actors_in_predictfeatures == 'SVD':
             proj_actors = self.proj_actors_SVD
 
-        x_actor_reduced = Normalizer(copy=False, norm='l1').fit_transform(x_actor_vector * proj_actors)
+        x_actor_reduced = Normalizer(copy=False, norm='l1').fit_transform(np.dot(x_actor_vector,proj_actors))
 
         x_genres_vector = np.zeros([1, self.nb_genres])
         if user_input.has_key('genres'):
@@ -1246,7 +1250,7 @@ class CinemaService(LearningService):
         if self.reduction_directors_in_predictfeatures == 'SVD':
             proj_directors = self.proj_directors_SVD
 
-        x_director_reduced = Normalizer(copy=False, norm='l1').fit_transform(x_director_vector * proj_directors)
+        x_director_reduced = Normalizer(copy=False, norm='l1').fit_transform(np.dot(x_director_vector,proj_directors))
         
         x_keyword_vector = np.zeros([1, self.nb_keywords])
         if user_input.has_key('keywords'):
@@ -1262,22 +1266,34 @@ class CinemaService(LearningService):
         if self.reduction_keywords_in_predictfeatures == 'SVD':
             proj_keywords = self.proj_keywords_SVD
 
-        x_keyword_reduced = Normalizer(copy=False, norm='l1').fit_transform(x_keyword_vector * proj_keywords)
-        
+        x_keyword_reduced = Normalizer(copy=False, norm='l1').fit_transform(np.dot(x_keyword_vector,proj_keywords))
+
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
             if user_input['budget'].__class__ == int:
                 x_budget_vector[0,0] = float(1000000.0 * user_input['budget'])
         
         x_season_vector = np.zeros([1, len(self.season_names)])
-        try:
-            for feat in self.season_names:
-                i = 0
-                if re.findall(user_input['release_period']['season'], feat):
-                    x_season_vector[0,i] = 1
-                i += 1
-        except exceptions.KeyError:
+        #try:
+        #    for feat in self.season_names:
+        #        i = 0
+        #        if re.findall(user_input['release_period']['season'], feat):
+        #            x_season_vector[0,i] = 1
+        #        i += 1
+        #except exceptions.KeyError:
+
+        if user_input['release_period']['season'] == 'no_season':
             x_season_vector[0,:] = np.array([0.25, 0.25, 0.25, 0.25])
+        if user_input['release_period']['season'] == 'fall':
+            x_season_vector[0,:] = np.array([1.0, 0., 0., 0.])
+        if user_input['release_period']['season'] == 'spring':
+            x_season_vector[0,:] = np.array([0., 1.0, 0., 0.])
+        if user_input['release_period']['season'] == 'summer':
+            x_season_vector[0,:] = np.array([0., 0., 1.0, 0.])
+        if user_input['release_period']['season'] == 'winter':
+            x_season_vector[0,:] = np.array([0., 0., 0., 1.0])
+        
+        print x_season_vector
         
         x_vector = np.hstack([
             x_actor_reduced,
@@ -1286,6 +1302,12 @@ class CinemaService(LearningService):
             x_budget_vector,
             x_season_vector,
             x_genres_vector,])
+
+        pk = Film.objects.get(imdb_id = 'tt0371746').pk
+        filmindex = self.fromPktoIndex[pk]
+        for i in range(len(self.predict_features_names)):
+            print self.predict_features_names[i],
+            print str(x_vector[0,i])+' ('+str(self.predict_features[filmindex,i])+')' 
         return x_vector
 
 ### KEYWORDS SUGGESTION ###
