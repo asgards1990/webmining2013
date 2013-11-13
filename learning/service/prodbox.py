@@ -657,7 +657,7 @@ class CinemaService(LearningService):
     def loadPredictLabels(self):
         self.predict_labels_log_box_office = np.log(self.box_office_matrix.toarray())
         self.predict_labels_log_box_office_names = ['log_box_office'] # a priori inutile
-        self.predict_labels_reviews = self.reviews_matrix.toarray()
+        self.predict_labels_reviews = self.reviews_matrix
 
         #mask = self.predict_labels_reviews >= 1        
         #for r in range(mask.shape[1]):

@@ -1,6 +1,7 @@
 from service.prodbox import *
 from sklearn.cross_validation import cross_val_score
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
+from sklearn.linear_model import LogisticRegression
 
 app = CinemaService()
 app.loadData()
@@ -82,5 +83,48 @@ def ReviewsScores():
     print   "Reviews regression by random forest score: ", RF_reg_scores.mean()
     print   "Reviews regression by gradient boosting score: ", GB_reg_scores.mean()
 
+def PrizesScores():
+    Y = app.predict_labels_prizes
+    RF_clf = []
+    RF_clf_scores = []
+    GB_clf = []
+    GB_clf_scores = []
+    RF_reg = []
+    RF_reg_scores = []
+    GB_reg = []
+    GB_reg_scores = []
+    LG_reg = []
+    LG_reg_scores = []
+    
+    print "Number of Prizes: ", app.nb_considered_prizes
+
+    for i in range(app.nb_considered_prizes):
+        y = Y[:,i]
+        y_bin = y > np.median(y)
+
+        RF_clf.append(RandomForestClassifier())
+        GB_clf.append(GradientBoostingClassifier())
+        RF_reg.append(RandomForestRegressor())
+        GB_reg.append(GradientBoostingRegressor())
+        LG_reg.append(LogisticRegression())
+
+        RF_clf_scores.append(cross_val_score(RF_clf[i], X, y_bin, cv=3).mean())
+        print "Journal ", i, " - ", "Reviews classification by random forest score: ", RF_clf_scores[i]
+        GB_clf_scores.append(cross_val_score(GB_clf[i], X, y_bin, cv=3).mean())
+        print "Journal ", i, " - ", "Reviews classification by gradient boosting score: ", GB_clf_scores[i]
+        RF_reg_scores.append(cross_val_score(RF_reg[i], X, y, cv=3).mean())
+        print "Journal ", i, " - ", "Reviews regression by random forest score: ", RF_reg_scores[i]
+        GB_reg_scores.append(cross_val_score(GB_reg[i], X, y, cv=3).mean())
+        print "Journal ", i, " - ", "Reviews regression by gradient boosting score: ", GB_reg_scores[i]
+        LG_reg_scores.append(cross_val_score(LG_reg[i], X, y, cv=3).mean())
+        print "Journal ", i, " - ", "Reviews regression by logistic regression score: ", LG_reg_scores[i]
+
+    print   "Reviews classification by random forest score: ", RF_clf_scores.mean()
+    print   "Reviews classification by gradient boosting score: ", GB_clf_scores.mean()
+    print   "Reviews regression by random forest score: ", RF_reg_scores.mean()
+    print   "Reviews regression by gradient boosting score: ", GB_reg_scores.mean()
+    print   "Reviews regression by logistic regression score: ", LG_reg_scores.mean()
+
 #BoxOfficeScores()
-ReviewsScores()
+#ReviewsScores()
+PrizesScores()
