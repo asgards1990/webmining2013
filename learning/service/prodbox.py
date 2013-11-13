@@ -1003,7 +1003,7 @@ class CinemaService(LearningService):
         '''
         
         # Box office
-        predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
+        predicted_box_office = 100*np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0]) #TODO
         
         # Reviews
         journals = []
@@ -1257,15 +1257,7 @@ class CinemaService(LearningService):
                 x_budget_vector[0,0] = float(1000000.0 * user_input['budget'])
         
         x_season_vector = np.zeros([1, len(self.season_names)])
-        #try:
-        #    for feat in self.season_names:
-        #        i = 0
-        #        if re.findall(user_input['release_period']['season'], feat):
-        #            x_season_vector[0,i] = 1
-        #        i += 1
-        #except exceptions.KeyError:
-
-        if user_input['release_period']['season'] == 'no_season':
+        if user_input['release_period']['season'] == 'no-season':
             x_season_vector[0,:] = np.array([0.25, 0.25, 0.25, 0.25])
         if user_input['release_period']['season'] == 'fall':
             x_season_vector[0,:] = np.array([1.0, 0., 0., 0.])
@@ -1275,8 +1267,6 @@ class CinemaService(LearningService):
             x_season_vector[0,:] = np.array([0., 0., 1.0, 0.])
         if user_input['release_period']['season'] == 'winter':
             x_season_vector[0,:] = np.array([0., 0., 0., 1.0])
-        
-        print x_season_vector
         
         x_vector = np.hstack([
             x_actor_reduced,
@@ -1288,9 +1278,13 @@ class CinemaService(LearningService):
 
         pk = Film.objects.get(imdb_id = 'tt0371746').pk
         filmindex = self.fromPktoIndex[pk]
-        for i in range(len(self.predict_features_names)):
-            print self.predict_features_names[i],
-            print str(x_vector[0,i])+' ('+str(self.predict_features[filmindex,i])+')' 
+        #print x_vector
+        #print self.predict_features[filmindex,:]
+        #print self.log_box_office_gradient_boosting_reg.feature_importances_
+        #for i in range(len(self.predict_features_names)):
+        #    print '['+str(self.log_box_office_gradient_boosting_reg.feature_importances_[i])+']',
+        #    print self.predict_features_names[i],
+        #    print str(x_vector[0,i])+' ('+str(self.predict_features[filmindex,i])+')' 
         return x_vector
 
 ### KEYWORDS SUGGESTION ###
