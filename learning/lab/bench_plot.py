@@ -1,7 +1,12 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from service.prodbox import *
 from sklearn.cross_validation import cross_val_score
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
 from sklearn.linear_model import LogisticRegression
+import matplotlib.pyplot as plt
+import csv
 
 app = CinemaService()
 app.loadData()
@@ -41,6 +46,24 @@ def BoxOfficeScores():
     reg = GradientBoostingRegressor()
     scores = cross_val_score(reg, X, y, cv=3)
     print 'Regression by gradient boosting score: ', scores.mean()
+
+def BoxOfficePlot():
+    fig = plt.figure()
+
+    fig.suptitle(u'Box Office prédit en fonction du box office réel')
+
+    ax = fig.add_subplot(111)
+    ax.set_xlabel(u'Log du box office réel')
+    ax.set_ylabel(u'Log du box office prédit')
+    ax.set_xlim([0,30])
+    ax.set_ylim([0,30])
+
+    y = app.predict_labels_log_box_office.ravel()
+    reg = RandomForestRegressor()
+    reg.fit(X[0::2],y[0::2])
+
+    ax.plot(y[1::2], reg.predict(X[1::2]), '+')
+    plt.show()
 
 
 ###############
@@ -83,6 +106,10 @@ def ReviewsScores():
     print   "Reviews regression by random forest score: ", RF_reg_scores.mean()
     print   "Reviews regression by gradient boosting score: ", GB_reg_scores.mean()
 
+###############
+### Prizes ###
+###############
+
 def PrizesScores():
     Y = app.predict_labels_prizes
     RF_clf = []
@@ -109,22 +136,24 @@ def PrizesScores():
         LG_reg.append(LogisticRegression())
 
         RF_clf_scores.append(cross_val_score(RF_clf[i], X, y_bin, cv=3).mean())
-        print "Journal ", i, " - ", "Reviews classification by random forest score: ", RF_clf_scores[i]
+        print "Institution ", i, " - ", "Prizes classification by random forest score: ", RF_clf_scores[i]
         GB_clf_scores.append(cross_val_score(GB_clf[i], X, y_bin, cv=3).mean())
-        print "Journal ", i, " - ", "Reviews classification by gradient boosting score: ", GB_clf_scores[i]
+        print "Institution ", i, " - ", "Prizes classification by gradient boosting score: ", GB_clf_scores[i]
         RF_reg_scores.append(cross_val_score(RF_reg[i], X, y, cv=3).mean())
-        print "Journal ", i, " - ", "Reviews regression by random forest score: ", RF_reg_scores[i]
+        print "Institution ", i, " - ", "Prizes regression by random forest score: ", RF_reg_scores[i]
         GB_reg_scores.append(cross_val_score(GB_reg[i], X, y, cv=3).mean())
-        print "Journal ", i, " - ", "Reviews regression by gradient boosting score: ", GB_reg_scores[i]
+        print "Institution ", i, " - ", "Prizes regression by gradient boosting score: ", GB_reg_scores[i]
         LG_reg_scores.append(cross_val_score(LG_reg[i], X, y, cv=3).mean())
-        print "Journal ", i, " - ", "Reviews regression by logistic regression score: ", LG_reg_scores[i]
+        print "Institution ", i, " - ", "Prizes regression by logistic regression score: ", LG_reg_scores[i]
 
-    print   "Reviews classification by random forest score: ", RF_clf_scores.mean()
-    print   "Reviews classification by gradient boosting score: ", GB_clf_scores.mean()
-    print   "Reviews regression by random forest score: ", RF_reg_scores.mean()
-    print   "Reviews regression by gradient boosting score: ", GB_reg_scores.mean()
-    print   "Reviews regression by logistic regression score: ", LG_reg_scores.mean()
+    print   "Prizes classification by random forest score: ", RF_clf_scores.mean()
+    print   "Prizes classification by gradient boosting score: ", GB_clf_scores.mean()
+    print   "Prizes regression by random forest score: ", RF_reg_scores.mean()
+    print   "Prizes regression by gradient boosting score: ", GB_reg_scores.mean()
+    print   "Prizes regression by logistic regression score: ", LG_reg_scores.mean()
 
 #BoxOfficeScores()
 #ReviewsScores()
-PrizesScores()
+#PrizesScores()
+
+BoxOfficePlot()
