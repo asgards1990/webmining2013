@@ -571,11 +571,11 @@ function genererRequetePredict(){
 				boxOffice = Math.round(data.general_box_office.value/10000)/100;
 				document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+boxOffice+"M";
 				document.getElementById("bogenretable").children[1].children[0].children[0].textContent=data.genre_box_office.neighbors[0].rank;
-				document.getElementById("bogenretable").children[1].children[0].children[1].textContent=data.genre_box_office.neighbors[0].english_title.substring(0,35);
+				document.getElementById("bogenretable").children[1].children[0].children[1].textContent=data.genre_box_office.neighbors[0].english_title.substring(0,29);
 				boxOffice = Math.round(data.genre_box_office.neighbors[0].value/10000)/100;
 				document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+boxOffice+"M";
 				document.getElementById("bogenretable").children[1].children[2].children[0].textContent=data.genre_box_office.neighbors[1].rank;
-				document.getElementById("bogenretable").children[1].children[2].children[1].textContent=data.genre_box_office.neighbors[1].english_title.substring(0,35);
+				document.getElementById("bogenretable").children[1].children[2].children[1].textContent=data.genre_box_office.neighbors[1].english_title.substring(0,29);
 				boxOffice = Math.round(data.genre_box_office.neighbors[1].value/10000)/100;
 				document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice+"M";
 			};
