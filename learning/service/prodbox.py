@@ -73,6 +73,7 @@ class CinemaService(LearningService):
         self.loadLanguages()
         self.loadGenres()
         self.loadBoxOffice() # Need nb_user_ratings, user_rating, genres, languages
+        self.loadBudget()
         # Load prediction features
         self.loadActors() # Need box office
         self.loadStars()
@@ -81,7 +82,6 @@ class CinemaService(LearningService):
         self.loadDirectors()
         self.loadDirectorsReduced()
         self.loadSeason()
-        self.loadBudget()
         self.loadKeywords()
         self.loadKeywordsReduced()
         # Load prediction labels
@@ -142,13 +142,29 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=np.float32)
             self.budget_matrix = v.fit_transform(gkey)
             
-            budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
-            budget_data = budget_data.reshape( [budget_data.shape[0], 1])
-            kde = KernelDensity(kernel='gaussian', bandwidth=self.budget_bandwidth).fit(budget_data)
+            #budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
+            #budget_data = budget_data.reshape( [budget_data.shape[0], 1])
+            #kde = KernelDensity(kernel='gaussian', bandwidth=self.budget_bandwidth).fit(budget_data)
             
-            for i in range(self.budget_matrix.shape[0]):
-                if np.isnan(self.budget_matrix[i,0]):
-                    self.budget_matrix[i,0]= max(1, kde.sample(1))
+            #for i in range(self.budget_matrix.shape[0]):
+            #    if np.isnan(self.budget_matrix[i,0]):
+            #        self.budget_matrix[i,0]= max(1, kde.sample(1))
+            
+            
+            y = self.budget_matrix.toarray()[:,0]
+            nan_indexes = np.isnan(y)
+            if np.sum(nan_indexes)>0:
+                X = scipy.sparse.hstack([
+                        self.imdb_user_rating_matrix,
+                        self.imdb_nb_user_ratings_matrix,
+                        self.languages_matrix,
+                        self.genres_matrix]).toarray()
+                reg = GradientBoostingRegressor()
+                reg.fit(X[-nan_indexes, :], y[-nan_indexes])
+                y[nan_indexes] = reg.predict(X[nan_indexes, :])
+                y[y < 0] = 1
+                self.budget_matrix = scipy.sparse.csc_matrix(y).transpose()
+            
             
             # Save object in cache
             self.create_cobject('budget', self.budget_matrix)
@@ -273,10 +289,6 @@ class CinemaService(LearningService):
             gkey = genReviews(self.films.iterator())
             v =  DictVectorizer(dtype=np.float32)
             self.reviews_matrix = v.fit_transform(gkey)
-            
-            completer = Imputer(missing_values=0, strategy="mean")
-            self.reviews_matrix.data -= 1.0
-            self.reviews_matrix = completer.fit_transform(self.reviews_matrix)
             
             self.reviews_names = v.get_feature_names()
             # Save object in cache
@@ -546,8 +558,13 @@ class CinemaService(LearningService):
         if self.reduction_directors_in_searchclustering == 'SVD':
             director_reduced=self.director_reduced_SVD
         X_people = np.hstack([actor_reduced, director_reduced])
-        X_review = self.reviews_matrix # TODO : check if results are better
-        #X_review.data = X_review.data - 1
+        
+        # WARNING
+        X_review = self.reviews_matrix / 2 # Values are between 0 and 2, 0 = no review, 1 = review with grade 0
+        #completer = Imputer(missing_values=0, strategy="mean")
+        #X_review.data -= 1.0
+        #X_review = completer.fit_transform(X_review)
+        
         X_genre =  self.genres_matrix.toarray()
         X_budget = np.log(self.budget_matrix.toarray())
         X_budget = X_budget/max(X_budget)
@@ -596,7 +613,7 @@ class CinemaService(LearningService):
         self.loadLogBoxOfficeRandomForestRegressor()
         self.loadLogBoxOfficeGradientBoostingRegressor()
         self.loadReviewRandomForestRegressors()
-        self.loadReviewGradientBoostingRegressors()
+        #self.loadReviewGradientBoostingRegressors()
         self.loadPrizeRandomForestRegressors()
         self.loadPrizeLogisticRegression()
     
@@ -640,7 +657,14 @@ class CinemaService(LearningService):
     def loadPredictLabels(self):
         self.predict_labels_log_box_office = np.log(self.box_office_matrix.toarray())
         self.predict_labels_log_box_office_names = ['log_box_office'] # a priori inutile
-        self.predict_labels_reviews = self.reviews_matrix
+        self.predict_labels_reviews = self.reviews_matrix.toarray()
+
+        #mask = self.predict_labels_reviews >= 1        
+        #for r in range(mask.shape[1]):
+        #    m = np.mean(self.predict_labels_reviews[:,r][mask[:,r]])
+        #    v = np.var(self.predict_labels_reviews[:,r][mask[:,r]])
+        #    self.predict_labels_reviews[:,r][-mask[:,r]] = np.random.normal(loc=m, scale=np.sqrt(v), size=(sum(-mask[:,r]),1)).astype(np.float32)
+        
         self.predict_labels_reviews_names = ['review_' + s for s in self.reviews_names] # a priori inutile
         self.predict_labels_prizes = self.prizes_matrix.toarray()
         awards_per_institution = np.sum(self.predict_labels_prizes, axis=0)
@@ -682,8 +706,14 @@ class CinemaService(LearningService):
             print s+' object not found. Creating it...'
             self.review_random_forest_reg = []
             for i in range(self.nb_journals):
+                mask = self.predict_labels_reviews[:,i] >=1
+                self.predict_labels_reviews[mask,i] -= 1.0
+                #m = np.mean(self.predict_labels_reviews[mask,i])
+                #v = np.var(self.predict_labels_reviews[mask,i])
+                #self.predict_labels_reviews[-mask,i] = np.random.normal(loc=m, scale=np.sqrt(v), size=(sum(-mask),1)).astype(np.float32)
+                
                 self.review_random_forest_reg.append(RandomForestRegressor())
-                self.review_random_forest_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
+                self.review_random_forest_reg[i].fit(self.predict_features[mask,:], self.predict_labels_reviews[mask,i])
             self.dumpJoblibObject(self.review_random_forest_reg, s)
     
     def loadReviewGradientBoostingRegressors(self):
@@ -695,8 +725,11 @@ class CinemaService(LearningService):
             print s+' object not found. Creating it...'
             self.review_gradient_boosting_reg = []
             for i in range(self.nb_journals):
+                mask = self.predict_labels_reviews[:,i] >=1
+                self.predict_labels_reviews[mask,i] -= 1.0
+                
                 self.review_gradient_boosting_reg.append(GradientBoostingRegressor())
-                self.review_gradient_boosting_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
+                self.review_gradient_boosting_reg[i].fit(self.predict_features[mask,:], self.predict_labels_reviews[mask,i])
             self.dumpJoblibObject(self.review_gradient_boosting_reg, s)
     
     def loadPrizeRandomForestRegressors(self):
@@ -978,8 +1011,10 @@ class CinemaService(LearningService):
         accuracy = 0.5 #self.bagofwords_accuracy #TODO : when missing values of grades will be made, take a better accuracy
         films_of_same_genre = self.genres_matrix.toarray()[:,np.where(input_genres==1)[0]].sum(axis=1)
         films_of_same_genre_indexes = np.where(films_of_same_genre>0)[0]
+        print self.reviews_matrix.mean(axis=1)
+        print predicted_score
         films_of_same_grade_indexes = np.where(np.abs(self.reviews_matrix.mean(axis=1)-predicted_score)<.5/accuracy)[0]
-        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist())
+        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist()[0])
         token_occurences = self.reviews_content_matrix[films_indexes,:].sum(axis=0)
         token_occurences = np.array(token_occurences[0,:])
         top_indexes = token_occurences.argsort()
@@ -1003,13 +1038,13 @@ class CinemaService(LearningService):
         '''
         
         # Box office
-        predicted_box_office = np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0])
+        predicted_box_office = 100*np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0]) #TODO
         
         # Reviews
         journals = []
         predicted_grades = []
         for i in range(self.nb_journals):
-            gr = self.review_gradient_boosting_reg[i].predict(x_vector)[0] 
+            gr = self.review_random_forest_reg[i].predict(x_vector)[0] 
             journals.append(self.reviews_names[i])
             predicted_grades.append(gr)
         
@@ -1257,15 +1292,7 @@ class CinemaService(LearningService):
                 x_budget_vector[0,0] = float(1000000.0 * user_input['budget'])
         
         x_season_vector = np.zeros([1, len(self.season_names)])
-        #try:
-        #    for feat in self.season_names:
-        #        i = 0
-        #        if re.findall(user_input['release_period']['season'], feat):
-        #            x_season_vector[0,i] = 1
-        #        i += 1
-        #except exceptions.KeyError:
-
-        if user_input['release_period']['season'] == 'no_season':
+        if user_input['release_period']['season'] == 'no-season':
             x_season_vector[0,:] = np.array([0.25, 0.25, 0.25, 0.25])
         if user_input['release_period']['season'] == 'fall':
             x_season_vector[0,:] = np.array([1.0, 0., 0., 0.])
@@ -1275,8 +1302,6 @@ class CinemaService(LearningService):
             x_season_vector[0,:] = np.array([0., 0., 1.0, 0.])
         if user_input['release_period']['season'] == 'winter':
             x_season_vector[0,:] = np.array([0., 0., 0., 1.0])
-        
-        print x_season_vector
         
         x_vector = np.hstack([
             x_actor_reduced,
@@ -1288,9 +1313,13 @@ class CinemaService(LearningService):
 
         pk = Film.objects.get(imdb_id = 'tt0371746').pk
         filmindex = self.fromPktoIndex[pk]
-        for i in range(len(self.predict_features_names)):
-            print self.predict_features_names[i],
-            print str(x_vector[0,i])+' ('+str(self.predict_features[filmindex,i])+')' 
+        #print x_vector
+        #print self.predict_features[filmindex,:]
+        #print self.log_box_office_gradient_boosting_reg.feature_importances_
+        #for i in range(len(self.predict_features_names)):
+        #    print '['+str(self.log_box_office_gradient_boosting_reg.feature_importances_[i])+']',
+        #    print self.predict_features_names[i],
+        #    print str(x_vector[0,i])+' ('+str(self.predict_features[filmindex,i])+')' 
         return x_vector
 
 ### KEYWORDS SUGGESTION ###
