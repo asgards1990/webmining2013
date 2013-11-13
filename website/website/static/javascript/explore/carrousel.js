@@ -2,18 +2,16 @@ var carrouselDispo;
 
 
 function carrousel(nomDuCadre,data){
-	//alert("hello")
 	var tableauId=new Array;
 	var repLien=new Array;
-	//alert(data.nbresults)
 	var nombre = data.results.length;
-	//alert(nombre);
+
 	var ontTousRep=new Array;
 	for (var i=0;i < nombre;i++){
 		ontTousRep[5+((1-2*(i%2))*(Math.floor(i/2)+1))]=0;
 	}
 	var milieuRep=0;
-	//alert("hello")
+
 	function encap(i,data,nombre){
 			return function(data){
 				if(i==nombre){
@@ -57,12 +55,12 @@ function carrousel(nomDuCadre,data){
 	for(var j=nombre;j<10;j++){
 		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../pesto/static/img/explore/filmVide.jpg";
 	}
-	//alert(repLien)
+
 	carrousel2(data,nomDuCadre,repLien)
 }
 
 function carrousel2(data,nomDuCadre,lienImage){
-	//alert(lienImage)
+
 	var largeur=75;//1*contenu.width;
 	var hauteur=100;//1*contenu.height;
 	var imageLoaded=new Array;
@@ -85,23 +83,16 @@ function carrousel2(data,nomDuCadre,lienImage){
 	function scopeChargement(l){return function(){coeffLargeur[l]=75/imageinter[l].width;coeffHauteur[l]=100/imageinter[l].height;imageLoaded[l]=true; toutEstCharge()}}
 
 	function toutEstCharge(){
-		//alert(imageLoaded)
+
 		if(imageLoaded[0]==true && imageLoaded[1]==true && imageLoaded[2]==true && imageLoaded[3]==true && imageLoaded[4]==true && imageLoaded[5]==true && imageLoaded[6]==true && imageLoaded[7]==true && imageLoaded[8]==true && imageLoaded[9]==true && imageLoaded[10]==true){
-			//alert("!!!!!!!")
+
 			actionAFaire();
 		}
 	}
 
 	function actionAFaire() {
-
-	//var contenu = new Image();
-	//contenu.src= "film1.jpg";
-	//var largeur=75;//1*contenu.width;
-	//var hauteur=100;//1*contenu.height;
-	//alert(largeur + " " + hauteur)
 	
 	var listCanvas;
-
 
 	for(var i=0; i <11;i++){
 		canv = document.createElement('canvas');
@@ -135,7 +126,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 		return function(){dessiner(h);};
 	}
 	
-	//var image=new Array;
+
 	function dessiner(h){
 		//image[h]=new Image();
 		//image[h].src = "film"+(h+1)+".jpg";
@@ -188,11 +179,9 @@ function carrousel2(data,nomDuCadre,lienImage){
 			arrivee=(numeroAffiche+9)%11+1;
 		}
 		var image=new Image();
-		//image.src=imageinter[pos.slice(4)-1].src;
+
 		image=imageinter[pos.slice(4)-1];
-		//alert(coeffLargeur[0])
-		//alert(pos.slice(4)-1)
-		//image.src="film1.jpg";
+
 		var width=image.width;
 		var height=image.height;
 		var context = $("#"+pos)[0].getContext("2d");
@@ -249,12 +238,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 						case 9:	document.getElementById(pos10).style.zIndex=(10-i); break;
 						case 10: document.getElementById(pos11).style.zIndex=(10-i); break;
 					}
-					/*if(i<=5){
-						document.getElementById(positioninv[i+1]).style.zIndex=i;
-					}
-					else{
-						document.getElementById(positioninv[i+1]).style.zIndex=(10-i);
-					}*/
+
 				}
 			}
 			else{
@@ -273,14 +257,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 							case 9:	document.getElementById(pos10).style.zIndex=(9-i); break;
 							case 10: document.getElementById(pos11).style.zIndex=0; break;
 						}
-					
-						/*if(i<=4){
-							document.getElementById(positioninv[i+1]).style.zIndex=i+1;
-						}
-						else{
-							if(i!==10){document.getElementById(positioninv[i+1]).style.zIndex=(9-i);}
-							else{document.getElementById(positioninv[i+1]).style.zIndex=0}
-						}*/
+
 					}
 					
 				}
@@ -299,13 +276,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 							case 9:	document.getElementById(pos10).style.zIndex=(11-i); break;
 							case 10: document.getElementById(pos11).style.zIndex=(11-i); break;
 						}
-						/*if(i<=6){
-							if(i!==0){document.getElementById(positioninv[i+1]).style.zIndex=i-1;}
-							else{document.getElementById(positioninv[i+1]).style.zIndex=0;}
-						}
-						else{
-							document.getElementById(positioninv[i+1]).style.zIndex=(11-i);
-						}*/
+
 					}
 				}
 			}
@@ -331,7 +302,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 		for (var i=1;i<nombreDePas+1;i++){
 			setTimeout(toutUnCoup(i,nombreDePas,"droite",positioninv[1],positioninv[2],positioninv[3],positioninv[4],positioninv[5],positioninv[6],positioninv[7],positioninv[8],positioninv[9],positioninv[10],positioninv[11]),i*(400/multiVit)/nombreDePas);
 		}
-		//setTimeout(function(){
+
 			for (var j=1;j<12;j++){
 				inter[j]=positioninv[j];
 			}
@@ -339,7 +310,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 				positioninv[k]=inter[(k+9)%11+1];
 			}
 			if (relacher==true){enCours=false;}
-			//},400/multiVit+10)
+
 	}
 
 	function decalerUnCranGauche(nombreDePas,multiVit,relacher){
@@ -357,7 +328,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 		for (var i=1;i<nombreDePas+1;i++){
 			setTimeout(toutUnCoup(i,nombreDePas,"gauche",positioninv[1],positioninv[2],positioninv[3],positioninv[4],positioninv[5],positioninv[6],positioninv[7],positioninv[8],positioninv[9],positioninv[10],positioninv[11]),i*(400/multiVit)/nombreDePas);
 		}
-		//setTimeout(function(){
+
 		inter2=positioninv[1];
 		positioninv[1]=positioninv[2];
 		positioninv[2]=positioninv[3];
@@ -371,9 +342,9 @@ function carrousel2(data,nomDuCadre,lienImage){
 		positioninv[10]=positioninv[11];
 		positioninv[11]=inter2;
 		if (relacher==true){enCours=false;}
-		//},400/multiVit+10)
+
 	}
-	//for (var i=1;i<12;i++){
+
 	function defClic(entier){
 		if(enCours===false){
 			enCours=true;
@@ -438,7 +409,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 
 
 	$("#canv1").click(function(){if(carrouselDispo==true && imageinter[0].src.slice(-12) != "filmVide.jpg"){
-		//alert(imageinter[0].src.slice(-12))
+
 		defClic(1);chargementBulleInfo("cadreInfo",data.results[9].id,data.results[9].title);}
 	});
 	$("#canv2").click(function(){if(carrouselDispo==true && imageinter[1].src.slice(-12) != "filmVide.jpg"){
@@ -460,7 +431,7 @@ function carrousel2(data,nomDuCadre,lienImage){
 				text = document.getElementsByClassName("div hilight")[0].childNodes[i].textContent.slice(0,-6).trim();
 			}
 		}
-		//alert(text)
+
 		defClic(6);chargementBulleInfo("cadreInfo",idFilm,text);}
 	});
 	$("#canv7").click(function(){if(carrouselDispo==true && imageinter[6].src.slice(-12) != "filmVide.jpg"){

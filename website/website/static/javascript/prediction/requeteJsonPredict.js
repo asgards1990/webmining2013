@@ -514,9 +514,9 @@ function genererRequetePredict(){
 				document.getElementById("reviewstable").children[1].children[0].children[0].textContent="Average rating";
 				document.getElementById("reviewstable").children[1].children[0].children[1].textContent=Math.round(data.critics.average*100)+"/100";
 				
-			for (k=0;k<Math.min(data.critics.reviews.length,8);k++) {   
-				document.getElementById("reviewstable").children[1].children[k].children[0].textContent=data.critics.reviews[k].journal;
-				document.getElementById("reviewstable").children[1].children[k].children[1].textContent=Math.round(data.critics.reviews[k].grade*100)+"/100";
+			for (k=0;k<Math.min(data.critics.reviews.length,7);k++) {   
+				document.getElementById("reviewstable").children[1].children[k+1].children[0].textContent=data.critics.reviews[k].journal;
+				document.getElementById("reviewstable").children[1].children[k+1].children[1].textContent=Math.round(data.critics.reviews[k].grade*100)+"/100";
 			};
 			
 			if (data.general_box_office.rank==1) {

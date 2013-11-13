@@ -21,5 +21,9 @@ var opts = {
   top: 'auto', // Top position relative to parent in px
   left: 'auto' // Left position relative to parent in px
 };
-var target = document.getElementById('actors');
-var spinner = new Spinner(opts).spin(target);
+$(document).ready(function(){
+	//alert("!!!")
+	//var target = document.getElementById('distancecriteria');
+	//var spinner = new Spinner(opts).spin(target);
+	//setTimeout(function(){document.getElementById('distancecriteria').removeChild(document.getElementById('distancecriteria').getElementsByClassName('spinner')[0])},2000)
+})
