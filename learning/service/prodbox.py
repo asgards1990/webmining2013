@@ -73,6 +73,7 @@ class CinemaService(LearningService):
         self.loadLanguages()
         self.loadGenres()
         self.loadBoxOffice() # Need nb_user_ratings, user_rating, genres, languages
+        self.loadBudget()
         # Load prediction features
         self.loadActors() # Need box office
         self.loadStars()
@@ -81,7 +82,6 @@ class CinemaService(LearningService):
         self.loadDirectors()
         self.loadDirectorsReduced()
         self.loadSeason()
-        self.loadBudget()
         self.loadKeywords()
         self.loadKeywordsReduced()
         # Load prediction labels
@@ -142,13 +142,29 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=np.float32)
             self.budget_matrix = v.fit_transform(gkey)
             
-            budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
-            budget_data = budget_data.reshape( [budget_data.shape[0], 1])
-            kde = KernelDensity(kernel='gaussian', bandwidth=self.budget_bandwidth).fit(budget_data)
+            #budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
+            #budget_data = budget_data.reshape( [budget_data.shape[0], 1])
+            #kde = KernelDensity(kernel='gaussian', bandwidth=self.budget_bandwidth).fit(budget_data)
             
-            for i in range(self.budget_matrix.shape[0]):
-                if np.isnan(self.budget_matrix[i,0]):
-                    self.budget_matrix[i,0]= max(1, kde.sample(1))
+            #for i in range(self.budget_matrix.shape[0]):
+            #    if np.isnan(self.budget_matrix[i,0]):
+            #        self.budget_matrix[i,0]= max(1, kde.sample(1))
+            
+            
+            y = self.budget_matrix.toarray()[:,0]
+            nan_indexes = np.isnan(y)
+            if np.sum(nan_indexes)>0:
+                X = scipy.sparse.hstack([
+                        self.imdb_user_rating_matrix,
+                        self.imdb_nb_user_ratings_matrix,
+                        self.languages_matrix,
+                        self.genres_matrix]).toarray()
+                reg = GradientBoostingRegressor()
+                reg.fit(X[-nan_indexes, :], y[-nan_indexes])
+                y[nan_indexes] = reg.predict(X[nan_indexes, :])
+                y[y < 0] = 1
+                self.budget_matrix = scipy.sparse.csc_matrix(y).transpose()
+            
             
             # Save object in cache
             self.create_cobject('budget', self.budget_matrix)
