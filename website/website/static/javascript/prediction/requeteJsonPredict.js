@@ -141,7 +141,7 @@ function genererRequetePredict(){
 		if (nbkeywords!=0){
 			requestInter.keywords=new Array();
 			for(var i=0;i<document.getElementById("id_keyword-deck").getElementsByClassName("div hilight").length;i++){
-				requestInter.keywords[i]=document.getElementById("id_keyword-deck").getElementsByClassName("hilight")[i].textContent.trim();
+				requestInter.keywords[i]=document.getElementById("id_keyword-deck").getElementsByClassName("hilight")[i].textContent.replace('X\n','').trim();
 			}
 		}
 

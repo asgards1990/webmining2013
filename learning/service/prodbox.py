@@ -1047,6 +1047,7 @@ class CinemaService(LearningService):
         return results
     
     def predict_request(self, args):
+        print args
         # Get results
         results = self.compute_predict(self.vectorize_predict_user_input(args))
         # Build query_results
@@ -1249,21 +1250,33 @@ class CinemaService(LearningService):
             proj_keywords = self.proj_keywords_SVD
 
         x_keyword_reduced = Normalizer(copy=False, norm='l1').fit_transform(np.dot(x_keyword_vector,proj_keywords))
-        
+
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
             if user_input['budget'].__class__ == int:
                 x_budget_vector[0,0] = float(1000000.0 * user_input['budget'])
         
         x_season_vector = np.zeros([1, len(self.season_names)])
-        try:
-            for feat in self.season_names:
-                i = 0
-                if re.findall(user_input['release_period']['season'], feat):
-                    x_season_vector[0,i] = 1
-                i += 1
-        except exceptions.KeyError:
+        #try:
+        #    for feat in self.season_names:
+        #        i = 0
+        #        if re.findall(user_input['release_period']['season'], feat):
+        #            x_season_vector[0,i] = 1
+        #        i += 1
+        #except exceptions.KeyError:
+
+        if user_input['release_period']['season'] == 'no_season':
             x_season_vector[0,:] = np.array([0.25, 0.25, 0.25, 0.25])
+        if user_input['release_period']['season'] == 'fall':
+            x_season_vector[0,:] = np.array([1.0, 0., 0., 0.])
+        if user_input['release_period']['season'] == 'spring':
+            x_season_vector[0,:] = np.array([0., 1.0, 0., 0.])
+        if user_input['release_period']['season'] == 'summer':
+            x_season_vector[0,:] = np.array([0., 0., 1.0, 0.])
+        if user_input['release_period']['season'] == 'winter':
+            x_season_vector[0,:] = np.array([0., 0., 0., 1.0])
+        
+        print x_season_vector
         
         x_vector = np.hstack([
             x_actor_reduced,
@@ -1273,11 +1286,11 @@ class CinemaService(LearningService):
             x_season_vector,
             x_genres_vector,])
 
-        #pk = Film.objects.get(imdb_id = 'tt0371746').pk
-        #filmindex = self.fromPktoIndex[pk]
-        #for i in range(len(self.predict_features_names)):
-        #    print self.predict_features_names[i],
-        #    print str(x_vector[0,i])+' ('+str(self.predict_features[filmindex,i])+')' #better than 0 ?
+        pk = Film.objects.get(imdb_id = 'tt0371746').pk
+        filmindex = self.fromPktoIndex[pk]
+        for i in range(len(self.predict_features_names)):
+            print self.predict_features_names[i],
+            print str(x_vector[0,i])+' ('+str(self.predict_features[filmindex,i])+')' 
         return x_vector
 
 ### KEYWORDS SUGGESTION ###
