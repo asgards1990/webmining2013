@@ -274,10 +274,6 @@ class CinemaService(LearningService):
             v =  DictVectorizer(dtype=np.float32)
             self.reviews_matrix = v.fit_transform(gkey)
             
-            completer = Imputer(missing_values=0, strategy="mean")
-            self.reviews_matrix.data -= 1.0
-            self.reviews_matrix = completer.fit_transform(self.reviews_matrix)
-            
             self.reviews_names = v.get_feature_names()
             # Save object in cache
             self.create_cobject('reviews', (self.reviews_names, self.reviews_matrix))
@@ -546,8 +542,13 @@ class CinemaService(LearningService):
         if self.reduction_directors_in_searchclustering == 'SVD':
             director_reduced=self.director_reduced_SVD
         X_people = np.hstack([actor_reduced, director_reduced])
-        X_review = self.reviews_matrix # TODO : check if results are better
-        #X_review.data = X_review.data - 1
+        
+        # WARNING
+        X_review = self.reviews_matrix / 2 # Values are between 0 and 2, 0 = no review, 1 = review with grade 0
+        #completer = Imputer(missing_values=0, strategy="mean")
+        #X_review.data -= 1.0
+        #X_review = completer.fit_transform(X_review)
+        
         X_genre =  self.genres_matrix.toarray()
         X_budget = np.log(self.budget_matrix.toarray())
         X_budget = X_budget/max(X_budget)
@@ -640,7 +641,14 @@ class CinemaService(LearningService):
     def loadPredictLabels(self):
         self.predict_labels_log_box_office = np.log(self.box_office_matrix.toarray())
         self.predict_labels_log_box_office_names = ['log_box_office'] # a priori inutile
-        self.predict_labels_reviews = self.reviews_matrix
+        self.predict_labels_reviews = self.reviews_matrix.toarray()
+
+        #mask = self.predict_labels_reviews >= 1        
+        #for r in range(mask.shape[1]):
+        #    m = np.mean(self.predict_labels_reviews[:,r][mask[:,r]])
+        #    v = np.var(self.predict_labels_reviews[:,r][mask[:,r]])
+        #    self.predict_labels_reviews[:,r][-mask[:,r]] = np.random.normal(loc=m, scale=np.sqrt(v), size=(sum(-mask[:,r]),1)).astype(np.float32)
+        
         self.predict_labels_reviews_names = ['review_' + s for s in self.reviews_names] # a priori inutile
         self.predict_labels_prizes = self.prizes_matrix.toarray()
         awards_per_institution = np.sum(self.predict_labels_prizes, axis=0)
@@ -682,8 +690,14 @@ class CinemaService(LearningService):
             print s+' object not found. Creating it...'
             self.review_random_forest_reg = []
             for i in range(self.nb_journals):
+                mask = self.predict_labels_reviews[:,i] >=1
+                self.predict_labels_reviews[mask,i] -= 1.0
+                #m = np.mean(self.predict_labels_reviews[mask,i])
+                #v = np.var(self.predict_labels_reviews[mask,i])
+                #self.predict_labels_reviews[-mask,i] = np.random.normal(loc=m, scale=np.sqrt(v), size=(sum(-mask),1)).astype(np.float32)
+                
                 self.review_random_forest_reg.append(RandomForestRegressor())
-                self.review_random_forest_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
+                self.review_random_forest_reg[i].fit(self.predict_features[mask,:], self.predict_labels_reviews[mask,i])
             self.dumpJoblibObject(self.review_random_forest_reg, s)
     
     def loadReviewGradientBoostingRegressors(self):
@@ -695,8 +709,11 @@ class CinemaService(LearningService):
             print s+' object not found. Creating it...'
             self.review_gradient_boosting_reg = []
             for i in range(self.nb_journals):
+                mask = self.predict_labels_reviews[:,i] >=1
+                self.predict_labels_reviews[mask,i] -= 1.0
+                
                 self.review_gradient_boosting_reg.append(GradientBoostingRegressor())
-                self.review_gradient_boosting_reg[i].fit(self.predict_features, self.predict_labels_reviews[:,i])
+                self.review_gradient_boosting_reg[i].fit(self.predict_features[mask,:], self.predict_labels_reviews[mask,i])
             self.dumpJoblibObject(self.review_gradient_boosting_reg, s)
     
     def loadPrizeRandomForestRegressors(self):
