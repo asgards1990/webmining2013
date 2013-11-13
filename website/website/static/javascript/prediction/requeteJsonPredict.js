@@ -141,7 +141,7 @@ function genererRequetePredict(){
 		if (nbkeywords!=0){
 			requestInter.keywords=new Array();
 			for(var i=0;i<document.getElementById("id_keyword-deck").getElementsByClassName("div hilight").length;i++){
-				requestInter.keywords[i]=document.getElementById("id_keyword-deck").getElementsByClassName("hilight")[i].textContent.trim();
+				requestInter.keywords[i]=document.getElementById("id_keyword-deck").getElementsByClassName("hilight")[i].textContent.replace('X\n','').trim();
 			}
 		}
 
@@ -514,9 +514,9 @@ function genererRequetePredict(){
 				document.getElementById("reviewstable").children[1].children[0].children[0].textContent="Average rating";
 				document.getElementById("reviewstable").children[1].children[0].children[1].textContent=Math.round(data.critics.average*100)+"/100";
 				
-			for (k=0;k<Math.min(data.critics.reviews.length,8);k++) {   
-				document.getElementById("reviewstable").children[1].children[k].children[0].textContent=data.critics.reviews[k].journal;
-				document.getElementById("reviewstable").children[1].children[k].children[1].textContent=Math.round(data.critics.reviews[k].grade*100)+"/100";
+			for (k=0;k<Math.min(data.critics.reviews.length,7);k++) {   
+				document.getElementById("reviewstable").children[1].children[k+1].children[0].textContent=data.critics.reviews[k].journal;
+				document.getElementById("reviewstable").children[1].children[k+1].children[1].textContent=Math.round(data.critics.reviews[k].grade*100)+"/100";
 			};
 			
 			if (data.general_box_office.rank==1) {
@@ -571,11 +571,11 @@ function genererRequetePredict(){
 				boxOffice = Math.round(data.general_box_office.value/10000)/100;
 				document.getElementById("bogenretable").children[1].children[1].children[2].textContent="$"+boxOffice+"M";
 				document.getElementById("bogenretable").children[1].children[0].children[0].textContent=data.genre_box_office.neighbors[0].rank;
-				document.getElementById("bogenretable").children[1].children[0].children[1].textContent=data.genre_box_office.neighbors[0].english_title.substring(0,35);
+				document.getElementById("bogenretable").children[1].children[0].children[1].textContent=data.genre_box_office.neighbors[0].english_title.substring(0,29);
 				boxOffice = Math.round(data.genre_box_office.neighbors[0].value/10000)/100;
 				document.getElementById("bogenretable").children[1].children[0].children[2].textContent="$"+boxOffice+"M";
 				document.getElementById("bogenretable").children[1].children[2].children[0].textContent=data.genre_box_office.neighbors[1].rank;
-				document.getElementById("bogenretable").children[1].children[2].children[1].textContent=data.genre_box_office.neighbors[1].english_title.substring(0,35);
+				document.getElementById("bogenretable").children[1].children[2].children[1].textContent=data.genre_box_office.neighbors[1].english_title.substring(0,29);
 				boxOffice = Math.round(data.genre_box_office.neighbors[1].value/10000)/100;
 				document.getElementById("bogenretable").children[1].children[2].children[2].textContent="$"+boxOffice+"M";
 			};
