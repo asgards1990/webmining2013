@@ -1009,7 +1009,7 @@ class CinemaService(LearningService):
         journals = []
         predicted_grades = []
         for i in range(self.nb_journals):
-            gr = 2 * self.review_gradient_boosting_reg[i].predict(x_vector)[0] - 1
+            gr = self.review_gradient_boosting_reg[i].predict(x_vector)[0] 
             journals.append(self.reviews_names[i])
             predicted_grades.append(gr)
         
