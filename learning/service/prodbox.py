@@ -62,7 +62,7 @@ class CinemaService(LearningService):
         self.search_latent_vars = False
         self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
         
-        self.min_awards = 100
+        self.min_awards = 300
     
     def loadData(self):
         assert self.dim_keywords >= self.dim_writers, 'dim_writers should be lower than dim_keywords'
@@ -296,7 +296,14 @@ class CinemaService(LearningService):
         else:
             self.reviews_names, self.reviews_matrix = self.get_cobject('reviews').get_content()
         self.nb_journals = self.reviews_matrix.shape[1]
-    
+        
+        self.avg_reviews = np.zeros((self.nb_films ,1))
+        M = self.reviews_matrix.toarray()
+        for f in range(self.nb_films):
+            mask = M[f, :] >= 1
+            self.avg_reviews[f] = np.mean(M[f, mask]) - 1
+        self.avg_reviews[np.isnan(self.avg_reviews)] = -1
+
     def loadReviewsContent(self):
         if not self.is_loaded('reviews_content'):
             gkey = genReviewsContent(self.films.iterator())
@@ -568,6 +575,7 @@ class CinemaService(LearningService):
         X_genre =  self.genres_matrix.toarray()
         X_budget = np.log(self.budget_matrix.toarray())
         X_budget = X_budget/max(X_budget)
+        X_budget = scipy.sparse.csr_matrix(X_budget)
         X_review = X_review # because grades should be in [0,1]
         X_genre = normalize(X_genre.astype(np.double),norm='l1',axis=1) #normalize
         X_people = X_people/2 #normalize
@@ -575,9 +583,9 @@ class CinemaService(LearningService):
         budget_weight = self.high_weight if (k>>1)%2 else self.low_weight
         review_weight = self.high_weight if (k>>2)%2 else self.low_weight
         genre_weight = self.high_weight if (k>>3)%2 else self.low_weight
-        res = np.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
+        res = scipy.sparse.hstack([people_weight*X_people, budget_weight*X_budget, review_weight*X_review, genre_weight*X_genre])
         if self.search_latent_vars:
-            res = np.hstack([res, self.low_weight * self.keywords_reduced_SVD])
+            res = scipy.sparse.hstack([res, self.low_weight * self.keywords_reduced_SVD])
         return res
     
     def loadSearchClustering(self, verbose=False):
@@ -586,7 +594,7 @@ class CinemaService(LearningService):
             self.search_clustering_SC = {}
             for k in range(1, 16): # 0 is not a correct value
                 print('Doing search clustering number '+str(k)+'/15')
-                X = self.getWeightedSearchFeatures(k)
+                X = self.getWeightedSearchFeatures(k).toarray()
                 # First method
                 KM = KMeans(n_clusters=self.n_clusters_search, verbose=verbose)
                 KM.fit(X)
@@ -614,7 +622,7 @@ class CinemaService(LearningService):
         self.loadLogBoxOfficeGradientBoostingRegressor()
         self.loadReviewRandomForestRegressors()
         #self.loadReviewGradientBoostingRegressors()
-        self.loadPrizeRandomForestRegressors()
+        #self.loadPrizeRandomForestRegressors()
         self.loadPrizeLogisticRegression()
     
     def loadPredictFeatures(self):
@@ -655,7 +663,7 @@ class CinemaService(LearningService):
             self.genres_names])
     
     def loadPredictLabels(self):
-        self.predict_labels_log_box_office = np.log(self.box_office_matrix.toarray())
+        self.predict_labels_log_box_office = self.box_office_matrix.toarray()
         self.predict_labels_log_box_office_names = ['log_box_office'] # a priori inutile
         self.predict_labels_reviews = self.reviews_matrix.toarray()
 
@@ -755,8 +763,9 @@ class CinemaService(LearningService):
             print s+' object not found. Creating it...'
             self.prize_logistic_reg = []
             for i in range(self.nb_considered_prizes):
-                self.prize_logistic_reg.append(LogisticRegression())
-                #self.prize_logistic_reg.append(SVC(probability=True))
+                print str(i)+'/'+str(self.nb_considered_prizes)
+                #self.prize_logistic_reg.append(LogisticRegression())
+                self.prize_logistic_reg.append(SVC(probability=True))
                 self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_logistic_reg, s)
 
@@ -867,7 +876,8 @@ class CinemaService(LearningService):
         #print('--> Start looking for neighbors...')
         # Find neighbors
         # 30 % time can be saved here with cache
-        X = self.getWeightedSearchFeatures(criteria_binary)
+        X = self.getWeightedSearchFeatures(criteria_binary).toarray()
+        print X
         nb_results_found=0
         distances=[]
         neighbors_indexes=[]
@@ -1008,13 +1018,12 @@ class CinemaService(LearningService):
         return [{'keyword' : inv_dic[i], 'value': float(y[i])} for i in top_indexes if y[i] > 1]
     
     def get_bagofwords2(self, predicted_score, input_genres):
-        accuracy = 0.5 #self.bagofwords_accuracy #TODO : when missing values of grades will be made, take a better accuracy
+        accuracy = self.bagofwords_accuracy #TODO : when missing values of grades will be made, take a better accuracy
         films_of_same_genre = self.genres_matrix.toarray()[:,np.where(input_genres==1)[0]].sum(axis=1)
         films_of_same_genre_indexes = np.where(films_of_same_genre>0)[0]
-        print self.reviews_matrix.mean(axis=1)
-        print predicted_score
-        films_of_same_grade_indexes = np.where(np.abs(self.reviews_matrix.mean(axis=1)-predicted_score)<.5/accuracy)[0]
-        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist()[0])
+        
+        films_of_same_grade_indexes = np.where(np.abs(self.avg_reviews-predicted_score)<.5/accuracy)[0]
+        films_indexes = np.intersect1d(films_of_same_genre_indexes.tolist(),films_of_same_grade_indexes.tolist())
         token_occurences = self.reviews_content_matrix[films_indexes,:].sum(axis=0)
         token_occurences = np.array(token_occurences[0,:])
         top_indexes = token_occurences.argsort()
@@ -1038,7 +1047,7 @@ class CinemaService(LearningService):
         '''
         
         # Box office
-        predicted_box_office = 100*np.exp(self.log_box_office_gradient_boosting_reg.predict(x_vector)[0]) #TODO
+        predicted_box_office = self.log_box_office_gradient_boosting_reg.predict(x_vector)[0] / 0.78 #TODO
         
         # Reviews
         journals = []
@@ -1156,11 +1165,12 @@ class CinemaService(LearningService):
                 sorted_bo_indices_genre = np.argsort(bo_genre)
                 invrank_genre = np.searchsorted(sorted_bo_genre, results['box_office'])
                 
-                rank_genre = (self.nb_films +1 )- invrank_genre
+                per_genre = sorted_bo_indices_genre.shape[0]
+                rank_genre = per_genre + 1 - invrank_genre
                 
                 neighbors_genre = []
                 
-                if rank_genre < self.nb_films+1:
+                if rank_genre < per_genre + 1:
                     k = sorted_bo_indices_genre[invrank_genre - 1]
                     lower_neighbor_genre = {
                         'english_title': self.film_names[k],
