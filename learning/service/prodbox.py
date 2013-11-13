@@ -613,7 +613,7 @@ class CinemaService(LearningService):
         self.loadLogBoxOfficeRandomForestRegressor()
         self.loadLogBoxOfficeGradientBoostingRegressor()
         self.loadReviewRandomForestRegressors()
-        self.loadReviewGradientBoostingRegressors()
+        #self.loadReviewGradientBoostingRegressors()
         self.loadPrizeRandomForestRegressors()
         self.loadPrizeLogisticRegression()
     
@@ -1044,7 +1044,7 @@ class CinemaService(LearningService):
         journals = []
         predicted_grades = []
         for i in range(self.nb_journals):
-            gr = self.review_gradient_boosting_reg[i].predict(x_vector)[0] 
+            gr = self.review_random_forest_reg[i].predict(x_vector)[0] 
             journals.append(self.reviews_names[i])
             predicted_grades.append(gr)
         
