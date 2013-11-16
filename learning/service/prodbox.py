@@ -1298,7 +1298,7 @@ class CinemaService(LearningService):
         
         if x_keyword_reduced.sum() == 0:
             for i in range(self.dim_keywords):
-                x_keyword_reduced[i] = 1./self.dim_keywords
+                x_keyword_reduced[0,i] = 1./self.dim_keywords
 
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
