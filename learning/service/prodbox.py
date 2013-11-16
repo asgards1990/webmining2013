@@ -1295,6 +1295,10 @@ class CinemaService(LearningService):
             proj_keywords = self.proj_keywords_SVD
 
         x_keyword_reduced = Normalizer(copy=False, norm='l1').fit_transform(np.dot(x_keyword_vector,proj_keywords))
+        
+        if x_keyword_reduced.sum() == 0:
+            for i in range(self.dim_keywords):
+                x_keyword_reduced[i] = 1./self.dim_keywords
 
         x_budget_vector = np.zeros([1,1])
         if user_input.has_key('budget'):
