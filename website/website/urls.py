@@ -10,7 +10,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
-    url(r'^cinema/', include('cinema.urls')),
 )
 urlpatterns += patterns('website.views',
     url(r'^$', 'home'),
@@ -21,5 +20,3 @@ urlpatterns += patterns('website.views',
 urlpatterns += staticfiles_urlpatterns()
 
 urlpatterns += patterns('', url(r'^cinema/filmInfo/','cinema.views.filmInfo'))
-urlpatterns += patterns('', url(r'^cinema/getId/','cinema.views.getId'))
-urlpatterns += patterns('', url(r'^cinema/getIdActor/','cinema.views.getIdActor'))
