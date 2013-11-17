@@ -6,7 +6,6 @@ body {
     background-image: -moz-radial-gradient(center, ellipse farthest-side, white 0%, #EDEDED 100%);
     background-image: -webkit-radial-gradient(center, ellipse farthest-side, white 0%, #EDEDED 100%);
     background: -webkit-radial-gradient(center, ellipse farthest-side, white 0%, #EDEDED 100%);
-    min-width : 1280px;
 }
 
 h1  {
@@ -52,7 +51,6 @@ p{
 
 #header {
     width:100%;
-    min-width:980px;
     max-width:1920px;
     height:50px;
     margin:0 auto;
@@ -103,7 +101,6 @@ p{
 /* Footer */
 
 #footer {
-    min-width:980px;
     max-width:1920px;
     margin:0 auto;
     clear:both;

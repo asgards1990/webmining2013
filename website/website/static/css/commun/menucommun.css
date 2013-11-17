@@ -2,8 +2,8 @@
 
 #menu {
     float:left;
-    width:16em;
-    margin-left:1.5em;
+    width:25%;
+    margin-left:2%;
 }
   
 .menubox {
@@ -21,7 +21,6 @@
 
 #container{
     width:100%;
-    min-width:980px;
     max-width:1920px;
     margin:0 auto;
     overflow:auto;

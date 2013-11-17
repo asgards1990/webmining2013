@@ -67,10 +67,10 @@ margin-top: 3px;
 #distancecriteria {
     position: relative;
     overflow: visible;
-    margin-left: 21em;
+    margin-left: 29%;
     padding: 5px;
     border-radius: 5px;
-    width: 72%;
+    width: 68%;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.73), 0 0 18px 0 rgba(0, 0, 0, 0.13);
 }
 
@@ -108,11 +108,11 @@ margin-top: 3px;
 #results {
     position: relative;
     border-radius: 5px;
-    overflow: auto;
     text-align: center;
     margin: 0 auto;
-    margin-left:21em;
-    width: 72%;
+    margin-left:29%;
+    width: 68%;
+	min-height: 400px;
     padding: 5px;
     margin-top : 3em;
     background-image: radial-gradient(ellipse farthest-side at 39% 62% , #FFFFFF 10%, rgba(226, 165, 141, 0.4) 100%);
