@@ -54,24 +54,24 @@ def printClustersKeywords(labels,names,n_sample):
 
 app = sp.CinemaService()
 app.loadFilms()
-app.loadData()
-#app.loadRanks()
-#app.loadActors()
-#app.loadActorsReduced()
-#app.loadDirectors()
-#app.loadDirectorsReduced()
-#app.loadKeywords()
-#app.loadKeywordsReduced()
+#app.loadData()
+app.loadRanks()
+app.loadActors()
+app.loadActorsReduced()
+app.loadDirectors()
+app.loadDirectorsReduced()
+app.loadKeywords()
+app.loadKeywordsReduced()
 #app.loadWriters()
 #app.loadWritersReduced()
-app.loadSearchClustering()
+#app.loadSearchClustering()
 
 labels_actors_KM = np.where(app.proj_actors_KM.toarray() != 0)[1]
 labels_actors_BOC = np.where(app.proj_actors_BOC.toarray() != 0)[1]
 labels_directors_KM = np.where(app.proj_directors_KM.toarray() != 0)[1]
-labels_writers_KM = np.where(app.proj_writers_KM.toarray() != 0)[1]
+#labels_writers_KM = np.where(app.proj_writers_KM.toarray() != 0)[1]
 labels_keywords_KM = np.where(app.proj_keywords_KM.toarray() != 0)[1]
-labels_searchclustering_KM = app.search_clustering_KM[1]['labels']
+#labels_searchclustering_KM = app.search_clustering_KM[1]['labels']
 
 n_sample = 30
 
@@ -101,10 +101,10 @@ def printClustersDirectorsSVD():
 #printClusters(labels_actors_BOC, app.actor_names,n_sample)
 #printClusters(labels_directors_KM, app.director_names,n_sample)
 #printClusters(labels_writers_KM, app.writer_names,n_sample)
-#printClustersKeywords(labels_keywords_KM, app.keyword_names,n_sample)
+printClustersKeywords(labels_keywords_KM, app.keyword_names,n_sample)
 #printClustersFilms(labels_searchclustering_KM, app.film_names,n_sample)
 #printClustersActorsSVD()
 #printClustersDirectorsSVD()
 
-app.quit()
+#app.quit()
 
