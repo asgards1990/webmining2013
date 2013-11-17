@@ -128,12 +128,12 @@ function ajoutKeywordSuggest(keyword) {
 
     var newImg1 = document.createElement('img');
     newImg1.className="add1";
-    newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+    newImg1.src="../static/img/prediction/AddGrey.png";
    
 
     var newImg2 = document.createElement('img');
     newImg2.className="add2"; 
-    newImg2.src="../pesto/static/img/prediction/AddBlue.png";
+    newImg2.src="../static/img/prediction/AddBlue.png";
 
     keywordClick(newImg1);
     newKeyword.appendChild(newDelete);
@@ -156,10 +156,10 @@ function keywordClick (icone) {
             var newDelete = document.createElement('span');                               
             newDelete.className="delete";
             newImg1.className="add1";
-            newImg1.src="../pesto/static/img/prediction/AddGrey.png";
+            newImg1.src="../static/img/prediction/AddGrey.png";
             var newImg2 = document.createElement('img');
             newImg2.className="add2"; 
-            newImg2.src="../pesto/static/img/prediction/AddBlue.png";
+            newImg2.src="../static/img/prediction/AddBlue.png";
             var newName = document.createElement('span');
             var suggestion = document.getElementById("keywordSuggest");
             

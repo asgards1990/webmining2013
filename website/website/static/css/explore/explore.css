@@ -26,7 +26,7 @@ img.steps {
     padding: 5px;
     overflow: visible;
     border-radius: 5px;
-    background-image:url("/pesto/static/img/explore/cubes2.jpg");
+    background-image:url("../../img/explore/cubes2.jpg");
     background-repeat:no-repeat;
     background-position: center left;
     background-size: 100%;
