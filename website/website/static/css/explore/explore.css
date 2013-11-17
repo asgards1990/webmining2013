@@ -110,9 +110,8 @@ margin-top: 3px;
     border-radius: 5px;
     text-align: center;
     margin: 0 auto;
-    margin-left:29%;
+	overflow: auto;
     width: 68%;
-	min-height: 400px;
     padding: 5px;
     margin-top : 3em;
     background-image: radial-gradient(ellipse farthest-side at 39% 62% , #FFFFFF 10%, rgba(226, 165, 141, 0.4) 100%);
@@ -260,7 +259,6 @@ background-color: white;
 
 canvas.cover {
 	cursor:pointer;
-	-webkit-box-reflect: above 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(50%, transparent), to(white));
 }
 
 /* Zone de resultat */
