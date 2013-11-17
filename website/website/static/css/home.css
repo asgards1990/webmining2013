@@ -14,7 +14,7 @@
     width:100%;
     height:350px;
     position:relative;
-    background-image: url('/pesto/static/img/home/bobine.png');
+    background-image: url('../img/home/bobine.png');
     background-size:100% 100%;
 }
 

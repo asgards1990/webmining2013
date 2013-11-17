@@ -29,13 +29,13 @@
 }
 
 #id_actors-deck span, #id_directors-deck span {
-    background-image:url("/pesto/static/img/croix.png");
+    background-image:url("../../img/croix.png");
     background-repeat:no-repeat;
     background-position: center left;
 }
 
 #id_actors-deck span:hover, #id_directors-deck span:hover {
-    background-image:url("/pesto/static/img/croix2.png");
+    background-image:url("../../img/croix2.png");
 }
 
 #id_actors-deck .photo, #id_directors-deck .photo {

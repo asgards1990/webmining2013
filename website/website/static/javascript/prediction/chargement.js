@@ -11,7 +11,7 @@ function loadChargement(nomDuCadre){
 	document.getElementById("boxLoader").appendChild(loader);
 	var image=document.createElement("img");
 	image.id="bandeauLoader";
-	image.src="../pesto/static/img/explore/bandecine6.jpg";
+	image.src="../static/img/explore/bandecine6.jpg";
 	image.onload=function(){
 	image.style.cssText='position:absolute;top:40%;left:0%;width:100%;height:20%;z-index:11;opacity:1;'
 	document.getElementById("loaderProvisoire").appendChild(image);

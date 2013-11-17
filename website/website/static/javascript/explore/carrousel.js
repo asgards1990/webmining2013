@@ -28,7 +28,7 @@ function carrousel(nomDuCadre,data){
 				}
 				if (mult==1) {
 					for(var j=nombre;j<10;j++){
-						repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../pesto/static/img/explore/filmVide.jpg";
+						repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../static/img/explore/filmVide.jpg";
 					}
 					carrousel2(nomDuCadre,repLien)
 				}
@@ -53,7 +53,7 @@ function carrousel(nomDuCadre,data){
 	repLien[5]="http://prodbox.co/media/"+data.img;
 	//repLien[5]="http://prodbox.co/media/poster/"+idFilm+".jpg"
 	for(var j=nombre;j<10;j++){
-		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../pesto/static/img/explore/filmVide.jpg";
+		repLien[5+((1-2*(j%2))*(Math.floor(j/2)+1))]="../static/img/explore/filmVide.jpg";
 	}
 
 	carrousel2(data,nomDuCadre,repLien)
