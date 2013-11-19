@@ -773,7 +773,7 @@ class CinemaService(LearningService):
             print s+' object not found. Creating it...'
             self.prize_logistic_reg = []
             for i in range(self.nb_considered_prizes):
-                print str(i)+'/'+str(self.nb_considered_prizes)
+                print str(i+1)+'/'+str(self.nb_considered_prizes)
                 self.prize_logistic_reg.append(LogisticRegression())
                 self.prize_logistic_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_logistic_reg, s)
@@ -787,7 +787,7 @@ class CinemaService(LearningService):
             print s+' object not found. Creating it...'
             self.prize_svm_reg = []
             for i in range(self.nb_considered_prizes):
-                print str(i)+'/'+str(self.nb_considered_prizes)
+                print str(i+1)+'/'+str(self.nb_considered_prizes)
                 self.prize_svm_reg.append(SVC(probability=True))
                 self.prize_svm_reg[i].fit(self.predict_features, self.predict_labels_prizes[:,i])
             self.dumpJoblibObject(self.prize_logistic_reg, s)
@@ -1112,7 +1112,6 @@ class CinemaService(LearningService):
         return results
     
     def predict_request(self, args):
-        print args
         # Get results
         results = self.compute_predict(self.vectorize_predict_user_input(args))
         # Build query_results
