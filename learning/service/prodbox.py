@@ -56,7 +56,7 @@ class CinemaService(LearningService):
         
         self.clustering_type_in_searchclustering = 'KM'
         
-        self.search_latent_vars = False
+        self.search_latent_vars = True
         self.min_nb_of_films_to_use_clusters_in_search = 100 # optimize this to make search faster
         
         self.verbose = False
@@ -837,8 +837,8 @@ class CinemaService(LearningService):
     def applySearchFilter(self,filters): #returns indexes of films that respect our filters
         # Filter budget
         if filters.has_key('budget'):
-            indexes_fitting_filters = self.budget_matrix.toarray() >= filters['budget']['min']
-            indexes_fitting_filters = indexes_fitting_filters * (self.budget_matrix.toarray() <= filters['budget']['max'])
+            indexes_fitting_filters = self.budget_matrix >= filters['budget']['min']
+            indexes_fitting_filters = indexes_fitting_filters * (self.budget_matrix <= filters['budget']['max'])
         # Filter release_date
         if filters.has_key('release_period'):
             years=self.release_date_matrix[:,self.release_date_names.index('year')].toarray()
