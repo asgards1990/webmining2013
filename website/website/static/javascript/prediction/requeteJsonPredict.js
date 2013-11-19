@@ -87,7 +87,7 @@ $(document).ready(function(){
 	$("#id_genre1-deck").bind("DOMSubtreeModified",function(){changementPredict()})
 	$("#id_genre2-deck").bind("DOMSubtreeModified",function(){changementPredict()})
 	$("#id_keyword-deck").bind("DOMSubtreeModified",function(){changementPredict()})
-	$( "#slider-range-min" ).on( "slidechange", function( event, ui ) {changementPredict(); document.getElementsByClassName("item5")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../../img/prediction/green2.png')";} );
+	$( "#slider-range-min" ).on( "slidechange", function( event, ui ) {changementPredict(); document.getElementsByClassName("item5")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../static/img/prediction/green2.png')";} );
 	$(".iCheck-helper").click(function(){changementPredict();document.getElementsByClassName("item6")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../static/img/prediction/green2.png')";});
 	verifSiRequete()
 	document.getElementsByClassName("item5")[0].getElementsByTagName("div")[0].style.backgroundImage="url('../static/img/prediction/orange2.png')";
