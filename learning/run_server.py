@@ -22,7 +22,7 @@ if __name__ == "__main__":
             [(r'/', ajax_server.handlers.TestHandler),
              (r'/predict/', ajax_server.handlers.Handler, dict(app_learn = app_learn, method="predict")),
              (r'/search/', ajax_server.handlers.Handler, dict(app_learn = app_learn, method="search")),
-             (r'/suggest_films/\?q=(.*)', ajax_server.handlers.AutoCompleteHandler, dict(app_learn = app_learn, target="films")),
+             (r'/suggest/film/(.*)', ajax_server.handlers.AutoCompleteHandler, dict(app_learn = app_learn, target="films")),
              (r'/suggest/', ajax_server.handlers.Handler, dict(app_learn = app_learn, method="suggest_keywords"))]
             )
         app.listen(args.integer)

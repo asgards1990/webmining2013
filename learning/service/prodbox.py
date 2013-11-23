@@ -1386,9 +1386,13 @@ class CinemaService(LearningService):
 ### FILM SUGGESTION ###
     def suggest_films(self, q):
         if len(q) > 0:
-            rex = re.compile(args['q'].lower())
+            rex = re.compile(q.lower())
             found = [i for i in range(self.nb_films) if (rex.search(self.film_names[i])!=None)]
             results = []
             for i in found:
-                results.append({"english_title" : self.film_names[i], "imdb_id" : Film.objects.get(pk = self.fromIndexToPk[i]).imdb_id, "year" : 2010 } )
+                film = Film.objects.get(pk = self.fromIndextoPk[i])
+                if film.release_date:
+                    results.append({"english_title" : self.film_names[i], "imdb_id" : film.imdb_id, "year" : film.release_date.year } )
+                else:
+                    results.append({"english_title" : self.film_names[i], "imdb_id" : film.imdb_id} )
             return {'results' : results}
