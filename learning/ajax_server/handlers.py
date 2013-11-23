@@ -44,3 +44,31 @@ class Handler(tornado.web.RequestHandler):
         #self.set_header("Access-Control-Allow-Origin", "senellart.com")
         #self.set_header("Access-Control-Allow-Origin", "tiresias.enst.fr")
         self.set_header("Access-Control-Allow-Origin", "*") # Uncomment to enable acces from every host.
+        
+        
+class AutoCompleteHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def initialize(self, app_learn, target):
+        self.app_learn = app_learn
+        self.target = target
+
+    def get(self, q):
+        if True or self.request.headers.get('X-Requested-With') == "XMLHttpRequest":
+            try:
+                if self.target=='films':
+                    query_results = self.app_learn.suggest_films(q)
+                else:
+                    raise service.objects.ParsingError('Undefined autocomplete target.')
+                query_results['success'] = True
+                query_results['error'] = ''
+                self.finish(tornado.escape.json_encode(query_results))                
+            except service.objects.ParsingError as e:
+                self.error(e.value)
+        else:
+            self.error('No proper JSON request found.')
+
+    def error(self, err_msg):
+        self.finish(tornado.escape.json_encode({'success' : False, 'error' : err_msg }))
+
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")   

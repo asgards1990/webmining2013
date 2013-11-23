@@ -1382,3 +1382,13 @@ class CinemaService(LearningService):
                 raise ParsingError('Wrong format for nbresults.')
         else:
             raise ParsingError('Please define a string and the expected number of results.')
+
+### FILM SUGGESTION ###
+    def suggest_films(self, q):
+        if len(q) > 0:
+            rex = re.compile(args['q'].lower())
+            found = [i for i in range(self.nb_films) if (rex.search(self.film_names[i])!=None)]
+            results = []
+            for i in found:
+                results.append({"english_title" : self.film_names[i], "imdb_id" : Film.objects.get(pk = self.fromIndexToPk[i]).imdb_id, "year" : 2010 } )
+            return {'results' : results}
