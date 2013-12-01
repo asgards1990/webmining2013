@@ -351,7 +351,7 @@ class CinemaService(LearningService):
 
     def loadKeywordsReduced(self):
         if not self.is_loaded('keywords_reduced'):
-            keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++')
+            keywords_KM = KMeans(n_clusters = self.dim_keywords, init='k-means++', n_jobs=-1)
             keyword_labels_KM = keywords_KM.fit_predict(TfidfTransformer().fit_transform(self.keyword_matrix).transpose())
             self.proj_keywords_KM = scipy.sparse.csc_matrix(keyword_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_keywords):
@@ -415,7 +415,7 @@ class CinemaService(LearningService):
             #    self.actor_reduced_SC = None
             #    print('Spectral clustering failed for actors due to memory error')
             # Second clustering method: KMeans clustering with tf-idf
-            actors_KM = KMeans(n_clusters = self.dim_actors, init='k-means++')
+            actors_KM = KMeans(n_clusters = self.dim_actors, init='k-means++', n_jobs=-1)
             actor_labels_KM = actors_KM.fit_predict(TfidfTransformer().fit_transform(self.actor_matrix).transpose())
             self.proj_actors_KM = scipy.sparse.csc_matrix(actor_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_actors):
@@ -481,7 +481,7 @@ class CinemaService(LearningService):
             # Second clustering method: Average of keywords features
             self.writer_reduced_avg =  normalize(self.writer_matrix.astype(np.double), norm='l1', axis=1) * self.writer_keyword_matrix
             # Third clustering method: KMeans clustering with tf-idf
-            writers_KM = KMeans(n_clusters = self.dim_writers, init='k-means++')
+            writers_KM = KMeans(n_clusters = self.dim_writers, init='k-means++', n_jobs=-1)
             writer_labels_KM = writers_KM.fit_predict(TfidfTransformer().fit_transform(self.writer_matrix).transpose())
             self.proj_writers_KM = scipy.sparse.csc_matrix(writer_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_writers):
@@ -528,7 +528,7 @@ class CinemaService(LearningService):
             # Second clustering method: Average of actors features
             self.director_reduced_avg =  normalize(self.director_matrix.astype(np.double), norm='l1', axis=1) * self.director_actor_matrix
             # Third clustering method: KMeans clustering with tf-idf
-            directors_KM = KMeans(n_clusters = self.dim_directors, init='k-means++')
+            directors_KM = KMeans(n_clusters = self.dim_directors, init='k-means++', n_jobs=-1)
             director_labels_KM = directors_KM.fit_predict(TfidfTransformer().fit_transform(self.director_matrix).transpose())
             self.proj_directors_KM = scipy.sparse.csc_matrix(director_labels_KM==0, dtype=int).transpose()
             for i in range(1, self.dim_directors):
@@ -589,7 +589,7 @@ class CinemaService(LearningService):
                 print('Doing search clustering number '+str(k)+'/15')
                 X = self.getWeightedSearchFeatures(k)
                 # First method
-                KM = KMeans(n_clusters=self.n_clusters_search, verbose=self.verbose)
+                KM = KMeans(n_clusters=self.n_clusters_search, verbose=self.verbose, n_jobs=-1)
                 KM.fit(X)
                 self.search_clustering_KM[k] = {'labels' : KM.labels_, 'cluster_centers' : KM.cluster_centers_}
                 # Second method
@@ -1385,9 +1385,9 @@ class CinemaService(LearningService):
 
 ### FILM SUGGESTION ###
     def suggest_films(self, q):
-        if len(q) > 0:
+        if len(q) > 2:
             rex = re.compile(q.lower())
-            found = [i for i in range(self.nb_films) if (rex.search(self.film_names[i])!=None)]
+            found = [i for i in range(self.nb_films) if (self.film_names[i].lower().find(q.lower())>-1)]
             results = []
             for i in found:
                 film = Film.objects.get(pk = self.fromIndextoPk[i])
@@ -1396,3 +1396,5 @@ class CinemaService(LearningService):
                 else:
                     results.append({"english_title" : self.film_names[i], "imdb_id" : film.imdb_id} )
             return {'results' : results}
+        else:
+            raise ParsingError("String is too short.")
