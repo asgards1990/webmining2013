@@ -1,28 +1,44 @@
-from scrapy.exceptions import IgnoreRequest
 from scrapy import log
+from scrapy.exceptions import NotConfigured
+import os
 
-from status.models import ScrapyStatus
-
-class FilterDownloadedMiddleware(object):
-    def is_downloaded(self, imdb_id):
-        try:
-            status = ScrapyStatus.objects.get(imdb_id = imdb_id)
-            return status.downloaded
-        except ScrapyStatus.DoesNotExist:
-            return False
- 
+class CacheReaderMiddleware(object):
+    @classmethod
+    def from_crawler(cls, crawler):
+        dir = crawler.settings.get('DOWNLOAD_DIRECTORY', None)
+        if not dir:
+            raise NotConfigured
+        return cls(dir)
+    
+    def __init__(self, dir):
+        self.dir = dir
+    
     def process_request(self, request, spider):
-        imdb_id = None
-        try:
-            imdb_id = re.search('nm\d+', response.url).group(0)
-            if imdb_id == None:
-                imdb_id = re.search('co\d+', response.url).group(0)
-            if imdb_id == None:
-                imdb_id = re.search('tt\d+', response.url).group(0)
-            if is_downloaded(imdb_id):
-                log.msg(imdb_id + ' already downloaded.', level = log.WARNING)
-                return IgnoreRequest()
-            else:
-                return None
-        except:
-            return None
+        if request.meta.has_key('download'):
+            if os.path.isfile(self.dir + request.meta['download']):
+                target = request.meta.pop('download')
+                request = request.replace(url = 'file://localhost' + self.dir + target)
+                log.msg('Opening ' + request.url, level = log.INFO)
+                return request
+
+class CacheWriterMiddleware(object):
+    @classmethod
+    def from_crawler(cls, crawler):
+        dir = crawler.settings.get('DOWNLOAD_DIRECTORY', None)
+        if not dir:
+            raise NotConfigured
+        return cls(dir)
+    
+    def __init__(self, dir):
+        self.dir = dir
+    
+    def process_spider_input(self, response, spider):
+        if response.status in [200] and response.meta.has_key('download'):
+            if not os.path.isfile(self.dir + response.meta['download']):
+                try:
+                    f = open(self.dir + response.meta['download'], "wb")
+                    f.write(response.body)
+                    f.close()
+                    log.msg('Saving ' + response.meta['download'], level = log.INFO)
+                except IOError:
+                    log.msg('Unable to write down ' + response.meta['download'], level = log.ERROR)
