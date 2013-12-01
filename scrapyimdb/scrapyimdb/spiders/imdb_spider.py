@@ -13,7 +13,7 @@ from status.models import ScrapyStatus
 AWARDS_PREFIX = 'film/awards/'
 FULLCREDITS_PREFIX = 'film/fullcredits/'
 COMPANYCREDITS_PREFIX = 'film/companycredits/'
-REVIEW_PREFIX = 'film/criticreviews/'
+REVIEW_PREFIX = 'film/reviews/'
 KEYWORDS_PREFIX = 'film/keywords/'
 BUSINESS_PREFIX = 'film/business/'
 MAINPAGE_PREFIX = 'film/mainpage/'
