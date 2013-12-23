@@ -18,7 +18,7 @@ class CacheReaderMiddleware(object):
             if os.path.isfile(self.dir + request.meta['download']):
                 target = request.meta.pop('download')
                 request = request.replace(url = 'file://localhost' + self.dir + target)
-                log.msg('Opening ' + request.url, level = log.INFO)
+                log.msg('Opening ' + request.url, level = log.DEBUG)
                 return request
 
 class CacheWriterMiddleware(object):
@@ -39,6 +39,6 @@ class CacheWriterMiddleware(object):
                     f = open(self.dir + response.meta['download'], "wb")
                     f.write(response.body)
                     f.close()
-                    log.msg('Saving ' + response.meta['download'], level = log.INFO)
+                    log.msg('Saving ' + response.meta['download'], level = log.DEBUG)
                 except IOError:
                     log.msg('Unable to write down ' + response.meta['download'], level = log.ERROR)

@@ -36,27 +36,29 @@ class IMDbSpider(BaseSpider):
     ext_country = re.compile("country/\w+\?")
     extract_country = lambda self, s : self.ext_country.search(s).group(0).split('/')[1][:-1]
 
-    def __init__(self, year = 2000, actors_max_rank = 15, fetch_person = True, fetch_company = False, max_position = 500, *args, **kwargs):
+    def __init__(self, year = 2000, actors_max_rank = 15, fetch_person = True, fetch_company = False, min_position=1, max_position = 500, *args, **kwargs):
         super(IMDbSpider, self).__init__(*args, **kwargs)
         self.year = year
         self.actors_max_rank = actors_max_rank
         self.fetch_person = fetch_person
         self.fetch_company = fetch_company
         self.max_position = int(max_position)
+        self.min_position = int(min_position)
+        self.position = self.min_position
 
-        self.start_urls = ["http://www.imdb.com/search/title?at=0&count=250&release_date={0},{0}&sort={1}&start={3}&title_type={2}&view=simple".format(self.year, self.sort, self.tags, start) for start in range(1, self.max_position, 250)]
+        self.start_urls = ["http://www.imdb.com/search/title?at=0&count=250&release_date={0},{0}&sort={1}&start={3}&title_type={2}&view=simple".format(self.year, self.sort, self.tags, start) for start in range(self.min_position, self.max_position, 250)]
 
     def parse(self, response):
         start_position = int(re.search('start=\d+', response.url).group(0).split('=')[1])
         hxs = HtmlXPathSelector(response)
         list_urls = hxs.select('//td[@class="title"]/a/@href').extract()
         list_items = []
-        k = 1
-        for url in list_urls:
+        k = (self.position - start_position) % 250
+        for url in list_urls[k:]:
             imdb_id = self.ext_title.search(url).group(0)
-            if (start_position + k <= self.max_position) and not self.is_parsed(imdb_id):
+            if (self.position <= self.max_position) and not self.is_parsed(imdb_id):
                 list_items.append(Request(url = 'http://www.imdb.com/title/' + imdb_id + '/', callback = self.parse_film, meta={'id' :imdb_id, 'download' :  MAINPAGE_PREFIX + imdb_id + '.html'}))
-            k += 1
+                self.position += 1
         return list_items
     
     def is_parsed(self, imdb_id):
