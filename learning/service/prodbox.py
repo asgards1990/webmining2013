@@ -109,7 +109,7 @@ class CinemaService(LearningService):
         if not self.is_loaded('imdb'):
             # imdb_user_rating
             g_user_rating = genImdbUserRating(self.films.iterator())
-            v_user_rating = DictVectorizer(dtype=np.float32, sparse=False)
+            v_user_rating = DictVectorizer(dtype=np.double, sparse=False)
             self.imdb_user_rating_matrix = v_user_rating.fit_transform(g_user_rating)
             # imdb_nb_user_ratings
             g_nb_user_ratings = genImdbNbUserRatings(self.films.iterator())
@@ -117,12 +117,12 @@ class CinemaService(LearningService):
             self.imdb_nb_user_ratings_matrix = v_nb_user_ratings.fit_transform(g_nb_user_ratings)
             # imdb_nb_user_reviews
             g_nb_user_reviews = genImdbNbUserReviews(self.films.iterator())
-            v_nb_user_reviews = DictVectorizer(dtype=np.float32, sparse=False)
+            v_nb_user_reviews = DictVectorizer(dtype=np.double, sparse=False)
             self.imdb_nb_user_reviews_matrix = v_nb_user_reviews.fit_transform(g_nb_user_reviews)
             self.imdb_nb_user_reviews_matrix[np.isnan(self.imdb_nb_user_reviews_matrix)] = 0
             # imdb_nb_reviews
             g_nb_reviews = genImdbNbReviews(self.films.iterator())
-            v_nb_reviews = DictVectorizer(dtype=np.float32, sparse=False)
+            v_nb_reviews = DictVectorizer(dtype=np.double, sparse=False)
             self.imdb_nb_reviews_matrix = v_nb_reviews.fit_transform(g_nb_reviews)
             self.imdb_nb_reviews_matrix[np.isnan(self.imdb_nb_reviews_matrix)] = 0
             # Save object in cache
@@ -133,7 +133,7 @@ class CinemaService(LearningService):
     def loadBudget(self):
         if not self.is_loaded('budget'):
             gkey = genBudget(self.films.iterator())
-            v =  DictVectorizer(dtype=np.float32, sparse=False)
+            v =  DictVectorizer(dtype=np.double, sparse=False)
             self.budget_matrix = v.fit_transform(gkey)
             
             #budget_data = self.budget_matrix.data[-np.isnan(self.budget_matrix.data)]
@@ -189,7 +189,7 @@ class CinemaService(LearningService):
     def loadBoxOffice(self):
         if not self.is_loaded('box_office'):
             gkey = genBoxOffice(self.films.iterator())
-            v =  DictVectorizer(dtype=np.float32, sparse=False)
+            v =  DictVectorizer(dtype=np.double, sparse=False)
             self.box_office_matrix = v.fit_transform(gkey)
             
             y = self.box_office_matrix[:,0]
@@ -202,7 +202,7 @@ class CinemaService(LearningService):
                         self.genres_matrix.toarray()])
                 reg = GradientBoostingRegressor()
                 reg.fit(X[-nan_indexes, :], y[-nan_indexes])
-                y[nan_indexes] = reg.predict(X[nan_indexes, :])
+                y[nan_indexes] = reg.predict(X[nan_indexes, :]).astype(np.double)
                 y[y < 0] = 1
                 self.box_office_matrix[:,0] = y
             
@@ -260,7 +260,7 @@ class CinemaService(LearningService):
     def loadMetacriticScore(self):
         if not self.is_loaded('metacritic_score'):
             gkey = genMetacriticScore(self.films.iterator())
-            v =  DictVectorizer(dtype=np.float32)
+            v =  DictVectorizer(dtype=np.double)
             self.metacritic_score_matrix = v.fit_transform(gkey)
             # Save object in cache
             self.create_cobject('metacritic_score', self.metacritic_score_matrix)
@@ -281,7 +281,7 @@ class CinemaService(LearningService):
     def loadReviews(self):
         if not self.is_loaded('reviews'):
             gkey = genReviews(self.films.iterator())
-            v =  DictVectorizer(dtype=np.float32)
+            v =  DictVectorizer(dtype=np.double)
             self.reviews_matrix = v.fit_transform(gkey)
             
             self.reviews_names = v.get_feature_names()
@@ -321,7 +321,7 @@ class CinemaService(LearningService):
     def loadSeason(self):
         if not self.is_loaded('season'):
             gkey = genSeason(self.films.iterator())
-            v =  DictVectorizer(dtype=np.float32)
+            v =  DictVectorizer(dtype=np.double)
             self.season_matrix = v.fit_transform(gkey)
             self.season_names = v.get_feature_names()
             # Save object in cache
@@ -1398,3 +1398,48 @@ class CinemaService(LearningService):
             return {'results' : results}
         else:
             raise ParsingError("String is too short.")
+
+### EXPORT DATA TO CSV ###
+
+    def export(self, filename):
+        file = open(filename, "w")
+        file.write("Name|Release date|Runtime|# users' ratings| Users' rating| # users' reviews| # critics| Metacritic score|")
+        file.write("Box office|Budget")
+        file.write("\n")
+        for i in range(self.nb_films):
+            file.write(self.film_names[i].encode("utf8") + "|")
+            file.write(str(self.release_date_matrix[i,2])+"-"+str(self.release_date_matrix[i,1])+"-"+str(self.release_date_matrix[i,0])+"|")
+            file.write(str(self.runtime_matrix[i,0])+"|")
+            file.write(str(self.imdb_nb_user_ratings_matrix[i,0])+"|"+str(self.imdb_user_rating_matrix[i,0])+"|")
+            file.write(str(self.imdb_nb_user_reviews_matrix[i,0])+"|"+str(self.imdb_nb_reviews_matrix[i,0])+"|")
+            file.write(str(self.metacritic_score_matrix[i,0])+"|")
+            file.write(str(self.box_office_matrix[i,0])+"|")
+            file.write(str(self.budget_matrix[i,0]))
+            file.write("\n")
+        file.close()
+            
+    def export_genre(self, filename):
+        file = open(filename, "w")
+        file.write("Name|")
+        file.write("|".join(self.genres_names).encode("utf8"))
+        file.write("\n")
+        for i in range(self.nb_films):
+            file.write(self.film_names[i].encode("utf8") + "|")
+            file.write("|".join(map(str, list(self.genres_matrix.toarray()[i,:]))))
+            file.write("\n")
+        file.close()
+        
+    def export_actors(self, filename, threshold=10):
+        considered_actors = np.array(self.actor_matrix.sum(axis=0)>threshold)[0, :]
+        actor_names = np.array(self.actor_names)[considered_actors]
+        actor_matrix = self.actor_matrix[:, considered_actors]
+        
+        file = open(filename, "w")
+        file.write("Name|")
+        file.write("|".join(list(actor_names)).encode("utf8"))
+        file.write("\n")
+        for i in range(self.nb_films):
+            file.write(self.film_names[i].encode("utf8") + "|")
+            file.write("|".join(map(str, list(actor_matrix[i,:].toarray()[0, :]))))
+            file.write("\n")
+        file.close()

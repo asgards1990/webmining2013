@@ -133,7 +133,7 @@ def genReviews(iter_films):
         else:
             d = {}
             for review in reviews.all():
-                d[review.journal.name] = 1+review.grade
+                d[review.journal.name] = 1.0+float(review.grade)
             yield d
 
 def genReviewsContent(iter_films):
