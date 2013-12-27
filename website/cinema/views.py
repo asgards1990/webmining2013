@@ -15,14 +15,16 @@ def filmInfo(request):
     except Film.DoesNotExist:
         return HttpReponse("No movie found for " + str(film_id) + ".")
     
-    actor_ids = ActorWeight.objects.filter(film=film).order_by('rank').values_list('actor_id')
-    actors = Person.objects.in_bulk(actor_ids)
+    actor_ids = film.actorweight_set.values_list("id")[:5]
     outputActors = []
     
-    for item in actor_ids[:5]:
-	    actor=actors[item[0]]
-	    actorDico = {'imdb_id':actor.imdb_id,'name':actor.name,'image_url':actor.image_url}
-	    outputActors.append(actorDico)
+    for item in actor_ids:
+        try:
+            actor = Person.objects.get(id = item[0])
+    	    actorDico = {'imdb_id':actor.imdb_id,'name':actor.name,'image_url':actor.image_url}
+    	    outputActors.append(actorDico)
+        except Person.DoesNotExist:
+            pass
     
     outputGenres = map(lambda e:e['name'], film.genres.values('name'))
     
