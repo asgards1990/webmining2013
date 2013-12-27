@@ -15,7 +15,7 @@ def filmInfo(request):
     except Film.DoesNotExist:
         return HttpReponse("No movie found for " + str(film_id) + ".")
     
-    actor_ids = film.actorweight_set.values_list("id")[:5]
+    actor_ids = film.actorweight_set.order_by("rank").values_list("actor_id")[:5]
     outputActors = []
     
     for item in actor_ids:
